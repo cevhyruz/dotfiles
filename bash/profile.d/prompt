@@ -13,8 +13,14 @@ enable_color_support() {
 
 set_prompts() {
 
+  local bold=""
+  local reset=""
+
   local cyan=""
   local green=""
+  local white=""
+  local grey=""
+  local pink=""
 
   if tput setaf 1 &> /dev/null; then
     tput sgr0; # reset colors
@@ -26,6 +32,9 @@ set_prompts() {
     green=$(tput setaf 41)
     white=$(tput setaf 15)
     grey=$(tput setaf 241)
+    dimgrey=$(tput setaf 248)
+    pink=$(tput setaf 216)
+
   fi
 
   PS1="\\n\\[${bold}\\]"
@@ -36,15 +45,17 @@ set_prompts() {
   PS1+="\\[${grey}\\]\\h"                # Host
   PS1+="\\[${white}\\]] "                # close bracket
   PS1+="\\[${cyan}\\]\\W"                # Working directory
-  PS1+="\\[${reset}\\]\\[${white}\\] $ "
+  PS1+="\\[${reset}\\]\\[${white}\\] $ \\[${pink}\\]"
 
   export PS1
 
+
   PS2="\\[${green}\\]   ➜  "
-  PS2+="\\[${white}\\] "
+  PS2+="\\[${pink}\\]"
 
   export PS2
 
+  trap 'echo -ne "${dimgrey}"' DEBUG
 }
 
 set_prompts
