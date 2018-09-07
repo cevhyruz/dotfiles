@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# automaticall preprend `cd` to directory names.
+shopt -s autocd
