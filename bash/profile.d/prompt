@@ -59,3 +59,6 @@ set_prompts() {
 }
 
 set_prompts
+
+unset -f enable_color_support
+unset -f set_prompts
