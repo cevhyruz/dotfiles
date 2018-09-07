@@ -96,11 +96,6 @@ set_prompts() {
 
   PS1="\\n\\[${bold}\\]"
   PS1+="\\[${green}\\] ➜ "
-  PS1+="\\[${white}\\]["                 # Open bracket.
-  PS1+="\\[${grey}\\]\\u"                # Username.
-  PS1+="\\[${white}\\]:"
-  PS1+="\\[${grey}\\]\\h"                # Host
-  PS1+="\\[${white}\\]] "                # close bracket
   PS1+="\\[${cyan}\\]\\W"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]\\[${white}\\] $ \\[${pink}\\]"
