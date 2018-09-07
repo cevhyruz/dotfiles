@@ -10,6 +10,59 @@ enable_color_support() {
   fi
 
 }
+prompt_git() {
+
+  local symbol='';
+  local branchName='';
+
+  # Check if the current directory is in a Git repository.
+  if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == 0 ]; then
+
+    # check if the current directory is in .git before running git checks
+    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+
+      # Ensure the index is up to date.
+      git update-index --really-refresh -q &>/dev/null;
+
+      # Check for uncommitted changes in the index.
+      if ! $(git diff --quiet --ignore-submodules --cached); then
+        symbol+='+';
+      fi;
+
+      # Check for unstaged changes.
+      if ! $(git diff-files --quiet --ignore-submodules --); then
+        symbol+='!';
+      fi;
+
+      # Check for untracked files.
+      if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+        symbol+='?';
+      fi;
+
+      # Check for stashed files.
+      if $(git rev-parse --verify refs/stash &>/dev/null); then
+        symbol+=' ∙';
+      fi;
+
+    fi;
+
+    # Get the short symbolic ref.
+    # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
+    # Otherwise, just give up.
+
+    branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+       git rev-parse --short HEAD 2> /dev/null || \
+       echo '(unknown)')";
+
+    [ -n "${symbol}" ] && symbol=" ${symbol}";
+
+    echo -e "${1}${branchName}${2}${symbol}";
+
+  else
+    return;
+  fi;
+
+}
 
 set_prompts() {
 
@@ -21,6 +74,8 @@ set_prompts() {
   local white=""
   local grey=""
   local pink=""
+  local yellow=""
+
 
   if tput setaf 1 &> /dev/null; then
     tput sgr0; # reset colors
@@ -34,6 +89,8 @@ set_prompts() {
     grey=$(tput setaf 241)
     dimgrey=$(tput setaf 248)
     pink=$(tput setaf 216)
+    yellow=$(tput setaf 178);
+    red=$(tput setaf 203);
 
   fi
 
@@ -45,10 +102,10 @@ set_prompts() {
   PS1+="\\[${grey}\\]\\h"                # Host
   PS1+="\\[${white}\\]] "                # close bracket
   PS1+="\\[${cyan}\\]\\W"                # Working directory
+  PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]\\[${white}\\] $ \\[${pink}\\]"
 
   export PS1
-
 
   PS2="\\[${green}\\]   ➜  "
   PS2+="\\[${pink}\\]"
