@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-enable_color_support() {
+function enable_color_support() {
 
   if [[ $COLORTERM == gnome-* && $TERM == xterm ]] \
     && infocmp gnome-256color &> /dev/null; then
@@ -10,7 +10,9 @@ enable_color_support() {
   fi
 
 }
-prompt_git() {
+
+
+function prompt_git() {
 
   local symbol='';
   local branchName='';
@@ -64,7 +66,7 @@ prompt_git() {
 
 }
 
-set_prompts() {
+function set_prompts() {
 
   local bold=""
   local reset=""
@@ -95,7 +97,7 @@ set_prompts() {
   fi
 
   PS1="\\n\\[${bold}\\]"
-  PS1+="\\[${green}\\] ➜ "
+  PS1+="\\[${green}\\] ➜  "
   PS1+="\\[${cyan}\\]\\W"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]\\[${white}\\] $ \\[${pink}\\]"
