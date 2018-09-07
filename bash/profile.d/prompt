@@ -10,3 +10,41 @@ enable_color_support() {
   fi
 
 }
+
+set_prompts() {
+
+  local cyan=""
+  local green=""
+
+  if tput setaf 1 &> /dev/null; then
+    tput sgr0; # reset colors
+
+    bold=$(tput bold);
+    reset=$(tput sgr0);
+
+    cyan=$(tput setaf 37)
+    green=$(tput setaf 41)
+    white=$(tput setaf 15)
+    grey=$(tput setaf 241)
+  fi
+
+  PS1="\\n\\[${bold}\\]"
+  PS1+="\\[${green}\\] ➜ "
+  PS1+="\\[${white}\\]["                 # Open bracket.
+  PS1+="\\[${grey}\\]\\u"                # Username.
+  PS1+="\\[${white}\\]:"
+  PS1+="\\[${grey}\\]\\h"                # Host
+  PS1+="\\[${white}\\]] "                # close bracket
+  PS1+="\\[${cyan}\\]\\W"                # Working directory
+  PS1+="\\[${reset}\\]\\[${white}\\] $ "
+
+  export PS1
+
+  PS2="\\[${green}\\]   ➜  "
+  PS2+="\\[${white}\\] "
+
+  export PS2
+
+}
+
+set_prompts
