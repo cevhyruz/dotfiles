@@ -19,6 +19,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+# Always enable colored `ls` output, sorted and with trailing slash.
+alias ls="ls --almost-all --classify --color=auto --group-directories-first"
+
 # Frequently used directories shortcuts.
 alias home="~"
 alias p="~/Projects"
