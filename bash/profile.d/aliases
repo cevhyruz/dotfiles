@@ -13,3 +13,12 @@ alias brestart="sudo /etc/init.d/bluetooth restart"
 alias gl="git log --pretty=oneline --max-count=20 --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
+
+# Frequently used directories shortcuts.
+alias home="~"
+alias p="~/Projects"
+alias dt="~/Desktop"
+alias m="~/Music"
+alias dl="~/Downloads"
+alias d="~/Documents"
+alias et="/etc"
