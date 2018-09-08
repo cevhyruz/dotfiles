@@ -8,3 +8,8 @@ alias path='printf "%b\n" "${PATH//:/\\n}"'
 
 # System commands
 alias brestart="sudo /etc/init.d/bluetooth restart"
+
+# Git shortcuts
+alias gl="git log --pretty=oneline --max-count=20 --graph --abbrev-commit"
+alias gs="git status --short"
+alias gshow="git show"
