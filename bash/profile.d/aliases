@@ -5,3 +5,6 @@ alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslo
 
 # print alias neatly.
 alias path='printf "%b\n" "${PATH//:/\\n}"'
+
+# System commands
+alias brestart="sudo /etc/init.d/bluetooth restart"
