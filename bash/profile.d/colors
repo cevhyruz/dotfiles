@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+LS_COLORS=""
+
+LS_COLORS+="mi=1;31:"   # Non-existent file pointed to by a symlink
+
 # Enable color support.
 if [ -x /usr/bin/dircolors ]; then
 
@@ -11,7 +15,7 @@ if [ -x /usr/bin/dircolors ]; then
   alias egrep="egrep --color=auto"
   alias fgrep="fgrep --color=auto"
   alias grep="grep --color=auto"
-  alias ls="ls --color=auto"
+  alias lsc="ls --color=auto "
   alias vdir="vdir --color=auto"
 
 fi
