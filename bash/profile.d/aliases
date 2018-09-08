@@ -17,6 +17,7 @@ alias gshow="git show"
 # Frequently used directories shortcuts.
 alias home="~"
 alias p="~/Projects"
+alias dot="~/Projects/dotfiles"
 alias dt="~/Desktop"
 alias m="~/Music"
 alias dl="~/Downloads"
