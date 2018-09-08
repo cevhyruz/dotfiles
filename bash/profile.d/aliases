@@ -14,6 +14,11 @@ alias gl="git log --pretty=oneline --max-count=20 --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
 
+# Always enable colored `grep` output
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
 # Frequently used directories shortcuts.
 alias home="~"
 alias p="~/Projects"
