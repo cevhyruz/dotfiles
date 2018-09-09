@@ -5,7 +5,6 @@ function md() {
 
   local dir="${1}"
 
-
   mkdir "${dir}" && cd "${dir}" || return
 
 }
@@ -21,7 +20,7 @@ function hicat() {
   if [ "$filesize" -gt "$(tput lines | awk '{print $file-3}')" ]; then
     pygmentize -g "${file}" | cat --number | less --RAW-CONTROL-CHARS
   else
-    pygmentize -g "${file}" | cat --number 
+    pygmentize -g "${file}" | cat --number
   fi
 
 }
