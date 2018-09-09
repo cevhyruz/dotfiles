@@ -14,7 +14,7 @@ alias gl="git log --pretty=oneline --max-count=20 --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
 
-# Sort and show hiden files/dirs.
+# Sort list and show hiden files/dirs.
 alias ls="lsc --almost-all --classify --group-directories-first"
 alias dir="dr --almost-all --classify --group-directories-first"
 
