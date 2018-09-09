@@ -5,6 +5,7 @@ function md() {
 
   local dir="${1}"
 
+
   mkdir "${dir}" && cd "${dir}" || return
 
 }
@@ -12,6 +13,15 @@ function md() {
 # Colorized `cat` output with linenumbers in `less` pager.
 function hicat() {
 
-  pygmentize -g "$1" | cat --number | less --RAW-CONTROL-CHARS
+  local file="${1}"
+  local filesize=""
+
+  filesize="$(pygmentize -g "${file}" | wc -l)"
+
+  if [ "$filesize" -gt "$(tput lines | awk '{print $file-3}')" ]; then
+    pygmentize -g "${file}" | cat --number | less --RAW-CONTROL-CHARS
+  else
+    pygmentize -g "${file}" | cat --number 
+  fi
 
 }
