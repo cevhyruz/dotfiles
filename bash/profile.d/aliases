@@ -16,6 +16,7 @@ alias gshow="git show"
 
 # Sort and show hiden files/dirs.
 alias ls="lsc --almost-all --classify --group-directories-first"
+alias dir="dr --almost-all --classify --group-directories-first"
 
 # Frequently used directories shortcuts.
 alias home="~"
