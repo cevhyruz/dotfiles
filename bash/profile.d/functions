@@ -8,3 +8,10 @@ function md() {
   mkdir "${dir}" && cd "${dir}" || return
 
 }
+
+# Colorized `cat` output with linenumbers in `less` pager.
+function hicat() {
+
+  pygmentize -g "$1" | cat --number | less --RAW-CONTROL-CHARS
+
+}
