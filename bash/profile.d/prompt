@@ -64,7 +64,8 @@ function prompt_git() {
     return;
   fi;
 
-}
+} 
+
 
 function set_prompts() {
 
@@ -77,7 +78,6 @@ function set_prompts() {
   local grey=""
   local pink=""
   local yellow=""
-
 
   if tput setaf 1 &> /dev/null; then
     tput sgr0; # reset colors
@@ -96,8 +96,19 @@ function set_prompts() {
 
   fi
 
+  function _exit_status() {
+
+    if [ "$?" == "0" ]; then
+      echo -e "${green}"
+    else
+      echo -e "${red}"
+    fi
+
+  }
+
   PS1="\\n\\[${bold}\\]"
-  PS1+="\\[${green}\\] ➜  "
+  PS1+="\\[${green}\\]"
+  PS1+="\$(_exit_status \" \") ➜  "
   PS1+="\\[${cyan}\\]\\W"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]\\[${white}\\] $ \\[${pink}\\]"
