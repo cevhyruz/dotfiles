@@ -3,12 +3,15 @@
 LS_COLORS=""
 
 LS_COLORS+="mi=1;31:"   # Non-existent file pointed to by a symlink
+LS_COLORS+="fi=;6:"   # Non-existent file pointed to by a symlink
+
+export LS_COLORS
 
 # Enable color support.
 if [ -x /usr/bin/dircolors ]; then
 
-  if test -r ~/.dircolors; then
-    eval "$(dircolors -b ~/.dircolors)"
+  if test -r ~/Projects/dotfiles/bash/dircolors; then
+    eval "$(dircolors -b ~/Projects/dotfiles/bash/dircolors)"
   fi
 
   alias dr='dir --color=auto '          # `dir` alias expansion. 
