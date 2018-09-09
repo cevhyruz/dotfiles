@@ -2,6 +2,7 @@
 
 # Enable capslock as backspace and double shift as capslock.
 alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslock"
+alias K="k"
 
 # print alias neatly.
 alias path='printf "%b\n" "${PATH//:/\\n}"'
