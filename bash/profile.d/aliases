@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Enable capslock as backspace and double shift as capslock.
-alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslock"
+alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslock | xset r 66"
 alias K="k"
 
 # print alias neatly.
