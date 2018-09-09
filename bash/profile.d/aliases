@@ -11,7 +11,7 @@ alias brestart="sudo /etc/init.d/bluetooth restart"
 alias sudo='sudo '
 
 # Git shortcuts
-alias gl="git log --pretty=oneline --max-count=20 --graph --abbrev-commit"
+alias gl="git log --pretty=oneline --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
 
