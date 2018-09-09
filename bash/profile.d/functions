@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Create directory and enter it.
+function md() {
+
+  local dir="${1}"
+
+  mkdir "${dir}" && cd "${dir}" || return
+
+}
