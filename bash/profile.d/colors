@@ -11,11 +11,11 @@ if [ -x /usr/bin/dircolors ]; then
     eval "$(dircolors -b ~/.dircolors)"
   fi
 
-  alias dr="dir --color=auto "          # `dir` alias expansion. 
+  alias dr='dir --color=auto '          # `dir` alias expansion. 
   alias egrep="egrep --color=auto"
   alias fgrep="fgrep --color=auto"
   alias grep="grep --color=auto"
-  alias lsc="ls --color=auto "          # `ls` alias expansion.
+  alias lsc='ls --color=auto '          # `ls` alias expansion.
   alias vdir="vdir --color=auto"
 
 fi
