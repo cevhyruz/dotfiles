@@ -9,8 +9,6 @@ function _source_bash_files() {
          && . "$file"
     done
 
-  unset file
-
 }
 
 _source_bash_files
