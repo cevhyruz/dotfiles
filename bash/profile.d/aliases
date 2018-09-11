@@ -18,6 +18,8 @@ alias sudo='sudo '
 alias gl="git log --pretty=oneline --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
+alias gdf="git diff"
+alias gca="git commit --all"
 
 #-----------------------------------
 # System utilities                 |
