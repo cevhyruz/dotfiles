@@ -2,3 +2,6 @@
 
 # Set `vim` as the default editor.
 export EDITOR="vim"
+
+# Set default term.
+export TERM="xterm-256color"
