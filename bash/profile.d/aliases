@@ -29,6 +29,9 @@ alias gca="git commit --all"
 alias ls='lsc --almost-all --classify --group-directories-first '
 alias dir='dr --almost-all --classify --group-directories-first '
 
+# Display which process spawn the current shell.
+alias mom="ps --no-headers -o comm $PPID"
+
 # Frequently used directories shortcuts.
 alias home="~"
 alias p="~/Projects"
