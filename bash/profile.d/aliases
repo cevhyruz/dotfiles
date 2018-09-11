@@ -7,6 +7,9 @@ alias K="k"
 # print alias neatly.
 alias path='printf "%b\n" "${PATH//:/\\n}"'
 
+# print bash options neatly.
+alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'
+
 # System commands
 alias brestart="sudo /etc/init.d/bluetooth restart" 
 alias sudo='sudo '
