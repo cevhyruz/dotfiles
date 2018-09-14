@@ -2,3 +2,6 @@
 
 # automaticall preprend `cd` to directory names.
 shopt -s autocd
+
+# Vi-style keybindings.
+set -o vi
