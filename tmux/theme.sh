@@ -16,24 +16,19 @@ set-option -g renumber-windows on
 # Remove separator between window names.
 setw -g window-status-separator ''
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
-
 #  Modes. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
 setw -g clock-mode-colour $status_bg
 setw -g mode-attr bold
 setw -g mode-fg colour13
 setw -g mode-bg colour134
 
 # Panes. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 set -g pane-border-bg $status_bg
 set -g pane-border-fg $status_fg
 set -g pane-active-border-bg $status_bg
 set -g pane-active-border-fg $status_fg
 
 # Statusbar. - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 set -g status-position bottom
 set -g status-justify centre
 set -g status-bg $status_bg
@@ -41,12 +36,11 @@ set -g status-fg white
 set -g status-attr bold
 
 # Status Left. - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 set -g status-left-bg $status_bg
 set -g status-left-fg $status_fg
 set -g status-left  \
-"#[bg=colour236,fg=colour30] ☰ #(tmux list-session | wc -l) "\
-"#[bg=colour23,fg=colour236] "\
+" ☰#[bg=colour236,fg=colour30] #(tmux list-session | wc -l) "\
+"#[bg=colour23,fg=colour236]"\
 "#[bg=colour23,fg=colour234] #S [#(tmux list-windows | wc -l)] "\
 "#[bg=colour234,fg=colour23]"\
 "#[bg=colour235,fg=colour234]  "\
@@ -75,12 +69,11 @@ setw -g window-status-current-format \
 "#[fg=colour30] #I "\
 "#[fg=colour130]#W "
 
-
 # Normal window. - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 setw -g window-status-fg colour30
 setw -g window-status-bg $status_bg
 setw -g window-status-attr none
+
 # Normal window format.
 setw -g window-status-format \
 "#[fg=colour235,bg=colour235]"\
@@ -88,7 +81,6 @@ setw -g window-status-format \
 "#[fg=colour246]#W "
 
 # Messages and Command mode. - - - - - - - - - - - - - - - - - - - - -
-
 set -g message-attr bold
 set -g message-fg colour250
 set -g message-bg colour23
