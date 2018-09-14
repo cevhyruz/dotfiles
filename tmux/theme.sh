@@ -7,6 +7,7 @@
 # Color Variables. - - - - - - - - - - - - - - - - - - - - - - - - - -
 status_bg=colour235
 status_fg=colour245
+status_bg_backdrop=colour234
 status_bluegreen=colour30
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
@@ -17,8 +18,8 @@ set-option -g renumber-windows on
 setw -g window-status-separator ''
 
 #  Modes. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-setw -g clock-mode-colour $status_bg
-setw -g mode-attr bold
+setw -g clock-mode-colour $status_fg
+setw -g mode-attr italic
 setw -g mode-fg colour13
 setw -g mode-bg colour134
 
@@ -30,7 +31,7 @@ set -g pane-active-border-fg $status_fg
 
 # Statusbar. - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 set -g status-position bottom
-set -g status-justify centre
+set -g status-justify left
 set -g status-bg $status_bg
 set -g status-fg white
 set -g status-attr bold
@@ -42,43 +43,36 @@ set -g status-left  \
 " ☰#[bg=colour236,fg=colour30] #(tmux list-session | wc -l) "\
 "#[bg=colour23,fg=colour236]"\
 "#[bg=colour23,fg=colour234] #S [#(tmux list-windows | wc -l)] "\
-"#[bg=colour234,fg=colour23]"\
-"#[bg=colour235,fg=colour234]  "\
+"#[bg=$status_bg_backdrop, fg=colour23]"\
+"#[bg=$status_bg, fg=colour234]"\
 
-# Status Right. - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Status right. - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 set -g status-right-bg $status_bg
 set -g status-right-fg colour239
 set -g status-right \
 "#[fg=colour235]"\
-"#[bg=colour235,fg=colour245, none] ♬ Nakapagtataka - Sponge Cola.. "\
-"#[fg=colour234,bg=$status_bg]"\
-"#[fg=colour23,bg=colour234]"\
-"#[fg=colour233,bg=colour23,bold] %m:%d "\
-"#[fg=colour233,bg=colour29,bold] #H "
+"#[bg=colour235, fg=colour245, none] ♬ Nakapagtataka - Sponge Cola.. "\
+"#[fg=colour234, bg=$status_bg]"\
+"#[fg=colour23, bg=colour234]"\
+"#[fg=colour233, bg=colour23,bold] %h %d"\
+"#[fg=colour109, bg=colour23,bold] %l:%M %p "\
+"#[fg=colour233, bg=colour29,bold] #H "
  
-#   Status Right =    %d/%m  %H:%M:%S
-set -g status-right-length 56
+# Status right.
+set -g status-right-length 70
 set -g status-left-length 30
 
 # Current active window. - - - - - - - - - - - - - - - - - - - - - - -
 setw -g window-status-current-fg colour30
 setw -g window-status-current-bg $status_bg
-setw -g window-status-current-attr bold
-setw -g window-status-current-format \
-"#[fg=colour235,bg=colour235]#[fg=colour235,bg=colour235]"\
-"#[fg=colour30] #I "\
-"#[fg=colour130]#W "
+setw -g window-status-current-attr dim
+setw -g window-status-current-format ' #I #[fg=colour137]#W '
 
 # Normal window. - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setw -g window-status-fg colour30
-setw -g window-status-bg $status_bg
-setw -g window-status-attr none
-
-# Normal window format.
-setw -g window-status-format \
-"#[fg=colour235,bg=colour235]"\
-"#[bg=colour235,fg=colour30,bold] #I "\
-"#[fg=colour246]#W "
+setw -g window-status-bg colour235
+setw -g window-status-attr bold
+setw -g window-status-format ' #I #[fg=colour246]#W '
 
 # Messages and Command mode. - - - - - - - - - - - - - - - - - - - - -
 set -g message-attr bold
