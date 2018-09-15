@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+
+function _get_current_playing_song() {
+
+if pgrep -x "mplayer" > /dev/null; then
+  lsof -c mplayer | grep -F ".mp3" | awk -F"/" '{ print $NF; }' | cut -d'.' -f1
+elif pgre -x "" > /dev/null; then
+  echo "mpsyt-youtube"
+fi
+  # Mplayer for local music files.
+#  echo 'hi folks'
+#elif "$(pgrep -x "mpsyt" > /dev/null)"; then
+#  # for mpsyt-youtube.
+#  echo "mpyt"
+#fi
+#echo "hi pips"
+}
+
+_get_current_playing_song
