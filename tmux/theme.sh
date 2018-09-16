@@ -61,9 +61,11 @@ set -g status-left  \
 "#[bg=colour23, fg=colour234] #S [#(tmux list-windows | wc -l)] "\
 "#[bg=$status_bg_backdrop, fg=colour23]"\
 "#[bg=$status_bg, fg=colour234]"\
-"#[fg=colour250, bold]"\
+"#[fg=colour250, bold] "\
 "#[bg=$status_bg, fg=colour23, none] #($git_status)"\
-"#[bg=$status_bg, fg=colour237] "
+"#[bg=$status_bg, fg=colour243, bold]    "
+
+
 
 # Current active window.
 setw -g window-status-current-fg colour30
