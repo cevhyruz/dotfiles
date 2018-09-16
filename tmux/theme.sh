@@ -7,8 +7,11 @@
 # Color Variables.
 status_bg=colour235
 status_fg=colour245
+
+# Executables.
 song_playing='/home/devs/Projects/dotfiles/bin/current_playing_song'
 git_status='/home/devs/Projects/dotfiles/bin/git_branch_status'
+
 status_bg_backdrop=colour234
 status_bluegreen=colour30
 
