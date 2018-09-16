@@ -13,7 +13,7 @@ function git_status() {
   # Get the current branch.
   current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
      git rev-parse --short HEAD 2> /dev/null || \
-     echo '(unknown)')";
+     (unknown))";
    
   # TODO: Add checking for remote branch in here.
   # Check for stream updates.
@@ -28,3 +28,4 @@ function git_status() {
 }
 git_status
 unset -f git_status
+
