@@ -24,7 +24,6 @@ setw -g mode-attr bold
 setw -g mode-fg colour13
 setw -g mode-bg colour134
 
-
 # Panes.
 set -g pane-border-bg $status_bg
 set -g pane-border-fg $status_fg
@@ -64,8 +63,6 @@ set -g status-left  \
 "#[fg=colour250, bold] "\
 "#[bg=$status_bg, fg=colour23, none] #($git_status)"\
 "#[bg=$status_bg, fg=colour243, bold]    "
-
-
 
 # Current active window.
 setw -g window-status-current-fg colour30
