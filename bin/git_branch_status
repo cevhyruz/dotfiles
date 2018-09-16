@@ -18,7 +18,6 @@ function git_status() {
   # TODO: Add checking for remote branch in here.
   # Check for stream updates.
   git rev-list --left-right "${current_branch}"...origin/master -- > /tmp/git_upstream_status
-   
 
   # Get the upstream and downstream.
   behind="$(grep --count '^>' /tmp/git_upstream_status)"
@@ -28,3 +27,4 @@ function git_status() {
 
 }
 git_status
+unset -f git_status
