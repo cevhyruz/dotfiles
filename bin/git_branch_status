@@ -6,21 +6,25 @@ function git_status() {
   local ahead=""
   local current_branch=""
 
+  # TODO: this needs an own dedication dotfiles env path.
+  # Make sure we are insde a git repo.
+  cd /home/devs/Projects/dotfiles || return
+
   # Get the current branch.
   current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
      git rev-parse --short HEAD 2> /dev/null || \
      echo '(unknown)')";
    
+  # TODO: Add checking for remote branch in here.
   # Check for stream updates.
   git rev-list --left-right "${current_branch}"...origin/master -- > /tmp/git_upstream_status
    
-  # TODO: Add checking for remote branch in here.
 
   # Get the upstream and downstream.
   behind="$(grep --count '^>' /tmp/git_upstream_status)"
   ahead="$(grep --count '^<' /tmp/git_upstream_status)"
 
   echo "$behind↓ $ahead↑"
-}
 
+}
 git_status
