@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+function git_status() {
+
+  local behind=""
+  local ahead=""
+  local current_branch=""
+
+  # Get the current branch.
+  current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
+     git rev-parse --short HEAD 2> /dev/null || \
+     echo '(unknown)')";
+   
+  # Check for stream updates.
+  git rev-list --left-right "${current_branch}"...origin/master -- > /tmp/git_upstream_status
+   
+  # TODO: Add checking for remote branch in here.
+
+  # Get the upstream and downstream.
+  behind="$(grep --count '^>' /tmp/git_upstream_status)"
+  ahead="$(grep --count '^<' /tmp/git_upstream_status)"
+
+  echo "$behind↓ $ahead↑"
+}
+
+git_status
