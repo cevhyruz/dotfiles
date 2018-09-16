@@ -23,6 +23,7 @@ setw -g mode-attr bold
 setw -g mode-fg colour13
 setw -g mode-bg colour134
 
+
 # Panes.
 set -g pane-border-bg $status_bg
 set -g pane-border-fg $status_fg
@@ -45,12 +46,12 @@ set -g status-right \
 "#[bg=colour235, fg=colour245, none] ♬ #($song_playing).. "\
 "#[fg=colour234, bg=$status_bg]"\
 "#[fg=colour23, bg=colour234]"\
-"#[fg=colour233, bg=colour23,bold] %h %d,"\
-"#[fg=colour109, bg=colour23,bold]%l:%M %p "\
+"#[fg=colour233, bg=colour23] %h %d,"\
+"#[fg=colour109, bg=colour23]%l:%M %p "\
 "#[fg=colour233, bg=colour29,bold] #H "
 
 # Status Left.
-set -g status-left-length 30
+set -g status-left-length 60
 set -g status-left-bg $status_bg
 set -g status-left-fg $status_fg
 set -g status-left  \
@@ -58,9 +59,10 @@ set -g status-left  \
 "#[bg=colour23, fg=colour236]"\
 "#[bg=colour23, fg=colour234] #S [#(tmux list-windows | wc -l)] "\
 "#[bg=$status_bg_backdrop, fg=colour23]"\
-"#[bg=$status_bg, fg=colour234]"\
+"#[bg=$status_bg, fg=colour234] "\
+"#[bg=$status_bg, fg=colour23, none]0↓ 8↑"\
+"#[bg=$status_bg, fg=colour237] "
 
- 
 # Current active window.
 setw -g window-status-current-fg colour30
 setw -g window-status-current-bg $status_bg
@@ -77,4 +79,3 @@ setw -g window-status-format ' #I #[fg=colour246]#W '
 set -g message-attr bold
 set -g message-fg colour250
 set -g message-bg colour23
-
