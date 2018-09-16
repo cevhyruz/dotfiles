@@ -8,6 +8,7 @@
 status_bg=colour235
 status_fg=colour245
 song_playing='/home/devs/Projects/dotfiles/bin/current_playing_song'
+git_status='/home/devs/Projects/dotfiles/bin/git_branch_status'
 status_bg_backdrop=colour234
 status_bluegreen=colour30
 
@@ -51,7 +52,7 @@ set -g status-right \
 "#[fg=colour233, bg=colour29,bold] #H "
 
 # Status Left.
-set -g status-left-length 60
+set -g status-left-length 90
 set -g status-left-bg $status_bg
 set -g status-left-fg $status_fg
 set -g status-left  \
@@ -59,8 +60,8 @@ set -g status-left  \
 "#[bg=colour23, fg=colour236]"\
 "#[bg=colour23, fg=colour234] #S [#(tmux list-windows | wc -l)] "\
 "#[bg=$status_bg_backdrop, fg=colour23]"\
-"#[bg=$status_bg, fg=colour234] "\
-"#[bg=$status_bg, fg=colour23, none]0↓ 8↑"\
+"#[bg=$status_bg, fg=colour234]"\
+"#[bg=$status_bg, fg=colour23, none] #(\$git_status)"\
 "#[bg=$status_bg, fg=colour237] "
 
 # Current active window.
