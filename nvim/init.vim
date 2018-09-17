@@ -34,20 +34,3 @@
   set tabstop=2                 " Tabs width.
   set softtabstop=2             " use 2 spaces for tabs.
   set shiftwidth=2              " Number of spaces to for indention.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
