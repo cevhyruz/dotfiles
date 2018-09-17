@@ -11,7 +11,7 @@
   set numberwidth=4             " Line numbers left-indention.
   set number relativenumber     " Display hy-brid line numbers.
   set scrolloff=6               " Line wrap around cursor while scrolling.
-  set autoindent                " Automatically set indenet for new lines.
+  set autoindent                " Automatically set indent for new lines.
   set autoread                  " Detect if a file has changed.
   set laststatus=2              " Always show the status line.
   set showcmd                   " Show partial commands at bottom-right.
