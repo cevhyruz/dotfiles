@@ -1,5 +1,2 @@
-" Leader key
-let mapleader = ","
-
-" Reload vim
-nnoremap <silent> <leader>r :source $MYVIMRC<cr>:echo " Reloaded "<cr>
+" Key mappings.
+source /home/devs/Projects/dotfiles/nvim/keybindings.vim
