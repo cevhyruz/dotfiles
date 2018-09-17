@@ -2,6 +2,9 @@
 " Key mappings.
   source /home/devs/Projects/dotfiles/nvim/keybindings.vim
 
+" Status Line
+  source /home/devs/Projects/dotfiles/nvim/statusline.vim
+
 " General Settings
 
   set nocompatible               " Make vim more useful.
@@ -48,6 +51,7 @@
   set ruler                      " Show cursor position in the file.
   set shortmess=atI              " No intro message at startup.
   set showmode                   " Show current mode.
+  set showtabline=2              " Always show the tabline.
 
 " When moving around, don't reset mouse position at the start of the line.
   set nostartofline
