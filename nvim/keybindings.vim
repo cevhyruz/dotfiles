@@ -5,5 +5,3 @@ let mapleader = ","          " Leader key.
 
 " Edit init.vim
   nnoremap <leader>e :e $MYVIMRC<cr> 
-
-
