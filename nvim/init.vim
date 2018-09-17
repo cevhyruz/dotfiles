@@ -17,9 +17,9 @@
   set showcmd                   " Show partial commands at bottom-right.
   set list                      " Show trailing whitespace, tabs, EOL, etc..
   set showbreak=...             " Show ellipsis where the line breaks.
-  set linebreak                 " Enable soft wrapping.
-  set wrap                      " Enable line-wrapping.
-  set wrapmargin=8              " Wrap lines from within `n` characters.
+"  set linebreak                 " Enable soft wrapping.
+"  set wrap                      " Enable line-wrapping.
+"  set wrapmargin=1              " Wrap lines from within `n` characters.
   set ttyfast                   " Faster redrawing.
   set cmdheight=1               " Set command bar height.
   set history=10000             " Set vim history to maximum size.
@@ -32,5 +32,6 @@
   set expandtab                 " Expand tabs to spaces.
   set smarttab                  " Don't override file default tabs.
   set tabstop=2                 " Tabs width.
-  set softtabstop=2             " use 2 spaces for tabs.
+  set softtabstop=2             " Use 2 spaces for tabs.
+  set foldmethod=manual         " Manually create my own code folding method.
   set shiftwidth=2              " Number of spaces to for indention.
