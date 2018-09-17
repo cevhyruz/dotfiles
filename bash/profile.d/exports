@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set `vim` as the default editor.
-export EDITOR="vim"
+export EDITOR="nvim"
 
 # Set default term.
 export TERM="xterm-256color"
