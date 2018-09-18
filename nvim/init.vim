@@ -1,5 +1,5 @@
 
-" Key mappings.
+" Key Bindings.
   source /home/devs/Projects/dotfiles/nvim/keybindings.vim
 
 " Status Line
@@ -50,7 +50,7 @@
   set mouse=a                    " Enable mouse in all modes.
   set ruler                      " Show cursor position in the file.
   set shortmess=atI              " No intro message at startup.
-  set showmode                   " Show current mode.
+  set noshowmode                   " Show current mode.
   set showtabline=2              " Always show the tabline.
 
 " When moving around, don't reset mouse position at the start of the line.
