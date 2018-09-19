@@ -5,6 +5,8 @@
 " Status Line
   source /home/devs/Projects/dotfiles/nvim/statusline.vim
 
+  source /home/devs/Projects/dotfiles/nvim/macros.vim
+
 " General Settings
 
   set nocompatible               " Make vim more useful.
