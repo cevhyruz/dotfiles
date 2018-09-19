@@ -29,6 +29,7 @@ alias gca="git commit --all"
 alias ls='lsc --almost-all --classify --group-directories-first '
 alias dir='dr --almost-all --classify --group-directories-first '
 
+# Default editor.
 alias vim='$EDITOR '
 
 # Display which process spawn the current shell.
@@ -50,5 +51,6 @@ alias et="/etc"
 
 # Neovim Files.
 alias lvim="~/.config/nvim/init.vim"    # Local nvim config.
+
 alias svim="$VIM/sysinit.vim"           # System-wide nvim config.
 
