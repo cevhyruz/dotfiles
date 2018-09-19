@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
 
-# Enable capslock as backspace and double shift as capslock.
 alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslock | xset r 66"
 alias K="k"
 
-# print alias neatly.
-alias path='printf "%b\n" "${PATH//:/\\n}"'
+#------------------------------------------
+#             Custom commands             |
+#------------------------------------------
 
-# print bash options neatly.
-alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'
+alias path='printf "%b\n" "${PATH//:/\\n}"'          # Print PATH env neatly.
+alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
+alias brestart="sudo /etc/init.d/bluetooth restart"  # Restart bluetooth.
+alias mom="ps --no-headers -o comm $PPID"      # which process spawns the shell?
 
-# System commands
-alias brestart="sudo /etc/init.d/bluetooth restart" 
+#------------------------------------------
+#              Git commands               |
+#------------------------------------------
 
-# Allow alias to be `sudo`ed.
-alias sudo='sudo '
-
-# Git shortcuts
 alias gl="git log --pretty=oneline --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
@@ -24,24 +23,19 @@ alias gdf="git diff"
 alias gca="git commit --all"
 
 #------------------------------------------
-#            System utilities             |
+#             System commands             |
 #------------------------------------------
 
-# Sort list and show hiden files/dirs.
+alias sudo='sudo '                       # Allow aliases to be `sudo`ed.
+alias vim='$EDITOR '                     # Expand from default editor.
+alias rm='rm '                           # Allow aliases to be `rm`ed.
+
+# Sort, list and show hiden files/dirs with colored listing.
 alias ls='lsc --almost-all --classify --group-directories-first '
 alias dir='dr --almost-all --classify --group-directories-first '
 
-# Remove
-alias rm='rm '
-
-# Default editor.
-alias vim='$EDITOR '
-
-# Display which process spawn the current shell.
-alias mom="ps --no-headers -o comm $PPID"
-
 #------------------------------------------
-#   Shortcuts for files and directories   |
+#     Files and directories shortcuts     |
 #------------------------------------------
 
 # Frequently used directories.
