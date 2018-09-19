@@ -12,6 +12,8 @@ alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'
 
 # System commands
 alias brestart="sudo /etc/init.d/bluetooth restart" 
+
+# Allow alias to be `sudo`ed.
 alias sudo='sudo '
 
 # Git shortcuts
@@ -28,6 +30,8 @@ alias gca="git commit --all"
 # Sort list and show hiden files/dirs.
 alias ls='lsc --almost-all --classify --group-directories-first '
 alias dir='dr --almost-all --classify --group-directories-first '
+
+alias rm='rm '
 
 # Default editor.
 alias vim='$EDITOR '
@@ -50,5 +54,5 @@ alias d="~/Documents"
 alias et="/etc"
 
 # Neovim Files.
-alias lvim="~/.config/nvim/init.vim"    # Local nvim config.
-alias svim="/usr/share/sysinit.vim"           # System-wide nvim config.
+alias lvim="~/.config/nvim/init.vim"          # Local nvim config.
+alias svim="/usr/share/nvim/sysinit.vim"      # System-wide nvim config.
