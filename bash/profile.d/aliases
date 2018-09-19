@@ -51,6 +51,4 @@ alias et="/etc"
 
 # Neovim Files.
 alias lvim="~/.config/nvim/init.vim"    # Local nvim config.
-
-alias svim="$VIM/sysinit.vim"           # System-wide nvim config.
-
+alias svim="/usr/share/sysinit.vim"           # System-wide nvim config.
