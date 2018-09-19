@@ -10,8 +10,8 @@ alias path='printf "%b\n" "${PATH//:/\\n}"'          # Print PATH env neatly.
 alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
 alias brestart="sudo /etc/init.d/bluetooth restart"  # Restart bluetooth.
 alias mom="ps --no-headers -o comm $PPID"      # which process spawns the shell?
-alias todo="grep --recursive 'TODO: '"                  # List all 
-alias cwd='printf '%s' "${PWD##*/}"'
+alias todo="grep --recursive 'TODO: '"         # List all todo comments.
+alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 
 #------------------------------------------
 #              Git commands               |
