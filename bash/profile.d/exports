@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# Set `vim` as the default editor.
+# Set Neovim as the default editor.
 export EDITOR="nvim"
+
+# Neovim ENV, used to locate various files, such as the user's init.vim.
+export VIM="/usr/share/$EDITOR"
 
 # Set default term.
 export TERM="xterm-256color"
