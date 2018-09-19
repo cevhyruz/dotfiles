@@ -31,6 +31,7 @@ alias gca="git commit --all"
 alias ls='lsc --almost-all --classify --group-directories-first '
 alias dir='dr --almost-all --classify --group-directories-first '
 
+# Remove
 alias rm='rm '
 
 # Default editor.
