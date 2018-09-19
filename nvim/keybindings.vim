@@ -1,7 +1,7 @@
 let mapleader = ","          " Leader key.
 
 " Refresh current file
-  nnoremap <silent> <leader>r :e<cr>:echo " current file loaded.." <cr>
+  nnoremap <silent> <leader>r :e<cr>:redraw<cr>:echo " current file loaded.."<cr>
 
 " Open vim config file
   nnoremap <leader>e :e $MYVIMRC<cr> 
@@ -29,7 +29,6 @@ let mapleader = ","          " Leader key.
 
 " Map command
   nnoremap ; :
-
 " List buffers
   nnoremap ;ls  :ls<cr>
 
@@ -38,3 +37,7 @@ let mapleader = ","          " Leader key.
 
 " Write file.
   nnoremap <leader>w :w<cr> 
+
+
+" Should be "macros"
+nnoremap ysiw :silent! normal bi"<esc>ea"<esc>
