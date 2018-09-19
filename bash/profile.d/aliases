@@ -21,6 +21,9 @@ alias gshow="git show"
 alias gdf="git diff"
 alias gca="git commit --all"
 
+# Reset uncommited changes.
+alias grest="git reset --hard HEAD"
+
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
