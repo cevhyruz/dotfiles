@@ -1,8 +1,8 @@
 
 " Key Bindings.
-"  source /home/devs/Projects/dotfiles/nvim/keybindings.vim
+ source /home/devs/Projects/dotfiles/nvim/autoload/keybindings.vim
 " Status Line
-"  source /home/devs/Projects/dotfiles/nvim/statusline.vim
+  source /home/devs/Projects/dotfiles/nvim/autoload/statusline.vim
 
 "  source /home/devs/Projects/dotfiles/nvim/macros.vim
 
@@ -55,4 +55,4 @@
   set showtabline=2              " Always show the tabline.
 
 " Don't create backup when in certain directories.
-  set backupskip=/tmp/*,/private/tmp/*
+  set backupskip=/tmp/*, /private/tmp/*
