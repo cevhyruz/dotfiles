@@ -1,11 +1,10 @@
 
 " Key Bindings.
-  source /home/devs/Projects/dotfiles/nvim/keybindings.vim
-
+"  source /home/devs/Projects/dotfiles/nvim/keybindings.vim
 " Status Line
-  source /home/devs/Projects/dotfiles/nvim/statusline.vim
+"  source /home/devs/Projects/dotfiles/nvim/statusline.vim
 
-  source /home/devs/Projects/dotfiles/nvim/macros.vim
+"  source /home/devs/Projects/dotfiles/nvim/macros.vim
 
 " General Settings
 
@@ -28,16 +27,16 @@
   set gdefault                   " Add the `g` flag to search/replace.
   set list                       " Show trailing whitespace, tabs, EOL, etc..
   set showbreak=...              " Show ellipsis where the line breaks.
-"  set linebreak                  " Enable soft wrapping.
-"  set wrap                       " Enable line-wrapping.
-"  set wrapmargin=1               " Wrap lines from within `n` characters.
+" set linebreak                  " Enable soft wrapping.
+" set wrap                       " Enable line-wrapping.
+" set wrapmargin=1               " Wrap lines from within `n` characters.
   set ttyfast                    " Faster redrawing.
   set cmdheight=1                " Set command bar height.
   set history=10000              " Set vim history to maximum size.
   set ignorecase                 " Make searching case-insensitive.
   set smartcase                  " Case-sensitive if expression has a capital.
   set binary                     " No empty newlines at the end of files.
-  set noeol
+  set noeol                      " Same as `set binary`.
   set hlsearch                   " Highlight search results.
   set incsearch                  " Highlight as pattern is typed.
   set nolazyredraw               " Don't redraw whle running a macro.
@@ -54,9 +53,6 @@
   set shortmess=atI              " No intro message at startup.
   set noshowmode                   " Show current mode.
   set showtabline=2              " Always show the tabline.
-
-" When moving around, don't reset mouse position at the start of the line.
-  set nostartofline
 
 " Don't create backup when in certain directories.
   set backupskip=/tmp/*,/private/tmp/*
