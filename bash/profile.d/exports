@@ -8,3 +8,5 @@ export EDITOR='nvim '
 
 # Set default term.
 export TERM="xterm-256color"
+
+export INPUTRC="/home/devs/Projects/dotfiles/bash/inputrc"
