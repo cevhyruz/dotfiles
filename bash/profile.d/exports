@@ -9,4 +9,6 @@ export EDITOR='nvim '
 # Set default term.
 export TERM="xterm-256color"
 
+ # TODO: This should have a environmental path.
+# Define local inputrc file.
 export INPUTRC="/home/devs/Projects/dotfiles/bash/inputrc"
