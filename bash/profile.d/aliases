@@ -29,7 +29,7 @@ alias grest="git reset --hard HEAD"
 #             System commands             |
 #------------------------------------------
 alias sudo='sudo '                       # Allow aliases to be `sudo`ed.
-alias vim='$EDITOR '                     # Expand from default editor.
+#alias vim='$EDITOR '                     # Expand from default editor.
 alias rm='rm '                           # Allow aliases to be `rm`ed.
 
 # Sort, list and show hiden files/dirs with colored listing.

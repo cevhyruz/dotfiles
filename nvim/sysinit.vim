@@ -1,10 +1,10 @@
 
-" Key Bindings.
- source /home/devs/Projects/dotfiles/nvim/autoload/keybindings.vim
-" Status Line
-  source /home/devs/Projects/dotfiles/nvim/autoload/statusline.vim
+" Load Components
+  source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
+  source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
 
 "  source /home/devs/Projects/dotfiles/nvim/macros.vim
+
 
 " General Settings
 
@@ -13,7 +13,7 @@
   set t_Co=256                   " Tell vim that terminal supports 256 colors.
   set encoding=utf-8 nobomb      " Use utf-8 encoding without BOM.
   set background=dark            " Disable dark texts on dark backgrounds.
-  set colorcolumn=80             " Character per line guide.
+  set colorcolumn=78             " Character per line guide.
   set numberwidth=4              " Line numbers left-indention.
   set number relativenumber      " Display hy-brid line numbers.
   set scrolloff=6                " Line wrap around cursor while scrolling.
@@ -50,9 +50,10 @@
   set cursorline                 " Highlight current line.
   set mouse=a                    " Enable mouse in all modes.
   set ruler                      " Show cursor position in the file.
-  set shortmess=atI              " No intro message at startup.
   set noshowmode                   " Show current mode.
   set showtabline=2              " Always show the tabline.
 
+  set backupdir=/tmp//
+
 " Don't create backup when in certain directories.
-  set backupskip=/tmp/*, /private/tmp/*
+  set backupskip=/tmp/*,/private/tmp/*
