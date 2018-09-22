@@ -18,7 +18,13 @@ set vi-cmd-mode-string \1\e[2 q\2
 $if mode=vi
   set keymap vi-command
 
-  # map `mm` as enter/carriage-return
+  # Map `mm` as enter/carriage-return
   "mm": "\C-M"
+
+  #-------------
+  #   Macros   |
+  #-------------
+  # Surround with double quotes.
+  "ysiw": 'bi"\eea"\e'
 
 $endif
