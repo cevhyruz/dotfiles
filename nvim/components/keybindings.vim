@@ -23,7 +23,7 @@ hi Normal ctermbg=234
 
 " Reload vim config file
   nnoremap <silent> ;r
-         \ :call components#keybindings#CurrentFile()<cr>
+         \ :call functions#ReloadFile()<cr>
 " Add marks.
   nnoremap <silent> m :call components#keybindings#GetNChar()<cr>
 
