@@ -1,0 +1,120 @@
+ //Place your key bindings in this file to overwrite the defaults
+[
+//----- Terminal ------//
+
+// toggle terminal
+{
+  "key": "ctrl+j",
+  "command": "workbench.action.terminal.toggleTerminal"
+},
+
+// create new terminal instance
+{
+  "key": "ctrl+n",
+  "command": "workbench.action.terminal.new",
+  "when": "terminalFocus"
+},
+
+// navigate through terminals
+
+// Note: while in --normal mode-- delete a line using vim's 'd' command
+// and [ctrl + shift + k] in --Insert Mode--
+{
+  "key": "ctrl+shift+k",
+  "command": "workbench.action.terminal.focusPrevious",
+  "when": "terminalFocus"
+},
+{
+  "key": "ctrl+shift+j",
+  "command": "workbench.action.terminal.focusNext",
+  "when": "terminalFocus"
+},
+
+// rename terminal
+{
+  "key": "ctrl+shift+,",
+  "command": "workbench.action.terminal.rename"
+},
+
+// kill terminal
+{
+  "key": "ctrl+k",
+  "command": "workbench.action.terminal.kill",
+  "when": "terminalFocus"
+},
+
+//----- Sidebar  ------ //
+
+// toggle sidebar visibility
+{
+  "key": "meta+b",
+  "command": "workbench.action.toggleSidebarVisibility"
+},
+{
+  "key": "ctrl+b",
+  "command": "-workbench.action.toggleSidebarVisibility"
+},
+
+// ------- Notification ------ //
+
+// confirm/cancel notif
+{
+  "key": "j j",
+  "command": "workbench.action.closeMessages",
+  "when": "globalMessageVisible"
+},
+
+// ---- Explorer ------ //
+
+// Deleting a file
+{
+  "key": "shift+d",
+  "command": "deleteFile",
+  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+},
+{
+  "key": "shift+delete",
+  "command": "-deleteFile",
+  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+},
+// renaming file  
+{
+  "key": "shift+r",
+  "command": "renameFile",
+  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+},
+{
+  "key": "f2",
+  "command": "-renameFile",
+  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+},
+// creating newfile 
+{
+  "key": "shift+n",
+  "command": "explorer.newFile",
+  "when": "filesExplorerFocus"
+},
+// creating newfolder 
+{
+  "key": "ctrl+n",
+  "command": "explorer.newFolder",
+  "when": "filesExplorerFocus"
+},
+// Stage file in git
+{
+  "key": "ctrl+k s",
+  "command": "git.stage"
+},
+// close active editor
+{
+  "key": "ctrl+shift+w",
+  "command": "workbench.action.closeActiveEditor"
+},
+{
+  "key": "ctrl+w",
+  "command": "-workbench.action.closeActiveEditor"
+},
+{
+  "key": "ctrl+k u",
+  "command": "git.unstage"
+}
