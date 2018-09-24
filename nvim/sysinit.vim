@@ -3,7 +3,7 @@
   source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
   source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
 
-"  source /home/devs/Projects/dotfiles/nvim/macros.vim
+  source /home/devs/Projects/dotfiles/nvim/components/macros.vim
 
 
 " General Settings
