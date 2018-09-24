@@ -5,7 +5,7 @@
   "kj": vi-movement-mode
 
 # map `mm` as enter/carriage-return
-  "mm": "\C-M"
+  "jj": "\C-M"
 
 # Change cursor shape depending on current mode.
 set show-mode-in-prompt on
@@ -19,7 +19,7 @@ $if mode=vi
   set keymap vi-command
 
   # Map `mm` as enter/carriage-return
-  "mm": "\C-M"
+  "jj": "\C-M"
 
   #-------------
   #   Macros   |
