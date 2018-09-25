@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 
+# Start tmux a tmux session with base directory.
+function tmx() {
+
+  local session_name=""
+  local session_base_dir=""
+
+  session_name="${PWD##*/}"
+  session_base_dir="$(pwd)"
+
+  # Create session.
+  tmux new -s "${session_name}" -d
+
+  # Set base directory (for statusline shell scripts).
+  tmux setenv __base_dir__ "${session_base_dir}"
+  
+  tmux attach
+  
+}
+
 # Create directory and enter it.
 function md() {
 
