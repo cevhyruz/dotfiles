@@ -8,6 +8,7 @@ function git_status() {
 
   # FIXME: It needs to be called in all external scripts. Make this a one
   # time setup.
+  # FIXME: Perhaps add refresh time?
   # Export tmux env variable to current shell. 
   export $(tmux showenv $__base_dir__)
 
@@ -27,7 +28,7 @@ function git_status() {
   behind="$(grep --count '^>' /tmp/git_upstream_status)"
   ahead="$(grep --count '^<' /tmp/git_upstream_status)"
 
-  echo "$behind↓ $ahead↑"
+  echo "$(dirs) $behind↓ $ahead↑"
 
 }
 git_status
