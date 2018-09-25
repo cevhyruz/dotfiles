@@ -1,3 +1,6 @@
 
 " Display single pane only.
 only
+
+" Set neovim as default editor.
+set vicmd=nvim
