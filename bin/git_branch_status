@@ -6,15 +6,19 @@ function git_status() {
   local ahead=""
   local current_branch=""
 
-  # TODO: this needs an own dedication dotfiles env path.
-  # Make sure we are insde a git repo.
-  cd /home/devs/Projects/dotfiles || return
+  # FIXME: It needs to be called in all external scripts. Make this a one
+  # time setup.
+  # Export tmux env variable to current shell. 
+  export $(tmux showenv $__base_dir__)
+
+  # Set the current working directory.
+  cd $__base_dir__
 
   # Get the current branch.
-  current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
+ current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
      git rev-parse --short HEAD 2> /dev/null || \
      (unknown))";
-   
+
   # TODO: Add checking for remote branch in here.
   # Check for stream updates.
   git rev-list --left-right "${current_branch}"...origin/master -- > /tmp/git_upstream_status
@@ -27,5 +31,4 @@ function git_status() {
 
 }
 git_status
-unset -f git_status
-
+#unset -f git_status
