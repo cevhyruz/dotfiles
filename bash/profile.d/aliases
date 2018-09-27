@@ -13,6 +13,7 @@ alias brestart="sudo /etc/init.d/bluetooth restart"  # Restart bluetooth.
 alias mom="ps --no-headers -o comm $PPID"      # which process spawns the shell?
 alias todo="grep --recursive 'TOD[O]: '"         # List all todo comments.
 alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
+alias pst="xclip -out"                       # Print xclip selection.
 
 #------------------------------------------
 #              Git commands               |
