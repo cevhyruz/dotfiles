@@ -6,17 +6,8 @@ function git_status() {
   local ahead=""
   local current_branch=""
 
-  # FIXME: It needs to be called in all external scripts. Make this a one
-  # time setup.
-  # FIXME: Perhaps add refresh time?
-  # Export tmux env variable to current shell. 
-  export $(tmux showenv $__base_dir__)
-
-  # Set the current working directory.
-  cd $__base_dir__
-
   # Get the current branch.
- current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
+  current_branch="$(git synbolic-ref --quiet --short HEAD 2> /dev/null || \
      git rev-parse --short HEAD 2> /dev/null || \
      (unknown))";
 
@@ -28,7 +19,7 @@ function git_status() {
   behind="$(grep --count '^>' /tmp/git_upstream_status)"
   ahead="$(grep --count '^<' /tmp/git_upstream_status)"
 
-  echo "$(dirs) $behind↓ $ahead↑"
+  echo " $behind↓ $ahead↑"
 
 }
 git_status
