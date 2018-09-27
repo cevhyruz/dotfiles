@@ -6,6 +6,7 @@ alias K="k"
 #------------------------------------------
 #             Custom commands             |
 #------------------------------------------
+
 alias path='printf "%b\n" "${PATH//:/\\n}"'          # Print PATH env neatly.
 alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
 alias brestart="sudo /etc/init.d/bluetooth restart"  # Restart bluetooth.
@@ -16,6 +17,7 @@ alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 #------------------------------------------
 #              Git commands               |
 #------------------------------------------
+
 alias gl="git log --pretty=oneline --graph --abbrev-commit"
 alias gs="git status --short"
 alias gshow="git show"
@@ -28,9 +30,11 @@ alias grest="git reset --hard HEAD"
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
-alias sudo='sudo '                       # Allow aliases to be `sudo`ed.
-#alias vim='$EDITOR '                     # Expand from default editor.
-alias rm='rm '                           # Allow aliases to be `rm`ed.
+
+alias sudo='sudo '                     # Allow aliases to be `sudo`ed.
+#alias vim='$EDITOR '                  # Expand from default editor.
+alias rm='rm '                         # Allow aliases to be `rm`ed.
+alias vifm='vifm '                     # Allow aliase expansion for vifm paths.
 
 # Sort, list and show hiden files/dirs with colored listing.
 alias ls='lsc --almost-all --classify --group-directories-first '
@@ -39,6 +43,7 @@ alias dir='dr --almost-all --classify --group-directories-first '
 #------------------------------------------
 #     Files and directories shortcuts     |
 #------------------------------------------
+
 # Frequently used directories.
 alias home="~"
 alias p="~/Projects"
