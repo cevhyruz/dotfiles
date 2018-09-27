@@ -27,7 +27,7 @@ alias gca="git commit --all"
 alias gc="git commit"
 alias ga="git add"
 
-# Reset uncommited changes.
+# Reset all uncommited changes.
 alias grest="git reset --hard HEAD"
 
 #------------------------------------------
