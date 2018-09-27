@@ -45,7 +45,7 @@ function hicat() {
 }
 
 # Cd into the current directory after quiting vifm.
-vifm() {
+vicd() {
 
   local dest=""
   dest="$(command vifm --choose-dir -)"
