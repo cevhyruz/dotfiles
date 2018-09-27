@@ -1,6 +1,5 @@
 
-" Display single pane only.
-only
 
-" Set neovim as default editor.
-set vicmd=nvim
+only                                  " Enable single-view mode.
+colorscheme theme                     " Define colors display.
+set vicmd=nvim                        " Set neovim as the default editor.
