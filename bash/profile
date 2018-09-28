@@ -8,6 +8,13 @@ function _source_bash_files() {
       [ -r "$file" ] \
          && . "$file"
     done
+  # FIXME: Create a dedicated paths for dotfiles env.
+  # or add localrc path to dot env variables.
+  # For local configuration that should
+  # not be included in source control.
+  if [ -r "$(pwd)/_localrc/local.bashrc" ]; then
+      . "$(pwd)/_localrc/local.bashrc"
+  fi
 
 }
 
