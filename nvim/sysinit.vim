@@ -49,7 +49,7 @@
   set cursorline                 " Highlight current line.
   set mouse=a                    " Enable mouse in all modes.
   set ruler                      " Show cursor position in the file.
-  set noshowmode                   " Show current mode.
+  set noshowmode                 " Show current mode.
   set showtabline=2              " Always show the tabline.
 
   set backupdir=/tmp//
