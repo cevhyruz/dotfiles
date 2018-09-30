@@ -2,7 +2,6 @@
 " Load Components
   source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
   source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
-
   source /home/devs/Projects/dotfiles/nvim/components/macros.vim
 
 
@@ -57,3 +56,5 @@
 
 " Don't create backup when in certain directories.
   set backupskip=/tmp/*,/private/tmp/*
+
+source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
