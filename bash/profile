@@ -8,6 +8,10 @@ function _source_bash_files() {
       [ -r "$file" ] \
          && . "$file"
     done
+  # Make sure to soure fzf after the bash_completion
+  # to avoid keybindings conflicts.
+  source "/home/devs/Projects/dotfiles/bash/fzf"
+
   # FIXME: Create a dedicated paths for dotfiles env.
   # or add localrc path to dot env variables.
   # For local configuration that should
