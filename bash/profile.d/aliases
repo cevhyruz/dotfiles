@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-alias k="setxkbmap -option caps:backspace && setxkbmap -option shift:both_capslock | xset r 66"
-alias K="k"
-
 #------------------------------------------
 #             Custom commands             |
 #------------------------------------------
