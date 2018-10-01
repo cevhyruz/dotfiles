@@ -23,5 +23,4 @@ function _source_bash_files() {
 }
 
 _source_bash_files
-
 unset -f _source_bash_files
