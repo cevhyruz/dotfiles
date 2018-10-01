@@ -30,7 +30,7 @@ highlight StatusLine      cterm=none ctermfg=250       ctermbg=235
 highlight Border          cterm=none ctermfg=blue       ctermbg=234
 
 highlight Selected        cterm=bold ctermfg=cyan    ctermbg=red
-highlight CurrLine        cterm=bold ctermfg=none    ctermbg=236
+highlight CurrLine        cterm=bold ctermfg=none    ctermbg=240
 
 highlight WildMenu        cterm=none,reverse ctermfg=blue ctermbg=236
 highlight CmdLine         cterm=none ctermfg=255 ctermbg=236
