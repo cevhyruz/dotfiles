@@ -42,7 +42,7 @@ function prompt_git() {
 
       # Check for stashed files.
       if git rev-parse --verify refs/stash &>/dev/null; then
-        symbol+=' ∙';
+        symbol+='∙';
       fi;
 
     fi;
