@@ -4,8 +4,10 @@
   source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
   source /home/devs/Projects/dotfiles/nvim/components/macros.vim
 
-" General Settings
+" Load packages
+  exec pathogen#infect()
 
+" General Settings
   set nocompatible               " Make vim more useful.
   syntax on                      " Enable syntax highlighting.
   set t_Co=256                   " Tell vim that terminal supports 256 colors.
@@ -50,7 +52,6 @@
   set ruler                      " Show cursor position in the file.
   set noshowmode                 " Show current mode.
   set showtabline=2              " Always show the tabline.
-
   set backupdir=/tmp//
 
 " Don't create backup when in certain directories.
