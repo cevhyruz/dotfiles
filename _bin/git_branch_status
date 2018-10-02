@@ -19,7 +19,7 @@ function git_status() {
   behind="$(grep --count '^>' /tmp/git_upstream_status)"
   ahead="$(grep --count '^<' /tmp/git_upstream_status)"
 
-  echo " $behind↓ $ahead↑"
+  echo "$behind↓ $ahead↑"
 
 }
 git_status
