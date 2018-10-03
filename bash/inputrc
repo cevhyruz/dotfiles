@@ -1,3 +1,6 @@
+
+TAB: menu-complete    # Bind TAB to cycle-through all matching comands/words.
+
 # -------------------------------------
 #      Insert-mode  keybindings       |
 # -------------------------------------
