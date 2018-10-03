@@ -12,6 +12,7 @@ alias todo="grep --recursive 'TOD[O]: '"         # List all todo comments.
 alias fixme="grep --recursive 'FIXM[E]: '"     # List all fixme comments.
 alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 alias pst="xclip -out"                       # Print xclip selection.
+alias open="xdg-open ."
 
 #------------------------------------------
 #              Git commands               |
