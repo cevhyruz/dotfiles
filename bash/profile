@@ -4,16 +4,16 @@ function _source_bash_files() {
 
   local file=""
 
-    for file in /etc/profile.d/*; do
-      [ -r "$file" ] \
-         && . "$file"
-    done
-  # Make sure to source fzf after the bash_completion
-  # to avoid keybindings conflicts.
-  source "/home/devs/Projects/dotfiles/bash/fzf"
+  for file in /etc/profile.d/*; do
+    [ -r "$file" ] \
+       &&  . "$file"
+  done
+  unset file
 
-  # FIXME: Create a dedicated paths for dotfiles env.
-  # or add localrc path to dot env variables.
+  # Make sure to source fzf after the bash_completion.sh
+  # to avoid keybindings conflicts.
+  . "/home/devs/Projects/dotfiles/bash/fzf"
+
   # For local configuration that should
   # not be included in source control.
   if [ -r "/home/devs/Projects/dotfiles/_localrc/local.bashrc" ]; then
@@ -21,6 +21,5 @@ function _source_bash_files() {
   fi
 
 }
-
 _source_bash_files
 unset -f _source_bash_files
