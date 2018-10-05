@@ -1,7 +1,28 @@
 #!/usr/bin/env bash
 
-# automaticall preprend `cd` to directory names.
+# Enable vi-style keybindings. (for one-liner command editing)
+set -o vi                  
+
+# Do not enable completion on empty line. 
+shopt -s no_empty_cmd_completion
+
+# Automatically prepend `cd` to directory names.
 shopt -s autocd
 
-# Vi-style keybindings.
-set -o vi
+# Autocorrect typos in path names when using `cd`.
+shopt -s cdspell
+
+# Case-insensitive globbing for pathname expansion.
+shopt -s nocaseglob
+
+# Check winsize and update the value of `LINES` and `COLUMNS` if necessarry.
+shopt -s checkwinsize
+
+# Save all multiple-lines command in the same history entry.
+shopt -s cmdhist
+
+# Include (.)files in file globbing.
+shopt -s dotglob
+
+# Append to the history file rather than overwriting.
+shopt -s histappend
