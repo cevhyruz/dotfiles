@@ -5,7 +5,9 @@
   source /home/devs/Projects/dotfiles/nvim/components/macros.vim
 
 " Load packages
-  exec pathogen#infect()
+call plug#begin('~/.config/packages')
+  Plug 'vifm/vifm.vim'
+call plug#end()
 
 " General Settings
   set nocompatible               " Make vim more useful.
