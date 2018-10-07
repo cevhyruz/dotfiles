@@ -6,14 +6,10 @@
 
 " Initialize package-specific configuration files.
 " -------------------------------------------------
-source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
-source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
-source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
-source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
-
-  " how to source this using forloop wildcard.
-  " if pathogen#blacklist don't source
-  "if pathogen_blacklist
+  source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
+  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
+  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
+  source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
 
 " Load Components.
 " -----------------
