@@ -53,5 +53,9 @@
   set fillchars+=vert:\┃          " Vertical split border style.
   set virtualedit=onemore         " One more space at the end for navigation.
 
+  " TODO: check first if fzf is installed
+  " in the terminal before setting the rtp.
+  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
+
 " Don't bother creating backups when i'm in this directories.
   set backupskip=/tmp/*
