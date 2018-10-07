@@ -2,14 +2,18 @@
 " sysinit.vim - neovim system-wide bootstrap file |
 "-------------------------------------------------
 
-" Initialize packages.
-" ---------------------
-  execute pathogen#infect('packages/{}')
+" Source a global configuration file if available
 
 " Initialize package-specific configuration files.
 " -------------------------------------------------
-  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
+source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
+source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
+source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
+source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
+
+  " how to source this using forloop wildcard.
+  " if pathogen#blacklist don't source
+  "if pathogen_blacklist
 
 " Load Components.
 " -----------------
@@ -23,4 +27,6 @@
 
 " Load the local.nvimrc for local configuration.
 " -----------------------------------------------
+if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
   source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
+endif
