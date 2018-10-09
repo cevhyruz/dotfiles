@@ -5,7 +5,7 @@
 " Keybindings
 " ------------
 " Should I just left it here? or add to the keybindings.vim component?
-nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
 " XXX: if disabled, when hitting <C-o> you would endup to nerdtree buffer.
 let NERDTreeCascadeSingleChildDir=1     " Collapse dirs with only one file.
