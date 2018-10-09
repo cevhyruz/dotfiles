@@ -14,9 +14,15 @@ let NERDTreeMinimalUI=1                  " Hide help and updir in UI.
 let NERDTreeShowHidden=1                 " Show hidden files / (.)files.
 let NERDTreeMapActivateNode='<space>'    " Toggle directory or open files.
 let g:NERDTreeDirArrowExpandable = ' '   " Hide the close arrow dirs.
-let g:NERDTreeDirArrowCollapsible = ' '  " Hide the open arrow in dirs.
-" let NERDTreeShowLineNumbers=1
+"
+let g:NERDTreeDirArrowCollapsible = '◿'  " Hide the open arrow in dirs.
+"◿
 
+" Directory color same as in bash.
+hi NERDTreeDir cterm=bold ctermfg=73
+hi NERDTreeCWD cterm=bold
+
+" let NERDTreeShowLineNumbers=1
 " Do not show these files.
 let NERDTreeIgnore=[
   \ '\.git$',
@@ -28,7 +34,7 @@ let NERDTreeIgnore=[
 augroup nerdtreehidecwd
   autocmd!
   autocmd FileType nerdtree setlocal conceallevel=3
-    \ | syntax match NERDTreeHideCWD #^[</].*$# conceal
+    \ | syntax match NERDTreeHideCWD #^[</]home[/]devs[/]# conceal
     \ | setlocal concealcursor=n
 augroup end
 

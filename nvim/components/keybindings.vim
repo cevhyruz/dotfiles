@@ -17,9 +17,8 @@ hi Normal ctermbg=234
   nnoremap <silent> <leader>r
          \ :e<cr>:redraw<cr>:echo "current file loaded.."<cr>
 
-" Open vim config file
-  nnoremap <silent> <leader>e
-         \ :e $VIM/sysinit.vim<cr>
+  nnoremap <leader>e
+   \ :edit $VIM/sysinit.vim<cr>
 
 " Reload vim config file
   nnoremap <silent> ;r

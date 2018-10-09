@@ -12,7 +12,7 @@
   set colorcolumn=78              " Character per line guide.
   set numberwidth=4               " Line numbers left-indention.
   set number relativenumber       " Display hy-brid line numbers.
-  set scrolloff=6                 " Line wrap around cursor while scrolling.
+  set scrolloff=12                 " Line wrap around cursor while scrolling.
   set autoindent                  " Automatically set indent for new lines.
   set autoread                    " Detect if a file has changed.
   set laststatus=2                " Always show the status line.
@@ -41,13 +41,13 @@
   set smarttab                    " Don't override file default tabs.
   set tabstop=2                   " Tabs width.
   set softtabstop=2               " Use 2 spaces for tabs.
-  set foldmethod=indent           " Manually create my own code folding method.
+  set foldmethod=marker           " Manually create my own code folding method.
   set shiftwidth=2                " Number of spaces to for indention.
   set cursorline                  " Highlight current line.
   set mouse=a                     " Enable mouse in all modes.
   set ruler                       " Show cursor position in the file.
   set noshowmode                  " Show current mode.
-  set showtabline=2               " Always show the tabline.
+"  set showtabline=2               " Always show the tabline.
   set swapfile                    " Always create swapfile.
   set backupdir=/tmp//            " Store backup in this directory.
   set fillchars+=vert:\┃          " Vertical split border style.
@@ -55,7 +55,7 @@
 
   " TODO: check first if fzf is installed
   " in the terminal before setting the rtp.
-  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
+"  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
 
 " Don't bother creating backups when i'm in this directories.
   set backupskip=/tmp/*
