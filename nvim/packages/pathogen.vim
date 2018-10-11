@@ -11,12 +11,13 @@ let g:pathogen_blacklist = []
  call add(g:pathogen_blacklist, 'vim-buffergator')
  call add(g:pathogen_blacklist, 'vim-scriptease')
  call add(g:pathogen_blacklist, 'vim-vinegar')
+" call add(g:pathogen_blacklist, 'YouCompleteMe')
 
 " Initialize packages.
 " ---------------------
-" maybe I should just point it to the dotfiles installation directory??
-" but then I must add all packages as a submodule (which I think is absurd)
-" and will bloat the dotfiles repository.
   execute pathogen#infect('packages/{}')
+
+" Generate help docs.
+  call pathogen#helptags()
 
 
