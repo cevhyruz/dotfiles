@@ -33,7 +33,8 @@ let NERDTreeIgnore=[
 " https://github.com/scrooloose/nerdtree/issues/806
 augroup nerdtreehidecwd
   autocmd!
-  autocmd FileType nerdtree setlocal conceallevel=3
+  autocmd FileType nerdtree
+    \ setlocal conceallevel=3
     \ | syntax match NERDTreeHideCWD #^[</]home[/]devs[/]# conceal
     \ | setlocal concealcursor=n
 augroup end
@@ -42,22 +43,15 @@ augroup end
 " https://github.com/scrooloose/nerdtree/issues/807
 augroup nerdtreehidedirslashes
   autocmd!
-  autocmd FileType nerdtree syntax match NERDTreeDirSlash #/$# 
+  autocmd FileType nerdtree
+        \ syntax match NERDTreeDirSlash #/$#
         \ containedin=NERDTreeDir conceal contained
 augroup end
 
-" Always open NERDTree when no files were specified.
-augroup nerdtreeopenwhenempty
-  autocmd!
-  autocmd StdinReadPre * let s:std_in=1
-  autocmd VimEnter *
-    \ if argc() == 0 && !exists("s:std_in")
-    \   | NERDTree |
-    \ endif
-augroup end
-
 " Close neovim if the only buffer left is NERDTree.
+augroup closewhennobuffer
 autocmd bufenter *
   \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
   \   | q |
   \ endif
+augroup end
