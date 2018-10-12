@@ -10,9 +10,9 @@
   set encoding=utf-8 nobomb       " Use utf-8 encoding without BOM.
   set background=dark             " Disable dark texts on dark backgrounds.
   set colorcolumn=78              " Character per line guide.
-  set numberwidth=4               " Line numbers left-indention.
-  set number relativenumber       " Display hy-brid line numbers.
-  set scrolloff=12                 " Line wrap around cursor while scrolling.
+  set numberwidth=4               " Line numbers gutter indention.
+  set number                      " Display line numbers.
+  set scrolloff=12                " Line wrap around cursor while scrolling.
   set autoindent                  " Automatically set indent for new lines.
   set autoread                    " Detect if a file has changed.
   set laststatus=2                " Always show the status line.
