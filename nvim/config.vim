@@ -6,6 +6,7 @@
   " -----------------
   set nocompatible                " Make vim more useful.
   syntax on                       " Enable syntax highlighting.
+  filetype plugin on              " Enable loading of plugins per filetype.
   set t_Co=256                    " Tell vim that terminal supports 256 colors.
   set encoding=utf-8 nobomb       " Use utf-8 encoding without BOM.
   set background=dark             " Disable dark texts on dark backgrounds.
@@ -56,6 +57,7 @@
   " TODO: check first if fzf is installed
   " in the terminal before setting the rtp.
 "  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
+
 
 " Don't bother creating backups when i'm in this directories.
   set backupskip=/tmp/*
