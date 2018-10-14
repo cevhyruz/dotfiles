@@ -1,42 +1,70 @@
-" Statusline (requires Powerline font)
-set statusline=
-set statusline+=%(%{&buflisted?bufnr('%'):''}\ \ %)
-set statusline+=%< " Truncate line here
-set statusline+=%f\  " File path, as typed or relative to current directory
-set statusline+=%{&modified?'+\ ':''}
-set statusline+=%{&readonly?'\ ':''}
-set statusline+=%= " Separation point between left and right aligned items
-set statusline+=\ %{&filetype!=#''?&filetype:'none'}
-set statusline+=%(\ %{(&bomb\|\|&fileencoding!~#'^$\\\|utf-8'?'\ '.&fileencoding.(&bomb?'-bom':''):'')
-  \.(&fileformat!=#(has('win32')?'dos':'unix')?'\ '.&fileformat:'')}%)
-  set statusline+=%(\ \ %{&modifiable?(&expandtab?'et\ ':'noet\ ').&shiftwidth:''}%)
-  set statusline+=\ 
-  set statusline+=\ %{&number?'':printf('%2d,',line('.'))} " Line number
-  set statusline+=%-2v " Virtual column number
-  set statusline+=\ %2p%% " Percentage through file in lines as in |CTRL-G|
+" default statusline.
+" set statusline=%f\ %h%w%m%r\ %=%(%l,%c%V\ %=\ %P%)
 
-  " ------------------------ 8< ------------------------
+" Status Line Custom
+let g:currentmode={
+    \ 'n'  : 'Normal',
+    \ 'v'  : 'Visual',
+    \ 'V'  : 'V·Line',
+    \ 'no' : 'Normal·Operator Pending',
+    \ '^V' : 'V·Block',
+    \ 's'  : 'Select',
+    \ 'S'  : 'S·Line',
+    \ 'i'  : 'Insert',
+    \ 'R'  : 'Replace',
+    \ 'Rv' : 'V·Replace',
+    \ 'c'  : 'Command',
+    \ 'cv' : 'Vim Ex',
+    \ 'ce' : 'Ex',
+    \ 'r'  : 'Prompt',
+    \ 'rm' : 'More',
+    \ 'r?' : 'Confirm',
+    \ '!'  : 'Shell',
+    \ 't'  : 'Terminal'
+    \}
 
-  " Statusline with highlight groups (requires Powerline font, using Solarized theme)
-  set statusline=
-  set statusline+=%(%{&buflisted?bufnr('%'):''}\ \ %)
-  set statusline+=%< " Truncate line here
-  set statusline+=%f\  " File path, as typed or relative to current directory
-  set statusline+=%{&modified?'+\ ':''}
-  set statusline+=%{&readonly?'\ ':''}
-  set statusline+=%1*\  " Set highlight group to User1
-  set statusline+=%= " Separation point between left and right aligned items
-  set statusline+=\ %{&filetype!=#''?&filetype:'none'}
-  set statusline+=%(\ %{(&bomb\|\|&fileencoding!~#'^$\\\|utf-8'?'\ '.&fileencoding.(&bomb?'-bom':''):'')
-    \.(&fileformat!=#(has('win32')?'dos':'unix')?'\ '.&fileformat:'')}%)
-    set statusline+=%(\ \ %{&modifiable?(&expandtab?'et\ ':'noet\ ').&shiftwidth:''}%)
-    set statusline+=\ %* " Restore normal highlight
-    set statusline+=\ %{&number?'':printf('%2d,',line('.'))} " Line number
-    set statusline+=%-2v " Virtual column number
-    set statusline+=\ %2p%% " Percentage through file in lines as in |CTRL-G|
+function! CheckIfItemExistsFirst()
 
-    " Logic for customizing the User1 highlight group is the following
-    " - if StatusLine colors are reverse, then User1 is not reverse and User1 fg = StatusLine fg
-    hi StatusLine cterm=reverse gui=reverse ctermfg=14 ctermbg=8 guifg=#93a1a1 guibg=#002732
-    hi StatusLineNC cterm=reverse gui=reverse ctermfg=11 ctermbg=0 guifg=#657b83 guibg=#073642
-    hi User1 ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=#073642
+" Add checking for syntastic errors
+" and warning here first. before displaying
+" Unicode symbols and counts.
+
+endfunction
+
+set statusline=                                    " Reset default statusline.
+set statusline+=%1*\ %{(g:currentmode[mode()])}\    " The current mode.
+set statusline+=%2*                                     " Separator
+set statusline+=%3*\                                     " Separator.
+set statusline+=%5*%t\                                 " File name.
+set statusline+=%6*                               " Separator.
+set statusline+=%0*%m%r%h%w\                           " Status Flags.
+set statusline+=%0*%=                                       " Right Side.
+set statusline+=%<                                   " Truncate here;
+set statusline+=%6*                               " Separator.
+set statusline+=%5*\ %{strlen(&ft)?&ft:'none'}\         " Encoding
+set statusline+=%5*(%{&ff})\                         " FileFormat(unix/dos).
+set statusline+=%3*                               " Separator.
+set statusline+=%2*                               " Separator.
+set statusline+=%1*\ ☰\ %02l,%02v\                         " Column number.
+set statusline+=%1*%3p%%\                         " Percentage of document.
+
+hi statusline cterm=bold,reverse ctermfg=235 ctermbg=250
+hi statuslineNC cterm=bold,reverse ctermfg=235 ctermbg=250
+
+" TODO: Support changing theme here, maybe get the values
+" from the main colorscheme file dynamically.
+"  Apparently this colors looks badass in my secondary monitor.
+
+" How about trying weak to strong tones?
+
+" Fist layer of statusline with backdrop. ( Current Mode )
+hi User1 cterm=bold ctermfg=251 ctermbg=240
+hi User2 cterm=bold ctermfg=240 ctermbg=238
+hi User3 cterm=bold ctermfg=238 ctermbg=237
+hi User4 cterm=bold ctermfg=237 ctermbg=237
+
+" second layer from statusline color. ( Filename, Fileformat )
+hi User5 cterm=bold ctermfg=248 ctermbg=237
+
+"second layer separator.
+hi User6 ctermfg=237 ctermbg=235
