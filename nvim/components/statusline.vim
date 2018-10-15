@@ -34,23 +34,23 @@ endfunction
 let g:syntastic_stl_format = " %E{E:%e}%B{, }%W{W:%w} ☰ %F "
 
 set statusline=                                    " Reset default statusline.
-set statusline+=%1*\ %{(g:currentmode[mode()])}\    " The current mode.
-set statusline+=%2*                                     " Separator
-set statusline+=%3*\                                     " Separator.
-set statusline+=%5*%t\                                 " File name.
-set statusline+=%6*                              " Separator.
-set statusline+=%0*\ %m\ \%r\ %h\ %w\                           " Status Flags.
-set statusline+=%=                                       " Right Side.
+set statusline+=%1*\ %{(g:currentmode[mode()])}\   " The current mode.
+set statusline+=%2*                               " Separator
+set statusline+=%3*\                              " Separator.
+set statusline+=%5*%t\                             " File name.
+set statusline+=%6*                               " Separator.
+set statusline+=%0*\ %m\ \%r\ %h\ %w\              " Status Flags.
+set statusline+=%=                                 " Right Side.
 set statusline+=%6*                               " Separator.
-set statusline+=%<                                   " Truncate here;
-set statusline+=%5*\ %{strlen(&ft)?&ft:'none'}\          " Filetype
-set statusline+=%5*(%{&ff})\ \                         " FileFormat(unix/dos).
+set statusline+=%<                                 " Truncate here;
+set statusline+=%5*\ %{strlen(&ft)?&ft:'none'}\    " Filetype
+set statusline+=%5*(%{&ff})\ \                     " FileFormat(unix/dos).
 set statusline+=%5*%{&fileencoding?&fileencoding:&encoding}\ \ 
 set statusline+=%5*\%{&modifiable?(&expandtab?'et\ ':'noet\ ').&shiftwidth:''}\ 
 set statusline+=%3*                               " Separator.
 set statusline+=%2*                               " Separator.
-set statusline+=%7*\ ☰\ %1*%02l,%02v\                         " Column number.
-set statusline+=%1*%3p%%\                         " Percentage of document.
+set statusline+=%7*\ ☰\ %1*%02l,%02v\              " Column number.
+set statusline+=%1*%3p%%\                          " Percentage of document.
 set statusline+=%4*                               " Separator.
 set statusline+=%9*                               " Separator.
 set statusline+=%8*%{SyntasticStatuslineFlag()}                                     " Separator
