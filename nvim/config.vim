@@ -1,7 +1,7 @@
 "------------------------------------------------
 " config.vim - neovim general configuration file |
 "------------------------------------------------
-
+"
   " General Settings
   " -----------------
   set nocompatible                " Make vim more useful.
@@ -10,8 +10,9 @@
   set t_Co=256                    " Tell vim that terminal supports 256 colors.
   set encoding=utf-8 nobomb       " Use utf-8 encoding without BOM.
   set background=dark             " Disable dark texts on dark backgrounds.
-  set colorcolumn=78              " Character per line guide.
-  set numberwidth=4               " Line numbers gutter indention.
+  set colorcolumn=79              " Character per line guide.
+  set numberwidth=1               " Line numbers gutter indention.
+  set signcolumn=yes              " Always open signcolumn gutter.
   set number                      " Display line numbers.
   set scrolloff=12                " Line wrap around cursor while scrolling.
   set autoindent                  " Automatically set indent for new lines.
@@ -56,7 +57,7 @@
 
   " TODO: check first if fzf is installed
   " in the terminal before setting the rtp.
-"  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
+  set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
 
 
 " Don't bother creating backups when i'm in this directories.
