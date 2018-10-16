@@ -23,30 +23,28 @@ if &laststatus == 1
   finish
 endif
 
-" Syntastic statusline format
-let g:syntastic_stl_format = " %E{E:%e}%B{, }%W{W:%w} ☰ %F "
 
 " Custom modes.
-let g:currentmode = {
-    \ 'n'  : 'Normal',
+ let g:currentmode = {
+     \ 'n'  : 'Normal',
     \ 'v'  : 'Visual',
-    \ 'V'  : 'V·Line',
-    \ 'no' : 'Normal·Operator Pending',
-    \ '' : 'V·Block',
-    \ 's'  : 'Select',
-    \ 'S'  : 'S·Line',
-    \ 'i'  : 'Insert',
-    \ 'R'  : 'Replace',
-    \ 'Rv' : 'V·Replace',
-    \ 'c'  : 'Command',
-    \ 'cv' : 'Vim Ex',
-    \ 'ce' : 'Ex',
-    \ 'r'  : 'Prompt',
-    \ 'rm' : 'More',
-    \ 'r?' : 'Confirm',
-    \ '!'  : 'Shell',
-    \ 't'  : 'Terminal'
-    \}
+     \ 'V'  : 'V·Line',
+     \ 'no' : 'Normal·Operator Pending',
+     \ '' : 'V·Block',
+     \ 's'  : 'Select',
+     \ 'S'  : 'S·Line',
+     \ 'i'  : 'Insert',
+     \ 'R'  : 'Replace',
+     \ 'Rv' : 'V·Replace',
+     \ 'c'  : 'Command',
+     \ 'cv' : 'Vim Ex',
+     \ 'ce' : 'Ex',
+     \ 'r'  : 'Prompt',
+     \ 'rm' : 'More',
+     \ 'r?' : 'Confirm',
+     \ '!'  : 'Shell',
+     \ 't'  : 'Terminal'
+     \}
 
 " TODO: Add functions that utilizes a global/local dictionary
 " for custom flags symbol/unicode. for a one function-rule-them-all thingy??
@@ -55,6 +53,7 @@ let g:currentmode = {
 " Syntastic
 function! LoadSyntastic()
   if exists('g:loaded_syntastic_plugin')
+    let g:syntastic_stl_format = " %E{E:%e}%B{, }%W{W:%w} ☰ %F "
     return SyntasticStatuslineFlag()
   else
     return ''
@@ -69,6 +68,10 @@ function! ReadOnly()
     return ''
 endfunction
 
+" TODO: Better hide the {item} instead of displaying
+" a useless and ugly truncated string.
+" That's a total eyesore!.
+
 set statusline=                                             " Clear defaults.
 set statusline+=%8*%{&paste?\ '\ \ PASTE\ '\ :\ ''}         " Paste mode flag.
 set statusline+=%9*                                        " Separator
@@ -76,16 +79,19 @@ set statusline+=%4*                                        " Separator
 set statusline+=%1*\ %{(g:currentmode[mode()])}\            " Current Mode
 set statusline+=%2*                                        " Separator.
 set statusline+=%3*                                        " Separator.
-set statusline+=%5*\ %t\                                    " File name.
-set statusline+=%5*%M\                                      " Modified '+'
-set statusline+=%6*                                        " Separator.
+set statusline+=%5*\ %t                                    " File name.
+set statusline+=%5*\ %M\                                      " Modified '+'
+set statusline+=%6*\                                        " Separator.
+set statusline+=%<
+set statusline+=%0*\ %f\                                    " File name.
 set statusline+=%0*\ %{ReadOnly()}                          " Readonly ''
 set statusline+=%0*\ %h                                     " Help '[Help]'
 set statusline+=%0*\ %W                                     " Preview '[PRV]'
-set statusline+=%=
+
+set statusline+=%= "-------- Start of Right Side ----------------------------
+
 set statusline+=%0*\ %{strlen(&ft)\ ?\ &ft\ :\ 'noft'}\     " Filetype.
 set statusline+=%6*                                        " Separator.
-set statusline+=%<
 set statusline+=%5*\ %{&fenc\ ?\ &fenc\ :&enc}              " UTF-8
 set statusline+=%5*(%{&fileformat})\                        " Unix / Dos
 set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\            " Et / noet
