@@ -60,5 +60,8 @@
   set rtp+=~/.fzf                 " Enable the fzf wrapper function for vim.
 
 
+  abbrev f FZF
+
+
 " Don't bother creating backups when i'm in this directories.
   set backupskip=/tmp/*
