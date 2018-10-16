@@ -24,8 +24,6 @@ $if mode=vi
   # Make all preceeding keybinds as command-mode keybindings.
   set keymap vi-command
 
-  "t": '"$(pst)"'
-
   # Map `mm` as enter/carriage-return
   "jj": "\C-M"
 
