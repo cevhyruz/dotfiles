@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-
 function _source_bash_files() {
 
-  local file=""
+  local file="test"
 
   for file in /etc/profile.d/*; do
     [ -r "$file" ] \
-       &&  . "$file"
+       && . "$file"
   done
   unset file
 
@@ -17,7 +16,7 @@ function _source_bash_files() {
   # For local configuration that should
   # not be included in source control.
   if [ -r "/home/devs/Projects/dotfiles/_localrc/local.bashrc" ]; then
-      . "/home/devs/Projects/dotfiles/_localrc/local.bashrc"
+    . "/home/devs/Projects/dotfiles/_localrc/local.bashrc"
   fi
 
 }
