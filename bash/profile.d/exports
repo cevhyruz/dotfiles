@@ -6,6 +6,12 @@ export EDITOR='vim '
 # Neovim ENV, used to locate various files, such as the user's init.vim.
 #export VIM="/usr/share/$EDITOR"
 
+# fzf prompt always at the bottom.
+export FZF_DEFAULT_OPTS='--no-height --no-reverse'
+
+# start fzf on a tmux split pane.
+export FZF_TMUX=1
+
 # Set default term.
 export TERM="xterm-256color"
 
