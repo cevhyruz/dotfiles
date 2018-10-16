@@ -1,7 +1,6 @@
 
 " Temporary Blacklisted plugins.
 let g:pathogen_blacklist = []
- call add(g:pathogen_blacklist, 'fzf.vim')
  call add(g:pathogen_blacklist, 'nerdtree-buffer-ops')
  call add(g:pathogen_blacklist, 'nerdtree-git-plugin')
  call add(g:pathogen_blacklist, 'unite.vim')
@@ -19,5 +18,4 @@ let g:pathogen_blacklist = []
 
 " Generate help docs.
   call pathogen#helptags()
-
 
