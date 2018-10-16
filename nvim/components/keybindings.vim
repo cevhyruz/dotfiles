@@ -45,6 +45,9 @@ hi Normal ctermbg=234
   cnoremap jj <cr>
 "  nnoremap mm o<esc>
 
+" Open fzf.
+nnoremap <silent> <C-n> :Files<CR>
+
 " Map command
   nnoremap ; :
 
