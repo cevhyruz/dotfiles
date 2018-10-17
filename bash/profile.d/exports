@@ -3,14 +3,13 @@
 # Set Neovim as the default editor.
 export EDITOR='vim '
 
-# Neovim ENV, used to locate various files, such as the user's init.vim.
-#export VIM="/usr/share/$EDITOR"
+# FZF Default Options.
+# ---------------------
+export FZF_DEFAULT_OPTS='--no-reverse'       # Prompt always at the bottom.
+export FZF_DEFAULT_OPTS+=' --border'         # Show top and bottom border.
+export FZF_DEFAULT_OPTS+=' --no-bold'        # Disable bold characters.
 
-# fzf prompt always at the bottom.
-export FZF_DEFAULT_OPTS='--no-height --no-reverse'
-
-# start fzf on a tmux split pane.
-export FZF_TMUX=1
+export FZF_TMUX=1                     # Open in split-pane if tmux is running.
 
 # Set default term.
 export TERM="xterm-256color"
