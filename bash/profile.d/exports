@@ -3,8 +3,9 @@
 # Set Neovim as the default editor.
 export EDITOR='vim '
 
-# FZF Default Options.
-# ---------------------
+# --------------------------------------
+#          FZF Default Options.         |
+# --------------------------------------
 export FZF_DEFAULT_OPTS='--no-reverse'       # Prompt always at the bottom.
 export FZF_DEFAULT_OPTS+=' --border'         # Show top and bottom border.
 export FZF_DEFAULT_OPTS+=' --no-bold'        # Disable bold characters.
@@ -18,5 +19,12 @@ export TERM="xterm-256color"
 # Define local inputrc file.
 export INPUTRC="/home/devs/Projects/dotfiles/bash/inputrc"
 
+
+# --------------------------------------
+#           Environment PATH.           |
+# --------------------------------------
+
 # Dotfiles executables.
-export PATH="$PATH:/home/devs/Projects/dotfiles/bin"
+if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
+  export PATH="$HOME/Projects/dotfiles/bin:$PATH"
+fi
