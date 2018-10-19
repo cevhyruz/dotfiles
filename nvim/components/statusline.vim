@@ -27,7 +27,7 @@ endif
 " Custom modes.
  let g:currentmode = {
      \ 'n'  : 'Normal',
-    \ 'v'  : 'Visual',
+     \ 'v'  : 'Visual',
      \ 'V'  : 'V·Line',
      \ 'no' : 'Normal·Operator Pending',
      \ '' : 'V·Block',
@@ -53,7 +53,7 @@ endif
 " Syntastic
 function! LoadSyntastic()
   if exists('g:loaded_syntastic_plugin')
-    let g:syntastic_stl_format = " %E{E:%e}%B{, }%W{W:%w} ☰ %F "
+    let g:syntastic_stl_format = " %E{%eE}%B{, }%W{%wW} on line %F "
     return SyntasticStatuslineFlag()
   else
     return ''
