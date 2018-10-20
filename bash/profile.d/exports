@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set Neovim as the default editor.
-export EDITOR='vim '
+export EDITOR="nvim"
 
 # --------------------------------------
 #          FZF Default Options.         |
