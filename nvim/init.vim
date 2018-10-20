@@ -62,6 +62,7 @@
 
   abbrev f FZF
 
+let g:indentLine_char = '│'
 
 " Don't bother creating backups when i'm in this directories.
   set backupskip=/tmp/*
