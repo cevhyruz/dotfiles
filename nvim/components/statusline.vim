@@ -59,39 +59,39 @@ endif
 " a useless and ugly truncated string.
 " That's a total eyesore!.
 
-set statusline=                                             " Clear defaults.
-set statusline+=%8*%{&paste?\ '\ \ PASTE\ '\ :\ ''}         " Paste mode flag.
-set statusline+=%9*                                        " Separator
-set statusline+=%4*                                        " Separator
-set statusline+=%1*\ %{(g:currentmode[mode()])}             " Current Mode
-set statusline+=%7*\ (%{ShowUser()})\                       " Current user
-set statusline+=%2*                                        " Separator.
-set statusline+=%3*                                        " Separator.
-set statusline+=%5*\ %t\                                    " File name.
-set statusline+=%5*%{ReadOnly()}                            " Readonly ''
-set statusline+=%5*\ %M\                                    " Modified '+'
-set statusline+=%6*                                        " Separator.d
+set statusline=
+set statusline+=%8*%{&paste?\ '\ \ PASTE\ '\ :\ ''}      " Paste mode flag
+set statusline+=%9*
+set statusline+=%4*
+set statusline+=%1*\ %{(g:currentmode[mode()])}          " Current Mode
+set statusline+=%7*\ (%{ShowUser()})\                    " Current user
+set statusline+=%2*
+set statusline+=%3*
+set statusline+=%5*\ %t\                                 " Filename (tail)
+set statusline+=%5*%{ReadOnly()}                         " Readonly flag ()
+set statusline+=%5*\ %M\                                 " Modified flag (+)
+set statusline+=%6*
 set statusline+=%<
-set statusline+=%0*\ %f\                                    " File name.
-set statusline+=%0*\ %h                                     " Help '[Help]'
-set statusline+=%0*\ %W                                     " Preview '[PRV]'
+set statusline+=%0*\ %f\                                 " File name (full)
+set statusline+=%0*\ %h                                  " Help flag '[Help]'
+set statusline+=%0*\ %W                                  " Preview flag '[PRV]'
 
-set statusline+=%= "-------- Start of Right Side ----------------------------
+set statusline+=%=
 
-set statusline+=%0*\ %{strlen(&ft)\ ?\ &ft\ :\ 'noft'}\     " Filetype.
-set statusline+=%6*                                        " Separator.
-set statusline+=%5*\ %{&fenc\ ?\ &fenc\ :&enc}              " UTF-8
-set statusline+=%5*(%{&fileformat})\                        " Unix / Dos
-set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\            " Et / noet
-set statusline+=%5*\ SW:%{&shiftwidth}\                     " ShiftWidth
-set statusline+=%3*                                        " Separator
-set statusline+=%2*                                        " Separator
-set statusline+=%1*\ %3p%%                                  " Percentage
-set statusline+=%7*\ ☰\ %1*%2l,%2v                          " Line / Column
-set statusline+=%7*\ %L\                                    " Total lines
-set statusline+=%4*                                        " Separator
-set statusline+=%9*                                        " Separator
-set statusline+=%8*%{LoadSyntastic()}                       " Syntastic
+set statusline+=%0*\ %{strlen(&ft)\ ?\ &ft\ :\ 'noft'}\  " Filetype
+set statusline+=%6*
+set statusline+=%5*\ %{&fenc\ ?\ &fenc\ :&enc}           " UTF-8
+set statusline+=%5*(%{&fileformat})\                     " Unix / Dos
+set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\         " Et / noet
+set statusline+=%5*\ SW:%{&shiftwidth}\                  " ShiftWidth
+set statusline+=%3*
+set statusline+=%2*
+set statusline+=%1*\ %3p%%                               " Percentage
+set statusline+=%7*\ ☰\ %1*%2l,%2v                       " Line / Column
+set statusline+=%7*\ %L\                                 " Total lines
+set statusline+=%4*
+set statusline+=%9*
+set statusline+=%8*%{LoadSyntastic()}                    " Syntastic
 
 hi statusline cterm=bold,reverse ctermfg=235 ctermbg=250
 hi statuslineNC cterm=bold,reverse ctermfg=235 ctermbg=250
