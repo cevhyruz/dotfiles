@@ -79,8 +79,8 @@ set statusline+=%0*\ %W                                  " Preview flag '[PRV]'
 set statusline+=%=
 
 set statusline+=%0*\ %{strlen(&ft)\ ?\ &ft\ :\ 'noft'}\  " Filetype
-set statusline+=%6*
-set statusline+=%5*\ %{&fenc\ ?\ &fenc\ :&enc}           " UTF-8
+set statusline+=%6*\ 
+set statusline+=%5*\ \ %{&fenc\ ?\ &fenc\ :&enc}         " UTF-8
 set statusline+=%5*(%{&fileformat})\                     " Unix / Dos
 set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\         " Et / noet
 set statusline+=%5*\ SW:%{&shiftwidth}\                  " ShiftWidth
