@@ -67,6 +67,7 @@ set statusline+=%1*\ %{(g:currentmode[mode()])}          " Current Mode
 set statusline+=%7*\ (%{ShowUser()})\                    " Current user
 set statusline+=%2*
 set statusline+=%3*
+set statusline+=%5*\ %{WebDevIconsGetFileTypeSymbol()}   " DevIcons
 set statusline+=%5*\ %t\                                 " Filename (tail)
 set statusline+=%5*%{ReadOnly()}                         " Readonly flag ()
 set statusline+=%5*\ %M\                                 " Modified flag (+)
