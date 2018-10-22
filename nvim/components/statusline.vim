@@ -25,48 +25,54 @@ endif
 
 
 " Custom modes.
- let g:currentmode = {
-     \ 'n'  : 'Normal',
-     \ 'v'  : 'Visual',
-     \ 'V'  : 'V·Line',
-     \ 'no' : 'Normal·Operator Pending',
-     \ '' : 'V·Block',
-     \ 's'  : 'Select',
-     \ 'S'  : 'S·Line',
-     \ 'i'  : 'Insert',
-     \ 'R'  : 'Replace',
-     \ 'Rv' : 'V·Replace',
-     \ 'c'  : 'Command',
-     \ 'cv' : 'Vim Ex',
-     \ 'ce' : 'Ex',
-     \ 'r'  : 'Prompt',
-     \ 'rm' : 'More',
-     \ 'r?' : 'Confirm',
-     \ '!'  : 'Shell',
-     \ 't'  : 'Terminal'
-     \}
+  let g:currentmode = {
+    \ 'n'  : 'Normal',
+    \ 'v'  : 'Visual',
+    \ 'V'  : 'V·Line',
+    \ 'no' : 'Normal·Operator Pending',
+    \ '' : 'V·Block',
+    \ 's'  : 'Select',
+    \ 'S'  : 'S·Line',
+    \ 'i'  : 'Insert',
+    \ 'R'  : 'Replace',
+    \ 'Rv' : 'V·Replace',
+    \ 'c'  : 'Command',
+    \ 'cv' : 'Vim Ex',
+    \ 'ce' : 'Ex',
+    \ 'r'  : 'Prompt',
+    \ 'rm' : 'More',
+    \ 'r?' : 'Confirm',
+    \ '!'  : 'Shell',
+    \ 't'  : 'Terminal'
+  \}
 
 " TODO: Add functions that utilizes a global/local dictionary
 " for custom flags symbol/unicode. for a one function-rule-them-all thingy??
 " TODO: Autoload this.
 
 " Syntastic
-function! LoadSyntastic()
-  if exists('g:loaded_syntastic_plugin')
-    let g:syntastic_stl_format = " %E{%eE}%B{, }%W{%wW} on line %F "
-    return SyntasticStatuslineFlag()
-  else
-    return ''
-  endif
-endfunction
+  function! LoadSyntastic()
+    if exists('g:loaded_syntastic_plugin')
+      let g:syntastic_stl_format = " %E{%eE}%B{, }%W{%wW} on line %F "
+      return SyntasticStatuslineFlag()
+    else
+      return ''
+    endif
+  endfunction
 
 " Custom Readonly unicode.
-function! ReadOnly()
-  if &readonly || !&modifiable
-    return ''
-  else
-    return ''
-endfunction
+  function! ReadOnly()
+    if &readonly || !&modifiable
+      return ''
+    else
+      return ''
+  endfunction
+
+" Show current user.
+  function! ShowUser()
+    let s:whoami = expand('$USER')
+    return s:whoami
+  endfunction
 
 " TODO: Better hide the {item} instead of displaying
 " a useless and ugly truncated string.
@@ -76,12 +82,13 @@ set statusline=                                             " Clear defaults.
 set statusline+=%8*%{&paste?\ '\ \ PASTE\ '\ :\ ''}         " Paste mode flag.
 set statusline+=%9*                                        " Separator
 set statusline+=%4*                                        " Separator
-set statusline+=%1*\ %{(g:currentmode[mode()])}\            " Current Mode
+set statusline+=%1*\ %{(g:currentmode[mode()])}             " Current Mode
+set statusline+=%7*\ (%{ShowUser()})\                       " Current user
 set statusline+=%2*                                        " Separator.
 set statusline+=%3*                                        " Separator.
-set statusline+=%5*\ %t                                    " File name.
-set statusline+=%5*\ %M\                                      " Modified '+'
-set statusline+=%6*\                                        " Separator.
+set statusline+=%5*\ %t                                     " File name.
+set statusline+=%5*\ %M\                                    " Modified '+'
+set statusline+=%6*\                                       " Separator.
 set statusline+=%<
 set statusline+=%0*\ %f\                                    " File name.
 set statusline+=%0*\ %{ReadOnly()}                          " Readonly ''
