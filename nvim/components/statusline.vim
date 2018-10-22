@@ -1,22 +1,3 @@
-" Sexy airline-like statusline for VIM
-"
-"    ┌─────────────────────────────────────────────────────────────────┐
-"    │~                                                                │
-"    │~                      VIM - Vi IMproved                         │
-"    │~                                                                │
-"    │~                         version 8.0                            │
-"    │~                    by Bram Moolenaar et al.                    │
-"    │~          Vim is open source and freely distributable           │
-"    │~                                                                │
-"    │~          type :h :q<Enter>          to exit                    │
-"    │~          type :help<Enter> or <F1>  for on-line help           │
-"    │~          type :help version8<Enter> for version info           │
-"    │~                                                                │
-"    │~                                                                │
-"    ├─────────────────────────────────────────────────────────────────┤
-"    │ [...]   A    B       -C-     V   W  X  Y    Z   [...] │
-"    └─────────────────────────────────────────────────────────────────┘
-"
 
 " TODO: Hoping to reduce some runtime resources, UNTESTED!
 if &laststatus == 1
