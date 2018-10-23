@@ -67,7 +67,9 @@ function prompt_git() {
 
 function _exit_status() {
 
-    if [ "$?" == "0" ]; then
+local last_command="$?"
+
+    if [ "$last_command" == "0" ]; then
       echo -e "${green}"
     else
       echo -e "${red}"
@@ -82,8 +84,6 @@ function set_prompts() {
 
   local cyan=""
   local green=""
-  local white=""
-  local grey=""
   local pink=""
   local yellow=""
 
@@ -95,8 +95,6 @@ function set_prompts() {
 
     cyan=$(tput setaf 37)
     green=$(tput setaf 41)
-    white=$(tput setaf 15)
-    grey=$(tput setaf 241)
     dimgrey=$(tput setaf 248)
     pink=$(tput setaf 216)
     yellow=$(tput setaf 178);
