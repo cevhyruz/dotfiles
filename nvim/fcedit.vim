@@ -2,8 +2,7 @@
 "  fcedit.vim - minimal configuration file for bash built-in `fc` command  |
 "--------------------------------------------------------------------------
 
-
-" Disable shitload of global plugins {{{
+" Disable some global plugins {{{
 
   let loaded_matchit       = 1
   let g:loaded_netrw       = 1
@@ -14,8 +13,6 @@
 
 " }}}
 
-hi! EndOfBuffer ctermfg=234
-hi! Statusline ctermfg=235 ctermbg=250
 " Basic Settings {{{
 
   syntax enable                 " Enable syntax highlighting.
@@ -32,9 +29,14 @@ hi! Statusline ctermfg=235 ctermbg=250
   set shiftwidth=2              " Number of spaces to use for indention.
   set noshowmode                " Hide mode display.
 
-
 " }}}
 
-  set statusline=%0*\ Edit\ history\ and\ run
+  set statusline=
+  set statusline=%0*\ Edit\ last\ history\ and\ run
+  set statusline+=%=
+  set statusline+=%0*☰\ %2v\                        " Column Number.
 
   source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
+
+hi! EndOfBuffer ctermfg=234
+hi! Statusline ctermfg=23 ctermbg=250
