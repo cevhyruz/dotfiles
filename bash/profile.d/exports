@@ -2,6 +2,8 @@
 
 # Set Neovim as the default editor.
 export EDITOR="nvim"
+
+# Set vim config for `fc` command.
 export FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
 
 # --------------------------------------
