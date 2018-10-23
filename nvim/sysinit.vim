@@ -2,6 +2,17 @@
 " sysinit.vim - neovim system-wide bootstrap file |
 "-------------------------------------------------
 
+" Disable some global plugins {{{
+
+  let loaded_matchit       = 1
+  let g:loaded_netrw       = 1
+  let g:loaded_netrwPlugin = 1
+  let loaded_gzip          = 1
+  let g:loaded_zipPlugin   = 1
+  let g:loaded_zip         = 1
+
+" }}}
+
 " Load the main configuration file.
 " ----------------------------------
   source /home/devs/Projects/dotfiles/nvim/config.vim
