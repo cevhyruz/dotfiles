@@ -5,14 +5,14 @@ export EDITOR="nvim"
 export FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
 
 # --------------------------------------
-#          FZF Default Options.         |
+#            FZF Variables              |
 # --------------------------------------
 
-export FZF_DEFAULT_OPTS='--no-reverse'       # Prompt always at the bottom.
-export FZF_DEFAULT_OPTS+=' --border'         # Show top and bottom border.
-export FZF_DEFAULT_OPTS+=' --no-bold'        # Disable bold characters.
+export FZF_DEFAULT_OPTS='--no-reverse'      # Prompt always at the bottom.
+export FZF_DEFAULT_OPTS+=' --border'        # Show top and bottom border.
+export FZF_DEFAULT_OPTS+=' --no-bold'       # Disable bold characters.
 
-export FZF_TMUX=1                     # Open in split-pane if tmux is running.
+export FZF_TMUX=1                           # Use tmux split-pane if possible.
 
 # Set default term.
 export TERM="xterm-256color"
