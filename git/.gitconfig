@@ -1,3 +1,8 @@
 [user]
 	email = johnfred.fadrigalan@hotmail.com
-	name = cevhyruz
+	name = Johnfred Fadrigalan
+
+[core]
+
+	# Set default editor to be used.
+	editor = "$EDITOR -u /home/devs/Projects/dotfiles/nvim/gitedit.vim"
