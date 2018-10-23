@@ -1,8 +1,13 @@
 [user]
-	email = johnfred.fadrigalan@hotmail.com
 	name = Johnfred Fadrigalan
+	email = johnfred.fadrigalan@hotmail.com
 
 [core]
 
 	# Set default editor to be used.
 	editor = "$EDITOR -u /home/devs/Projects/dotfiles/nvim/gitedit.vim"
+
+[commit]
+
+	# Set custom git message.
+	template = /home/devs/Projects/dotfiles/git/.gitmessage
