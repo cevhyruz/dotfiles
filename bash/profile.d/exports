@@ -2,10 +2,12 @@
 
 # Set Neovim as the default editor.
 export EDITOR="nvim"
+export FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
 
 # --------------------------------------
 #          FZF Default Options.         |
 # --------------------------------------
+
 export FZF_DEFAULT_OPTS='--no-reverse'       # Prompt always at the bottom.
 export FZF_DEFAULT_OPTS+=' --border'         # Show top and bottom border.
 export FZF_DEFAULT_OPTS+=' --no-bold'        # Disable bold characters.
