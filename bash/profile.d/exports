@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set Neovim as the default editor.
-export EDITOR="nvim"
+export EDITOR="/usr/bin/nvim"
 
 # --------------------------------------
 #           Bash Variables              |
@@ -18,7 +18,7 @@ export HISTIGNORE="bash:exit:pwd:dir:dirs:ls:clear:echo:man *"
 
 # Dotfiles executables.
 if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
-  export PATH="$HOME/Projects/dotfiles/bin:$PATH"
+  PATH="$HOME/Projects/dotfiles/bin:$PATH"
 fi
 
 # Set vim config for `fc` command.
