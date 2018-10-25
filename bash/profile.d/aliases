@@ -30,12 +30,15 @@ alias ga="git add"
 # Reset all uncommited changes.
 alias grest="git reset --hard HEAD"
 
+# Reset dirty file to working tree.
+alias gco="git checkout"
+
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
 
 alias sudo='sudo '                     # Allow aliases to be `sudo`ed.
-#alias vim='$EDITOR '                  # Expand from default editor.
+alias vim='$EDITOR '                  # Expand from default editor.
 alias rm='rm '                         # Allow aliases to be `rm`ed.
 alias vifm='vifm '                     # Allow alias expansion for vifm paths.
 
