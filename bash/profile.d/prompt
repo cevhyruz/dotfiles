@@ -90,18 +90,12 @@ function set_prompts() {
 
   fi
 
-  # Change prompt indicator for different userlevel.
-  if [[ "${USER}" == "root" ]]; then
-    user_style="\\[#\\]";
-  else
-    user_style="\\[$\\]";
-  fi;
-
   PS1="\\n\\[${bold}\\]"
   PS1+="\\[${green}\\]"
-  PS1+="\\[${cyan}\\]\\W"                # Working directory
+  PS1+="\\[${cyan}\\] \\W"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
-  PS1+="\\[${reset}\\] \\[${user_style}\\] \\[${pink}\\]"
+  PS1+="\\[${reset}\\]"
+  PS1+="\\[${pink}\\]"
 
   export PS1
 
