@@ -63,18 +63,6 @@ function prompt_git() {
     return;
   fi;
 
-} 
-
-function _exit_status() {
-
-local last_command="$?"
-
-    if [ "$last_command" == "0" ]; then
-      echo -e "${green}"
-    else
-      echo -e "${red}"
-    fi
-
 }
 
 function set_prompts() {
@@ -111,7 +99,6 @@ function set_prompts() {
 
   PS1="\\n\\[${bold}\\]"
   PS1+="\\[${green}\\]"
-  PS1+="\$(_exit_status \" \")  ➜  "
   PS1+="\\[${cyan}\\]\\W"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\] \\[${user_style}\\] \\[${pink}\\]"
