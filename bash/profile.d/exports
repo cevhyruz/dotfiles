@@ -3,9 +3,25 @@
 # Set Neovim as the default editor.
 export EDITOR="nvim"
 
+# --------------------------------------
+#           Bash Variables              |
+# --------------------------------------
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+
+export HISTFILESIZE=10000   # Increase history line limit (default 500).
+export HISTSIZE=10000      # Increase command history limit (default 500).
+export HISTIGNORE="exit:pwd:dir:dirs:ls:clear:echo" # Dont add to history file.
+export HISTCONTROL=ignoreboth:erasedups # Innore duplicate commands and spaces.
+export INPUTRC="$HOME/Projects/dotfiles/bash/inputrc" # Local inputrc file.
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND" # One history for all.
+
+# Dotfiles executables.
+if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
+  export PATH="$HOME/Projects/dotfiles/bin:$PATH"
+fi
+
 # Set vim config for `fc` command.
 export FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
-
 # --------------------------------------
 #            FZF Variables              |
 # --------------------------------------
@@ -19,16 +35,11 @@ export FZF_TMUX=1                           # Use tmux split-pane if possible.
 # Set default term.
 export TERM="xterm-256color"
 
- # TODO: This should have a environmental path.
-# Define local inputrc file.
-export INPUTRC="/home/devs/Projects/dotfiles/bash/inputrc"
-
 
 # --------------------------------------
-#           Environment PATH.           |
+#            Man Variables.             |
 # --------------------------------------
 
-# Dotfiles executables.
-if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
-  export PATH="$HOME/Projects/dotfiles/bin:$PATH"
-fi
+# Don't clear the screen after quitting a `man` page.
+export MANPAGER="less --no-init"
+
