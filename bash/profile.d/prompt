@@ -71,7 +71,6 @@ function set_prompts() {
   local reset=""
 
   local cyan=""
-  local green=""
   local pink=""
   local yellow=""
 
@@ -82,25 +81,26 @@ function set_prompts() {
     reset=$(tput sgr0);
 
     cyan=$(tput setaf 37)
-    green=$(tput setaf 41)
     dimgrey=$(tput setaf 248)
     pink=$(tput setaf 216)
     yellow=$(tput setaf 178);
     red=$(tput setaf 203);
+    white=$(tput setaf 246);
 
   fi
 
+
   PS1="\\n\\[${bold}\\]"
-  PS1+="\\[${green}\\]"
-  PS1+="\\[${cyan}\\] \\W"                # Working directory
+  PS1+=" \\[${white}\\]"
+  PS1+="\\u"
+  PS1+="\\[${cyan}\\] \\W:"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]"
-  PS1+="\\[${pink}\\]"
+  PS1+="\\[${pink}\\]\\n $  "
 
   export PS1
 
-  PS2="\\[${green}\\]   ➜  "
-  PS2+="\\[${pink}\\]"
+  PS2="\\[${pink}\\] $  "
 
   export PS2
 
