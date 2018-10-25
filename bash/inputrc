@@ -7,9 +7,11 @@ TAB: menu-complete    # Bind TAB to cycle-through all matching comands/words.
 
 # Bind `kj` as <Escape>.
   "kj": vi-movement-mode
+  "KJ": vi-movement-mode
 
 # map `mm` as enter/carriage-return
   "jj": "\C-M"
+  "JJ": "\C-M"
 
 # Change cursor shape depending on current mode.
 set show-mode-in-prompt on
