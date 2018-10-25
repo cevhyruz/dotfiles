@@ -6,14 +6,15 @@ export EDITOR="nvim"
 # --------------------------------------
 #           Bash Variables              |
 # --------------------------------------
-# https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
 
 export HISTFILESIZE=10000   # Increase history line limit (default 500).
 export HISTSIZE=10000      # Increase command history limit (default 500).
-export HISTIGNORE="exit:pwd:dir:dirs:ls:clear:echo" # Dont add to history file.
 export HISTCONTROL=ignoreboth:erasedups # Innore duplicate commands and spaces.
 export INPUTRC="$HOME/Projects/dotfiles/bash/inputrc" # Local inputrc file.
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND" # One history for all.
+
+# Dont add to history file.
+export HISTIGNORE="bash:exit:pwd:dir:dirs:ls:clear:echo:man *"
 
 # Dotfiles executables.
 if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
