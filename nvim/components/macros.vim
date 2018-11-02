@@ -1,6 +1,5 @@
 
-" Surround word with double qoutes.
-let @j='bi"ea"'
+let @j='bi"ea"'               " Surround word with double quotes
 
-" Sorround word with single qoutes.
-" let @s='bi"ea''
+
+nnoremap ysiw @j<cr>
