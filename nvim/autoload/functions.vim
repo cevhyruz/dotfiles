@@ -3,8 +3,12 @@
 function! functions#ReloadFile()
   echohl MoreMsg
   if expand('%:e') == "vim"
+
     " TODO: Add exception incase sourcing fails.
-    source $VIM/sysinit.vim
+
+    source $VIM/sysinit.vim          " Reload init file.
+    call webdevicons#refresh()       " Reload icons.
+
     echo " vim reloaded... "
   else
     edit %

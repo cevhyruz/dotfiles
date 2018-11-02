@@ -4,18 +4,17 @@ if &laststatus == 1
   finish
 endif
 
-
 " Custom modes.
   let g:currentmode = {
     \ 'n'  : 'Normal',
     \ 'v'  : 'Visual',
     \ 'V'  : 'V·Line',
     \ 'no' : 'Normal·Operator Pending',
-    \ '' : 'V·Block',
+    \ '' : 'V·Blck',
     \ 's'  : 'Select',
     \ 'S'  : 'S·Line',
     \ 'i'  : 'Insert',
-    \ 'R'  : 'Replace',
+    \ 'R'  : 'Replce',
     \ 'Rv' : 'V·Replace',
     \ 'c'  : 'Command',
     \ 'cv' : 'Vim Ex',
@@ -24,47 +23,84 @@ endif
     \ 'rm' : 'More',
     \ 'r?' : 'Confirm',
     \ '!'  : 'Shell',
-    \ 't'  : 'Terminal'
+    \ 't'  : 'Termnal'
   \}
 
 " TODO: Add functions that utilizes a global/local dictionary
 " for custom flags symbol/unicode. for a one function-rule-them-all thingy??
 " TODO: Autoload this.
 
-" Syntastic
-  function! LoadSyntastic()
-    if exists('g:loaded_syntastic_plugin')
-      let g:syntastic_stl_format = " %E{%eE}%B{, }%W{%wW} on line %F "
-      return SyntasticStatuslineFlag()
-    else
-      return ''
-    endif
-  endfunction
 
-" Custom Readonly unicode.
-  function! ReadOnly()
-    if &readonly || !&modifiable
-      return ''
-    else
-      return ''
-  endfunction
+" TODO: Maybe I need to add this to autoload?
+
+function! AleStatus() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+
+  return l:counts.total == 0 ? ' OK ' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+  \)
+endfunction
+
+" Custom readonly flag.
+function! ReadOnly()
+  if &readonly || !&modifiable
+    return ''
+  else
+    return ''
+endfunction
 
 " Show current user.
-  function! ShowUser()
-    let s:whoami = expand('$USER')
-    return s:whoami
-  endfunction
+function! ShowUser()
+  let g:whoami = expand('$USER')
+if winwidth(0) <= 126
+  return ''
+else
+  return g:whoami
+endfunction
+
+function! FileEncoding()
+if winwidth(0) <= 126
+  return ''
+else
+  return &encoding
+endfunction
+
+function! FileFormat()
+if winwidth(0) <= 126
+  return ''
+else
+  return &fileformat
+endfunction
+
+function! CurrentMode()
+if winwidth(0) <= 126
+  return toupper(mode())
+else
+  return g:currentmode[mode()]
+endfunction
+
+function! PasteMode()
+if winwidth(0) <= 126
+  return (&paste ? 'P' : '')
+else
+  return (&paste ? ' '.'PASTE ' : '')
+endfunction
 
 " TODO: Better hide the {item} instead of displaying
 " a useless and ugly truncated string.
 " That's a total eyesore!.
 
 set statusline=
-set statusline+=%8*%{&paste?\ '\ \ PASTE\ '\ :\ ''}      " Paste mode flag
+set statusline+=%8*%{PasteMode()}      " Paste mode flag
 set statusline+=%9*
 set statusline+=%4*
-set statusline+=%1*\ %{(g:currentmode[mode()])}          " Current Mode
-set statusline+=%7*\ (%{ShowUser()})\                    " Current user
+set statusline+=%1*%{CurrentMode()}          " Current Mode
+set statusline+=%7*%{ShowUser()}                    " Current user
 set statusline+=%2*
 set statusline+=%3*
 set statusline+=%5*\ %{WebDevIconsGetFileTypeSymbol()}   " DevIcons
@@ -72,8 +108,7 @@ set statusline+=%5*\ %t\                                 " Filename (tail)
 set statusline+=%5*%{ReadOnly()}                         " Readonly flag ()
 set statusline+=%5*\ %M\                                 " Modified flag (+)
 set statusline+=%6*
-set statusline+=%<
-set statusline+=%0*\ %f\                                 " File name (full)
+set statusline+=%0*\ %<\ %f\                             " File name (full)
 set statusline+=%0*\ %h                                  " Help flag '[Help]'
 set statusline+=%0*\ %W                                  " Preview flag '[PRV]'
 
@@ -81,8 +116,8 @@ set statusline+=%=
 
 set statusline+=%0*\ %{strlen(&ft)\ ?\ &ft\ :\ 'noft'}\  " Filetype
 set statusline+=%6*\ 
-set statusline+=%5*\ \ %{&fenc\ ?\ &fenc\ :&enc}         " UTF-8
-set statusline+=%5*(%{&fileformat})\                     " Unix / Dos
+set statusline+=%5*%7.5{FileEncoding()}                  " UTF-8
+set statusline+=%5*%5.4{FileFormat()}                    " Unix / Dos
 set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\         " Et / noet
 set statusline+=%5*\ SW:%{&shiftwidth}\                  " ShiftWidth
 set statusline+=%3*
@@ -92,7 +127,7 @@ set statusline+=%7*\ ☰\ %1*%2l,%2v                       " Line / Column
 set statusline+=%7*\ %L\                                 " Total lines
 set statusline+=%4*
 set statusline+=%9*
-set statusline+=%8*%{LoadSyntastic()}                    " Syntastic
+set statusline+=%8*%{AleStatus()}
 
 hi statusline cterm=bold,reverse ctermfg=235 ctermbg=250
 hi statuslineNC cterm=bold,reverse ctermfg=235 ctermbg=250

@@ -96,15 +96,17 @@ function set_prompts() {
   PS1+="\\[${cyan}\\] \\W:"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]"
-  PS1+="\\[${pink}\\]\\n $  "
+  PS1+="\\[${pink}\\]\\n \\$  "
 
-  export PS1
+  set PS1
 
-  PS2="\\[${pink}\\] $  "
+  PS2="\\[${pink}\\] \\$  "
 
   export PS2
 
   trap 'echo -ne "${dimgrey}"' DEBUG
+  printf '\033[?7l'   # Disable terminal wrapping.
+
 }
 
 function main() {
