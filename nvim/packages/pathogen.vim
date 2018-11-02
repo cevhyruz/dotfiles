@@ -5,7 +5,7 @@
 " call add(g:pathogen_blacklist, 'ale')
 " call add(g:pathogen_blacklist, 'fzf.vim')
 " call add(g:pathogen_blacklist, 'indentLine')
-" call add(g:pathogen_blacklist, 'neovim-vifm')
+ call add(g:pathogen_blacklist, 'neovim-vifm')
  call add(g:pathogen_blacklist, 'nerdcommenter')
 " call add(g:pathogen_blacklist, 'nerdtree')
  call add(g:pathogen_blacklist, 'nerdtree-buffer-ops')
@@ -27,7 +27,7 @@
 
  call add(g:pathogen_blacklist, 'vim-easymotion')
  call add(g:pathogen_blacklist, 'vim-eunuch')
-" call add(g:pathogen_blacklist, 'vim-fugitive')
+ call add(g:pathogen_blacklist, 'vim-fugitive')
 " call add(g:pathogen_blacklist, 'vim-gitgutter')
  call add(g:pathogen_blacklist, 'vim-multiple-cursors')
  call add(g:pathogen_blacklist, 'vim-scriptease')

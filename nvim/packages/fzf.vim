@@ -1,6 +1,6 @@
 " Customize fzf colors to match your
 let g:fzf_colors =
-\ { 'fg':      ['fg', '23'],
+\ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'PmenuSel'],
   \ 'hl':      ['fg', 'Comment'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -17,10 +17,14 @@ let g:fzf_colors =
 
  "   call fzf#run({'options': '--reverse --prompt "C:\\Program Files\\"'})
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-let $FZF_DEFAULT_OPTS = '--header=head --reverse --inline-info --cycle --border'
 
-    let g:fzf_layout = { 'down': '~35%' }
-    let $FZF_DEFAULT_LAYOUT = "--prompt='o '"
+let $FZF_DEFAULT_OPTS =
+  \ '--header="[j, k] for navigation. <space> to open, <TAB> to select" ' .
+  \ '--reverse ' .
+\ '--inline-info '
+
+let g:fzf_layout = { 'down': '~35%' }
+
 
 " Enable per-command history.
 " CTRL-N and CTRL-P will be automatically bound to next-history and
