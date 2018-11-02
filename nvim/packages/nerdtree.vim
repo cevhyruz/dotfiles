@@ -97,30 +97,30 @@ endfunction
 "  echo 'gitfile entry count '. c
 "endfor
 
-let g:gitcmd = 'git -c color.status=false status -s --ignored'
+function! GitDimIgnoredFiles()
+    let gitcmd = 'git -c color.status=false status -s --ignored'
+    if exists('b:NERDTree')
+        let root = b:NERDTree.root.path.str()
+    else
+        let root = './'
+    endif
+    let files = split(system(gitcmd.' '.root), '\n')
 
-if exists('b:NERDTree')     " if NERDTree is opened.
-  let g:root = b:NERDTree.root.path.str()
-else
-  let root = './'
-endif
+    call GitFindIgnoredFiles(files)
+endfunction
 
-let g:files = split(
-      \ system('git -c color.status=false status -s --ignored '.
-        \ g:root
-      \),
-    \ '\n')
-" -----------------------------------------------------
+function! GitFindIgnoredFiles(files)
+    for file in a:files
+        let pre = file[0:1]
+        if pre == '!!'
+            let ignored = split(file[3:], '/')[-1]
+            exec 'syn match Comment #\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
+            echo ignored
+        endif
+    endfor
+endfunction
 
-for file in g:files
-  let prefix = file[0:1]
-  if prefix == '!!'
-    let ignored = split(file[3:], '/')[-1]
-    echo ignored
-  endif
-endfor
-
-
+autocmd FileType nerdtree :call GitDimIgnoredFiles()
 
 
 
@@ -132,4 +132,4 @@ call PrettyFile('gitignore', 'italic,bold', 'none', 'green')
 "call PrettyFile('vim', 'italic,bold', 'none', 'green')
 
 "let g:test = {}
-let g:test=split(glob("_localrc/*"))
+"let g:test=split(glob("_localrc/*"))
