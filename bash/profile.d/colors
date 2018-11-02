@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+LS_COLORS=""
+
+LS_COLORS+="no=0;39:"   # Global default
+LS_COLORS+="di=0;36:"   # Directory
+LS_COLORS+="ex=0;32:"   # Executable file
+LS_COLORS+="fi=0;39:"   # File
+LS_COLORS+="ec=:"       # Non-filename text
+LS_COLORS+="mi=1;31:"   # Non-existent file pointed to by a symlink
+LS_COLORS+="ln=target:" # Symbolic link
+LS_COLORS+="or=31;01"   # Symbolic link pointing to a non-existent file
+
+export LS_COLORS
+# Enable color support.
+if [ -x /usr/bin/dircolors ]; then
+
+  if test -r ~/Projects/dotfiles/bash/LS_COLORS; then
+    eval "$(dircolors -b ~/Projects/dotfiles/bash/LS_COLORS)"
+  fi
+
+  alias dr='dir --color=auto '          # `dir` alias expansion. 
+  alias egrep="egrep --color=auto"
+  alias fgrep="fgrep --color=auto"
+  alias grep="grep --color=auto"
+  alias lsc='ls --color=auto '          # `ls` alias expansion.
+  alias vdir="vdir --color=auto"
+
+fi

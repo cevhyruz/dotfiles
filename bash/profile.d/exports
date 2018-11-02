@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# TODO: do not use exports!
+# see this: https://unix.stackexchange.com/questions/477716/is-it-possible-to-display-ps2-prompt-ellipsis-when-long-bash-command-wraps
+
+  EDITOR="/usr/bin/nvim"             # Set neovim as the default editor.
+  HISTFILESIZE=10000          # Increase bash history line limit (default 500).
+  HISTSIZE=10000           # Increase bash command history limit (default 500).
+  HISTCONTROL=ignoreboth:erasedups     # Ignore duplicate commands and spaces.
+  INPUTRC="$HOME/Projects/dotfiles/bash/inputrc"     # Local inputrc file.
+  PROMPT_COMMAND="history -a; $PROMPT_COMMAND"       # One history for all.
+  HISTIGNORE="bash:exit:pwd:dir:dirs:ls:clear:echo:man *"
+  FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
+  TERM="xterm-256color"
+
+  MANPAGER="less --no-init"
+
+  if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
+    PATH="$HOME/Projects/dotfiles/bin:$PATH"
+  fi
+
+
+  FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"   # Add to existing fzf options.
+  FZF_DEFAULT_OPTS+=' --no-reverse'      # Prompt always at the bottom.
+  FZF_DEFAULT_OPTS+=' --border'          # Show top and bottom border.
+  FZF_DEFAULT_OPTS+=' --no-bold'         # Disable bold characters.
+
+#  export FZF_DEFAULT_OPTS             # Export to be used by vim
+  FZF_TMUX=1                      # Use tmux split-pane if possible.

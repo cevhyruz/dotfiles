@@ -1,0 +1,66 @@
+# -------------------------------------
+#      Insert-mode  keybindings       |
+# -------------------------------------
+
+# Change cursor shape depending on current mode.
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[5 q\2
+set vi-cmd-mode-string \1\e[2 q\2
+
+# Make Tab autocomplete regardless of filename case.
+set completion-ignore-case on
+
+# Add trailing slash when autocompleting symlinks to directories.
+set mark-symlinked-directories on
+
+# Do not autocomplete hidden files unless pattern begins with a dot.
+set match-hidden-files off
+
+# Be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set skip-completed-text on
+
+# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Bind TAB to cycle-through all matching comands/words.
+TAB: menu-complete
+
+# Bind `kj` as <Escape>.
+  "kj": vi-movement-mode
+  "KJ": vi-movement-mode
+
+# map `mm` as enter/carriage-return
+  "jj": "\C-M"
+  "JJ": "\C-M"
+
+
+# -------------------------------------
+#      Command-mode keybindings       |
+# -------------------------------------
+
+$if mode=vi
+
+  # Make all preceeding keymap as command-mode keybindings.
+  set keymap vi-command
+
+  # Map `mm` as enter/carriage-return
+  "jj": "\C-M"
+
+  # Navigation
+  "a": end-of-line
+  "b": beginning-of-line
+
+  # Surround with double quotes.
+  "ysiw": 'bi"\eea"\e'
+
+  # Autocomplete partially typed command based on history.
+  "n": history-search-forward
+  "p": history-search-backward
+
+$endif
