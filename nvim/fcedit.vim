@@ -28,6 +28,7 @@
   set softtabstop=2             " Use 2 spaces for tabs.
   set shiftwidth=2              " Number of spaces to use for indention.
   set noshowmode                " Hide mode display.
+  set shortmess+=F
 
 " }}}
 
@@ -36,7 +37,7 @@
   set statusline+=%=
   set statusline+=%0*☰\ %2v\                        " Column Number.
 
-  source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
+  source /home/devs/Projects/dotfiles/nvim/components/keybindings/basic.vim
 
 hi! EndOfBuffer ctermfg=234
 hi! Statusline ctermfg=23 ctermbg=250

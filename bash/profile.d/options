@@ -1,28 +1,13 @@
 #!/usr/bin/env bash
 
-# Enable vi-style keybindings. (for one-liner command editing)
-set -o vi                  
+# Enable vi-style keybindings (for one-liner editing).
+set -o vi
 
-# Do not enable completion on empty line. 
-shopt -s no_empty_cmd_completion
-
-# Automatically prepend `cd` to directory names.
-shopt -s autocd
-
-# Autocorrect typos in path names when using `cd`.
-shopt -s cdspell
-
-# Case-insensitive globbing for pathname expansion.
-shopt -s nocaseglob
-
-# Check winsize and update the value of `LINES` and `COLUMNS` if necessarry.
-shopt -s checkwinsize
-
-# Save all multiple-lines command in the same history entry.
-shopt -s cmdhist
-
-# Include (.)files in file globbing.
-shopt -s dotglob
-
-# Append to the history file rather than overwriting.
-shopt -s histappend
+shopt -s no_empty_cmd_completion   # Do'nt enable completion on empty line.
+shopt -s autocd                    # Preprend `cd` to directory names.
+shopt -s cdspell                   # Auto-correct typos in path names.
+shopt -s nocaseglob                # Case-insensitive pathname globbing.
+shopt -s checkwinsize              # Update `LINES` and `COLUMNS` if needed.
+shopt -s cmdhist                   # Save multi-line command in one entry.
+shopt -s dotglob                   # Include (.)files in file globbing.
+shopt -s histappend                # Append to history rather than override.

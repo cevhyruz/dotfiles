@@ -14,24 +14,33 @@ alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 alias pst="xclip -out"                       # Print xclip selection.
 alias open="xdg-open ."
 
+#------------------------------------------
+#             Neovim Editor               |
+#------------------------------------------
+
+# TODO: Make this load multiple files.
+# Start neovim without plugin but with basic keybindings.
+alias nnvim="nvim -u \
+    /home/devs/Projects/dotfiles/nvim/components/keybindings.vim"
+
 
 #------------------------------------------
 #              Git commands               |
 #------------------------------------------
 
 alias gl="git log --pretty=oneline --graph --abbrev-commit"
-alias gs="git status --short"
+#alias gs="git status --short"
 alias gshow="git show"
 alias gdf="git diff"
 alias gca="git commit --all"
 alias gc="git commit"
-alias ga="git add"
+alias ga="git add"           # Stage file.
+alias gu="git reset"         # Unstage file in index.
 
 # Reset all uncommited changes.
 alias grest="git reset --hard HEAD"
 
-# Reset dirty file to working tree.
-alias gco="git checkout"
+# Reset dirty working tree back HEAD.
 
 #------------------------------------------
 #             System commands             |
@@ -59,7 +68,3 @@ alias m="~/Music"
 alias dl="~/Downloads"
 alias d="~/Documents"
 alias et="/etc"
-
-# Neovim Files.
-alias lvim="~/.config/nvim/init.vim"          # Local nvim config.
-alias svim="/usr/share/nvim/sysinit.vim"      # System-wide nvim config.

@@ -1,10 +1,10 @@
 
 " Enable folder/directory glyph flag.
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:DevIconsEnableFoldersOpenClose = 1
 
 " enable pattern matching glyphs on folder/directory (enabled by default with 1)
-let g:DevIconsEnableFolderPatternMatching = 1
+let g:DevIconsEnableFolderPatternMatching = 0
 
 " change the default dictionary mappings for file extension matches
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
@@ -94,17 +94,5 @@ endfunction
 
 " }}}
 
-" Pretty file. {{{
-function! PrettyFile(filename, cterm, fg)
-  exec 'autocmd filetype nerdtree highlight ' .
-    \ a:filename .
-    \ ' cterm='. a:cterm .
-    \ ' ctermfg='. a:fg
-
-  exec 'autocmd filetype nerdtree syn match ' .
-    \ a:filename . ' #^\s\+.*'. a:filename .'$#'
-endfunction
-" }}}
 
 call PrettyIcon(g:icons)
-call PrettyFile('gitignore', 'none', 'green')

@@ -1,5 +1,42 @@
 #!/usr/bin/env bash
 
+# Helpers functions
+
+# Open all out-of-bounds command output in less.
+function _out_of_bounds() {
+
+  local output_linecount="$1"
+  local window_height="$2"
+  local cmd="$3"
+
+  if [ "$output_linecount" -gt "$window_height" ]; then
+    "${cmd}" | less --RAW-CONTROL-CHARS
+  else
+    "${cmd}"
+  fi
+
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# git status in `less` ( for easy scrolling )
+function gs() {
+
+  local status_count=''
+  local window_height=''
+
+  window_height="$(tput lines)"
+  status_count="$(git status --short | wc -l)"
+
+  if [ "$status_count" -gt "$window_height" ]; then
+    git status --short | less -r
+  else
+    git status --short
+  fi
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Start tmux a tmux session with base directory.
 function tmx() {
 
@@ -14,19 +51,20 @@ function tmx() {
 
   # Set base directory (for statusline shell scripts).
   tmux setenv __base_dir__ "${session_base_dir}"
-  
+
   tmux attach
-  
+
 }
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Create directory and enter it.
 function md() {
-
   local dir="${1}"
-
   mkdir "${dir}" && cd "${dir}" || return
-
 }
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Colorized `cat` output with linenumbers in `less` pager.
 function hicat() {
@@ -44,6 +82,8 @@ function hicat() {
 
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 # Cd into the current directory after quiting vifm.
 vicd() {
 
@@ -57,3 +97,6 @@ vicd() {
 
   cd "$dest" || return
 }
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
