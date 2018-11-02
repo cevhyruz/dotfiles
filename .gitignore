@@ -1,3 +1,4 @@
-_localrc/*
-install.sh
-setup.sh
+/bash/*
+/_localrc/*
+/install.sh
+/setup.sh
