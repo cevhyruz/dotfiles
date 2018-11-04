@@ -28,14 +28,49 @@ alias nnvim="nvim -u \
 #              Git commands               |
 #------------------------------------------
 
-alias gl="git log --pretty=oneline --graph --abbrev-commit"
-#alias gs="git status --short"
-alias gshow="git show"
-alias gdf="git diff"
-alias gca="git commit --all"
-alias gc="git commit"
-alias ga="git add"           # Stage file.
-alias gu="git reset"         # Unstage file in index.
+# git log - Show commit logs.
+
+alias gl="git log --oneline --graph -20"
+#                   │         │      └─ Limit output to 20 lines.
+#                   │         └─  Display text-based graphical commit history.
+#                   └─ Shorthand for --pretty=oneline --abbrev-commit.
+
+# git status - Show the working tree status as 'short-format'.
+
+alias gs="git status --short"     # Staged and untracked files.
+alias gsi="gs --ignored"          # Status with ignored files.
+
+# git ls-files - Show info about files in index and the working tree.
+
+alias gli="git ls-files -o -i --exclude-standard"
+#                        │  │   └─ Use standard ignore rules.
+#                        │  └── Show only ignored files.
+#                        └─ Show other (i.e. untracked) files in the output.
+
+# git show - Show one or more objects (blobs, trees, tags, and commits).
+
+alias gshow="git show --oneline"  # Show HEAD's log message and diffs.
+#                       └─ Shorthand for --pretty=oneline --abbrev-commit.
+
+# git diff - Show changes between the working tree and the index or a tree.
+
+alias gdf="git diff"              # Show uncommited changes
+
+# git commit - Record changes to the repository.
+
+alias gc="git commit"            # Commit all staged file, fire up $EDITOR.
+alias gca="gc --all"             # Stage all files, modified and untracked.
+alias gcp="gc --patch"           # Choose which hunks/changes to commit.
+alias gam="gc --amend"           # Amend changes to the tip of current branch.
+
+# git add - Update index using the current content found in the working tree.
+
+alias ga="git add"           # Add file/s to the index (staging area).
+alias gan="ga --dry-run"     # See What would be added and/or will be ignored.
+alias gai="ga --interactive" # Stage file interactively to the index.
+alias gap="ga --patch"       # Choose which hunks to be added to index.
+
+alias gu="git reset"              # Unstage file in index.
 
 alias grc="git rm --cached"  # Fix not ignoring.
 

@@ -1,6 +1,19 @@
-snippet aug "Create Autogroup"
+# Autocmd Group name
+snippet aug "Define autocmd groupname..."
 augroup ${1:Name}
-	autocmd!
+	autocmd! $1
 	autocmd ${2:Code here..}
 augroup end
+
+$0
 endsnippet
+
+snippet todo "This is a TODO reminder" b
+" TODO: ${1:description}
+endsnippet
+
+snippet fx "This is a FIXME reminder" b
+" FIXME: ${1:description}
+endsnippet
+
+

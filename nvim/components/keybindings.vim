@@ -28,7 +28,6 @@ hi! Cursorline cterm=none ctermbg=235
 "------------------------------------
 "           File Editing             |
 "------------------------------------
-
 " Write to file.
   nnoremap ;w :w<cr>
 
@@ -75,3 +74,4 @@ hi! Cursorline cterm=none ctermbg=235
 
 " Run `git loglive` in terminal buffer.
   nnoremap vs :40vs term://git loglive<cr>
+

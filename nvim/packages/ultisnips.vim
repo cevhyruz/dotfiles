@@ -1,15 +1,16 @@
 
-
+" Location of the snippet files.
 let g:UltiSnipsSnippetDirectories = [
       \ '/home/devs/Projects/dotfiles/nvim/UltiSnips',
       \'UltiSnips'
       \]
 
-" Use python3 for UltiSnips.
-let g:UltiSnipsUsePythonVersion = 3            " Use Python3 for UltiSnips.
-let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsUsePythonVersion = 3        " Use Python3 for UltiSnips.
+let g:UltiSnipsEditSplit="vertical"        " Always open snip file in vsplit.
 
-" <Tab> is scary if you are using YouCompeletMe( don't do this at home ).
+" This is actually the default value, I just
+" put it here to help keep myself sane at all times.
 let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-j>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
