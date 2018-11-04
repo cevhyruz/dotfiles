@@ -53,11 +53,12 @@ function! GitFindIgnoredFiles(files)
       let ignored = split(file[3:], '/')[-1]
       exec 'syntax match NerdIgnored ' .
         \ '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
-
+        echo '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
+        echo ignored
     endif
 
-"      exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
-"            \ ' containedin=NERDTreeDir conceal contained'
+      exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
+            \ ' containedin=NERDTreeDir conceal contained'
   endfor
 endfunction
 

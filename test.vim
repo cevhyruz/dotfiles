@@ -22,3 +22,4 @@ function! GitFindIgnoredFiles(files)
 endfunction
 
 autocmd FileType nerdtree       :call GitDimIgnoredFiles()
+
