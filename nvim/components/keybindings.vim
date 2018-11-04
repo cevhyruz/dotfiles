@@ -34,6 +34,12 @@ hi! Cursorline cterm=none ctermbg=235
 " Insert Newline.
   nnoremap mm o<esc>
 
+" Move a whole line.
+  nnoremap J mz:m+<cr>`z
+  nnoremap K mz:m-2<cr>`z
+  vnoremap J :m'>+<cr>`<my`>mzgv`yo`z
+  vnoremap K :m'<-2<cr>`>my`<mzgv`yo`z
+
 " Append text at the end of the line (shadows 'a').
   nnoremap a A
 
