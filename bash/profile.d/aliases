@@ -70,12 +70,18 @@ alias gan="ga --dry-run"     # See What would be added and/or will be ignored.
 alias gai="ga --interactive" # Stage file interactively to the index.
 alias gap="ga --patch"       # Choose which hunks to be added to index.
 
+# git branch - List, create and delete branches.
+
+alias gb="git branch"       # list all local branches
+alias gbd="gb --delete"     # Delete given branch.
+
 alias gu="git reset"              # Unstage file in index.
 
 alias grc="git rm --cached"  # Fix not ignoring.
 
 # Reset all uncommited changes.
 alias grest="git reset --hard HEAD"
+
 
 # Reset dirty working tree back HEAD.
 
