@@ -65,25 +65,38 @@ function prompt_git() {
 
 }
 
+function _git_commit() {
+
+  local commit_message=""
+  commit_message="$(git show --pretty=format:%s --no-patch HEAD)"
+
+
+  echo -e "${commit_message}"
+}
+
 function set_prompts() {
 
   local bold=""
   local reset=""
+  local italic=""
 
   local cyan=""
   local pink=""
   local yellow=""
+  local green=""
 
   if tput setaf 1 &> /dev/null; then
     tput sgr0; # reset colors
 
     bold=$(tput bold);
     reset=$(tput sgr0);
+    italic=$(tput sitm);
 
     cyan=$(tput setaf 37)
     dimgrey=$(tput setaf 248)
     pink=$(tput setaf 216)
     yellow=$(tput setaf 178);
+    green=$(tput setaf 30);
     red=$(tput setaf 203);
     white=$(tput setaf 246);
 
@@ -96,7 +109,12 @@ function set_prompts() {
   PS1+="\\[${cyan}\\] \\W:"                # Working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]"
-  PS1+="\\[${pink}\\]\\n \\$  "
+  PS1+="\\n \\[${italic}\\]"
+  PS1+="➜ \\[${green}\\]"
+  PS1+="\$(_git_commit)"
+  PS1+="\\[${reset}\\]"
+  PS1+="\\[${pink}\\]"
+  PS1+=" \\n\\$  "
 
   set PS1
 
