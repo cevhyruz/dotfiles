@@ -1,9 +1,6 @@
 
 let mapleader = ","          " Leader key.
 
-hi! LineNR ctermbg=234 ctermfg=239
-hi! Cursorline cterm=none ctermbg=235
-
 " Edit vimrc.
   nnoremap <silent> <leader>e :edit $VIM/sysinit.vim<cr>
 
