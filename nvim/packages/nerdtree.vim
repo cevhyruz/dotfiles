@@ -37,12 +37,11 @@ augroup end
 function! GitDimIgnoredFiles()
   let gitcmd = 'git -c color.status=false status --short --ignored'
   if exists('b:NERDTree')
-      let root = b:NERDTree.root.path.str()
+    let root = b:NERDTree.root.path.str()
   else
-      let root = './'
+    let root = './'
   endif
   let files = split(system(gitcmd.' '.root), '\n')
-
   call GitFindIgnoredFiles(files)
 endfunction
 
@@ -54,9 +53,8 @@ function! GitFindIgnoredFiles(files)
       exec 'syntax match NerdIgnored ' .
         \ '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
     endif
-
       exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
-            \ ' containedin=NERDTreeDir conceal contained'
+        \ ' containedin=NERDTreeDir conceal contained'
   endfor
 endfunction
 
@@ -83,10 +81,8 @@ function! PrettyFile(filename, cterm, bg, fg)
     \ ' cterm='. a:cterm .
     \ ' ctermfg='. a:bg .
     \ ' ctermfg='. a:fg
-
   execute 'autocmd FileType nerdtree syntax match ' .
     \ a:filename . ' #^\s\+.*'. a:filename .'$#'
-
 endfunction
 
 let g:haha = glob("_localrc/*")
