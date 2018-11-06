@@ -79,11 +79,24 @@ alias gu="git reset"              # Unstage file in index.
 
 alias grc="git rm --cached"  # Fix not ignoring.
 
-# Reset all uncommited changes.
-alias grest="git reset --hard HEAD"
+# git reset - Reset current HEAD to the specified state.
 
+# Reset all changes to HEAD.
+alias gr="git reset"
 
-# Reset dirty working tree back HEAD.
+# Delete all uncommited changes to 'working tree' and 'index'
+alias grh="gr --hard HEAD"
+
+# Delete all uncommitted changes to index (retain working directory).
+alias grs="gr --soft HEAD"
+
+# Delete last commit, index and uncommited changes to working tree.
+alias grh1="gr --hard HEAD~1"
+
+# Delete last commit and indexed changes but retain working tree.
+alias hrs1="gr --soft HEAD~1"
+
+alias teset="this is the command # Add this to something.."
 
 #------------------------------------------
 #             System commands             |
