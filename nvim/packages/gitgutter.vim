@@ -1,6 +1,18 @@
 
-let g:gitgutter_sign_added = ' ┃'
-let g:gitgutter_sign_modified = ' ┃'
-let g:gitgutter_sign_removed = ' ┃'
-let g:gitgutter_sign_removed_first_line = ' ┃'
-let g:gitgutter_sign_modified_removed = ' ┃'
+let g:sign = ' ┃'                " Git Gutter Sign.
+let g:gitgutter_map_keys = 0     " Dont set mappings.
+
+let g:gitgutter_sign_added = g:sign
+let g:gitgutter_sign_modified = g:sign
+let g:gitgutter_sign_removed = g:sign
+let g:gitgutter_sign_removed_first_line = g:sign
+let g:gitgutter_sign_modified_removed = g:sign
+
+hi! GitGutterAdd ctermfg=64
+hi! GitGutterChange ctermfg=67
+hi! GitGutterDelete ctermfg=203
+
+augroup UpdateGitGutterOnSave
+  autocmd! UpdateGitGutterOnSave
+  autocmd BufWritePost * GitGutter
+augroup end
