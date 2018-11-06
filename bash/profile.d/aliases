@@ -96,8 +96,6 @@ alias grh1="gr --hard HEAD~1"
 # Delete last commit and indexed changes but retain working tree.
 alias hrs1="gr --soft HEAD~1"
 
-alias teset="this is the command # Add this to something.."
-
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
