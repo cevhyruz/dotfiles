@@ -102,3 +102,6 @@ source /home/devs/Projects/dotfiles/nvim/components/tabline.vim
 if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
   source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
 endif
+
+hi! LineNR ctermbg=234 ctermfg=239
+hi! Cursorline cterm=none ctermbg=236
