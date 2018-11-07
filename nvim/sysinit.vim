@@ -8,6 +8,8 @@ augroup TermConfig
   autocmd BufEnter term://* startinsert         " Always start in InsertMode.
 augroup end
 
+
+
 " Disable some global plugins {{{
 
   let loaded_matchit       = 1
@@ -31,7 +33,7 @@ augroup end
 "  colorscheme codedark
   set colorcolumn=79             " Character per line threshold guide.
   set signcolumn=yes             " Always open signcolumn gutter.
-  set number                     " Display line numbers.
+  set number relativenumber      " Display hybrid line numbers.
   set nofoldenable               " Dont fold marked folds by default.
   set scrolloff=16               " Line wrap around cursor while scrolling.
   set backspace=indent,eol,start " Allow backspace in insert mode.
