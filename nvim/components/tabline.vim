@@ -15,7 +15,8 @@ function! MyTabLine()
     else
       let s .= '%#TabLine#'
     endif
-    let s .= '  %{WebDevIconsGetFileTypeSymbol()} %{MyTabLabel()} '      " Current file name.
+    let s .= '  %{WebDevIconsGetFileTypeSymbol()} ' .
+          \'%{MyTabLabel()} %M'
     " right-align the label to close the current tab page
     let s .= '%=%#TabFileType#  buffers : ' .  g:bufcount  . '  '
   return s
