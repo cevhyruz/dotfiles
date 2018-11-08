@@ -5,8 +5,6 @@ hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
 hi! TabLine cterm=none
 hi! TabLineFill cterm=none ctermbg=234
 
-let g:bufcount = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-
 function! MyTabLine()
   let s = '%#TabFileType#'
   let s .= '  ' . toupper(&filetype) . '  '
@@ -18,8 +16,12 @@ function! MyTabLine()
     let s .= '  %{WebDevIconsGetFileTypeSymbol()} ' .
           \'%{MyTabLabel()} %M'
     " right-align the label to close the current tab page
-    let s .= '%=%#TabFileType#  buffers : ' .  g:bufcount  . '  '
+    let s .= '%=%#TabFileType#  buffers : %{BufCount()}  '
   return s
+endfunction
+
+function! BufCount()
+  return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 endfunction
 
 function! MyTabLabel()
@@ -32,4 +34,3 @@ function! MyTabLabel()
 endfunction
 
 set tabline=%!MyTabLine()
-
