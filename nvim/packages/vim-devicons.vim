@@ -11,7 +11,7 @@ let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = 'ƛ'
 
 " change the default character when no match found
-let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
+let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 
 " TODO: optimize this.
 " change the default dictionary mappings for exact file node matches
