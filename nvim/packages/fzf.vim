@@ -38,7 +38,7 @@ augroup FzfConfig&Keybindings
     \| tnoremap q <C-c><cr>
     \| tnoremap j <C-j>
     \| tnoremap <space> <C-m>
-    \| setlocal signcolumn=no showtabline=0 laststatus=0 noshowmode noruler
+    \| setlocal signcolumn=no laststatus=0 noshowmode noruler
     \| autocmd BufLeave <buffer> setlocal laststatus=2 showmode ruler
     \| tmapclear
 augroup end
