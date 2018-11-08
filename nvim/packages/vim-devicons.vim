@@ -1,38 +1,32 @@
-
-" Enable folder/directory glyph flag.
 let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:DevIconsEnableFoldersOpenClose = 1
-
-" enable pattern matching glyphs on folder/directory (enabled by default with 1)
 let g:DevIconsEnableFolderPatternMatching = 0
+let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 
-" change the default dictionary mappings for file extension matches
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = 'ƛ'
+let g:ShellGlyph =''
+let g:TmuxGlyph = ''
+let g:licenseGlyph = ''
 
-" change the default character when no match found
-let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
-
-" TODO: optimize this.
-" change the default dictionary mappings for exact file node matches
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {} " needed
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'bash.bashrc' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'fzf' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'inputrc' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'profile' ] = ''
-
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'aliases' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'colors' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'exports' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'functions' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'options' ] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols[ 'prompt' ] = ''
-
-" add or override individual additional filetypes
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['myext'] = 'ƛ'
-
-" Prettify Icons. {{{
+let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {
+  \ 'bash.bashrc': g:ShellGlyph,
+  \ 'local.bashrc': g:ShellGlyph,
+  \ 'fzf': g:ShellGlyph,
+  \ 'inputrc': g:ShellGlyph,
+  \ 'profile': g:ShellGlyph,
+  \ 'aliases': g:ShellGlyph,
+  \ 'colors': g:ShellGlyph,
+  \ 'exports': g:ShellGlyph,
+  \ 'functions': g:ShellGlyph,
+  \ 'options': g:ShellGlyph,
+  \ 'prompt': g:ShellGlyph,
+  \ 'tmux.conf': g:TmuxGlyph,
+  \ 'keybindings.conf': g:TmuxGlyph,
+  \ 'theme.conf': g:TmuxGlyph,
+  \ 'license': g:licenseGlyph
+\}
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {
+  \ 'otf': '',
+\}
 let g:palette = {
     \'base03': 8,
     \'base02': 0,
@@ -51,13 +45,12 @@ let g:palette = {
     \'cyan': 6,
     \'green': 2
 \}
-
 let g:icons = {
     \ 'normal':    [ '' ],
     \ 'emphasize': [ '' ],
     \ 'green':     [ '' ],
-    \ 'blue':      [ '', '', ''],
-    \ 'yellow':    [ '', '', ''],
+    \ 'blue':      [ '', '', '' ],
+    \ 'yellow':    [ '', '', '','' ],
     \ 'magenta':   [ '' ],
     \ 'orange':    [ '', '' ],
     \ 'red':       [ '' ],
@@ -89,4 +82,3 @@ function! PrettyNerdTree(config)
 endfunction
 
 call PrettyNerdTree(g:icons)
-" }}}
