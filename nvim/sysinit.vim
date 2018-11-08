@@ -107,3 +107,4 @@ endif
 
 hi! LineNR ctermbg=234 ctermfg=239
 hi! Cursorline cterm=none ctermbg=236
+hi! matchParen cterm=bold ctermbg=none ctermfg=30
