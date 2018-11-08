@@ -59,42 +59,34 @@ let g:icons = {
     \ 'blue':      [ '', '', ''],
     \ 'yellow':    [ '', '', ''],
     \ 'magenta':   [ '' ],
-    \ 'orange':    [ '' ],
+    \ 'orange':    [ '', '' ],
     \ 'red':       [ '' ],
     \ 'violet':    [ '' ],
     \ 'cyan':      [ '', '' ]
 \}
 
-function! PrettyIcon(config)
+function! PrettyNerdTree(config)
   let colors = keys(a:config)
-
-" TODO: Add support for light background
-" and maybe support for icon background colors too??
   augroup devicons_colors
-
     autocmd!
     for color in colors
       if color == 'normal'
         exec 'autocmd FileType nerdtree' .
           \ 'highlight devicons_' . color .
-            \ ' ctermfg=' . g:palette.base01
+          \ ' ctermfg=' . g:palette.base01
       elseif color == 'emphasize'
         exec 'autocmd FileType nerdtree' .
           \ 'highlight devicons_' . color .
-            \ ' ctermfg=' . g:palette.base1
+          \ ' ctermfg=' . g:palette.base1
       else
         exec 'autocmd FileType nerdtree highlight devicons_' . color .
           \ ' ctermfg='. g:palette[color]
       endif
-
       exec 'autocmd FileType nerdtree syntax match devicons_' . color .
         \ ' /\v' . join(a:config[color], '|') . '/ containedin=ALL'
-
     endfor
   augroup END
 endfunction
 
+call PrettyNerdTree(g:icons)
 " }}}
-
-
-call PrettyIcon(g:icons)
