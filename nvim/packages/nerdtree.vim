@@ -9,8 +9,8 @@ let NERDTreeCascadeSingleChildDir=1      " Collapse dirs with only one file.
 let NERDTreeQuitOnOpen = 1               " Close Nerdtree after opening a file.
 let NERDTreeMinimalUI=1                  " Hide help and updir in UI.
 let NERDTreeShowHidden=1                 " Show hidden files / (.)files.
-let g:NERDTreeDirArrowExpandable = '❯'   " Set close arrow in dirs.
-let g:NERDTreeDirArrowCollapsible = '◿'  " Set open arros in dirs.
+let g:NERDTreeDirArrowExpandable = ''   " Set close arrow in dirs.
+let g:NERDTreeDirArrowCollapsible = ''  " Set open arros in dirs.
 
 " Directory color same as in bash.
 hi NERDTreeDir cterm=bold ctermfg=73
