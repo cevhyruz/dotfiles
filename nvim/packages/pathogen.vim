@@ -6,7 +6,7 @@
 " call add(g:pathogen_blacklist, 'fzf.vim')
 " call add(g:pathogen_blacklist, 'indentLine')
  call add(g:pathogen_blacklist, 'neovim-vifm')
- call add(g:pathogen_blacklist, 'nerdcommenter')
+" call add(g:pathogen_blacklist, 'nerdcommenter')
 " call add(g:pathogen_blacklist, 'nerdtree')
  call add(g:pathogen_blacklist, 'nerdtree-buffer-ops')
  call add(g:pathogen_blacklist, 'nerdtree-git-plugin')
