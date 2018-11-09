@@ -39,6 +39,7 @@ augroup FzfConfig&Keybindings
     \| tnoremap j <C-j>
     \| tnoremap <space> <C-m>
     \| setlocal signcolumn=no noruler
+    \| let g:indentLine_enabled = 0
     \| autocmd BufLeave <buffer> setlocal ruler
     \| tmapclear
 augroup end
