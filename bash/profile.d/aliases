@@ -96,6 +96,9 @@ alias grh1="gr --hard HEAD~1"
 # Delete last commit and indexed changes but retain working tree.
 alias hrs1="gr --soft HEAD~1"
 
+# Unstaged a file.
+alias grf="git reset HEAD --"
+
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
