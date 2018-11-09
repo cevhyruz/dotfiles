@@ -71,7 +71,7 @@ augroup end
     cnoreabbrev l BLines<cr>
     " Open git log.
     cnoreabbrev c Commits<cr>
-    " Search for a text/string in project dir.
+    " Jump for specific code in all opened buffers.
     cnoreabbrev al Lines<cr>
     " Jump to buffer.
     cnoreabbrev b Buffers<cr>
