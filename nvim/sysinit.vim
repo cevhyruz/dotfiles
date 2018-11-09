@@ -61,12 +61,25 @@ augroup end
 " Abbreviation {{{
 
 " Try appending <cr> or <bs>
-
+  " fzf {{{
     cnoreabbrev f FZF<cr>
+    cnoreabbrev a Ag<cr>
 
-    cnoreabbrev snip UltiSnipsEdit<cr>
+    " Git ls-files.
+    cnoreabbrev g GFiles<cr>
+    " Lines in the current buffer.
+    cnoreabbrev l BLines<cr>
+    " Open git log.
+    cnoreabbrev c Commits<cr>
+    " Search for a text/string in project dir.
+    cnoreabbrev al Lines<cr>
+    " Jump to buffer.
+    cnoreabbrev b Buffers<cr>
+  " }}}
 
-    inoreabbrev nerdtree NERDTree
+  cnoreabbrev snip UltiSnipsEdit<cr>
+
+  inoreabbrev nerdtree NERDTree
 
 " }}}
 
