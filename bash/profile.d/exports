@@ -7,7 +7,6 @@
   HISTFILESIZE=10000          # Increase bash history line limit (default 500).
   HISTSIZE=10000           # Increase bash command history limit (default 500).
   HISTCONTROL=ignoreboth:erasedups     # Ignore duplicate commands and spaces.
-  INPUTRC="$HOME/Projects/dotfiles/bash/inputrc"     # Local inputrc file.
   PROMPT_COMMAND="history -a; $PROMPT_COMMAND"       # One history for all.
   HISTIGNORE="bash:exit:pwd:dir:dirs:ls:clear:echo:man *"
   FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
