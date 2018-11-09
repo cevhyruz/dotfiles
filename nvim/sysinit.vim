@@ -8,8 +8,6 @@ augroup TermConfig
   autocmd BufEnter term://* startinsert         " Always start in InsertMode.
 augroup end
 
-
-
 " Disable some global plugins {{{
 
   let loaded_matchit       = 1
@@ -21,20 +19,17 @@ augroup end
 
 " }}}
 
-
 " Basic Settings {{{
 
-  " Some options were omited, see `:help nvim-defaults` for details.
-
-  syntax enable                  " Allow using :hi to set my preffered colors.
+  syntax enable                  " Allow using :hi to set my preferred colors.
   filetype plugin indent on      " Enable loading of plugins per filetype.
+  set spell spelllang=en_us      " Enable word spell and language.
 
   set background=dark            " Use light texts in dark background.
-"  colorscheme codedark
   set colorcolumn=79             " Character per line threshold guide.
   set signcolumn=yes             " Always open signcolumn gutter.
   set number relativenumber      " Display hybrid line numbers.
-  set nofoldenable               " Dont fold marked folds by default.
+  set nofoldenable               " Don't fold marked folds by default.
   set scrolloff=16               " Line wrap around cursor while scrolling.
   set backspace=indent,eol,start " Allow backspace in insert mode.
   set clipboard+=unnamedplus     " Use OS clipboard by default.
@@ -85,7 +80,7 @@ source /home/devs/Projects/dotfiles/nvim/components/tabline.vim
 " Initialize package-specific configuration files.
 " -------------------------------------------------
 "  TODO: Check first if their respective plugin
-" is enabled or not before sourcing to avoid errors poppingup.
+" is enabled or not before sourcing to avoid errors popping up.
 
 
   source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
