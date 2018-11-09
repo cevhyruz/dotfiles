@@ -1,25 +1,21 @@
-"----------------------------------------------
-" nerdtree.vim - tree explorer manager for vim |
-"----------------------------------------------
-
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
-let NERDTreeMapActivateNode='<space>'    " Toggle directory or open files.
-let NERDTreeCascadeSingleChildDir=1      " Collapse dirs with only one file.
-let NERDTreeQuitOnOpen = 1               " Close Nerdtree after opening a file.
-let NERDTreeMinimalUI=1                  " Hide help and updir in UI.
-let NERDTreeShowHidden=1                 " Show hidden files / (.)files.
-let g:NERDTreeDirArrowExpandable = ''   " Set close arrow in dirs.
-let g:NERDTreeDirArrowCollapsible = ''  " Set open arros in dirs.
+let NERDTreeMapActivateNode='<space>'
+let NERDTreeCascadeSingleChildDir=1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeMinimalUI=1
+let NERDTreeShowHidden=1
+let g:NERDTreeDirArrowExpandable = ''
+let g:NERDTreeDirArrowCollapsible = ''
 
-" Directory color same as in bash.
+autocmd FileType nerdtree :call GitDimIgnoredFiles()
+
 hi NERDTreeDir cterm=bold ctermfg=73
 hi NERDTreeCWD cterm=bold
 hi! NERDTreeOpenable cterm=bold ctermfg=245
 hi! NERDTreeClosable cterm=bold ctermfg=243
 hi! NerdIgnored ctermfg=30
-" let NERDTreeShowLineNumbers=1
-" Do not show these files.
+
 let NERDTreeIgnore=[
   \ '\.git$',
   \ '\~$'
@@ -54,18 +50,9 @@ function! GitFindIgnoredFiles(files)
         \ '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
     endif
       exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
-        \ ' containedin=NERDTreeDir conceal contained'
+        \ ' containedin=ALL conceal contained'
   endfor
 endfunction
-
-autocmd FileType nerdtree :call GitDimIgnoredFiles()
-
-"augroup HideNerdTreeDirSlashes
-"  autocmd! FileType nerdtree
-"  autocmd FileType nerdtree
-"    \ syntax match NERDTreeDirSlash #/$#
-"    \ containedin=NERDTreeDir conceal contained
-"augroup END
 
 augroup CloseWhenNoBuffer
   autocmd! FileType nerdtree
