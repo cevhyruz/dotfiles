@@ -63,8 +63,8 @@ augroup end
 " Try appending <cr> or <bs>
   " fzf {{{
     cnoreabbrev f FZF<cr>
+    " Jump to specific code in all files in project dir.
     cnoreabbrev a Ag<cr>
-
     " Git ls-files.
     cnoreabbrev g GFiles<cr>
     " Lines in the current buffer.
