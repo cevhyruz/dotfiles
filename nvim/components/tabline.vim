@@ -5,32 +5,37 @@ hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
 hi! TabLine cterm=none
 hi! TabLineFill cterm=none ctermbg=234
 
+
 function! MyTabLine()
-  let s = '%#TabFileType#'
-  let s .= '  ' . toupper(&filetype) . '  '
-    if 0 + 1 == tabpagenr()  " if tab is the current active buffer.
+  let s = ''
+  for i in range(tabpagenr('$'))
+    " select the highlighting
+    if i + 1 == tabpagenr()
       let s .= '%#TabLineSel#'
     else
       let s .= '%#TabLine#'
     endif
-    let s .= '  %{WebDevIconsGetFileTypeSymbol()} ' .
-          \'%{MyTabLabel()} %M'
-    " right-align the label to close the current tab page
-    let s .= '%=%#TabFileType#  buffers : %{BufCount()}  '
+    " set the tab page number (for mouse clicks)
+    let s .= '%' . (i + 1) . 'T'
+    " the label is made by MyTabLabel()
+    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+  endfor
+  " after the last tab fill with TabLineFill and reset tab page nr
+  let s .= '%#TabLineFill#%T'
+  " right-align the label to close the current tab page
+  if tabpagenr('$') > 1
+    let s .= '%=%#TabLine#%999Xclose'
+  endif
   return s
 endfunction
 
-function! BufCount()
-  return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+
+function! MyTabLabel(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
+  return WebDevIconsGetFileTypeSymbol(filename) .' '. filename
 endfunction
 
-function! MyTabLabel()
-  let filename = expand('%:t')
-  if filename == ''
-    return '[No Name]'
-  else
-    return filename
-  endif
-endfunction
 
 set tabline=%!MyTabLine()
