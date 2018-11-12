@@ -36,7 +36,11 @@ function! MyTabLabel(n)
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
   let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
+  if expand('%:t') == ''
+    return WebDevIconsGetFileTypeSymbol() .' '. 'Untitled'
+  else
   return WebDevIconsGetFileTypeSymbol(filename) .' '. filename
+  endif
 endfunction
 
 set tabline=%!MyTabLine()
