@@ -32,10 +32,8 @@ function! MyTabLabel(n)
   let winnr = tabpagewinnr(a:n)
   let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
   if expand('%:t') == ''
-    return WebDevIconsGetFileTypeSymbol() .' '. 'Untitled'
+    return WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return WebDevIconsGetFileTypeSymbol(filename) .' '. filename
-  endif
+  return WebDevIconsGetFileTypeSymbol(filename). ' ' .filename
 endfunction
-
 set tabline=%!MyTabLine()
