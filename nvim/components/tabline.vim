@@ -2,8 +2,9 @@
 set showtabline=2
 
 hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
-hi! TabLine cterm=none
-hi! TabLineFill cterm=none ctermbg=234
+hi! TabLine cterm=none ctermbg=235 ctermfg=245
+hi! TabLineFill cterm=none ctermbg=236
+hi! TabLineSel cterm=bold ctermbg=23
 
 function! MyTabLine()
   let s = ''
@@ -34,6 +35,6 @@ function! MyTabLabel(n)
   if expand('%:t') == ''
     return WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return WebDevIconsGetFileTypeSymbol(filename). ' ' .filename
+  return ' ' . WebDevIconsGetFileTypeSymbol(filename). ' ' .filename . ' '
 endfunction
 set tabline=%!MyTabLine()
