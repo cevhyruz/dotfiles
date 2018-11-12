@@ -1,0 +1,36 @@
+extends css
+
+# Include
+snippet include "include"
+@include $1;
+endsnippet
+
+# If statement
+snippet if "@if"
+@if $1
+endsnippet
+
+# Mix-ins
+snippet mixin "mixin"
+@mixin ${1:name} {
+	$0
+}
+endsnippet
+
+# Extends
+snippet extends "extends"
+@extend $1;
+endsnippet
+
+# Clearfix
+snippet clear "clearfix"
+display: inline-block;
+&:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+* html & { height: 1px }
+endsnippet
