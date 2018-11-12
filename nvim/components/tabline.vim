@@ -41,6 +41,8 @@ function! MyTabLabel(n)
   if expand('%:t') == ''
     return WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return ' ' . WebDevIconsGetFileTypeSymbol(filename). ' ' .filename . ' '
+  return '  ' . WebDevIconsGetFileTypeSymbol(filename).
+        \' ' .filename . '  '
 endfunction
+
 set tabline=%!MyTabLine()
