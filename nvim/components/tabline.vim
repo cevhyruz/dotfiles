@@ -5,9 +5,15 @@ hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
 hi! TabLine cterm=none ctermbg=235 ctermfg=245
 hi! TabLineFill cterm=none ctermbg=236
 hi! TabLineSel cterm=bold ctermbg=23
+hi! TabLineHide ctermbg=234
 
 function! MyTabLine()
-  let s = ''
+  if exists('g:NERDTree') && g:NERDTree.IsOpen()
+    let s = '%#TabLineHide#'
+    let s .= '                                '
+  else
+    let s = '  '
+  endif
   for i in range(tabpagenr('$'))
     if i + 1 == tabpagenr()
       let s .= '%#TabLineSel#'
