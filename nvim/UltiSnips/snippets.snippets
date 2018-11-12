@@ -4,3 +4,15 @@ snippet snip "Ultisnips snippet definition" b
 ${0:${VISUAL}}
 `!p snip.rv = "endsnippet"`
 endsnippet
+
+# Create global snippets?
+snippet global "Global snippet" !
+`!p snip.rv = "global"` !p
+$0
+`!p snip.rv = "endglobal"`
+endsnippet
+
+# Adding visual?
+snippet vis "${VISUAL}" i
+\$\{VISUAL${1:${2:default}${3:/transform/}}\}
+endsnippet
