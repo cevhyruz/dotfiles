@@ -52,10 +52,6 @@ $if mode=vi
   # Map `mm` as enter/carriage-return
   "jj": "\C-M"
 
-  # Navigation
-  "a": end-of-line
-  "b": beginning-of-line
-
   # Surround with double quotes.
   "ysiw": 'bi"\eea"\e'
 
