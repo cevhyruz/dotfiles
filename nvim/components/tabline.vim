@@ -5,7 +5,6 @@ hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
 hi! TabLine cterm=none
 hi! TabLineFill cterm=none ctermbg=234
 
-
 function! MyTabLine()
   let s = ''
   for i in range(tabpagenr('$'))
@@ -24,11 +23,14 @@ function! MyTabLine()
   let s .= '%#TabLineFill#%T'
   " right-align the label to close the current tab page
   if tabpagenr('$') > 1
-    let s .= '%=%#TabLine#%999Xclose'
+    let s .= '%=%#TabLine# %{BufCount()} '
   endif
   return s
 endfunction
 
+function! BufCount()
+  return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+endfunction
 
 function! MyTabLabel(n)
   let buflist = tabpagebuflist(a:n)
@@ -36,6 +38,5 @@ function! MyTabLabel(n)
   let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
   return WebDevIconsGetFileTypeSymbol(filename) .' '. filename
 endfunction
-
 
 set tabline=%!MyTabLine()
