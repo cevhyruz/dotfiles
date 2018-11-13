@@ -49,7 +49,7 @@ let g:palette = {
 \}
 let g:icons = {
   \ 'emphasize' : [ '' ],
-  \    'normal' : [ '' ],
+  \    'normal' : [ '', '' ],
   \     'green' : [ '' ],
   \      'blue' : [ '', '', '' ],
   \    'yellow' : [ '', '', '','' ],
