@@ -91,6 +91,24 @@ else
   return (&paste ? ' '.'PASTE ' : '')
 endfunction
 
+function! FileTypeSymbol()
+  for [key, value] in items(g:icons)
+    if index(value, WebDevIconsGetFileTypeSymbol()) >= 0
+      if key == 'normal'
+        exec 'highlight FileGlyph ctermfg=' . g:palette.base01 .
+              \ ' ctermbg=237'
+      elseif key == 'emphasize'
+        exec 'highlight FileGlyph ctermfg=' . g:palette.base1 .
+              \ ' ctermbg=237'
+      else
+        exec 'highlight FileGlyph ctermfg=' . g:palette[key] .
+              \ ' ctermbg=237'
+      endif
+        return WebDevIconsGetFileTypeSymbol()
+    endif
+  endfor
+endfunction
+
 " TODO: Better hide the {item} instead of displaying
 " a useless and ugly truncated string.
 " That's a total eyesore!.
@@ -103,7 +121,7 @@ set statusline+=%1*%{CurrentMode()}          " Current Mode
 set statusline+=%7*%{ShowUser()}                    " Current user
 set statusline+=%2*
 set statusline+=%3*
-set statusline+=%5*\ %{WebDevIconsGetFileTypeSymbol()}   " DevIcons
+set statusline+=%#FileGlyph#\ %{FileTypeSymbol()}   " DevIcons
 set statusline+=%5*\ %t\                                 " Filename (tail)
 set statusline+=%5*%{ReadOnly()}                         " Readonly flag ()
 set statusline+=%5*\ %M\                                 " Modified flag (+)
