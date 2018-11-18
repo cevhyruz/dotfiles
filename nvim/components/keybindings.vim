@@ -47,8 +47,8 @@ let mapleader = ","          " Leader key.
 "            Navigation              |
 "------------------------------------
 
-" Return/Enter key.
-  cnoremap jj <cr>
+" Return/Enter key (redraw).
+  cnoremap jj <C-l><cr>
 
 " Escape key.
   inoremap kj <esc>
