@@ -1,6 +1,40 @@
 #!/usr/bin/env bash
 
 # ------------------------------------------------------------------
+# lazyload nvim
+# ------------------------------------------------------------------
+# Modified version of @fl0w's gist
+# https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
+function lazynvm() {
+  unset -f nvm node npm npx
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+  if [ -f "$NVM_DIR/bash_completion" ]; then
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+  fi
+}
+
+function nvm() {
+  lazynvm
+  nvm "$@"
+}
+
+function node() {
+  lazynvm
+  node "$@"
+}
+
+function npm() {
+  lazynvm
+  npm "$@"
+}
+
+function npx() {
+  lazynvm
+  npx "$@"
+}
+
+# ------------------------------------------------------------------
 # md - create directory and enter it
 # ------------------------------------------------------------------
 function md() {
