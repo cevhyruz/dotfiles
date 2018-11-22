@@ -6,7 +6,7 @@ let mapleader = ","          " Leader key.
 
 " Reload vim config file
   nnoremap <silent> <leader>r
-         \ :call functions#ReloadFile()<cr>
+ \ :call functions#ReloadFile()<cr>
 
 "------------------------------------
 "             Searching              |
@@ -36,9 +36,6 @@ let mapleader = ","          " Leader key.
   nnoremap K mz:m-2<cr>`z
   vnoremap J :m'>+<cr>`<my`>mzgv`yo`z
   vnoremap K :m'<-2<cr>`>my`<mzgv`yo`z
-
-" Append text at the end of the line (shadows 'a').
-  nnoremap a A
 
 " Toggle Paste mode.
   nnoremap <silent> <leader>v :set invpaste<cr>
