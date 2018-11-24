@@ -33,9 +33,9 @@ function! s:handler(line)
   echom b:file[2]
   let l:status = system('git status --short '. b:file[2])[:1]
   if l:status ==# 'A ' || l:status ==# 'M '
-    call system('git reset '.b:file[2])
+    return system('git reset '.b:file[2])
   else
-    call system('git add '.b:file[2])
+    return system('git add '.b:file[2])
   endif
 endfunction
 
@@ -44,23 +44,22 @@ endfunction
 " Add devicons folder icon for directories.
 function! s:colorize(prefix)
   if a:prefix[0:1] == 'A '
-    let l:prefix = "\e[0;32m  ".strcharpart(a:prefix, 0, 2).
+    return "\e[0;32m  ".strcharpart(a:prefix, 0, 2).
     \ " \e[0m  ".WebDevIconsGetFileTypeSymbol(a:prefix).
     \ strcharpart(a:prefix, 2)
   elseif a:prefix[0:1] ==# 'M '
-    let l:prefix = "\e[0;32m  ".strcharpart(a:prefix, 0, 2).
+    return "\e[0;32m  ".strcharpart(a:prefix, 0, 2).
     \ " \e[0m  ".WebDevIconsGetFileTypeSymbol(a:prefix).
     \ strcharpart(a:prefix, 2)
   elseif a:prefix[0:1] ==# ' M'
-    let l:prefix = "\e[0;33m  ".strcharpart(a:prefix, 0, 2).
+    return "\e[0;33m  ".strcharpart(a:prefix, 0, 2).
     \ " \e[0m  ".WebDevIconsGetFileTypeSymbol(a:prefix).
     \ strcharpart(a:prefix, 2)
   else
-    let l:prefix = "\e[0;31m  ".strcharpart(a:prefix, 0, 2).
+    return "\e[0;31m  ".strcharpart(a:prefix, 0, 2).
     \ " \e[0m  ".WebDevIconsGetFileTypeSymbol(a:prefix).
     \ strcharpart(a:prefix, 2)
   endif
-  return l:prefix
 endfunction
 
 function! fzf#git_add_reset()
