@@ -56,7 +56,7 @@ let mapleader = ","          " Leader key.
   nnoremap <C-e> 3<C-e>
   nnoremap <C-y> 3<c-y>
 
-" Vim split navigation.
+" Split navigation.
   nnoremap <C-j> <C-W>j
   nnoremap <C-k> <C-W>k
   nnoremap <C-h> <C-w>h
@@ -65,6 +65,9 @@ let mapleader = ","          " Leader key.
 "------------------------------------
 "           Miscellaneous            |
 "------------------------------------
+
+" Run the last command
+  nnoremap <leader><space> :<up><cr>
 
 " Jump to command bar.
   nnoremap ; :
