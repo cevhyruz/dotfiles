@@ -13,6 +13,7 @@ alias fixme="grep --recursive 'FIXM[E]: '"     # List all fixme comments.
 alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 alias pst="xclip -out"                       # Print xclip selection.
 alias open="xdg-open ."
+alias reload="exec ${SHELL}"             # Reload the shell.
 
 #------------------------------------------
 #             Neovim Editor               |
@@ -104,7 +105,7 @@ alias grf="git reset HEAD --"
 #------------------------------------------
 
 alias sudo='sudo '                     # Allow aliases to be `sudo`ed.
-alias vim='$EDITOR '                  # Expand from default editor.
+#alias vim='$EDITOR '                  # Expand from default editor.
 alias rm='rm '                         # Allow aliases to be `rm`ed.
 alias vifm='vifm '                     # Allow alias expansion for vifm paths.
 
