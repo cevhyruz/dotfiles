@@ -13,7 +13,7 @@ alias fixme="grep --recursive 'FIXM[E]: '"     # List all fixme comments.
 alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
 alias pst="xclip -out"                       # Print xclip selection.
 alias open="xdg-open ."
-alias reload="exec ${SHELL}"             # Reload the shell.
+alias reload="exec \${SHELL}"             # Reload the shell.
 
 #------------------------------------------
 #             Neovim Editor               |
