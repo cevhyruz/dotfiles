@@ -39,7 +39,7 @@ function! AleStatus() abort
   let l:all_errors = l:counts.error + l:counts.style_error
   let l:all_non_errors = l:counts.total - l:all_errors
 
-  return l:counts.total == 0 ? ' OK ' : printf(
+  return l:counts.total == 0 ? '   ' : printf(
     \   '%dW %dE',
     \   all_non_errors,
     \   all_errors
@@ -74,7 +74,8 @@ function! FileFormat()
 if winwidth(0) <= 126
   return ''
 else
-  return &fileformat
+  return &fileformat == 'unix' ? ' ' : ' '
+endif
 endfunction
 
 function! CurrentMode()
@@ -137,7 +138,7 @@ set statusline+=%6*\ 
 set statusline+=%5*%7.5{FileEncoding()}                  " UTF-8
 set statusline+=%5*%5.4{FileFormat()}                    " Unix / Dos
 set statusline+=%5*\ %{&et\ ?\ 'ET'\ :\ 'noet'}\         " Et / noet
-set statusline+=%5*\ SW:%{&shiftwidth}\                  " ShiftWidth
+set statusline+=%5*\ \ %{&shiftwidth}\                  " ShiftWidth
 set statusline+=%3*
 set statusline+=%2*
 set statusline+=%1*\ %3p%%                               " Percentage
