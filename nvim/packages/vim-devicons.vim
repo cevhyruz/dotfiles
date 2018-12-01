@@ -49,15 +49,15 @@ let g:palette = {
 \}
 let g:icons = {
   \ 'emphasize' : [ '' ],
-  \    'normal' : [ '', '' ],
+  \    'normal' : [ '', ''],
   \     'green' : [ '' ],
   \      'blue' : [ '', '', '' ],
-  \    'yellow' : [ '', '', '','' ],
-  \   'magenta' : [ '' ],
+  \    'yellow' : [ '', '', '', '' ],
+  \   'magenta' : [ ' ' ],
   \    'orange' : [ '', '' ],
   \       'red' : [ '' ],
   \    'violet' : [ '' ],
-  \      'cyan' : [ '', '' ]
+  \      'cyan' : [ '' ]
 \}
 
 function! PrettyNerdTree(config)
