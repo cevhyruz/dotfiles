@@ -13,3 +13,8 @@
 
 	# Set custom git message.
 	template = /home/devs/Projects/dotfiles/git/.gitmessage
+
+[color "status"]
+	untracked = red
+	changed = 208
+	added = green
