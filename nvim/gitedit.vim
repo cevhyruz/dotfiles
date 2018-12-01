@@ -58,7 +58,7 @@ endfunction
   set statusline+=%=
   set statusline+=%3*
   set statusline+=%2*
-  set statusline+=%1*\ %{GitEmail()}\ 
+  set statusline+=%1*\ %{GitEmail()}\
 
 hi! Statusline ctermfg=235 ctermbg=250
 hi! User1 cterm=bold ctermbg=23 ctermfg=250
