@@ -3,7 +3,7 @@
   let g:pathogen_blacklist = []
 " call add(g:pathogen_blacklist, 'YouCompleteMe')
 " call add(g:pathogen_blacklist, 'ale')
-" call add(g:pathogen_blacklist, 'fzf.vim')
+ call add(g:pathogen_blacklist, 'fzf.vim')
 " call add(g:pathogen_blacklist, 'indentLine')
  call add(g:pathogen_blacklist, 'neovim-vifm')
 " call add(g:pathogen_blacklist, 'nerdcommenter')
@@ -33,13 +33,13 @@
  call add(g:pathogen_blacklist, 'vim-scriptease')
  call add(g:pathogen_blacklist, 'vim-showmarks')
  call add(g:pathogen_blacklist, 'vim-snipmate')
- call add(g:pathogen_blacklist, 'vim-surround')
+" call add(g:pathogen_blacklist, 'vim-surround')
  call add(g:pathogen_blacklist, 'vim-vinegar')
 
-
+ call add(g:pathogen_blacklist, 'auto-pairs')
+" call add(g:pathogen_blacklist, 'vim-autoclose')
 " Initialize custom location for packages.
 " ----------------------------------------
   execute pathogen#infect('/home/devs/packages/{}')
 
-" Generate helptags for plugins.
-  call pathogen#helptags()
+call pathogen#helptags()
