@@ -2,12 +2,6 @@
 " sysinit.vim - neovim system-wide bootstrap file |
 "-------------------------------------------------
 
-augroup TermConfig
-  au!
-  autocmd TermOpen * setlocal nonumber          " Disable LineNumbers.
-  autocmd BufEnter term://* startinsert         " Always start in InsertMode.
-augroup end
-
 " Disable some global plugins {{{
 
   let loaded_matchit       = 1
@@ -24,9 +18,9 @@ augroup end
   syntax enable                  " Allow using :hi to set my preferred colors.
   filetype plugin indent on      " Enable loading of plugins per filetype.
   set spell spelllang=en_us      " Enable word spell and language.
-
   set background=dark            " Use light texts in dark background.
   set colorcolumn=79             " Character per line threshold guide.
+  set updatetime=100             " Faster update time.
   set signcolumn=yes             " Always open signcolumn gutter.
   set number relativenumber      " Display hybrid line numbers.
   set nofoldenable               " Don't fold marked folds by default.
@@ -55,31 +49,6 @@ augroup end
 
   hi! TrailingWhitespace cterm=bold ctermbg=235 ctermfg=30
   match TrailingWhitespace #\s\+$#
-
-" }}}
-
-" Abbreviation {{{
-
-" Try appending <cr> or <bs>
-  " fzf {{{
-    cnoreabbrev f FZF<cr>
-    " Jump to specific code in all files in project dir.
-    cnoreabbrev a Ag<cr>
-    " Git ls-files.
-    cnoreabbrev g GFiles<cr>
-    " Lines in the current buffer.
-    cnoreabbrev l BLines<cr>
-    " Open git log.
-    cnoreabbrev c Commits<cr>
-    " Jump for specific code in all opened buffers.
-    cnoreabbrev al Lines<cr>
-    " Jump to buffer.
-    cnoreabbrev b Buffers<cr>
-  " }}}
-
-  cnoreabbrev snip UltiSnipsEdit<cr>
-
-  inoreabbrev nerdtree NERDTree
 
 " }}}
 
