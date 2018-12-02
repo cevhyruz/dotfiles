@@ -26,16 +26,19 @@
 
   TERM="xterm-256color"
 
-  MANPAGER="less --no-init"
-
   if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
     PATH="$HOME/Projects/dotfiles/bin:$PATH"
   fi
 
-  FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"
-  FZF_DEFAULT_OPTS+=' --border'          # Show top and bottom border.
-  FZF_DEFAULT_OPTS+=' --no-bold'         # Disable bold characters.
-  FZF_DEFAULT_OPTS+=' --ansi'         # Disable bold characters.
-
-#  export FZF_DEFAULT_OPTS             # Export to be used by vim
-  FZF_TMUX=1                      # Use tmux split-pane if possible.
+  # fzf
+  export FZF_DEFAULT_OPTS="\
+     --height='40%' \
+     --ansi    \
+     --multi   \
+     --reverse \
+     --inline-info \
+     --header='' \
+     --color=dark,bg+:23,prompt:30,pointer:108 \
+     --margin='1,1,1%' \
+     --prompt='  "$(printf %s "${PWD##*/}")"  '
+  "
