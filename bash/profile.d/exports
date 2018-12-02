@@ -23,6 +23,7 @@
 
   TERM="xterm-256color"
 
+  # Custom executables.
   if ! printenv PATH | grep 'dotfiles' &> /dev/null; then
     PATH="$HOME/Projects/dotfiles/bin:$PATH"
   fi
