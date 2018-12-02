@@ -62,6 +62,12 @@ let mapleader = ","          " Leader key.
   nnoremap <C-h> <C-w>h
   nnoremap <C-l> <C-w>l
 
+" Split Arrangement.
+  nnoremap <M-f> <C-w>J
+  nnoremap <M-d> <C-w>K
+  nnoremap <M-s> <C-w>H
+  nnoremap <M-g> <C-w>L
+
 "------------------------------------
 "           Miscellaneous            |
 "------------------------------------
