@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-# TODO: do not use exports!
-# see this: https://unix.stackexchange.com/questions/477716/is-it-possible-to-display-ps2-prompt-ellipsis-when-long-bash-command-wraps
-
-  # Set neovim as the default editor.
-  EDITOR="/usr/bin/nvim"
+  # Set the default editor.
+  EDITOR="$(which nvim || which vim)"
 
   # Increase bash history line limit (default 500).
   HISTFILESIZE=10000
