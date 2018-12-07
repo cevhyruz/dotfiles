@@ -37,6 +37,4 @@
      --inline-info \
      --header='' \
      --color=dark,bg+:23,prompt:30,pointer:108 \
-     --margin='1,1,1%' \
-     --prompt='  "$(printf %s "${PWD##*/}")"  '
   "
