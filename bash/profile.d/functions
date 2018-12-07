@@ -10,7 +10,7 @@ function lazynvm() {
   export NVM_DIR=~/.nvm
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
   if [ -f "$NVM_DIR/bash_completion" ]; then
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
   fi
 }
 
@@ -45,9 +45,6 @@ function md() {
 # ------------------------------------------------------------------
 # fshow - git commit browser (fzf)
 # ------------------------------------------------------------------
-# Modified version of junegunn's gist
-# https://gist.github.com/junegunn/f3fca918e937e6bf5bad
-# enter for show, ctrl-d for diff, ` toggles sort.
 function fshow() {
   local output shas sha query key
   while output=$(
@@ -69,7 +66,3 @@ function fshow() {
     fi
   done
 }
-
-# ------------------------------------------------------------------
-# 
-# ------------------------------------------------------------------
