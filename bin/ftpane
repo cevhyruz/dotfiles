@@ -1,4 +1,4 @@
-#!/usr/bin/env dash
+#!/usr/bin/env bash
 
 # ------------------------------------------------------------------
 # ftpane - tmux panes and X11 window focus switcher
@@ -19,6 +19,8 @@ _in_tmux() {
 # TODO: Make it toggable! ( avoid running two instance )
 # Always show active pane first.
 # Add support for ansi colors codes.
+
+# TODO: Don't list drawer-type panes.
 ftpane() {
   local _format panes prev_panes target target_window target_pane
   local _window_title
@@ -28,7 +30,7 @@ ftpane() {
     panes=$(tmux list-panes -s -F "$_format")
     prev_panes=$(tmux list-pane -F "$_format")
 
-    target=$(echo "$panes" | grep -v "$prev_panes" | column -t | fzf --layout=reverse-list --color='dark,bg:0') || return
+    target=$(echo "$panes" | grep -v "$prev_panes" | column -t | fzf ) || return
 
     target_window="$(echo "$target" | awk 'BEGIN{ FS=":|-" } { print $1 }')"
     target_pane="$(echo "$target" | awk 'BEGIN{ FS=":|-" } { print $2 }' | cut -c 1)"
