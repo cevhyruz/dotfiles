@@ -30,11 +30,12 @@ function! BufCount()
 endfunction
 
 function! MyTabLabel(n)
+  let tabsplits = len(tabpagebuflist(a:n))
   let buflist = tabpagebuflist(a:n)
   let winnr = tabpagewinnr(a:n)
   let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
   if expand('%:t') == ''
     return a:n.' '.WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return a:n.' ' . WebDevIconsGetFileTypeSymbol(filename).' ' .filename . ' '
+  return a:n.' ' . WebDevIconsGetFileTypeSymbol(filename).' ' .filename . ' ' .'('.winnr.'/'.tabsplits.')'
 endfunction
