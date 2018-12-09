@@ -1,19 +1,14 @@
 
 set showtabline=2
+set tabline=%!MyTabLine()
 
 hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
 hi! TabLine cterm=none ctermbg=235 ctermfg=245
 hi! TabLineFill cterm=none ctermbg=236
 hi! TabLineSel cterm=bold ctermbg=23
-hi! TabLineHide ctermbg=234
 
 function! MyTabLine()
-  if exists('g:NERDTree') && g:NERDTree.IsOpen()
-    let s = '%#TabLineHide#'
-    let s .= '                                '
-  else
-    let s = '  '
-  endif
+    let s = ''
   for i in range(tabpagenr('$'))
     if i + 1 == tabpagenr()
       let s .= '%#TabLineSel#'
@@ -41,8 +36,5 @@ function! MyTabLabel(n)
   if expand('%:t') == ''
     return a:n.' '.WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return a:n.' ' . WebDevIconsGetFileTypeSymbol(filename).
-        \' ' .filename . '  '
+  return a:n.' ' . WebDevIconsGetFileTypeSymbol(filename).' ' .filename . ' '
 endfunction
-
-set tabline=%!MyTabLine()
