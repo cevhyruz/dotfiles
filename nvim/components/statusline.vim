@@ -165,7 +165,7 @@ hi User3 cterm=bold ctermfg=238 ctermbg=237
 hi User4 cterm=bold ctermfg=239 ctermbg=240
 
 " second layer from statusline color. ( Filename, Fileformat )
-hi User5 cterm=bold ctermfg=248 ctermbg=237
+hi User5 cterm=bold ctermfg=73 ctermbg=237
 "second layer closing separator.
 hi User6 ctermfg=237 ctermbg=235
 " emphasis
