@@ -39,9 +39,9 @@ function! MyTabLabel(n)
   let winnr = tabpagewinnr(a:n)
   let filename = fnamemodify(bufname(buflist[winnr - 1]), ':t')
   if expand('%:t') == ''
-    return WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
+    return a:n.' '.WebDevIconsGetFileTypeSymbol(). ' ' . 'New File'
   else
-  return '  ' . WebDevIconsGetFileTypeSymbol(filename).
+  return a:n.' ' . WebDevIconsGetFileTypeSymbol(filename).
         \' ' .filename . '  '
 endfunction
 
