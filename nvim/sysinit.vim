@@ -67,6 +67,7 @@ source /home/devs/Projects/dotfiles/nvim/components/tabline.vim
 
   source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
   source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
+  source /home/devs/Projects/dotfiles/nvim/packages/nerdcommenter.vim
   source /home/devs/Projects/dotfiles/nvim/packages/ale.vim
   source /home/devs/Projects/dotfiles/nvim/packages/gitgutter.vim
   source /home/devs/Projects/dotfiles/nvim/packages/ycm.vim
