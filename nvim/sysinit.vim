@@ -43,6 +43,8 @@
   set noshowmode                 " Don't show current mode in commandline.
   set fillchars+=vert:\┃,fold:\  " Vertical split border style.
   set rtp+=/home/devs/.fzf       " Enable the fzf wrapper function for vim.
+  set splitright                 " Vertical splits spawns at right side.
+  set splitbelow                 " Horizontal split spawns below.
   set list                       " Show trailing whitespace, tabs, EOL, etc..
   set showtabline=0              " Do not show the tabline.
   set listchars=trail:~,tab:▸\ ,extends:❯,precedes:❮,nbsp:␣
