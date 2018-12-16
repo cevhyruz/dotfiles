@@ -56,9 +56,9 @@ let mapleader = ","          " Leader key.
   nnoremap <C-e> 3<C-e>
   nnoremap <C-y> 3<c-y>
 
-" Split navigation.
-  nnoremap <C-j> <C-W>j
-  nnoremap <C-k> <C-W>k
+  " Split navigation.
+  nnoremap <C-j> <C-w>j
+  nnoremap <C-k> <C-w>k
   nnoremap <C-h> <C-w>h
   nnoremap <C-l> <C-w>l
 
