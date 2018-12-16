@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# ------------------------------------------------------------------
+# ftsession - tmux session manager
+# ------------------------------------------------------------------
+function ftsession() {
+  local target target_session
+
+  target=$(tmux list-session | grep -v "attached" | fzf)
+  target_session=$(echo "${target}" | awk '{print $1}')
+
+  tmux switch -t "${target_session}"
+}
+
+ftsession
