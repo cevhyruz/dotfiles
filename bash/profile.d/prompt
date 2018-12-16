@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+function _inside_git() {
+  # Check if the current directory is in a Git repository.
+  if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == 0 ]; then
+    # Make sure we are not inside the .git/ directory.
+    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+      return 0
+    fi
+  else
+    return 1
+  fi
+}
+
 function enable_color_support() {
 
   if [[ $COLORTERM == gnome-* && $TERM == xterm ]] \
@@ -16,11 +28,7 @@ function prompt_git() {
   local symbol='';
   local branchName='';
 
-  # Check if the current directory is in a Git repository.
-  if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == 0 ]; then
-
-    # check if the current directory is in .git before running git checks
-    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+  if _inside_git; then
 
       # Ensure the index is up to date.
       git update-index --really-refresh -q &>/dev/null;
@@ -45,8 +53,6 @@ function prompt_git() {
         symbol+='∙';
       fi;
 
-    fi;
-
     # Get the short symbolic ref.
     # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
     # Otherwise, just give up.
@@ -68,10 +74,14 @@ function prompt_git() {
 function _git_commit() {
 
   local commit_message=""
-  commit_message="$(git show --pretty=format:%s --no-patch HEAD)"
 
+  if _inside_git; then
+    commit_message="$(git show --pretty=format:%s --no-patch HEAD)"
+    echo -e "${commit_message}"
+  else
+    return;
+  fi
 
-  echo -e "${commit_message}"
 }
 
 function set_prompts() {
@@ -110,8 +120,8 @@ function set_prompts() {
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
   PS1+="\\[${reset}\\]"
   PS1+="\\n \\[${italic}\\]"
-  PS1+="➜ \\[${green}\\]"
-  PS1+="\$(_git_commit)"
+  PS1+="\\[${green}\\]"
+  PS1+="\$(_git_commit \" \")"
   PS1+="\\[${reset}\\]"
   PS1+="\\[${pink}\\]"
   PS1+=" \\n\\$  "
