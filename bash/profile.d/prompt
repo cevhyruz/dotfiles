@@ -117,7 +117,7 @@ function set_prompts() {
   PS1+=" \\[${white}\\]"
   PS1+="\\u"
   PS1+="\\[${cyan}\\] \\W:"                # Working directory
-  PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")";
+  PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")"
   PS1+="\\[${reset}\\]"
   PS1+="\\n \\[${italic}\\]"
   PS1+="\\[${green}\\]"
@@ -133,7 +133,7 @@ function set_prompts() {
   export PS2
 
   trap 'echo -ne "${dimgrey}"' DEBUG
-  printf '\033[?7l'   # Disable terminal wrapping.
+  # printf '\033[?7l'   # Disable terminal wrapping.
 
 }
 
