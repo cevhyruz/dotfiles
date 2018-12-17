@@ -2,7 +2,7 @@
 
 function _inside_git() {
   # Check if the current directory is in a Git repository.}}}
-  if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == 0 ]; then
+  if [ "$(git rev-parse --is-inside-work-tree &> /dev/null; echo "${?}")" == 0 ]; then
     # Make sure we are not inside the .git/ directory.
     if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
       return 0
@@ -52,9 +52,9 @@ function prompt_git() {
     # Get the short symbolic ref.
     # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
     # Otherwise, just give up.
-    branch_name="$(git symbolic-ref --quiet --short HEAD 2> /dev/null \
-      || git rev-parse --short HEAD 2> /dev/null \
-      || echo '(unknown)')";
+    branch_name="$(git symbolic-ref --quiet --short HEAD 2> /dev/null ||
+      \ git rev-parse --short HEAD 2> /dev/null ||
+      \ echo '(unknown)')";
 
     [ -n "${symbol}" ] && symbol=" ${symbol}";
     echo -e "${1}${branch_name}${2}${symbol}";
@@ -66,8 +66,10 @@ function prompt_git() {
 function git_commit() {
   local commit_message
   if _inside_git; then
-    commit_message="$(git show --pretty=format:%s --no-patch HEAD)"
-    echo -e "\\n ${commit_message}"
+    commit_message="$(git show --pretty=format:%s --no-patch HEAD 2> /dev/null)"
+    if [ "$(git rev-parse HEAD &> /dev/null; echo "${?}")" == 0 ]; then
+      echo -e "\\n ${commit_message}"
+    fi
   else
     return;
   fi
@@ -96,7 +98,7 @@ function set_prompts() {
   PS1="\\n\\[${bold}\\]"
   PS1+=" \\[${white}\\]"
   PS1+="\\u"
-  PS1+="\\[${cyan}\\] \\W:"
+  PS1+="\\[${cyan}\\]:\\W"
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")"
   PS1+="\\[${reset}\\]"
   PS1+="\\[${italic}\\]"
