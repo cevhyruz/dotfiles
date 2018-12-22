@@ -32,7 +32,7 @@ alias nnvim="nvim -u \
 
 # git log - Show commit logs.
 
-alias gl="git log --oneline --graph -20"
+alias lg="git log --oneline --graph -20"
 #                   │         │      └─ Limit output to 20 lines.
 #                   │         └─  Display text-based graphical commit history.
 #                   └─ Shorthand for --pretty=oneline --abbrev-commit.
@@ -136,3 +136,8 @@ alias npmlg="npm list --global --depth 0"
 alias nig="npm install --global"
 alias nid="npm install --save-dev"
 alias nr="npm run"
+
+# ------------------------------------------------------------------
+# Gulp task manager
+# ------------------------------------------------------------------
+alias gl="gulp"
