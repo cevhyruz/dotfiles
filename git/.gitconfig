@@ -3,6 +3,7 @@
 
 	name = cevhyruz
 	email = johnfred.fadrigalan@hotmail.com
+	signingkey = John Fred Fadrigalan <johnfred.fadrigalan@hotmail.com>
 
 [core]
 
