@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 
 # ------------------------------------------------------------------
+# note - jot down those nice ideas.
+# ------------------------------------------------------------------
+function note() {
+  local file="$1" location="$HOME/Documents/notes"
+
+  if [ "$#" -ne 0 ]; then
+    cd "$location" || md "$location"
+    $EDITOR "$HOME/Documents/notes/$file"
+    cd - &> /dev/null || return
+  else
+    echo "--> $location"
+    ls "$location"
+  fi
+}
+
+# ------------------------------------------------------------------
 # lazyload nvim
 # ------------------------------------------------------------------
 # Modified version of @fl0w's gist
