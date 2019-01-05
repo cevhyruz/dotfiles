@@ -1,21 +1,87 @@
-
 [user]
-
 	name = cevhyruz
 	email = johnfred.fadrigalan@hotmail.com
 	signingkey = John Fred Fadrigalan <johnfred.fadrigalan@hotmail.com>
 
 [core]
-
 	# Set default editor to be used.
-	editor = "$EDITOR -u /home/devs/Projects/dotfiles/nvim/gitedit.vim"
+	editor = "$EDITOR -u $HOME/Projects/dotfiles/nvim/gitedit.vim"
+
+  # Use custom `.gitignore` and `.gitattributes`.
+  excludesfile = "$HOME/Projects/dotfiles/git/.gitignore"
+	attributesfile = "$HOME/Projects/dotfiles/git/.gitattributes"
+
+	# Speed up commands involving untracked files such as `git status`.
+	# https://git-scm.com/docs/git-update-index#_untracked_cache
+	untrackedCache = true
 
 [commit]
-
 	# Set custom git message.
 	template = /home/devs/Projects/dotfiles/git/.gitmessage
 
 [color "status"]
-	untracked = red
-	changed = 208
-	added = green
+	untracked = 203
+	changed = 208 italic
+	added = 35 bold
+
+[color "branch"]
+	current = 35 italic bold
+	local = 248
+	remote = 203 bold
+
+[color "diff"]
+	meta = 241 bold
+	frag = 142 bold  # line info
+	old = 203        # deletions
+	new = 35         # additions
+
+[commit]
+	# https://help.github.com/articles/signing-commits-using-gpg
+  gpgsign = true
+
+[url "git@github.com:"]
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+	insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+	insteadOf = "gist:"
+
+[alias]
+  amend = commit --amend --reuse-message=HEAD  # Amend all staged files.
+  alias = config --get-regexp alias            # list all git aliases.
+  c = clone --recursive    # Always clone submodules.
+  s = status --short       # Working tree status using short format.
+  b = branch --all         # Show local and remote branches.
+  r = remote --verbose     # Show remote url after name.
+
+	lg = log --oneline --graph -25
+  #          │         │      └─> Limit output to 25 lines.
+  #          │         └────────> Display text-based graphical commit history.
+  #          └──────────────────> short for --pretty=oneline --abbrev-commit.
+  
+  # List all ignored files.
+  si = ls-files -i -o --exclude-standard 
+  #              │  │   └─> Use standard ignore rules.
+  #              │  └─────> Show only ignored files.
+  #              └────────> Show other (i.e. untracked) files in the output.
+  
+  # Create a branch or switch if it exists.
+	mb = "!a(){ git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\";}; a"
+
+	# Credit an author on the last commit
+	credit = "!b() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; b"
+
+	# Delete merged local branches.
+	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+  # List contributors with number of commits
+	contributors = shortlog --summary --numbered
