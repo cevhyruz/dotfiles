@@ -2,9 +2,10 @@ let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 let g:fzf_layout = { 'down': '~30%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_action = {
-  \ 'ctrl-t': 'tab-split',
-  \ 'ctrl-x': 'tab-split',
-  \ 'ctrl-o': 'tab-split'
+  \ 'ctrl-l': 'botright vsplit',
+  \ 'ctrl-h': 'topleft vsplit',
+  \ 'alt-t': 'tab split',
+  \ 'alt-i': 'split'
   \}
 
 augroup fzf_hide_statusline
