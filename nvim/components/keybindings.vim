@@ -5,8 +5,7 @@ let mapleader = ","          " Leader key.
   nnoremap <silent> <leader>e :edit $VIM/sysinit.vim<cr>
 
 " Reload vim config file
-  nnoremap <silent> <leader>r
- \ :call functions#ReloadFile()<cr>
+  nnoremap <silent> <leader>r :source $VIM/sysinit.vim<cr>
 
 "------------------------------------
 "             Searching              |
