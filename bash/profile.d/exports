@@ -30,11 +30,12 @@
 
   # fzf
   export FZF_DEFAULT_OPTS="\
-     --height='40%' \
+     --height='30%' \
+     --margin=1,0,0
      --ansi    \
      --multi   \
      --reverse \
      --inline-info \
      --header='' \
-     --color=dark,bg+:23,prompt:30,pointer:108 \
+     --color=dark,bg+:237,prompt:30,pointer:108 \
   "
