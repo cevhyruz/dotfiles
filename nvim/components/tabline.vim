@@ -3,9 +3,9 @@ set showtabline=2
 set tabline=%!MyTabLine()
 
 hi! TabFileType cterm=bold ctermfg=250 ctermbg=23
-hi! TabLine cterm=none ctermbg=237 ctermfg=245
-hi! TabLineFill cterm=none ctermbg=234
-hi! TabLineSel cterm=none ctermbg=235 ctermfg=250
+hi! TabLine cterm=none ctermbg=235 ctermfg=242
+hi! TabLineFill cterm=none ctermbg=235
+hi! TabLineSel cterm=none ctermbg=234 ctermfg=248
 hi BufModified cterm=bold ctermfg=red
 
 function! MyTabLine()
@@ -15,21 +15,18 @@ function! MyTabLine()
     let i = i + 1
     let bufmodified = ''
     if i == tabpagenr()
-      let s .= '%#User6#'
-      let s .= ' '.i.'%#TabLineSel# '
+      let s .= '%#TabLineSel# ' .i
     else
-      let s .= '%#User5# '.i.' '
-      let s .= '%#TabLine#'
+      let s .= '%#Tabline# '.i
     endif
     for buf in tabpagebuflist(i)
       if getbufvar(buf, "&modified")
         let bufmodified = '⁕ '
       endif
     endfor
-    let s .= '%' .i. 'T'
-    let s .= '%{MyTabLabel(' .i. ')} '
+    let s .= '%' .i. 'T'                      " moust-click start
+    let s .= ' %{MyTabLabel(' .i. ')}  '
     let s .= '%#BufModified#'.bufmodified
-    let s .= '%#User2#┃'
   endfor
   let s .= '%#TabLineFill#%T'                 " mouse-click end
   let s .= '%<'                               " truncate here
