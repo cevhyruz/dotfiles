@@ -34,7 +34,8 @@
   set expandtab                  " Expand tabs to spaces.
   set tabstop=2                  " Tabs width.
   set softtabstop=2              " Use 2 spaces for tabs.
-  set foldmethod=marker          " Manually create my own code folding method.
+  set foldtext=functions#myFoldText()
+  set foldmethod=marker
   set shiftwidth=2               " Number of spaces to for indention.
   set cursorline                 " Highlight current line.
   set shortmess+=F               " Don't give the fileinfo when editing a file.
