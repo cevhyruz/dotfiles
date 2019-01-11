@@ -2,90 +2,95 @@
 " sysinit.vim - neovim system-wide bootstrap file |
 "-------------------------------------------------
 
-" Disable some global plugins {{{
-
+" Disabled global plugins {{{
   let loaded_matchit       = 1
-  let loaded_netrw         = 1
-  let loaded_netrwPlugin   = 1
   let loaded_gzip          = 1
   let g:loaded_zipPlugin   = 1
   let g:loaded_zip         = 1
-
 " }}}
 
-" Basic Settings {{{
-
-  syntax enable                  " Allow using :hi to set my preferred colors.
-  filetype plugin indent on      " Enable loading of plugins per filetype.
-  set spell spelllang=en_us      " Enable word spell and language.
-  set background=dark            " Use light texts in dark background.
-  set colorcolumn=79             " Character per line threshold guide.
-  set updatetime=100             " Faster update time.
-  set signcolumn=yes             " Always open signcolumn gutter.
-  set number relativenumber      " Display hybrid line numbers.
-  set nofoldenable               " Don't fold marked folds by default.
-  set scrolloff=16               " Line wrap around cursor while scrolling.
-  set backspace=indent,eol,start " Allow backspace in insert mode.
-  set clipboard+=unnamedplus     " Use OS clipboard by default.
-  set showbreak=↪                " Indicate where the line breaks.
-  set ignorecase                 " Make searching case-insensitive.
-  set smartcase                  " Case-sensitive if expression has a capital.
-  set nolazyredraw               " Don't redraw while running a macro.
-  set expandtab                  " Expand tabs to spaces.
-  set tabstop=2                  " Tabs width.
-  set softtabstop=2              " Use 2 spaces for tabs.
-  set foldtext=functions#myFoldText()
-  set foldmethod=marker
-  set shiftwidth=2               " Number of spaces to for indention.
-  set cursorline                 " Highlight current line.
-  set shortmess+=F               " Don't give the fileinfo when editing a file.
-  set mouse=a                    " Enable mouse in all modes.
-  set backupdir=/tmp//           " Set the backup directory.
-  set noshowmode                 " Don't show current mode in commandline.
-  set fillchars+=vert:\┃,fold:\  " Vertical split border style.
-  set rtp+=/home/devs/.fzf       " Enable the fzf wrapper function for vim.
-  set splitright                 " Vertical splits spawns at right side.
-  set splitbelow                 " Horizontal split spawns below.
-  set list                       " Show trailing whitespace, tabs, EOL, etc..
-  set showtabline=0              " Do not show the tabline.
-  set listchars=trail:~,tab:▸\ ,extends:❯,precedes:❮,nbsp:␣
-
-  hi! TrailingWhitespace cterm=bold ctermbg=235 ctermfg=30
-  match TrailingWhitespace #\s\+$#
-
+" General {{{
+    syntax enable " Allow using :hi to set my preferred colors.
+    filetype plugin indent on " Enable loading of plugins per filetype.
+    set autoread " Detect if the file is changed.
+    set history=10000 " More room for history logs.
+    set backspace=indent,eol,start " Make <BS> behave in a sane manner.
+    set clipboard+=unnamedplus " Use the OS clipboard by default.
+    set updatetime=100 " Faster update time.
+    set nolazyredraw " Don't redraw while running a macro.
+    set shortmess+=F " Don't give the fileinfo when editing a file.
+    set wildmode=list:longest,full
+    set textwidth=120 " Max width of text before breaking after whitespace.
 " }}}
 
-" Load Components.
-" -----------------
-source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
-source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
-source /home/devs/Projects/dotfiles/nvim/components/macros.vim
-source /home/devs/Projects/dotfiles/nvim/components/tabline.vim
+" Appearance {{{
+    set noshowmode " Don't show current mode in commandline.
+    set cursorline " Highlight the current line where the cursor is.
+    set background=dark " Use light texts in dark background.
+    set colorcolumn=79 " Character per line threshold guide.
+    " Gutter
+    set signcolumn=yes " Always open signcolumn gutter.
+    set number relativenumber " Always display the line numbers.
+    " Check spelling.
+    set spell spelllang=en_us " Enable word spelling checks.
+    " Code folding
+    set foldmethod=marker " Lines with equal indent form a fold.
+    set foldtext=functions#myFoldText()
+    " Display invisible characters.
+    set list
+    set listchars=trail:~,tab:▸\ ,extends:❯,precedes:❮,nbsp:␣
+    set showbreak=↪
+    " Splits
+    set splitbelow " Horizontal split spawns below.
+    set splitright " Vertical splits spawns at right side.
+    set fillchars+=vert:\┃ " Vertical split border.
+" }}}
 
-" Initialize package-specific configuration files.
-" -------------------------------------------------
-"  TODO: Check first if their respective plugin
-" is enabled or not before sourcing to avoid errors popping up.
+" Behaviour {{{
+    " Searching
+    set ignorecase " Make searching case-insensitive.
+    set smartcase " Case-sensitive if expression has a capital.
+    " Tab control
+    set expandtab " Expand <Tabs> as spaces.
+    set tabstop=2 " visible <Tab> width.
+    set smarttab " <Tabs> respects 'tabstops', 'shiftwidth', and 'softtabstop.
+    set softtabstop=2 " edit as if the <Tab> if four characters wide.
+    set shiftwidth=2 " Number of spaces to use for indention.
+    " Scrolling
+    set scrolloff=15 " Line wrap around cursor while scrolling.
+    " Mouse support
+    set mouse=a " Enable mouse in all modes.
+" }}}
 
+" Paths and Locations {{{
+    set rtp+=/home/devs/.fzf " Enable the fzf wrapper function for vim.
+    set backupdir=/tmp// " Set the backup directory.
+" }}}
 
-  source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/nerdcommenter.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/ale.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/gitgutter.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/ycm.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/ultisnips.vim
-"  source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
-"  source /home/devs/Projects/dotfiles/nvim/packages/vim-airline.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/fzf.vim
-  source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
+" Components {{{
+    source /home/devs/Projects/dotfiles/nvim/components/keybindings.vim
+    source /home/devs/Projects/dotfiles/nvim/components/statusline.vim
+    source /home/devs/Projects/dotfiles/nvim/components/macros.vim
+    source /home/devs/Projects/dotfiles/nvim/components/tabline.vim
+" }}}
 
-" Load the local.nvimrc for local configuration.
-" -----------------------------------------------
-if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
-  source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
-endif
+" Plugin sripts {{{
+    source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/nerdcommenter.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/ale.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/gitgutter.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/ycm.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/ultisnips.vim
+  " source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
+  " source /home/devs/Projects/dotfiles/nvim/packages/vim-airline.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/fzf.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
+    source /home/devs/Projects/dotfiles/nvim/packages/indentline.vim
+" }}}
 
-hi! LineNR ctermbg=234 ctermfg=239
-hi! Cursorline cterm=none ctermbg=236
-hi! matchParen cterm=bold ctermbg=none ctermfg=30
+" Local config {{{
+    if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
+      source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
+    endif
+" }}}
