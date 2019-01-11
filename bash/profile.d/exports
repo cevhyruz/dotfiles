@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+  export XDG_CONFIG_HOME="$HOME/.config"
+  export XDG_DATA_HOME="$HOME/.local/share"
+
   # Set the default editor.
   EDITOR="$(which nvim || which vim)"
 
@@ -31,11 +34,11 @@
   # fzf
   export FZF_DEFAULT_OPTS="\
      --height='30%' \
-     --margin=1,0,0
      --ansi    \
      --multi   \
      --reverse \
      --inline-info \
      --header='' \
-     --color=dark,bg+:237,prompt:30,pointer:108 \
+     --color=dark,hl:242,hl+:30,fg+:23,bg+:234,prompt:30,pointer:108 \
   "
+# vim:set ft=sh:
