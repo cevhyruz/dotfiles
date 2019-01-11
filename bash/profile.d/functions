@@ -65,7 +65,7 @@ function fshow() {
   local output shas sha query key
   while output=$(
           git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+            --format="%C(auto)%h%d %s %C(black)%C(green)%cr" "$@" |
           fzf --ansi --multi --no-sort --reverse --query="$query" \
             --print-query --expect=ctrl-d --toggle-sort=\`
         ); do
