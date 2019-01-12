@@ -40,6 +40,6 @@
 " call add(g:pathogen_blacklist, 'vim-autoclose')
 " Initialize custom location for packages.
 " ----------------------------------------
-  execute pathogen#infect('/home/devs/packages/{}')
+  execute pathogen#infect('~/packages/{}', '~/src/vim/bundle/{}')
 
 call pathogen#helptags()
