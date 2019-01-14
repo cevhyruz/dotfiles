@@ -13,6 +13,7 @@
 " }}}
 
 " Appearance {{{
+    colorscheme greyscale
     set noshowmode " Don't show current mode in commandline.
     set cursorline " Highlight the current line where the cursor is.
     set background=dark " Use light texts in dark background.
