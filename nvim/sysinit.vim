@@ -1,14 +1,3 @@
-"-------------------------------------------------
-" sysinit.vim - neovim system-wide bootstrap file |
-"-------------------------------------------------
-
-" Disabled global plugins {{{
-  let loaded_matchit       = 1
-  let loaded_gzip          = 1
-  let g:loaded_zipPlugin   = 1
-  let g:loaded_zip         = 1
-" }}}
-
 " General {{{
     syntax enable " Allow using :hi to set my preferred colors.
     filetype plugin indent on " Enable loading of plugins per filetype.
@@ -75,7 +64,6 @@
 " }}}
 
 " Plugin sripts {{{
-    source /home/devs/Projects/dotfiles/nvim/packages/pathogen.vim
     source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
     source /home/devs/Projects/dotfiles/nvim/packages/nerdcommenter.vim
     source /home/devs/Projects/dotfiles/nvim/packages/ale.vim
