@@ -8,18 +8,49 @@ let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = ''
 let g:NERDTreeDirArrowCollapsible = ''
 
-autocmd FileType nerdtree :call GitDimIgnoredFiles()
-
-hi NERDTreeDir cterm=bold ctermfg=73
-hi NERDTreeCWD cterm=bold
-hi! NERDTreeOpenable cterm=bold ctermfg=245
-hi! NERDTreeClosable cterm=bold ctermfg=243
+hi NERDTreeDir cterm=none ctermfg=73
+hi NERDTreeCWD cterm=none
+hi! NERDTreeOpenable cterm=none ctermfg=245
+hi! NERDTreeClosable cterm=none ctermfg=243
 hi! NerdIgnored ctermfg=30
 
 let NERDTreeIgnore=[
   \ '\.git$',
   \ '\~$'
   \ ]
+
+function! PrettyNerdTree(config)
+  let colors = keys(a:config)
+  augroup devicons_colors
+    autocmd!
+    for color in colors
+      if color == 'normal'
+        exec 'autocmd FileType nerdtree' .
+          \ 'highlight devicons_' . color .
+          \ ' cterm=none ctermfg=' . g:palette.base01
+      elseif color == 'emphasize'
+        exec 'autocmd FileType nerdtree' .
+          \ 'highlight devicons_' . color .
+          \ ' cterm=none ctermfg=' . g:palette.base1
+      else
+        exec 'autocmd FileType nerdtree highlight devicons_' . color .
+          \ ' cterm=none ctermfg='. g:palette[color]
+      endif
+      exec 'autocmd FileType nerdtree syntax match devicons_' . color .
+        \ ' /\v' . join(a:config[color], '|') . '/ containedin=ALL'
+    endfor
+  augroup END
+endfunction
+
+function! PrettyFile(filename, cterm, bg, fg)
+  execute 'autocmd FileType nerdtree highlight ' .
+    \ a:filename .
+    \ ' cterm='. a:cterm .
+    \ ' ctermfg='. a:bg .
+    \ ' ctermfg='. a:fg
+  execute 'autocmd FileType nerdtree syntax match ' .
+    \ a:filename . ' #^\s\+.*'. a:filename .'$#'
+endfunction
 
 " TODO: change /home/devs to use expanded value of $HOME variable.
 augroup Hide$HOME
@@ -62,16 +93,6 @@ augroup CloseWhenNoBuffer
     \| endif
 augroup END
 
-function! PrettyFile(filename, cterm, bg, fg)
-  execute 'autocmd FileType nerdtree highlight ' .
-    \ a:filename .
-    \ ' cterm='. a:cterm .
-    \ ' ctermfg='. a:bg .
-    \ ' ctermfg='. a:fg
-  execute 'autocmd FileType nerdtree syntax match ' .
-    \ a:filename . ' #^\s\+.*'. a:filename .'$#'
-endfunction
-
-let g:haha = glob("_localrc/*")
-
 call PrettyFile('gitignore', 'italic', 'none', 'green')
+call PrettyNerdTree(g:icons)
+autocmd FileType nerdtree :call GitDimIgnoredFiles()

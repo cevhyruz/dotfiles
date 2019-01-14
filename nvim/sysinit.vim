@@ -65,6 +65,7 @@
 " }}}
 
 " Plugin sripts {{{
+    source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
     source /home/devs/Projects/dotfiles/nvim/packages/nerdtree.vim
     source /home/devs/Projects/dotfiles/nvim/packages/nerdcommenter.vim
     source /home/devs/Projects/dotfiles/nvim/packages/ale.vim
@@ -74,7 +75,6 @@
   " source /home/devs/Projects/dotfiles/nvim/packages/nerdtree-git-plugin.vim
   " source /home/devs/Projects/dotfiles/nvim/packages/vim-airline.vim
     source /home/devs/Projects/dotfiles/nvim/packages/fzf.vim
-    source /home/devs/Projects/dotfiles/nvim/packages/vim-devicons.vim
     source /home/devs/Projects/dotfiles/nvim/packages/indentline.vim
 " }}}
 
