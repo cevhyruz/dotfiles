@@ -34,6 +34,8 @@
     set splitbelow " Horizontal split spawns below.
     set splitright " Vertical splits spawns at right side.
     set fillchars+=vert:\┃ " Vertical split border.
+    " Text wrapping
+    set nowrap " Do not wrap long text text.
 " }}}
 
 " Behaviour {{{
