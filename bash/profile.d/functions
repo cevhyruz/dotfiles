@@ -11,8 +11,12 @@ function note() {
     $EDITOR "$HOME/Documents/notes/$file"
     cd - &> /dev/null || return
   else
-    echo "--> $location"
-    ls "$location"
+    if [[ -z "$(ls "$location")" ]]; then
+       echo "You don't have notes yet"
+    else
+      echo "--> notes from " "$location"
+      printf "%b\\n" "$(ls "${location}")"
+    fi
   fi
 }
 
