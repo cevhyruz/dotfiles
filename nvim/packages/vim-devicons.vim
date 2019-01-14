@@ -2,12 +2,10 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 0
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderPatternMatching = 0
 let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
-
 let g:ShellGlyph =''
 let g:TmuxGlyph = ''
 let g:licenseGlyph = ''
 let g:snippetGlyph = ''
-
 let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {
   \ 'keybindings.conf' : g:TmuxGlyph,
   \       'theme.conf' : g:TmuxGlyph,
@@ -53,34 +51,9 @@ let g:icons = {
   \     'green' : [ '' ],
   \      'blue' : [ '', '', '' ],
   \    'yellow' : [ '', '', '', '' ],
-  \   'magenta' : [ ' ' ],
+  \   'magenta' : [ '' ],
   \    'orange' : [ '', '' ],
   \       'red' : [ '' ],
   \    'violet' : [ '' ],
   \      'cyan' : [ '' ]
 \}
-
-function! PrettyNerdTree(config)
-  let colors = keys(a:config)
-  augroup devicons_colors
-    autocmd!
-    for color in colors
-      if color == 'normal'
-        exec 'autocmd FileType nerdtree' .
-          \ 'highlight devicons_' . color .
-          \ ' ctermfg=' . g:palette.base01
-      elseif color == 'emphasize'
-        exec 'autocmd FileType nerdtree' .
-          \ 'highlight devicons_' . color .
-          \ ' ctermfg=' . g:palette.base1
-      else
-        exec 'autocmd FileType nerdtree highlight devicons_' . color .
-          \ ' ctermfg='. g:palette[color]
-      endif
-      exec 'autocmd FileType nerdtree syntax match devicons_' . color .
-        \ ' /\v' . join(a:config[color], '|') . '/ containedin=ALL'
-    endfor
-  augroup END
-endfunction
-
-call PrettyNerdTree(g:icons)
