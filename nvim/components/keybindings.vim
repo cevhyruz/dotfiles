@@ -44,8 +44,8 @@ let mapleader = ","          " Leader key.
   vnoremap kj <esc>
 
 " Much faster scrolling (increments by 3).
-  nnoremap <C-e> 3<C-e>
-  nnoremap <C-y> 3<c-y>
+  nnoremap <C-e> 2<C-e>
+  nnoremap <C-y> 2<c-y>
 
 " Split Arrangement.
   nnoremap <M-f> <C-w>J
