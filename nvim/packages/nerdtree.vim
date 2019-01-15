@@ -81,7 +81,7 @@ function! GitFindIgnoredFiles(files)
         \ '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
     endif
       exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
-        \ ' containedin=ALL conceal contained'
+        \ ' containedin=ALL conceal'
   endfor
 endfunction
 
@@ -91,6 +91,11 @@ augroup CloseWhenNoBuffer
     \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
     \| q
     \| endif
+augroup END
+
+augroup hide_nerd_signcolumn
+  autocmd! FileType nerdtree
+  autocmd FileType nerdtree setlocal signcolumn=no
 augroup END
 
 call PrettyFile('gitignore', 'italic', 'none', 'green')
