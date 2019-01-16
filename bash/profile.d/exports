@@ -34,11 +34,16 @@
   # fzf
   export FZF_DEFAULT_OPTS="\
      --height='30%' \
-     --ansi    \
-     --multi   \
+     --ansi \
+     --multi \
      --reverse \
      --inline-info \
      --header='' \
-     --color=dark,hl:242,hl+:30,fg+:23,bg+:234,prompt:30,pointer:108 \
+     --color=dark,hl:242,hl+:250,fg+:240,bg+:234,prompt:30,pointer:108 \
   "
+  # GO
+  if ! printenv PATH | grep '/usr/local/go/bin' &> /dev/null; then
+    PATH=$PATH:/usr/local/go/bin
+  fi
+
 # vim:set ft=sh:
