@@ -55,7 +55,6 @@
 " }}}
 
 " Paths and Locations {{{
-    set rtp+=/home/devs/.fzf " Enable the fzf wrapper function for vim.
     set backupdir=/tmp// " Set the backup directory.
 " }}}
 
@@ -84,4 +83,11 @@
     if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
       source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
     endif
+" }}}
+
+" AutoCommands {{{
+    augroup dimInactiveWindows
+      autocmd!
+      autocmd WinEnter * call functions#dimInactiveWindows()
+    augroup END
 " }}}
