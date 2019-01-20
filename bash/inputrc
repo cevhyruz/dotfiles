@@ -31,13 +31,11 @@ set convert-meta off
 # Bind TAB to cycle-through all matching comands/words.
 TAB: menu-complete
 
-# Bind `kj` as <Escape>.
-  "kj": vi-movement-mode
-  "KJ": vi-movement-mode
+# Additional <Esc> key.
+"kj": vi-movement-mode
 
-# map `mm` as enter/carriage-return
-  "jj": "\C-M"
-  "JJ": "\C-M"
+# Additional <Enter> key.
+"jj": accept-line
 
 # -------------------------------------
 #      Command-mode keybindings       |
@@ -46,8 +44,20 @@ TAB: menu-complete
 $if mode=vi
   # Make all preceeding keymap as command-mode keybindings.
   set keymap vi-command
-  # Map `mm` as enter/carriage-return
+
+  "tt": copy-region-as-kill
+
   "jj": accept-line
+  "gg": clear-screen
+
+  # Uppercase word under cursor (default: M-u)
+  ",": backward-word, upcase-word
+
+  # Perform shell expansion.
+  ".": shell-expand-line
+
+  # Paste last command args.
+  "p": yank-last-arg
 
   #----------|  Inserting Surround  |----------
 
@@ -111,8 +121,8 @@ $if mode=vi
   "ds`": "bbxwx"
 
   # Autocomplete partially typed command based on history.
-  "n": history-search-forward
-  "p": history-search-backward
+  "J": history-search-forward
+  "K": history-search-backward
 
 $endif
 
