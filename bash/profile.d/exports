@@ -32,6 +32,7 @@
   fi
 
   # fzf
+  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
   export FZF_DEFAULT_OPTS="\
      --height='30%' \
      --ansi \
@@ -41,7 +42,8 @@
      --header='' \
      --color=dark,hl:242,hl+:250,fg+:240,bg+:234,prompt:30,pointer:108 \
   "
-  # GO
+
+  # Golang
   if ! printenv PATH | grep '/usr/local/go/bin' &> /dev/null; then
     PATH=$PATH:/usr/local/go/bin
   fi
