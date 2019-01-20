@@ -1,4 +1,3 @@
-let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 let g:fzf_layout = { 'down': '~30%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_action = {
