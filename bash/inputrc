@@ -39,24 +39,81 @@ TAB: menu-complete
   "jj": "\C-M"
   "JJ": "\C-M"
 
-
 # -------------------------------------
 #      Command-mode keybindings       |
 # -------------------------------------
 
 $if mode=vi
-
   # Make all preceeding keymap as command-mode keybindings.
   set keymap vi-command
-
   # Map `mm` as enter/carriage-return
-  "jj": "\C-M"
+  "jj": accept-line
 
-  # Surround with double quotes.
-  "ysiw": 'bi"\eea"\e'
+  #----------|  Inserting Surround  |----------
+
+  # variable expansion
+  "ysiw$": "bi${\eea}"
+
+  # qoutes.
+  "ysiw\"": "bi\"\eea\""
+  "ysiw\'": "bi\'\eea\'"
+
+  # parenthesis.
+  "ysiw(": "bi\( \eea )"
+  "ysiw)": "bi\(\eea\)"
+
+  # brackets.
+  "ysiw[": "bi[ \eea ]"
+  "ysiw]": "bi[\eea]"
+
+  # curly braces.
+  "ysiw{": "bi{ \eea }"
+  "ysiw}": "bi{\eea}"
+
+  # backticks.
+  "ysiw`": "bi`\eea`"
+
+  #----------|  Changing Surround  |----------
+
+  # to double quotes
+  "cs$\"": "bbxr\"wwr\""
+  "cs\'\"": "bbr\"wwr\""
+  "cs(\"": "bbr\"lxwr\"hx"
+  "cs)\"": "bbr\"wwr\""
+  "cs[\"": "bbr\"lxwr\"hx"
+  "cs]\"": "bbr\"wwr\""
+  "cs{\"": "bbr\"lxwr\"hx"
+  "cs}\"": "bbr\"wwr\""
+  "cs`\"": "bbr\"wwr\""
+
+  # to single quotes
+  "cs$\'": "bbxr\'wwr\'"
+  "cs\"\'": "bbr\'wwr\'"
+  "cs(\'": "bbr\'lxwr\'hx"
+  "cs)\'": "bbr\'wwr\'"
+  "cs[\'": "bbr\'lxwr\'hx"
+  "cs]\'": "bbr\'wwr\'"
+  "cs{\'": "bbr\'lxwr\'hx"
+  "cs}\'": "bbr\'wwr\'"
+  "cs`\'": "bbr\'wwr\'"
+
+  #----------|  Removing Surround  |----------
+
+  "ds$": "xbbxx"
+  "ds\'": "bbxwx"
+  "ds\"": "bbxwx"
+  "ds(": "bbxxwhxx"
+  "ds)": "bbxwx"
+  "ds[": "bbxxwhxx"
+  "ds]": "bbxwx"
+  "ds{": "bbxxwhxx"
+  "ds}": "bbxwx"
+  "ds`": "bbxwx"
 
   # Autocomplete partially typed command based on history.
   "n": history-search-forward
   "p": history-search-backward
 
 $endif
+
+# vim:set ft=readline:
