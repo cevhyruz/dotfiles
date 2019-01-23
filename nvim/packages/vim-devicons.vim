@@ -1,6 +1,7 @@
-let g:WebDevIconsUnicodeDecorateFolderNodes = 0
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderPatternMatching = 0
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
 let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = ''
 let g:ShellGlyph =''
 let g:TmuxGlyph = ''
@@ -13,6 +14,7 @@ let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {
   \      'bash.bashrc' : g:ShellGlyph,
   \     'local.bashrc' : g:ShellGlyph,
   \              'fzf' : g:ShellGlyph,
+  \       'keybindings' : g:ShellGlyph,
   \          'inputrc' : g:ShellGlyph,
   \          'profile' : g:ShellGlyph,
   \          'aliases' : g:ShellGlyph,
