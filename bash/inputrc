@@ -1,13 +1,12 @@
-# -------------------------------------
-#      Insert-mode  keybindings       |
-# -------------------------------------
+# change default mode.
+set editing-mode vi
 
-# Change cursor shape depending on current mode.
+# show cursor
 set show-mode-in-prompt on
-set vi-ins-mode-string \1\e[5 q\2
-set vi-cmd-mode-string \1\e[2 q\2
+set vi-ins-mode-string "\1\e[38;5;29m\2   \1\e[38;5;216m\2\1\e[3 q\2"
+set vi-cmd-mode-string "\1\e[38;5;240m\2   \1\e[38;5;216m\2\1\e[2 q\2"
 
-# Make Tab autocomplete regardless of filename case.
+# Make <Tab> autocomplete regardless of filename case.
 set completion-ignore-case on
 
 # Add trailing slash when autocompleting symlinks to directories.
@@ -23,106 +22,115 @@ set match-hidden-files off
 # Readline used by Bash 4.)
 set skip-completed-text on
 
-# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+# Allow UTF-8 input and output.
 set input-meta on
 set output-meta on
-set convert-meta off
+set convert-meta on
 
-# Bind TAB to cycle-through all matching comands/words.
-TAB: menu-complete
+# Never ring the terminal bell.
+set bell-style none
 
-# Additional <Esc> key.
-"kj": vi-movement-mode
 
-# Additional <Enter> key.
-"jj": accept-line
 
-# -------------------------------------
-#      Command-mode keybindings       |
-# -------------------------------------
-
+# Vi mode keybindings
 $if mode=vi
-  # Make all preceeding keymap as command-mode keybindings.
+  # -------------------------------------
+  #  Insert Mode                        |
+  # -------------------------------------
+  set keymap vi-insert
+    # much better <Esc> key.
+    "kj": vi-movement-mode
+    # cycle through all posible completion.
+    TAB: menu-complete
+  # -------------------------------------
+  #  Command Mode                       |
+  # -------------------------------------
   set keymap vi-command
+    # redundant with "K"
+    "k": nop
 
-  "tt": copy-region-as-kill
+    "j": accept-line
+    "gg": clear-screen
+    "u": upcase-word
 
-  "jj": accept-line
-  "gg": clear-screen
+    # Perform shell expansion.
+    TAB: shell-expand-line
 
-  # Uppercase word under cursor (default: M-u)
-  ",": backward-word, upcase-word
+    # Delete in word
+    "diw": "dw"
+    # Paste last command args.
+    "p": yank-last-arg
 
-  # Perform shell expansion.
-  ".": shell-expand-line
+    # ------------------------------------------------------------------
+    # inserting surroundings.
+    # ------------------------------------------------------------------
+    # subshell
+    "sh": "bi$(\eea)"
 
-  # Paste last command args.
-  "p": yank-last-arg
+    # variable expansion
+    "ysiw$": "bi${\eea}"
 
-  #----------|  Inserting Surround  |----------
+    # qoutes.
+    "ysiw\"": "bi\"\eea\""
+    "ysiw\'": "bi\'\eea\'"
 
-  # variable expansion
-  "ysiw$": "bi${\eea}"
+    # parenthesis.
+    "ysiw(": "bi\( \eea )"
+    "ysiw)": "bi\(\eea\)"
 
-  # qoutes.
-  "ysiw\"": "bi\"\eea\""
-  "ysiw\'": "bi\'\eea\'"
+    # brackets.
+    "ysiw[": "bi[ \eea ]"
+    "ysiw]": "bi[\eea]"
 
-  # parenthesis.
-  "ysiw(": "bi\( \eea )"
-  "ysiw)": "bi\(\eea\)"
+    # curly braces.
+    "ysiw{": "bi{ \eea }"
+    "ysiw}": "bi{\eea}"
 
-  # brackets.
-  "ysiw[": "bi[ \eea ]"
-  "ysiw]": "bi[\eea]"
+    # backticks.
+    "ysiw`": "bi`\eea`"
 
-  # curly braces.
-  "ysiw{": "bi{ \eea }"
-  "ysiw}": "bi{\eea}"
+    # ------------------------------------------------------------------
+    # changing surroundings.
+    # ------------------------------------------------------------------
+    # to double quotes
+    "cs$\"": "bbxr\"wwr\""
+    "cs\'\"": "bbr\"wwr\""
+    "cs(\"": "bbr\"lxwr\"hx"
+    "cs)\"": "bbr\"wwr\""
+    "cs[\"": "bbr\"lxwr\"hx"
+    "cs]\"": "bbr\"wwr\""
+    "cs{\"": "bbr\"lxwr\"hx"
+    "cs}\"": "bbr\"wwr\""
+    "cs`\"": "bbr\"wwr\""
 
-  # backticks.
-  "ysiw`": "bi`\eea`"
+    # to single quotes
+    "cs$\'": "bbxr\'wwr\'"
+    "cs\"\'": "bbr\'wwr\'"
+    "cs(\'": "bbr\'lxwr\'hx"
+    "cs)\'": "bbr\'wwr\'"
+    "cs[\'": "bbr\'lxwr\'hx"
+    "cs]\'": "bbr\'wwr\'"
+    "cs{\'": "bbr\'lxwr\'hx"
+    "cs}\'": "bbr\'wwr\'"
+    "cs`\'": "bbr\'wwr\'"
 
-  #----------|  Changing Surround  |----------
+    # ------------------------------------------------------------------
+    # removing surroundings.
+    # ------------------------------------------------------------------
+    "ds$": "xbbxx"
+    "ds\'": "bbxwx"
+    "ds\"": "bbxwx"
+    "ds(": "bbxxwhxx"
+    "ds)": "bbxwx"
+    "ds[": "bbxxwhxx"
+    "ds]": "bbxwx"
+    "ds{": "bbxxwhxx"
+    "ds}": "bbxwx"
+    "ds`": "bbxwx"
 
-  # to double quotes
-  "cs$\"": "bbxr\"wwr\""
-  "cs\'\"": "bbr\"wwr\""
-  "cs(\"": "bbr\"lxwr\"hx"
-  "cs)\"": "bbr\"wwr\""
-  "cs[\"": "bbr\"lxwr\"hx"
-  "cs]\"": "bbr\"wwr\""
-  "cs{\"": "bbr\"lxwr\"hx"
-  "cs}\"": "bbr\"wwr\""
-  "cs`\"": "bbr\"wwr\""
-
-  # to single quotes
-  "cs$\'": "bbxr\'wwr\'"
-  "cs\"\'": "bbr\'wwr\'"
-  "cs(\'": "bbr\'lxwr\'hx"
-  "cs)\'": "bbr\'wwr\'"
-  "cs[\'": "bbr\'lxwr\'hx"
-  "cs]\'": "bbr\'wwr\'"
-  "cs{\'": "bbr\'lxwr\'hx"
-  "cs}\'": "bbr\'wwr\'"
-  "cs`\'": "bbr\'wwr\'"
-
-  #----------|  Removing Surround  |----------
-
-  "ds$": "xbbxx"
-  "ds\'": "bbxwx"
-  "ds\"": "bbxwx"
-  "ds(": "bbxxwhxx"
-  "ds)": "bbxwx"
-  "ds[": "bbxxwhxx"
-  "ds]": "bbxwx"
-  "ds{": "bbxxwhxx"
-  "ds}": "bbxwx"
-  "ds`": "bbxwx"
-
-  # Autocomplete partially typed command based on history.
-  "J": history-search-forward
-  "K": history-search-backward
+    # Autocomplete partially typed command based on history.
+    "J": history-search-forward
+    "K": history-search-backward
 
 $endif
 
