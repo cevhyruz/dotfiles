@@ -46,8 +46,12 @@ $if mode=vi
   #  Command Mode                       |
   # -------------------------------------
   set keymap vi-command
-    # redundant with "K"
+    # redundant wit key.
     "k": nop
+
+    # Autocomplete partially typed command based on history.
+    "J": history-search-forward
+    "K": history-search-backward
 
     "j": accept-line
     "gg": clear-screen
@@ -68,26 +72,26 @@ $if mode=vi
     "sh": "bi$(\eea)"
 
     # variable expansion
-    "ysiw$": "bi${\eea}"
+    "ysiw$": "bi${\eea}\e[2 q"
 
     # qoutes.
-    "ysiw\"": "bi\"\eea\""
-    "ysiw\'": "bi\'\eea\'"
+    "ysiw\"": "bi\"\eea\"\e[2 q"
+    "ysiw\'": "bi\'\eea\'\e[2 q"
 
     # parenthesis.
-    "ysiw(": "bi\( \eea )"
-    "ysiw)": "bi\(\eea\)"
+    "ysiw(": "bi\( \eea )\e[2 q"
+    "ysiw)": "bi\(\eea\)\e[2 q"
 
     # brackets.
-    "ysiw[": "bi[ \eea ]"
-    "ysiw]": "bi[\eea]"
+    "ysiw[": "bi[ \eea ]\e[2 q"
+    "ysiw]": "bi[\eea]\e[2 q"
 
     # curly braces.
-    "ysiw{": "bi{ \eea }"
-    "ysiw}": "bi{\eea}"
+    "ysiw{": "bi{ \eea }\e[2 q"
+    "ysiw}": "bi{\eea}\e[2 q"
 
     # backticks.
-    "ysiw`": "bi`\eea`"
+    "ysiw`": "bi`\eea`\e[2 q"
 
     # ------------------------------------------------------------------
     # changing surroundings.
@@ -127,11 +131,6 @@ $if mode=vi
     "ds{": "bbxxwhxx"
     "ds}": "bbxwx"
     "ds`": "bbxwx"
-
-    # Autocomplete partially typed command based on history.
-    "J": history-search-forward
-    "K": history-search-backward
-
 $endif
 
 # vim:set ft=readline:
