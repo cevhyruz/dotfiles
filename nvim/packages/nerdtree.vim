@@ -2,18 +2,11 @@ nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeMapActivateNode='<space>'
 let NERDTreeCascadeSingleChildDir=1
-let NERDTreeQuitOnOpen = 1
+let NERDTreeQuitOnOpen = 0
 let NERDTreeMinimalUI=1
 let NERDTreeShowHidden=1
-let g:NERDTreeDirArrowExpandable = ''
-let g:NERDTreeDirArrowCollapsible = ''
-
-hi NERDTreeDir cterm=none ctermfg=73
-hi NERDTreeCWD cterm=none
-hi! NERDTreeOpenable cterm=none ctermfg=245
-hi! NERDTreeClosable cterm=none ctermfg=243
-hi! NerdIgnored ctermfg=30
-
+let NERDTreeDirArrowExpandable = "\u00a0"
+let NERDTreeDirArrowCollapsible = "\u00a0"
 let NERDTreeIgnore=[
   \ '\.git$',
   \ '\~$'
@@ -52,6 +45,28 @@ function! PrettyFile(filename, cterm, bg, fg)
     \ a:filename . ' #^\s\+.*'. a:filename .'$#'
 endfunction
 
+function! GitDimIgnoredFiles()
+    let gitcmd = 'git -c color.status=false status -s --ignored'
+    if exists('b:NERDTree')
+        let root = b:NERDTree.root.path.str()
+    else
+        let root = './'
+    endif
+    let files = split(system(gitcmd.' '.root), '\n')
+
+    call GitFindIgnoredFiles(files)
+endfunction
+
+function! GitFindIgnoredFiles(files)
+    for file in a:files
+        let pre = file[0:1]
+        if pre == '!!'
+            let ignored = split(file[3:], '/')[-1]
+            exec 'syn match Comment #\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
+        endif
+    endfor
+endfunction
+
 " TODO: change /home/devs to use expanded value of $HOME variable.
 augroup Hide$HOME
   autocmd! FileType nerdtree
@@ -61,29 +76,11 @@ augroup Hide$HOME
     \ | setlocal concealcursor=n
 augroup end
 
-function! GitDimIgnoredFiles()
-  let gitcmd = 'git -c color.status=false status --short --ignored'
-  if exists('b:NERDTree')
-    let root = b:NERDTree.root.path.str()
-  else
-    let root = './'
-  endif
-  let files = split(system(gitcmd.' '.root), '\n')
-  call GitFindIgnoredFiles(files)
-endfunction
-
-function! GitFindIgnoredFiles(files)
-  for file in a:files
-    let prefix = file[0:1]
-    if prefix == '!!'
-      let ignored = split(file[3:], '/')[-1]
-      exec 'syntax match NerdIgnored ' .
-        \ '#\<'.escape(ignored, '~').'\(\.\)\@!\># containedin=NERDTreeFile'
-    endif
-      exec 'syntax match NERDTreeDirSlash ' . '#/$#' .
-        \ ' containedin=ALL conceal'
-  endfor
-endfunction
+augroup hide_nerdtree_dir_slash
+  autocmd!
+  autocmd! FileType nerdtree syntax match NERDTreeDirSlash
+    \ #/$# containedin=ALL conceal
+augroup END
 
 augroup CloseWhenNoBuffer
   autocmd! FileType nerdtree
