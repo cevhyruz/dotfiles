@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 function _source_bash_files() {
-
   local file="test"
+
+  # Helper functions.
+  . "/home/devs/Projects/dotfiles/bash/helpers"
 
   for file in /etc/profile.d/*; do
     [ -r "$file" ] \
