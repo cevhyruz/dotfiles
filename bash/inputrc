@@ -1,10 +1,11 @@
 # change default mode.
 set editing-mode vi
-
-# show cursor
 set show-mode-in-prompt on
-set vi-ins-mode-string "\1\e[38;5;29m\2   \1\e[38;5;216m\2\1\e[3 q\2"
-set vi-cmd-mode-string "\1\e[38;5;240m\2   \1\e[38;5;216m\2\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[38;5;29m\2\1\e[38;5;216m\2\1\e[5 q\2"
+set vi-cmd-mode-string "\1\e[38;5;240m\2\1\e[38;5;216m\2\1\e[2 q\2"
+#                         └─────┬────┘    └─────┬────┘    └─┬──┘
+#                               │               │           └──> cursor.
+#                               └───────────────┴──────────────> color codes.
 
 # Make <Tab> autocomplete regardless of filename case.
 set completion-ignore-case on
@@ -49,12 +50,13 @@ $if mode=vi
     # redundant wit key.
     "k": nop
 
+    TAB: menu-complete
     # Autocomplete partially typed command based on history.
     "J": history-search-forward
     "K": history-search-backward
 
     "j": accept-line
-    "gg": clear-screen
+    "gg": ""
     "u": upcase-word
 
     # Perform shell expansion.
@@ -63,6 +65,9 @@ $if mode=vi
     # Delete in word
     "diw": "dw"
     # Paste last command args.
+    "p": yank-last-arg
+
+    # Marks
     "p": yank-last-arg
 
     # ------------------------------------------------------------------
