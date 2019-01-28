@@ -15,6 +15,9 @@ function _source_bash_files() {
   # to avoid keybindings conflicts.
   . "/home/devs/Projects/dotfiles/bash/fzf"
 
+  # Custom keybindings.
+  . "/home/devs/Projects/dotfiles/bash/keybindings"
+
   # For local configuration that should
   # not be included in source control.
   if [ -r "/home/devs/Projects/dotfiles/_localrc/local.bashrc" ]; then
