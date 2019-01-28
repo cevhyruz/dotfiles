@@ -84,8 +84,8 @@ function set_prompts() {
   PS1+="\\[${white}\\]"
   PS1+="\\[${cyan}\\]"
   PS1+=" \\W"
-  PS1+="\$( prompt_git \"\\[${yellow}\\]( \\[${red}\\]\" \"\\[${yellow}\\] )\")"
-  #                                      └────────> delimeter char <────────┘
+  PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")"
+  #                                    └───────> delimeter char <───────┘
   PS1+="\\[${reset}\\]"
   PS1+="\\[${reset}\\]"
   PS1+="\\[${italic}\\]"
@@ -95,7 +95,7 @@ function set_prompts() {
   PS1+=" \\n \\$ "
 
   # ------------------------------------------------------------------
-  # PS2
+  # PS2 - Continuation prompt
   # ------------------------------------------------------------------
   PS2="\\[${pink}\\] \\$  "
 
