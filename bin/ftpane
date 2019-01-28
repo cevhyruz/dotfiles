@@ -6,26 +6,17 @@
 # heavily-modified version of @george-b's `ftpane` script.
 # https://github.com/junegunn/fzf/wiki/examples
 
-_in_tmux() {
-  local parent
-  parent="$(ps --no-headers -o comm "$PPID")"
-  if [ "${parent}" = 'tmux: server' ]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 # TODO: Make it toggable! ( avoid running two instance )
 # Always show active pane first.
 # Add support for ansi colors codes.
 
 # TODO: Don't list drawer-type panes.
+
 ftpane() {
   local _format panes prev_panes target target_window target_pane
   local _window_title
 
-  if _in_tmux; then
+  if _inside_tmux; then
     _format='#W:#P - (#{history_size}/#{history_limit}) #{pane_current_path} #{pane_current_command} #{pane_active}'
     panes=$(tmux list-panes -s -F "$_format")
     prev_panes=$(tmux list-pane -F "$_format")
