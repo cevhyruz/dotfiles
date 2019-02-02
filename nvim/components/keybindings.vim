@@ -11,8 +11,7 @@ let mapleader = ","          " Leader key.
 "------------------------------------
 
 " Toggle search highlights.
-  nnoremap <expr><silent> <space>
-  \ (&hls == 0 ? ':set hls' : ':set nohls')."<cr>"
+  nnoremap <expr><silent> <space> (&hls == 0 ? ':set hls' : ':set nohls')."<cr>"
 
 "------------------------------------
 "           File Editing             |
@@ -43,9 +42,13 @@ let mapleader = ","          " Leader key.
   cnoremap kj <C-c><esc>
   vnoremap kj <esc>
 
-" Much faster scrolling (increments by 3).
+" Faster vertical scrolling (increments by 3).
   nnoremap <C-e> 2<C-e>
   nnoremap <C-y> 2<c-y>
+
+" Faster horizontal scrolling (incremnents by 20)
+  nnoremap zl 20zl
+  nnoremap zh 20zh
 
 " Split Arrangement.
   nnoremap <M-f> <C-w>J
@@ -62,6 +65,12 @@ let mapleader = ","          " Leader key.
 
 " Jump to command bar.
   nnoremap ; :
+
+" Open command bar.
+  nnoremap ;<space> q:
+
+" Quit.
+  nnoremap ;q :q<cr>
 
 " I think I don't need `;` in Command Mode.
   cnoremap ; :
