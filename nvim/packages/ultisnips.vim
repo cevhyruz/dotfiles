@@ -5,7 +5,7 @@ let g:UltiSnipsSnippetDirectories = [
       \'UltiSnips'
       \]
 
-let g:UltiSnipsUsePythonVersion = 3        " Use Python3 for UltiSnips.
+let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsEditSplit="vertical"        " Always open snip file in vsplit.
 
 " This is actually the default value, I just
