@@ -14,8 +14,7 @@ function prompt_git() {
   # as it will only pollute the global space and will result in a laggy
   # terminal shell. This function cannot be unset because it's called
   # every time the prompt string is shown.
-  #
-  # [?] Usage: prompt_git <branch-delimeter> <status-delimeter>
+
   local stat branch_name
 
   # Check if we're inside a git repo.
@@ -56,6 +55,16 @@ function prompt_git() {
   echo -e "${1}${branch_name}${2} ${3}${stat}${4}";
 }
 
+function _exit_status() {
+  # https://www.tldp.org/LDP/abs/html/exitcodes.html
+  local last_command="$?"
+  if [ "$last_command" -ne 0 ]; then
+    echo -e "${shade}[$last_command]"
+  fi
+}
+
+
+# PROMPT_COMMAND=print_pre_prompt
 function set_prompts() {
   local bold reset italic
   local cyan pink yellow green
@@ -66,7 +75,6 @@ function set_prompts() {
     # attributes
     bold=$(tput bold);
     reset=$(tput sgr0);
-    italic=$(tput sitm);
 
     cyan=$(tput setaf 37)
     dimgrey=$(tput setaf 248)
@@ -75,23 +83,30 @@ function set_prompts() {
     green=$(tput setaf 30);
     red=$(tput setaf 203);
     white=$(tput setaf 246);
+    shade=$(tput setaf 241)
   fi
 
   # ------------------------------------------------------------------
   # PS1 - the default propmt
   # ------------------------------------------------------------------
-  PS1="\\n\\[${bold}\\]"
-  PS1+="\\[${white}\\]"
+
+  # [Todo] right-alight-part-of-prompt
+  # Test Cases:
+  # [ ] set -o vi
+  # [ ] set show-mode-in-prompt
+  # [ ] set vi-mode-string
+  # [ ] ASCII CSI codes (same as above)
+  # [ ] adapt to sudden sceen-size change
+  # [ ] if possible don't use prompt_command
+
+  PS1="\\n"
+  PS1+="\$(_exit_status)"
+  PS1+="\\[${bold}\\]"
   PS1+="\\[${cyan}\\]"
-  PS1+=" \\W"
+  PS1+=" \\W"             # current working directory
   PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")"
-  #                                    └───────> delimeter char <───────┘
-  PS1+="\\[${reset}\\]"
-  PS1+="\\[${reset}\\]"
-  PS1+="\\[${italic}\\]"
-  PS1+="\\[${green}\\]"
-  PS1+="\\[${reset}\\]"
-  PS1+="\\[${pink}\\]"
+  PS1+="\\[${reset}\\]"   # reset color set by `trap`
+  PS1+="\\[${pink}\\]"    # command color
   PS1+=" \\n \\$ "
 
   # ------------------------------------------------------------------
@@ -113,4 +128,4 @@ function main() {
 
 main && unset -f main
 
-# vim:fdm=indent cc=75:
+# vim:fdm=indent cc=80:
