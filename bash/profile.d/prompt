@@ -21,8 +21,8 @@ function prompt_git() {
   ! command git rev-parse &> /dev/null \
   && return;
 
-  # Check if inside the .git/ directory first before running status checks.
-  if [ "$(command git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+  # Check that we're not inside the .git/ directory first before running status checks.
+  if [[ "$(command git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]]; then
     # Ensure the index is up to date.
     command git update-index --really-refresh -q &> /dev/null;
     # Check for uncommitted changes in the index.
@@ -51,7 +51,7 @@ function prompt_git() {
       command git rev-parse --short HEAD 2> /dev/null || \
       echo 'unknown')";
 
-  [ -n "${stat}" ] && stat="${stat}";
+  [[ -n "${stat}" ]] && stat="${stat}";
   echo -e "${1}${branch_name}${2} ${3}${stat}${4}";
 }
 
