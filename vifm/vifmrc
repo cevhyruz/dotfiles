@@ -1,5 +1,61 @@
+" If you installed the vim.txt help file set vimhelp.
+" If you would rather use a plain text help file set novimhelp.
+" set novimhelp
 
+only                    " Enable single-view mode.
+colorscheme theme       " Define colors display.
+set vicmd=$EDITOR       " Default editor for opening files.
+set nofastrun           " Enable running of ambiguous commands.
+set undolevels=100      " Max number of changes that can be undone.
+set history=100         " Entries in directory history.
+set followlinks         " Always follow links.
+set dotdirs=never       " Never show 'up dir / ..'. for not empty directories.
+set vimhelp
 
-only                                  " Enable single-view mode.
-colorscheme theme                     " Define colors display.
-set vicmd=$EDITOR                     " Vifm default editor for opening files.
+" ------------------------------------------------------------------
+" File Icons
+" ------------------------------------------------------------------
+file types
+set classify=' :dir:, :exe:, :reg:, :link:'
+" various file names
+set classify+=' ::../::, ::*.sh::, ::*.[hc]pp::, ::*.[hc]::, ::/^copying|license$/::, ::.git/,,*.git/::, ::*.epub,,*.fb2,,*.djvu::, ::*.pdf::, ::*.htm,,*.html,,**.[sx]html,,*.xml::'
+" archives
+set classify+=' ::*.7z,,*.ace,,*.arj,,*.bz2,,*.cpio,,*.deb,,*.dz,,*.gz,,*.jar,,*.lzh,,*.lzma,,*.rar,,*.rpm,,*.rz,,*.tar,,*.taz,,*.tb2,,*.tbz,,*.tbz2,,*.tgz,,*.tlz,,*.trz,,*.txz,,*.tz,,*.tz2,,*.xz,,*.z,,*.zip,,*.zoo::'
+" images
+set classify+=' ::*.bmp,,*.gif,,*.jpeg,,*.jpg,,*.ico,,*.png,,*.ppm,,*.svg,,*.svgz,,*.tga,,*.tif,,*.tiff,,*.xbm,,*.xcf,,*.xpm,,*.xspf,,*.xwd::'
+" audio
+set classify+=' ::*.aac,,*.anx,,*.asf,,*.au,,*.axa,,*.flac,,*.m2a,,*.m4a,,*.mid,,*.midi,,*.mp3,,*.mpc,,*.oga,,*.ogg,,*.ogx,,*.ra,,*.ram,,*.rm,,*.spx,,*.wav,,*.wma,,*.ac3::'
+" media
+set classify+=' ::*.avi,,*.ts,,*.axv,,*.divx,,*.m2v,,*.m4p,,*.m4v,,.mka,,*.mkv,,*.mov,,*.mp4,,*.flv,,*.mp4v,,*.mpeg,,*.mpg,,*.nuv,,*.ogv,,*.pbm,,*.pgm,,*.qt,,*.vob,,*.wmv,,*.xvid::'
+" office files
+set classify+=' ::*.doc,,*.docx::, ::*.xls,,*.xls[mx]::, ::*.pptx,,*.ppt::'
+" Markdown
+set classify+=' ::*md::'
+" Vim
+set classify+=' ::*vim,,*.vifm::'
+" Golang
+set classify+=' ::*go::'
+" Backup
+set classify+='::*back::'
+" Config
+set classify+=' ::gitignore::'
+
+source ~/Projects/dotfiles/vifm/keybindings.vifm
+
+" Show hidden files by default.
+windo normal zo
+
+" Redraw when directory is changed to avoid artifacts.
+autocmd DirEnter * :redraw
+
+highlight /^.*\.vim$/ cterm=none ctermbg=none ctermfg=cyan
+
+highlight /^.*\^/ cterm=bold ctermfg=red ctermbg=23
+
+" ------------------------------------------------------------------
+" filters
+" ------------------------------------------------------------------
+" Hide .git directory
+filter /^.*\.git\/$/
+
+" vim:ft=vim:

@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 
-# ------------------------------------------------------------------
-# note - jot down those nice ideas.
-# ------------------------------------------------------------------
-function note() {
-  local file="$1" location="$HOME/Documents/notes"
+source ~/Projects/dotfiles/bash/bin/helpers.bash
 
-  if [ "$#" -ne 0 ]; then
-    cd "$location" || md "$location"
-    $EDITOR "$HOME/Documents/notes/$file"
+# ------------------------------------------------------------------
+#  [?] create notes
+# ------------------------------------------------------------------
+# usage:    note [file]
+# location: Documents/notes
+
+function note() {
+  local file location
+
+  file="$1"
+  location="$HOME/Documents/notes"
+
+  if [[ "$#" -ne 0 ]]; then
+    md "$location"
+    if [[ "$(has df)" ]]; then
+      command nvim --noplugin -c 'set ft=help' "$HOME/Documents/notes/$file"
+    fi
     cd - &> /dev/null || return
   else
     if [[ -z "$(ls "$location")" ]]; then
@@ -21,63 +31,111 @@ function note() {
 }
 
 # ------------------------------------------------------------------
-# lazyload nvim
+#  [?] quick-start a Go project.
 # ------------------------------------------------------------------
-# Modified version of @fl0w's gist
+# usage: golang [path] [module name]
+function golang() {
+  local path module_name
+  local main app
+
+  main="package main"
+
+  read -rp "module name: (github.com/cevhyruz/testify)"
+
+  # create the directory
+  command mkdir -p "$path" && cd "$path" || return
+
+  command touch "main.go"
+}
+
+#  [?] Safer rm
+# ------------------------------------------------------------------
+function trash() {
+  local OPTIND # Must be local
+  while getopts ":[a]:b:c" opt; do
+    case $opt in
+    a) echo "using option a";;
+    b) echo "using option b";;
+    c) echo "using option b";;
+    *) echo "error";;
+    esac
+  done
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# [?] lazy load nvm ( Modified version of @fl0w's gist )
 # https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
 function lazynvm() {
   unset -f nvm node npm npx
   export NVM_DIR=~/.nvm
+
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
   if [ -f "$NVM_DIR/bash_completion" ]; then
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
   fi
 }
 
-function nvm() {
-  lazynvm
-  nvm "$@"
-}
+nvm()  { lazynvm && nvm "$@";  }
+node() { lazynvm && node "$@"; }
+npm()  { lazynvm && npm "$@";  }
+npx()  { lazynvm && npx "$@";  }
 
-function node() {
-  lazynvm
-  node "$@"
-}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function npm() {
-  lazynvm
-  npm "$@"
-}
 
-function npx() {
-  lazynvm
-  npx "$@"
-}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# ------------------------------------------------------------------
-# md - create directory and enter it
-# ------------------------------------------------------------------
+# [?] create directory and `cd`.
+# usage: md [directory]
 function md() {
-  local dir="$1"
-  mkdir "$dir" && cd "${dir}" || return
+  local dir="${1}"
+  mkdir -p "${dir}" && cd "${dir}" || return
+  command dirs
 }
 
-# ------------------------------------------------------------------
-# fshow - git commit browser (fzf)
-# ------------------------------------------------------------------
-function fshow() {
-  local output shas sha query key
-  while output=$(
-          git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(green)%cr" "$@" |
-          fzf --ansi --multi --no-sort --reverse --query="$query" \
-            --print-query --expect=ctrl-d --toggle-sort=\`
-        ); do
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# [?] interactive `ls` browser (require fzf installed).
+function lsfile() {
+  local output
+
+  while output=$(ls -l "$@" |
+  fzf --ansi --query="$query" --print-query --expect=ctrl-d --toggle-sort=\`); do
+
+    query=$(head -1 <<< "$output")
+    key=$(head -2 <<< "$output" | tail -1)
+    # shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$output" | awk '{print $1}')
+
+    # [[ -z "$shas" ]] && continue
+
+    if [[ "$key" = ctrl-d ]]; then
+      echo "ctrl - d"
+    else
+        echo "enter"
+    fi
+  done
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# [?] interactive git commit browser (require fzf installed).
+# keys: <Enter>=git show, <ctrl-d>=git diff
+function gshow() {
+  local output shas sha query key format
+  gformat="--format=%C(auto)%h%d %s %C(black)%C(green)%cr"
+
+  while output=$(git log --graph --color=always "${gformat}" "$@" |
+  fzf --query="$query" --print-query --expect=ctrl-d --toggle-sort=\`); do
+
     query=$(head -1 <<< "$output")
     key=$(head -2 <<< "$output" | tail -1)
     shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$output" | awk '{print $1}')
-    [ -z "$shas" ] && continue
-    if [ "$key" = ctrl-d ]; then
+
+    [[ -z "$shas" ]] && continue
+
+    if [[ "$key" = ctrl-d ]]; then
       git diff --color=always "$shas" | less -R
     else
       for sha in $shas; do
@@ -85,4 +143,22 @@ function fshow() {
       done
     fi
   done
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# [?] `cd` to last `vifm` location after quitting.
+vicd() {
+  local dest="$(command vifm --choose-dir - "$@")"
+
+  if [ -z "$dest" ]; then
+    echo 'Directory picking cancelled/failed'
+    return 1
+  fi
+
+  cd "$dest"
+}
+
+function try() {
+  echo testl
 }

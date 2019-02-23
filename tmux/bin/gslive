@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# ------------------------------------------------------------------
+# gslive - live git status
+# ------------------------------------------------------------------
+function gslive() {
+  while :
+  do
+    clear
+    echo -e "\\n"
+      git status --short --untracked-files --column
+    sleep 1
+  done
+}
+
+gslive

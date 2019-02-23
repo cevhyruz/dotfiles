@@ -1,0 +1,13 @@
+" Jump to commandline.
+nnoremap ; :
+
+" Exit commandline.
+cnoremap kj <Esc>:redraw<cr>
+
+" Close vifm (match with bash keybinding ctrl-n to simulate toggling).
+nnoremap <c-n> :q<cr>
+
+" Accept command.
+cnoremap jj <cr>
+
+" vim:ft=vim:

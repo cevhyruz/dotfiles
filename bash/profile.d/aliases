@@ -1,45 +1,64 @@
 #!/usr/bin/env bash
 
-#------------------------------------------
-#             Custom commands             |
-#------------------------------------------
+# ------------------------------------------------------------------
+#  Miscellaneous
+# ------------------------------------------------------------------
 
-alias path='printf "%b\n" "${PATH//:/\\n}"'          # Print PATH env neatly.
-alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
-alias brestart="sudo /etc/init.d/bluetooth restart"  # Restart bluetooth.
-alias mom='ps --no-headers -o comm "${PPID}"'      # which process spawns the shell?
-alias todo="grep --recursive 'TOD[O]: '"         # List all todo comments.
-alias fixme="grep --recursive 'FIXM[E]: '"     # List all fixme comments.
-alias cwd='printf '%s' "${PWD##*/}"'         # Print current working directory.
-alias pst="xclip -out"                       # Print xclip selection.
-alias open="xdg-open ."
-alias reload="exec \${SHELL}"             # Reload the shell.
-alias e="exit"                            # Exit the shell.
+alias     path=' printf "%b\n" "${PATH//:/\\n}"'      # Print PATH env neatly.
+alias bashopts=' printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
+alias   parent=' ps --no-headers -o comm "${PPID}"'   # which process spawns the shell?
+alias     todo=" grep -r --exclude-dir='.git' [T]ODO" # List all pending tasks.
+alias    fixme=" grep -r [F]IXME"                     # List all fixme comments.
+alias      pst=" xclip -out"                          # Print xclip selection.
+alias     open=" xdg-open ."
+alias        r=" exec \${SHELL}"                      # Reload shell.
+alias        e=" exit"                                # Exit terminal.
 
-#------------------------------------------
-#             Neovim Editor               |
-#------------------------------------------
+# ------------------------------------------------------------------
+# Services
+# ------------------------------------------------------------------
 
-# TODO: Make this load multiple files.
-# Start neovim without plugin but with basic keybindings.
-alias nnvim="nvim -u \
-    /home/devs/Projects/dotfiles/nvim/components/keybindings.vim"
+# Mysql.
+alias   msstart=" service mysql start"
+alias    msstop=" service mysql stop"
+alias  msstatus=" service mysql status"
+alias msrestart=" service mysql restart"
 
+# Apache2.
+alias   astart=" service apache2 start"
+alias    astop=" service apache2 stop"
+alias  astatus=" service apache2 status"
+alias arestart=" service apache2 restart"
+
+# Network manager.
+alias   netstart=" service network-manager start"
+alias    netstop=" service network-manager stop"
+alias  netstatus=" service network-manager status"
+alias netrestart=" service network-manager restart"
+
+# Bluetooth.
+alias   bstart=" service bluetooth start"
+alias    bstop=" service bluetooth stop"
+alias  bstatus=" service bluetooth status"
+alias brestart=" service bluetooth restart"
 
 #------------------------------------------
 #              Git commands               |
 #------------------------------------------
-
 # git log - Show commit logs.
 
-alias lg="git log --oneline --graph -20"
+# alias alias='lol'
+
+# alias g="git"
+
+format="--format='%C(auto)%h%d %s %C(black)%C(green)%cr'"
+alias lg="git log $format --oneline --graph -20"
 #                   │         │      └─ Limit output to 20 lines.
-#                   │         └─  Display text-based graphical commit history.
+#                   │         └─ Display text-based graphical commit history.
 #                   └─ Shorthand for --pretty=oneline --abbrev-commit.
 
 # git status - Show the working tree status as 'short-format'.
 
-alias gs="git status --short"     # Staged and untracked files.
 alias gsi="gs --ignored"          # Status with ignored files.
 
 # git ls-files - Show info about files in index and the working tree.
@@ -51,7 +70,7 @@ alias gli="git ls-files -o -i --exclude-standard"
 
 # git show - Show one or more objects (blobs, trees, tags, and commits).
 
-alias gshow="git show --oneline"  # Show HEAD's log message and diffs.
+# alias gshow="git show --oneline"  # Show HEAD's log message and diffs.
 #                       └─ Shorthand for --pretty=oneline --abbrev-commit.
 
 # git diff - Show changes between the working tree and the index or a tree.
@@ -105,15 +124,18 @@ alias grf="git reset HEAD --"
 #             System commands             |
 #------------------------------------------
 
-alias sudo='sudo '                     # Allow aliases to be `sudo`ed.
-#alias vim='$EDITOR '                  # Expand from default editor.
-alias rm='rm '                         # Allow aliases to be `rm`ed.
-alias vifm='vifm '                     # Allow alias expansion for vifm paths.
-alias which="which -a"                 # Always show all matching pathnames.
+alias sudo='sudo '                   # Allow aliases to be `sudo`ed.
+#alias vim='$EDITOR '                # Expand from default editor.
+alias rm='rm '                       # Allow aliases to be `rm`ed ([!] Dangerous)
+alias vifm='vifm '                   # Allow alias expansion for vifm arguments.
+alias which="which -a"               # Always show all matching pathnames.
+alias type="type -ta"                # display all matching info about command type.
+alias mkdir="mkdir -p"               # no errors if existing, make parent dir.
 
-# Sort, list and show hiden files/dirs with colored listing.
-alias ls='lsc --almost-all --classify --group-directories-first '
-alias dir='dr --almost-all --classify --group-directories-first '
+alias ls="lscolor --almost-all --classify --group-directories-first"
+alias dir="dircolor --almost-all --classify --group-directories-first"
+alias applist="dpkg --list"          # list installed apps using `apt`.
+alias man1="ls /usr/share/man/man1"  # list man page section 1 -- user commands.
 
 #------------------------------------------
 #     Files and directories shortcuts     |
@@ -122,7 +144,6 @@ alias dir='dr --almost-all --classify --group-directories-first '
 # Frequently used directories.
 alias home="~"
 alias p="~/Projects"
-alias dot="~/Projects/dotfiles"
 alias dt="~/Desktop"
 alias m="~/Music"
 alias dl="~/Downloads"
@@ -141,3 +162,9 @@ alias nr="npm run"
 # Gulp task manager
 # ------------------------------------------------------------------
 alias gl="gulp"
+
+# ------------------------------------------------------------------
+#  programs
+# ------------------------------------------------------------------
+# custom socket name for nested local and remote sessions.
+alias tmux="tmux -L codelabs"

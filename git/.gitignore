@@ -1,0 +1,19 @@
+# node & npm.
+node_modules
+npm-debug.log
+
+# Vim
+%*
+%*
+*.sw[a-z]
+*.un~
+.netrwhist
+Session.vim
+
+# Windows OS
+Desktop.ini
+ehthumbs.db
+Thumbs.db
+
+# Linux OS
+*~

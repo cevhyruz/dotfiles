@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+
+# FZF Key bindings
+# -----------------
+# [!] must be the default installation directory of fzf upon settingup dotfiles.
+# source "/home/devs/Projects/cloned-repo/fzf/shell/key-bindings.bash"
+
 # TODO: get the actual failing command rather than just hard coding.
 function __error() {
  if [ "$?" -eq 127 ]; then
@@ -9,4 +15,14 @@ function __error() {
  fi
 }
 
-bind -x '"\C-n": "vifm &> /dev/null || __error vifm"' # launch a file browser.
+function _vifm() {
+ vifm
+ if [ "$?" -eq 127 ]; then
+   echo -e "[keybindings]: command not found -> $1 "
+ else
+   echo "[keybindings]: error $?"
+ fi
+}
+
+bind -x '"\C-n": "_vifm"' # launch a file browser.
+

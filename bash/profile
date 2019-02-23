@@ -1,29 +1,27 @@
 #!/usr/bin/env bash
 function _source_bash_files() {
-  local file="test"
 
-  # Helper functions.
-  . "/home/devs/Projects/dotfiles/bash/helpers"
+  # enable color support
+  . "/home/devs/Projects/dotfiles/bash/colors"
 
+  # source all files in /etc/.
   for file in /etc/profile.d/*; do
     [ -r "$file" ] \
        && . "$file"
   done
   unset file
 
-  # Make sure to source fzf after the bash_completion.sh
-  # to avoid keybindings conflicts.
-  . "/home/devs/Projects/dotfiles/bash/fzf"
 
   # Custom keybindings.
   . "/home/devs/Projects/dotfiles/bash/keybindings"
 
-  # For local configuration that should
-  # not be included in source control.
+  # [?] For local configuration that should
+  # not be included in  the source control.
   if [ -r "/home/devs/Projects/dotfiles/_localrc/local.bashrc" ]; then
     . "/home/devs/Projects/dotfiles/_localrc/local.bashrc"
   fi
 
 }
 
-_source_bash_files && unset -f _source_bash_files
+_source_bash_files
+unset -f _source_bash_files

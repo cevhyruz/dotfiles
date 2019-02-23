@@ -1,4 +1,5 @@
-bin/env bash
+#!/usr/bin/env bash
+
 declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles"
 
 declare -r DOTFILES_ORIGIN="git@github.com:$GITHUB_REPOSITORY.git"
@@ -36,6 +37,7 @@ while :; do
 done
 
 } #}}}
+installing
 
 function downLoad() { #{{{
 

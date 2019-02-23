@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+# Interactive git commits browser.
+# [keys]: <enter> = git show, <ctrl-d> = git diff.
+# shellcheck disable=SC2086
+
+function main() {
+
+  local output sha1 key git_format
+
+  git_format="--format=%C(auto)%h%d %s %C(black)%C(green)%cr"
+  declare -a fzf_options=(
+    "--print-query"
+    "--expect=ctrl-d"
+    "--toggle-sort=\`" )
+
+  while commits=$(git log --graph "${git_format}" | fzf ${fzf_options[*]}); do
+    key=$(head -2 <<< "${commits}" | tail -1)
+    sha1=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "${commits}" | awk '{print $1}')
+
+    [[ -z "${sha1}" ]] && continue
+
+    _assign_key "${key}" "${sha1}"
+  done
+}
+
+function _get_sha1() {
+  local output
+  sha1=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "${commits}" | awk '{print $1}')
+}
+
+# [?] assign command to keypress.
+# usage: _assign_key "ctrl-d" "git diff"
+function _assign_key() {
+  local key cmd
+
+   key="${1}"
+   cmd="${2}"
+
+  if [[ "${key}" == ctrl-d ]]; then
+    git diff --color=always
+  else
+    for sha in $(_get_sha1); do
+      git show --color=always
+    done
+  fi
+}
+
+# check script requirements.
+function _sanity_check() {
+  _has "df"
+  _has "fzf"
+}
+
+# check if program is installed.
+function _has() {
+  local cmd="${1}";
+  if ! [[ "$(command -v "${cmd}")" ]]; then
+    printf "[git-s] you don't seem to have \"${cmd}\" installed"
+    exit 127
+  fi
+}
+
+main
