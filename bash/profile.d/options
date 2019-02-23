@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Enable vi-style keybindings (for one-liner editing).
-set -o vi
+# set -o vi
 
 shopt -s no_empty_cmd_completion   # Do'nt enable completion on empty line.
 shopt -s autocd                    # Preprend `cd` to directory names.

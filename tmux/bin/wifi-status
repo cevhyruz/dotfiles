@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# ssid="$(iw wlan0 link | grep 'SSID' | awk '{printf $2}')"
+status="$(iw wlan0 link)"
+
+if [[ "$status" != "Not connected" ]]; then
+  echo "#[bold]#[default, fg=colour250]  :"
+else
+  echo "lol"
+fi

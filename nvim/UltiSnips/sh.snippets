@@ -1,15 +1,33 @@
-
-snippet # "Block comment / Code coverage" b
+snippet # "comment: banner"
 # ------------------------------------------------------------------
-# ${1:Title}
+# ${1:banner title}
 # ------------------------------------------------------------------
 endsnippet
 
-# Shebang
-snippet #! "Shebang"
+snippet she "portable script boilerplate"
 #!/usr/bin/env bash
 
-${0}
+function main() {
+	${1:# ... }
+}
+
+# check script requirements.
+function _sanity_check() {
+
+}
+
+# check if program is installed.
+function _has() {
+	local cmd="${1}";
+	if ! [[ "$(command -v "${cmd}")" ]]; then
+		printf "[git-s] you don't seem to have \"${cmd}\" installed"
+		exit 127
+	fi
+}
+
+${2}
+
+main
 endsnippet
 
 # If statement

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1090
+source "$HOME/Projects/dotfiles/tmux/lib.sh"
+
+function git_status() {
+  local behind ahead current_branch
+  local working_dir
+
+  working_dir="$(display '#{@window_current_path}')"
+
+  echo "$working_dir"
+
+  # check if working directory is a git repository.
+  if [[ $(command git -C "${working_dir}" &> /dev/null) ]]; then
+    echo 'false' && return
+  fi
+
+  # Get the current branch.
+  current_branch="$( git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+                     git rev-parse --short HEAD 2> /dev/null || \
+                   ( unknown ))";
+
+  # Check for stream updates.
+  git rev-list --left-right "${current_branch}"...origin/master -- > /tmp/git_upstream_status
+
+  # Get the upstream and downstream.
+  behind="$(grep --count '^>' /tmp/git_upstream_status)"
+  ahead="$(grep --count '^<' /tmp/git_upstream_status)"
+
+
+  printf "#[dim,bold]  #[default] $behind↓ $ahead↑"
+}
+git_status
+#unset -f git_status

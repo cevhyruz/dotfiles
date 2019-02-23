@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+function main() {
+  enable_color_support
+  set_color_variables
+  enable_command_color
+  unset -f enable_color_support enable_command_color
+}
+
+function enable_color_support() {
+  if [[ $COLORTERM == gnome-* && $TERM == xterm ]] \
+  && infocmp gnome-256color &> /dev/null; then
+    export TERM="gnome-256color";
+  elif infocmp xterm-256color &> /dev/null; then
+    export TERM="xterm-256color";
+  fi
+}
+
+function set_color_variables() {
+# shellcheck disable=SC2034
+  if tput setaf 1 &> /dev/null; then
+    # reset
+    tput sgr0;
+    # attributes.
+    reset=$(tput sgr0);
+    bold=$(tput bold);
+    # colors
+    cyan=$(tput setaf 37);
+    dimgrey=$(tput setaf 248);
+    pink=$(tput setaf 216);
+    yellow=$(tput setaf 178);
+    green=$(tput setaf 30);
+    red=$(tput setaf 203);
+    white=$(tput setaf 246);
+    shade=$(tput setaf 241);
+  fi
+}
+
+function enable_command_color() {
+  if [ -x /usr/bin/dircolors ]; then
+    if test -r ~/Projects/dotfiles/bash/LS_COLORS; then
+      eval "$(dircolors -b ~/Projects/dotfiles/bash/LS_COLORS)"
+    fi
+    alias dircolor="dir --color=always"
+    alias egrep="egrep --color=always"
+    alias fgrep="fgrep --color=always"
+    alias grep="grep --color=always"
+    alias lscolor="ls --color=always"
+    alias vdir="vdir --color=always"
+  else
+    alias lscolor="ls"
+    alias dircolor="dir"
+  fi
+  export LESS="--raw-control-chars "
+  export FZF_DEFAULT_OPTS="--ansi "
+  export LS_COLORS=""
+}
+
+main && unset -f main

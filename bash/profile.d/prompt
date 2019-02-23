@@ -1,20 +1,12 @@
 #!/usr/bin/env bash
 
-function enable_color_support() {
-  if [[ $COLORTERM == gnome-* && $TERM == xterm ]] \
-  && infocmp gnome-256color &> /dev/null; then
-    export TERM="gnome-256color"
-  elif infocmp xterm-256color &> /dev/null; then
-    export TERM="xterm-256color"
-  fi
+# shellcheck disable=SC2154
+
+function main() {
+  __colorize_stdout
 }
 
-function prompt_git() {
-  # [!]  Don't break this function into smaller,  more specialized ones
-  # as it will only pollute the global space and will result in a laggy
-  # terminal shell. This function cannot be unset because it's called
-  # every time the prompt string is shown.
-
+function __prompt_git() {
   local stat branch_name
 
   # Check if we're inside a git repo.
@@ -22,110 +14,56 @@ function prompt_git() {
   && return;
 
   # Check that we're not inside the .git/ directory first before running status checks.
-  if [[ "$(command git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]]; then
+  if [[ "$(command git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]]; then
+
     # Ensure the index is up to date.
     command git update-index --really-refresh -q &> /dev/null;
+
     # Check for uncommitted changes in the index.
     if ! command git diff --quiet --ignore-submodules --cached; then
-      stat+='+';
-    fi;
+      stat+="+";
+    fi
     # Check for unstaged changes.
     if ! command git diff-files --quiet --ignore-submodules --; then
-      stat+='!';
+      stat+="!";
     fi;
     # Check for untracked files.
-    # [!] Doesn't work inside `.git/` directory.
     if [ -n "$(command git ls-files --others --exclude-standard)" ]; then
-      stat+='?';
+      stat+="?";
     fi;
     # Check for stashed files.
     if command git rev-parse --verify refs/stash &>/dev/null; then
-      stat+='⁕';
+      stat+="⁕";
     fi;
   fi
 
-  # Get the short symbolic ref.
-  # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
-  # Otherwise, just give up.
   branch_name="$(command git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-      command git rev-parse --short HEAD 2> /dev/null || \
-      echo 'unknown')";
+    command git rev-parse --short HEAD 2> /dev/null || \
+    echo "unknown")"
 
-  [[ -n "${stat}" ]] && stat="${stat}";
-  echo -e "${1}${branch_name}${2} ${3}${stat}${4}";
+  # @note: to change delimeter symbol change PS1 value in 'bash/profile.d/exports'.
+  declare -a git_prompt=(
+    "${yellow}${1}"        # opening branch delimeter
+    "${red}${branch_name}" # current branch / SHA or 'unknown'
+    "${yellow}${2}"        # closing branch delimeter
+    " "
+    "${stat}"              # status symbol (+!?*)
+    "${reset}"
+  )
+
+  printf %s "${git_prompt[@]}"
 }
 
-function _exit_status() {
+function __prompt_exit_status() {
   # https://www.tldp.org/LDP/abs/html/exitcodes.html
   local last_command="$?"
-  if [ "$last_command" -ne 0 ]; then
-    echo -e "${shade}[$last_command]"
+  if [[ "$last_command" -ne 0 ]]; then
+    echo " ${shade}[$last_command]"
   fi
 }
 
-
-# PROMPT_COMMAND=print_pre_prompt
-function set_prompts() {
-  local bold reset italic
-  local cyan pink yellow green
-
-  if tput setaf 1 &> /dev/null; then
-    tput sgr0; # reset
-
-    # attributes
-    bold=$(tput bold);
-    reset=$(tput sgr0);
-
-    cyan=$(tput setaf 37)
-    dimgrey=$(tput setaf 248)
-    pink=$(tput setaf 216)
-    yellow=$(tput setaf 178);
-    green=$(tput setaf 30);
-    red=$(tput setaf 203);
-    white=$(tput setaf 246);
-    shade=$(tput setaf 241)
-  fi
-
-  # ------------------------------------------------------------------
-  # PS1 - the default propmt
-  # ------------------------------------------------------------------
-
-  # [Todo] right-alight-part-of-prompt
-  # Test Cases:
-  # [ ] set -o vi
-  # [ ] set show-mode-in-prompt
-  # [ ] set vi-mode-string
-  # [ ] ASCII CSI codes (same as above)
-  # [ ] adapt to sudden sceen-size change
-  # [ ] if possible don't use prompt_command
-
-  PS1="\\n"
-  PS1+="\$(_exit_status)"
-  PS1+="\\[${bold}\\]"
-  PS1+="\\[${cyan}\\]"
-  PS1+=" \\W"             # current working directory
-  PS1+="\$(prompt_git \"\\[${yellow}\\](\\[${red}\\]\" \"\\[${yellow}\\])\")"
-  PS1+="\\[${reset}\\]"   # reset color set by `trap`
-  PS1+="\\[${pink}\\]"    # command color
-  PS1+=" \\n \\$ "
-
-  # ------------------------------------------------------------------
-  # PS2 - Continuation prompt
-  # ------------------------------------------------------------------
-  PS2="\\[${pink}\\] \\$  "
-
+function __colorize_stdout() {
   trap 'echo -ne "${dimgrey}"' DEBUG
 }
 
-function main() {
-  enable_color_support
-  set_prompts
-
-  # Cleanup.
-  unset -f enable_color_support
-  unset -f set_prompts
-}
-
 main && unset -f main
-
-# vim:fdm=indent cc=80:
