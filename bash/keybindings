@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+if [[ "$(ps --no-headers -o comm "${PPID}")" ==  'tmux: server' ]]; then
+  echo 'server'
+fi
 
 # FZF Key bindings
 # -----------------
@@ -15,14 +18,19 @@ function __error() {
  fi
 }
 
-function _vifm() {
- vifm
- if [ "$?" -eq 127 ]; then
-   echo -e "[keybindings]: command not found -> $1 "
- else
-   echo "[keybindings]: error $?"
- fi
+# if the last word on readline exists in env,
+# convert to uppercase then prepend '$'.
+function __uppercase_envar() {
+if [[ -n "$READLINE_LINE" ]]; then
+  tmux copy-mode
+  # echo "$READLINE_LINE"
+    # READLINE_LINE="Testigo Daw!"
+    # READLINE_POINT=23
+fi
 }
 
-bind -x '"\C-n": "_vifm"' # launch a file browser.
+bind -x '"\C-n": "idm"' # Interactive directory bookmark (bash/functions).
+bind    '"kj": vi-movement-mode' # lol
+
+# bind -m vi-command -x '"v": "tmux visual"'
 

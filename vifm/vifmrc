@@ -46,7 +46,7 @@ source ~/Projects/dotfiles/vifm/keybindings.vifm
 windo normal zo
 
 " Redraw when directory is changed to avoid artifacts.
-autocmd DirEnter * :redraw
+autocmd DirEnter :redraw
 
 highlight /^.*\.vim$/ cterm=none ctermbg=none ctermfg=cyan
 

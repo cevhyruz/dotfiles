@@ -29,6 +29,28 @@ function note() {
     fi
   fi
 }
+# ------------------------------------------------------------------
+# interactive directory bookmark (vifm)
+# ------------------------------------------------------------------
+# keys:   <space> - toggle between MRU and bookmarks
+# config: $XDG_CONFIG_HOME/idm
+function idm() {
+  local config
+  local bookmark mru_dir
+
+  config="${XDG_CONFIG_HOME}/idm"
+  bookmark="${XDG_CONFIG_HOME}/bm"
+  mru_dir="${XDG_CONFIG_HOME}/mru"
+
+  if test -d "${confdig}"; then
+    vifm --choose-dir "${config}"
+    #statements
+    echo "test"
+  else
+    echo 'false' >&2
+    # mkdir -p "${config}"
+  fi
+}
 
 # ------------------------------------------------------------------
 #  [?] quick-start a Go project.
@@ -52,18 +74,16 @@ function golang() {
 # ------------------------------------------------------------------
 function trash() {
   local OPTIND # Must be local
-  while getopts ":[a]:b:c" opt; do
+  while getopts ":[a]:[h]" opt; do
     case $opt in
-    a) echo "using option a";;
-    b) echo "using option b";;
-    c) echo "using option b";;
-    *) echo "error";;
+      a) echo "using option a";;
+      h) echo "print this help file and exit";;
+      *) echo "error"; break;;
     esac
   done
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # [?] lazy load nvm ( Modified version of @fl0w's gist )
 # https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
 function lazynvm() {
@@ -120,33 +140,6 @@ function lsfile() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# [?] interactive git commit browser (require fzf installed).
-# keys: <Enter>=git show, <ctrl-d>=git diff
-function gshow() {
-  local output shas sha query key format
-  gformat="--format=%C(auto)%h%d %s %C(black)%C(green)%cr"
-
-  while output=$(git log --graph --color=always "${gformat}" "$@" |
-  fzf --query="$query" --print-query --expect=ctrl-d --toggle-sort=\`); do
-
-    query=$(head -1 <<< "$output")
-    key=$(head -2 <<< "$output" | tail -1)
-    shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$output" | awk '{print $1}')
-
-    [[ -z "$shas" ]] && continue
-
-    if [[ "$key" = ctrl-d ]]; then
-      git diff --color=always "$shas" | less -R
-    else
-      for sha in $shas; do
-        git show --color=always "$sha" | less -R
-      done
-    fi
-  done
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # [?] `cd` to last `vifm` location after quitting.
 vicd() {
   local dest="$(command vifm --choose-dir - "$@")"
@@ -157,8 +150,4 @@ vicd() {
   fi
 
   cd "$dest"
-}
-
-function try() {
-  echo testl
 }

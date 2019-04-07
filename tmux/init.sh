@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+# set tmux custom behaviour
+
 # shellcheck disable=SC1090
 source "$HOME/Projects/dotfiles/tmux/lib.sh"
 
@@ -10,11 +13,9 @@ function main() {
     command tmux setenv -g "PATH" "$PATH:$HOME/Projects/dotfiles/tmux/bin"
   fi
 
+  #
   window-option "@window_current_path" "#{pane_current_path}"
   session-name "#{b:pane_current_path}"
-
-  setenv
-
 }
 
 function setenv() {
@@ -34,15 +35,17 @@ function git-stream-status() {
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# [?] for debugging library file
-# call this function to debug the library script inside tmux terminal.
-
-function testing() {
-  # source library file.
-  command tmux set -ag default-command " --rcfile $HOME/Projects/dotfiles/tmux/lib.sh"
-}
-# testing
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 main
+
+
+
+# and/or
+function set-session-alias() {
+  local name index cmd
+  eval "tmux set -s command-alias[${index}] ${name} ${cmd}"
+}
+
+
+# tmux set -s command-alias[92] testigo="display" "$(testigo)"
+# eval "tmux set -s command-alias[55] testigo=display -p "$(_get_tty)""

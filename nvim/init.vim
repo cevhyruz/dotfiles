@@ -1,13 +1,15 @@
-syntax enable
+call plug#begin()
+call plug#end()
 
 set background=dark
 colorscheme tpope
-filetype plugin indent on
-
+" syntax on
+" filetype plugin indent on
 set history=10000
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 set updatetime=100
-set wildmode=list:longest,full
+set undofile
+set foldcolumn=1
 set scrolloff=10
 set nomodeline
 set textwidth=120
@@ -17,6 +19,7 @@ set spell spelllang=en_us
 set foldtext=dotvim#myFoldText()
 set showbreak=↳
 set listchars=trail:~,tab:\▸\ ,extends:❯,precedes:❮,nbsp:␣
+set guicursor=cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor
 set list
 set splitbelow
 set splitright
@@ -36,8 +39,8 @@ set backupdir=/tmp//,.
 set directory=/tmp//,.
 set undodir=/tmp//,.
 
-source /home/devs/Projects/dotfiles/nvim/lib/message.vim
-source /home/devs/Projects/dotfiles/nvim/lib/tmux.vim
+" generate helptags
+" call execute('helptags ALL', 'silent')
 
 " ------------------------------------------------------------------
 "  [?] Mapping
@@ -61,8 +64,8 @@ xnoremap kj <esc>
 cnoremap kj <c-c>
 vnoremap kj <esc>
 " Scrolling/skimming (increments by 3).
-nnoremap <C-e> 2<C-e>
-nnoremap <C-y> 2<c-y>
+nnoremap <c-e> 2<c-e>
+nnoremap <c-y> 2<c-y>
 " commandline navigation.
 cnoremap <c-h> <left>
 cnoremap <c-l> <right>
@@ -80,13 +83,16 @@ noremap <ScrollWheelDown> 1<c-e>
 noremap <ScrollWheelUp> 1<c-y>
 " visual line.
 nnoremap vv V
-
+" paste register" to cmdline.
+cnoremap <F9> <C-R>"
+" indent whole line
+nnoremap <silent> <tab> ml>>`l :delmarks l<cr>
 " Save session
 nnoremap <c-s> :mksession! /tmp/mysession.vim<cr>
 
 
 " [?] Plugin mapping
-nmap <leader>t <Plug>TmuxRunCommand
+" nmap <leader>5 <Plug>(TriggerPrompt)
 
 " [?] Navigation
 " simplified version of christoomey's vim-tmux-navigator

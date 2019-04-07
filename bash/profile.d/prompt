@@ -3,7 +3,7 @@
 # shellcheck disable=SC2154
 
 function main() {
-  __colorize_stdout
+ trap __colorize_stdout DEBUG
 }
 
 function __prompt_git() {
@@ -63,7 +63,7 @@ function __prompt_exit_status() {
 }
 
 function __colorize_stdout() {
-  trap 'echo -ne "${dimgrey}"' DEBUG
+  echo -ne "${dimgrey}"
 }
 
 main && unset -f main
