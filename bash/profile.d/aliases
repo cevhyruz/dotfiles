@@ -3,7 +3,6 @@
 # ------------------------------------------------------------------
 #  Miscellaneous
 # ------------------------------------------------------------------
-
 alias     path=' printf "%b\n" "${PATH//:/\\n}"'      # Print PATH env neatly.
 alias bashopts=' printf "%b\n" "${BASHOPTS//:/\\n}"'  # Show bashopts env neatly.
 alias   parent=' ps --no-headers -o comm "${PPID}"'   # which process spawns the shell?
@@ -17,7 +16,8 @@ alias        e=" exit"                                # Exit terminal.
 # ------------------------------------------------------------------
 # Services
 # ------------------------------------------------------------------
-
+# TODO: port this as centralized control panel (function/executable)
+# interactive control panel.
 # Mysql.
 alias   msstart=" service mysql start"
 alias    msstop=" service mysql stop"
@@ -123,7 +123,6 @@ alias grf="git reset HEAD --"
 #------------------------------------------
 #             System commands             |
 #------------------------------------------
-
 alias sudo='sudo '                   # Allow aliases to be `sudo`ed.
 #alias vim='$EDITOR '                # Expand from default editor.
 alias rm='rm '                       # Allow aliases to be `rm`ed ([!] Dangerous)
@@ -140,7 +139,6 @@ alias man1="ls /usr/share/man/man1"  # list man page section 1 -- user commands.
 #------------------------------------------
 #     Files and directories shortcuts     |
 #------------------------------------------
-
 # Frequently used directories.
 alias home="~"
 alias p="~/Projects"

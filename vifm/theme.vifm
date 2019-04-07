@@ -6,7 +6,7 @@ highlight TopLineSel cterm=bold         ctermfg=250     ctermbg=236
 highlight StatusLine cterm=none         ctermfg=250     ctermbg=235
 highlight Border     cterm=none         ctermfg=none    ctermbg=235
 highlight Selected   cterm=bold         ctermfg=cyan    ctermbg=red
-highlight CurrLine   cterm=none         ctermfg=none    ctermbg=235
+highlight CurrLine   cterm=none         ctermfg=none    ctermbg=236
 highlight WildMenu   cterm=none,reverse ctermfg=blue    ctermbg=235
 highlight CmdLine    cterm=none         ctermfg=248     ctermbg=234
 highlight ErrorMsg   cterm=none         ctermfg=red     ctermbg=black

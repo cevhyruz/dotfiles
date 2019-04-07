@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+function main() {
+
+  declare -a fzf_opts=(
+    "--query=$(get_query)"
+    "--height=100%"
+    "--print-query"
+    "--expect=ctrl-d"
+    "--toggle-sort=\`" )
+
+  while browser=$(git status --short | fzf ${fzf_opts[*]}); do
+    if [[ "$(get_key)" == "ctrl-d" ]]; then
+      # TODO: add option to save to external file (diff.txt)
+      echo 'ctrl-d' "$(get_query)"
+    else
+      echo 'else'
+    fi
+  done
+}
+
+function get_query() {
+    head -1 <<< "${browser}" | awk '{print $2}'
+}
+
+function get_key() {
+  head -2 <<< "${browser}" | tail -1
+}
+main

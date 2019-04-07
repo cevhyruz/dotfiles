@@ -2,36 +2,6 @@
 #
 #
 #
-#
-# Provide lower level API for init.sh
-
-# ------------------------------------------------------------------
-# Command alias
-# ------------------------------------------------------------------
-
-# check current pane running process
- function _is_running() {
-   local proc="${1}"
-   eval "ps -o command --tty $(_get_tty) | grep --silent ${proc}"
- }
-
-function _get_tty() {
-  printf %s "$(tmux display-message -p '#{pane_tty}')"
-}
-
-# [?] print result to stdout.
-# usage: display [env-var, option]
-function display() {
-  local var value
-
-    var="$1"
-  value="$( command tmux display-message -p "$var" )"
-
-  echo "$value"
-}
-
-# ------------------------------------------------------------------
-
 
 # [?] set key binding depending on user option value.
 # usage: set_keys "-r C-y" "[cmd]"
@@ -95,8 +65,16 @@ function setw_name() {
   command tmux rename-window -t "$window" "$new_name"
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# [?] print result to stdout.
+# usage: display [env-var, option]
+function display() {
+  local var value
+
+    var="$1"
+  value="$( command tmux display-message -p "$var" )"
+
+  printf "$value"
+}
 
 function _is_fullscreen() {
   command xprop -name "namehere" _NET_WM_STATE | grep -q _NET_WM_STATE_FULLSCREEN

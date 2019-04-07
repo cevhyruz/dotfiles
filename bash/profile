@@ -11,7 +11,7 @@ function _source_bash_files() {
   done
   unset file
 
-
+ . "/home/devs/Projects/dotfiles/bash/bash_completion.d/tmux"
   # Custom keybindings.
   . "/home/devs/Projects/dotfiles/bash/keybindings"
 

@@ -1,0 +1,95 @@
+# ------------------------------------------------------------------
+# General configuration
+# ------------------------------------------------------------------
+set editing-mode vi
+set bell-style none
+
+###### Completion ######
+TAB: menu-complete
+set mark-symlinked-directories on
+set completion-ignore-case on
+set completion-map-case on
+set match-hidden-files off
+set skip-completed-text on
+set menu-complete-display-prefix on
+
+###### 8-bit Characters ######
+set convert-meta on
+set input-meta on
+set output-meta on
+set enable-meta-key on
+
+###### History ######
+# set mark-modified-lines on
+
+###### Prompt ######
+# color code should be the same for bash PS1 prompt, this is to cover for any
+set show-mode-in-prompt on
+# discoloration that may caused by prompt's `trap` firing up for commands that
+# were not actually returned using 'accept-line', like keybindings.
+set vi-ins-mode-string "\1\e[38;5;29m\2\1\e[38;5;216m\2\1\e[5 q\2"
+set vi-cmd-mode-string "\1\e[38;5;240m\2\1\e[38;5;216m\2\1\e[2 q\2"
+#                         └─────┬────┘    └─────┬────┘    └─┬──┘
+#                               │               │           └──> cursor.
+#                               └───────────────┴──────────────> color codes.
+
+###### Key sequence ######
+set keyseq-timeout 3000
+set keymap vi-insert
+  # exit insert mode.
+  "kj": vi-movement-mode
+
+set keymap vi-command
+  # disabled keys
+  "k": nop
+  # close terminal
+  ";q": "dd\C-d"
+  # history navigation/completion.
+  "J": history-search-forward
+  "K": history-search-backward
+  "j": accept-line
+  "u": undo
+
+  ### missing common vi motion (backward-wise) ###
+
+  # delete in word
+  "diw": "bdw"
+  "2diw": "2b2dw"
+  "3diw": "3b3dw"
+  "4diw": "4b4dw"
+  "5diw": "5b5dw"
+  "6diw": "6b6dw"
+  "7diw": "7b7dw"
+  "8diw": "8b8dw"
+  "9diw": "9b9dw"
+  # delete all word
+  "daw": "bdwx"
+  "2daw": "2b2dwx"
+  "3daw": "3b3dwx"
+  "4daw": "4b4dwx"
+  "5daw": "5b5dwx"
+  "6daw": "6b6dwx"
+  "7daw": "7b7dwx"
+  "8daw": "8b8dwx"
+  "9daw": "9b9dwx"
+  # yank in word
+  "yiw": "mtbyw`t"
+  "2yiw": "mt2b2yw`t"
+  "3yiw": "mt3b3yw`t"
+  "4yiw": "mt4b4yw`t"
+  "5yiw": "mt5b5yw`t"
+  "6yiw": "mt6b6yw`t"
+  "7yiw": "mt7b7yw`t"
+  "8yiw": "mt8b8yw`t"
+  "9yiw": "mt9b9yw`t"
+   # yank all word
+  "yaw": ""
+  # change
+  "ciw": "diwa"
+  "caw": "dawa"
+###### Surroundings ######
+$include /home/devs/Projects/dotfiles/bash/readline/yank
+$include /home/devs/Projects/dotfiles/bash/readline/surround
+$include /home/devs/Projects/dotfiles/bash/readline/change-surround
+$include /home/devs/Projects/dotfiles/bash/readline/delete-surround
+# yank me please

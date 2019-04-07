@@ -27,6 +27,7 @@ ftpane() {
     tmux select-window -t "${target_window}" &&
     tmux select-pane -t:".${target_pane}"
     # tmux display "test"
+  tmux setw 
 }
 ftpane
 

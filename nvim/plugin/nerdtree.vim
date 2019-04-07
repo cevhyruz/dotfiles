@@ -9,6 +9,7 @@ let    NERDTreeDirArrowExpandable = "\uf105"
 let   NERDTreeDirArrowCollapsible = "\uf107"
 let                NERDTreeWinPos = "left"
 let                NERDTreeIgnore = [ '\.git$', '\~$' ]
+let NERDTreeWinSize = 35
 
 function! PrettyNerdTree(config)
   let colors = keys(a:config)

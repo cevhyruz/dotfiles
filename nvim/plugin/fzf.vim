@@ -7,6 +7,20 @@ let g:fzf_action = { 'ctrl-l': 'botright vsplit', 'ctrl-h': 'topleft vsplit',
 
 let $FZF_DEFAULT_COMMAND = 'ag --skip-vcs-ignores --hidden --ignore .git/ -g ""'
 let $FZF_DEFAULT_OPTS  = '--reverse --no-bold --header= --bind='.g:_bindings.' --ansi --inline-info --margin=0'
+let g:fzf_colors = {
+\ 'fg':      ['fg', 'Normal'],
+\ 'bg':      ['bg', 'ErrorMsg'],
+\ 'hl':      ['fg', 'ErrorMsg'],
+\ 'fg+':     ['fg', 'Identifier', 'CursorColumn', 'Normal'],
+\ 'bg+':     ['bg', 'ErrorMsg', 'ErrorMsg'],
+\ 'hl+':     ['fg', 'WarningMsg'],
+\ 'info':    ['fg', 'PreProc'],
+\ 'border':  ['fg', 'Ignore'],
+\ 'prompt':  ['fg', 'Conditional'],
+\ 'pointer': ['fg', 'Exception'],
+\ 'marker':  ['fg', 'Keyword'],
+\ 'spinner': ['fg', 'Label'],
+\ 'header':  ['fg', 'Comment'] }
 
 augroup fzf_hide_statusline
   au!
@@ -14,7 +28,7 @@ augroup fzf_hide_statusline
     \| au BufLeave <buffer> set laststatus=2 showmode
 augroup END
 
-command! Script  call fzf#scriptnames()
+command! Script  call autoload_fzf#scriptnames()
 command! Files   call fzf#files()
 command! Old     call fzf#mru()
 command! Gadd    call fzf#git_add_reset()

@@ -1,28 +1,34 @@
 "------------------------------------------------------------------------------
-" File:          colors/mytheme.vim
-" Description:   dark theme for vim.
-" Author:        John Fred Fadrigalan <github.com/cevhyruz>
-" License:       DWTFYWTPL
+" File:        colors/mytheme.vim
+" Description: a super bias dark theme for my vim.
+" Author:      John Fred Fadrigalan <github.com/cevhyruz>
+" License:     DWTFYWTPL
 "------------------------------------------------------------------------------
 
-" Section: Initialisation{{{
+" Section: Initialisation
+" - - - - - - - - - - - -
 set background=dark
-" To achieved synchronized `dim-inactive-window` effect on both tmux panes
-" and vim splits, `Normal` highlighting should be cleared if tmux is active,
-" and let tmux window-active-style/window-style option to pass through.
-call execute((empty($TMUX)        ? ':hi clear'     : ':hi clear Normal'))
-call execute((exists("syntax_on") ? ':syntax reset' :                 ''))
-let g:colors_name = "mytheme" "}}}
+highlight clear
+if exists("syntax_on")
+  syntax reset
+endif
+call execute((!empty($TMUX) ? ":hi clear Normal" : ":hi Normal ctermbg=235"))
+let g:colors_name = "mytheme"
 
-" hi Normal ctermbg=235
-hi colorcolumn cterm=none ctermbg=233
+" Section: Built-in highlight group
+" - - - - - - - - - - - - - - - - -
+hi ColorColumn  cterm=none             ctermbg=234
+hi Conceal      cterm=none ctermfg=240 ctermbg=none
+" hi Cursor
+" hi CursorIM
+hi CursorColumn cterm=none ctermbg=235
+
 hi Comment cterm=none ctermfg=242 ctermbg=none
 hi cursorline cterm=none ctermfg=none ctermbg=235
-hi cursorcolumn cterm=none ctermbg=235
 hi foldcolumn cterm=none ctermbg=none ctermfg=242
 hi folded cterm=none ctermbg=none ctermfg=242
-hi LineNR cterm=none ctermbg=234 ctermfg=242
-hi cursorlineNR ctermbg=none ctermfg=red
+hi LineNR cterm=none ctermbg=235 ctermfg=243
+hi cursorlineNR cterm=bold ctermbg=237 ctermfg=11
 hi vertsplit cterm=none ctermbg=234 ctermfg=236
 
 hi ErrorMsg cterm=none ctermbg=none ctermfg=203
