@@ -54,14 +54,20 @@ function __prompt_git() {
   printf %s "${git_prompt[@]}"
 }
 
+# return exit code of last command.
+# https://www.tldp.org/LDP/abs/html/exitcodes.html
 function __prompt_exit_status() {
-  # https://www.tldp.org/LDP/abs/html/exitcodes.html
   local last_command="$?"
   if [[ "$last_command" -ne 0 ]]; then
+    if [[ "$last_command" -eq 139 ]]; then
+      # bring back cursor on segmentation fault.
+      command tput cvvis
+    fi
     echo " ${shade}[$last_command]"
   fi
 }
 
+# change color of commandline stdout.
 function __colorize_stdout() {
   echo -ne "${dimgrey}"
 }
