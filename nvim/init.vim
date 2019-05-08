@@ -51,8 +51,6 @@ nnoremap k gk
 " Toggles
 nnoremap <expr> <space> (&hls == 0 ? ":set hls" : ":set nohls")."<cr>"
 nnoremap <expr> <leader>s<space> (&spell == 0 ? ":set spell" : ":set nospell")."<cr>"
-" Saving
-nnoremap <silent> ;w :w<cr>
 " Breakline.
 nnoremap mm i<c-m><esc>
 " Move line upward / downward
