@@ -13,7 +13,6 @@ set foldcolumn=1
 set scrolloff=10
 set nomodeline
 set textwidth=120
-set colorcolumn=80
 set number relativenumber
 set spell spelllang=en_us
 set foldtext=dotvim#myFoldText()
@@ -46,6 +45,9 @@ set undodir=/tmp//,.
 "  [?] Mapping
 " ------------------------------------------------------------------
 let mapleader = ","
+" wrapped-lines traversal
+nnoremap j gj
+nnoremap k gk
 " Toggles
 nnoremap <expr> <space> (&hls == 0 ? ":set hls" : ":set nohls")."<cr>"
 nnoremap <expr> <leader>s<space> (&spell == 0 ? ":set spell" : ":set nospell")."<cr>"
