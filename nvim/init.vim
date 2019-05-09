@@ -58,6 +58,10 @@ nnoremap J mz:m+<cr>`z
 vnoremap J :m'>+<cr>`<my`>mzgv`yo`z
 nnoremap K mz:m-2<cr>`z
 vnoremap K :m'<-2<cr>`>my`<mzgv`yo`z
+" preserve state upon running :only
+nnoremap <c-w>o :mksession! /tmp/stateB4only.vim <bar> wincmd o<cr>
+" revert to previous state after running '<c-w>o'
+nnoremap <c-w>u :source /tmp/stateB4only.vim<cr>
 " kj | Escaping!
 inoremap kj <esc>
 xnoremap kj <esc>
