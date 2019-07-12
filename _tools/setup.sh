@@ -8,7 +8,7 @@ declare -r DOTFILES_TARBALL_URL="https://github.com/$GITHUB_REPOSITORY/tarball/m
 declare dotfiles_directory="$HOME/Projects/dotfiles"
 
 
-# Internal Function -- - - - - - - - - -  - - - - -   - -- - - - - - - 
+# Internal Function -- - - - - - - - - -  - - - - -   - -- - - - - - -
 
  _print_in_color() { #{{{
 
@@ -24,12 +24,12 @@ print_in_green() { #{{{
 
 function installing() { #{{{
 
-local spinner="/-\\|"
+local spinner=""
 
 while :; do
   for (( i = 0; i<${#spinner}; i++ )); do
-    sleep 0.1
-    echo -en "   (${spinner:$i:1}) Installing precompiled binaries" "\\r"
+    sleep 0.7
+    echo -en "   ${spinner:$i:1} Installing precompiled binaries" "\\r"
     #     │└─ do not output trailing newlines
     #     └─ enable interpretation of backslash escapes
   done

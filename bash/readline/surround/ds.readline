@@ -1,0 +1,12 @@
+# vim: ft=readline
+"ds$": "F$xxf}x"
+"dsh": "F$xxf)x"
+"ds\'": "F\'xf\'x"
+"ds\"": "F\"xf\"x"
+"ds(": "F(xxt)xx"
+"ds)": "F(xf)x"
+"ds[": "F[xxt]xx"
+"ds]": "F[xf]x"
+"ds{": "F{xxt}xx"
+"ds}": "F{xf}x"
+"ds`": "F`xf`x"

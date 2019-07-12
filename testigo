@@ -1,0 +1,11 @@
+
+
+
+display-menu -T "testigo daw manu wa yo?" -x W -y S \
+    "Swap Left"                         l "swap-window -t:-1" \
+    "Swap Right"                        r "swap-window-t:+1" \
+    "#{?pane_marked_set,,-}Swap Marked" s "swap-window" \
+    "Kill"                              X "kill-window" \
+    "Respawn"                           R "respawn-window -k" \
+    "#{?pane_marked,Unmark,Mark}"       m "select-pane -m" \
+    "Rename"                            n "command-prompt -I \"#W\" \"rename-window"

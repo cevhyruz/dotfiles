@@ -15,6 +15,8 @@ endif
 call execute((!empty($TMUX) ? ":hi clear Normal" : ":hi Normal ctermbg=235"))
 let g:colors_name = "mytheme"
 
+"tmp: re-arrange:
+hi Nontext cterm=none ctermbg=none ctermfg=none
 " Section: Built-in highlight group
 " - - - - - - - - - - - - - - - - -
 hi ColorColumn  cterm=none             ctermbg=234
@@ -24,28 +26,28 @@ hi Conceal      cterm=none ctermfg=240 ctermbg=none
 hi CursorColumn cterm=none ctermbg=235
 
 hi Comment cterm=none ctermfg=242 ctermbg=none
-hi cursorline cterm=none ctermfg=none ctermbg=235
+hi cursorline cterm=none ctermfg=none ctermbg=236
 hi foldcolumn cterm=none ctermbg=none ctermfg=242
 hi folded cterm=none ctermbg=none ctermfg=242
 hi LineNR cterm=none ctermbg=235 ctermfg=243
 hi cursorlineNR cterm=bold ctermbg=237 ctermfg=11
-hi vertsplit cterm=none ctermbg=234 ctermfg=236
+hi vertsplit cterm=none ctermbg=none ctermfg=240
 
 hi ErrorMsg cterm=none ctermbg=none ctermfg=203
 
 hi modemsg cterm=none ctermfg=203
 
-hi Visual cterm=none ctermbg=239 ctermfg=none
 
 " nerdtree
 hi NERDTreeDir cterm=none ctermbg=none ctermfg=30
+hi Visual cterm=none ctermbg=239 ctermfg=none
 hi NERDTreeCWD cterm=none ctermbg=none ctermfg=30
 
 hi vimCommentTitle cterm=bold ctermbg=none ctermfg=14
 
 hi Wildmenu cterm=none ctermbg=235 ctermfg=yellow
 
-hi signcolumn cterm=none ctermbg=234
+hi signcolumn cterm=none ctermbg=235
 " ------------------------------------------------------------------
 " spelling
 " ------------------------------------------------------------------

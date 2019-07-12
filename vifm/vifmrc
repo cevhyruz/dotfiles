@@ -1,16 +1,25 @@
+only                  " enable single-view mode.
+colorscheme theme
+
+set vicmd=$EDITOR     " default editor for opening files.
+set nofastrun         " enable running of ambiguous commands.
+set undolevels=500    " max number of changes that can be undone (default: 100).
+set history=500       " entries in directory history (default: 100).
+set followlinks       " always follow links.
+set dotdirs=never     " never show 'up dir / ..'. for not empty directories.
+set scrolloff=15
+
 " If you installed the vim.txt help file set vimhelp.
 " If you would rather use a plain text help file set novimhelp.
-" set novimhelp
-
-only                    " Enable single-view mode.
-colorscheme theme       " Define colors display.
-set vicmd=$EDITOR       " Default editor for opening files.
-set nofastrun           " Enable running of ambiguous commands.
-set undolevels=100      " Max number of changes that can be undone.
-set history=100         " Entries in directory history.
-set followlinks         " Always follow links.
-set dotdirs=never       " Never show 'up dir / ..'. for not empty directories.
 set vimhelp
+
+" left-side statusline
+" creat a function: to display symbolic link target
+set statusline=' next:%D'
+set statusline+='%='
+set statusline+='  %g:%u:%A  '         " group, user, file permission.
+set statusline+='  last-modified:%d   '
+set statusline+='  free:%a  '          " space remaining on disk.
 
 " ------------------------------------------------------------------
 " File Icons
@@ -46,7 +55,7 @@ source ~/Projects/dotfiles/vifm/keybindings.vifm
 windo normal zo
 
 " Redraw when directory is changed to avoid artifacts.
-autocmd DirEnter :redraw
+autocmd DirEnter * :redraw
 
 highlight /^.*\.vim$/ cterm=none ctermbg=none ctermfg=cyan
 

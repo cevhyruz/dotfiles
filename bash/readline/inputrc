@@ -1,95 +1,50 @@
-# ------------------------------------------------------------------
-# General configuration
-# ------------------------------------------------------------------
-set editing-mode vi
+# ----------------------------------------------------------------------
+# inputrc for libreadline see readline(3readline)
+# and `info rluserman' for more information.
+# ----------------------------------------------------------------------
+
+# allow UTF-8 input and output instead of showing
+# an ugly stuff like $'\0123\0456'.
+set input-meta   on
+set output-meta  on
+set convert-meta off
+
+set colored-stats on
+set colored-completion-prefix on
+set completion-display-width 1
+set completion-prefix-display-length 3
+
+# do not bell on tab-completion (default: audible)
 set bell-style none
 
-###### Completion ######
-TAB: menu-complete
-set mark-symlinked-directories on
-set completion-ignore-case on
-set completion-map-case on
-set match-hidden-files off
-set skip-completed-text on
-set menu-complete-display-prefix on
+# append slash for completed names which are symlink to directories.
+set  mark-symlinked-directories   on
 
-###### 8-bit Characters ######
-set convert-meta on
-set input-meta on
-set output-meta on
-set enable-meta-key on
+# case-insensitive filename matching and completion
+set  completion-ignore-case       on
 
-###### History ######
-# set mark-modified-lines on
+# match all files begin with dot (.)
+set  match-hidden-files           off
 
-###### Prompt ######
-# color code should be the same for bash PS1 prompt, this is to cover for any
-set show-mode-in-prompt on
-# discoloration that may caused by prompt's `trap` firing up for commands that
-# were not actually returned using 'accept-line', like keybindings.
-set vi-ins-mode-string "\1\e[38;5;29m\2\1\e[38;5;216m\2\1\e[5 q\2"
-set vi-cmd-mode-string "\1\e[38;5;240m\2\1\e[38;5;216m\2\1\e[2 q\2"
-#                         └─────┬────┘    └─────┬────┘    └─┬──┘
-#                               │               │           └──> cursor.
-#                               └───────────────┴──────────────> color codes.
+# when complete-ignore-case is On, treats `-` and `_`
+# as the same when matching and completion.
+set  completion-map-case          on
 
-###### Key sequence ######
+# be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set  skip-completed-text          on
+
+# displays common prefix of the list of possible
+# completions (before cycling through the list).
+set  menu-complete-display-prefix on
+
+# duration for ambiguous characters (default: 500)
 set keyseq-timeout 3000
-set keymap vi-insert
-  # exit insert mode.
-  "kj": vi-movement-mode
 
-set keymap vi-command
-  # disabled keys
-  "k": nop
-  # close terminal
-  ";q": "dd\C-d"
-  # history navigation/completion.
-  "J": history-search-forward
-  "K": history-search-backward
-  "j": accept-line
-  "u": undo
-
-  ### missing common vi motion (backward-wise) ###
-
-  # delete in word
-  "diw": "bdw"
-  "2diw": "2b2dw"
-  "3diw": "3b3dw"
-  "4diw": "4b4dw"
-  "5diw": "5b5dw"
-  "6diw": "6b6dw"
-  "7diw": "7b7dw"
-  "8diw": "8b8dw"
-  "9diw": "9b9dw"
-  # delete all word
-  "daw": "bdwx"
-  "2daw": "2b2dwx"
-  "3daw": "3b3dwx"
-  "4daw": "4b4dwx"
-  "5daw": "5b5dwx"
-  "6daw": "6b6dwx"
-  "7daw": "7b7dwx"
-  "8daw": "8b8dwx"
-  "9daw": "9b9dwx"
-  # yank in word
-  "yiw": "mtbyw`t"
-  "2yiw": "mt2b2yw`t"
-  "3yiw": "mt3b3yw`t"
-  "4yiw": "mt4b4yw`t"
-  "5yiw": "mt5b5yw`t"
-  "6yiw": "mt6b6yw`t"
-  "7yiw": "mt7b7yw`t"
-  "8yiw": "mt8b8yw`t"
-  "9yiw": "mt9b9yw`t"
-   # yank all word
-  "yaw": ""
-  # change
-  "ciw": "diwa"
-  "caw": "dawa"
-###### Surroundings ######
-$include /home/devs/Projects/dotfiles/bash/readline/yank
-$include /home/devs/Projects/dotfiles/bash/readline/surround
-$include /home/devs/Projects/dotfiles/bash/readline/change-surround
-$include /home/devs/Projects/dotfiles/bash/readline/delete-surround
-# yank me please
+# readline components
+$include ~/Projects/dotfiles/bash/readline/prompt
+$include ~/Projects/dotfiles/bash/readline/vi-insert.readline
+# $include ~/Projects/dotfiles/bash/readline/vi-command.readline
