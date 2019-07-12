@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
 # Interactive git commit browser.
-# @keys: <enter>  = git show
-#         <ctrl-d> = git diff
-#         <`>      = toggle sort
+# keys: <enter>  = git show
+#       <ctrl-d> = git diff
+#       <`>      = toggle sort
 #
 # shellcheck disable=SC2086
 
@@ -20,8 +20,9 @@ function main() {
 
   while browser=$(git log "${gformat}" | fzf ${fzf_opts[*]}); do
     if [[ "$(get_key)" == "ctrl-d" ]]; then
-      # TODO: add option to save to external file (diff.txt)
-      gdiff
+      # TODO: add option to save to file (diff.txt) as patch.
+      # gdiff
+      echo "$(get_query)"
     else
       gshow
     fi

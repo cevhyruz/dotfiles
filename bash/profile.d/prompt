@@ -1,75 +1,55 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC2154
-
 function main() {
- trap __colorize_stdout DEBUG
+  # shellcheck disable=SC2154
+  trap 'echo -ne "${dimgrey}"' DEBUG
 }
 
-function __prompt_git() {
-  local stat branch_name
-
-  # Check if we're inside a git repo.
-  ! command git rev-parse &> /dev/null \
-  && return;
-
-  # Check that we're not inside the .git/ directory first before running status checks.
-  if [[ "$(command git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]]; then
-
-    # Ensure the index is up to date.
-    command git update-index --really-refresh -q &> /dev/null;
-
-    # Check for uncommitted changes in the index.
-    if ! command git diff --quiet --ignore-submodules --cached; then
-      stat+="+";
-    fi
-    # Check for unstaged changes.
-    if ! command git diff-files --quiet --ignore-submodules --; then
-      stat+="!";
-    fi;
-    # Check for untracked files.
-    if [ -n "$(command git ls-files --others --exclude-standard)" ]; then
-      stat+="?";
-    fi;
-    # Check for stashed files.
-    if command git rev-parse --verify refs/stash &>/dev/null; then
-      stat+="⁕";
-    fi;
-  fi
-
-  branch_name="$(command git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-    command git rev-parse --short HEAD 2> /dev/null || \
-    echo "unknown")"
-
-  # @note: to change delimeter symbol change PS1 value in 'bash/profile.d/exports'.
+function __repo() {
+  local status branch_name
+  ! git rev-parse &> /dev/null && return;
+  [ "$( git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ] && {
+    git update-index --really-refresh -q &> /dev/null;
+    ! git diff --quiet --ignore-submodules --cached \
+      && status+="+";
+    ! git diff-files --quiet --ignore-submodules -- \
+      && status+="!";
+    [ -n "$( git ls-files --others --exclude-standard)" ] \
+      && status+="?";
+    git rev-parse --verify refs/stash &> /dev/null \
+      && status+="⁕";
+  }
+  branch_name="$( git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+    git rev-parse --short HEAD 2> /dev/null || echo "unknown")"
   declare -a git_prompt=(
-    "${yellow}${1}"        # opening branch delimeter
-    "${red}${branch_name}" # current branch / SHA or 'unknown'
-    "${yellow}${2}"        # closing branch delimeter
-    " "
-    "${stat}"              # status symbol (+!?*)
+    "${dimgrey}"    "${1}"           # opening delimeter
+    "${bold}${red}" "${branch_name}" # current branch
+    "${dimgrey}"    "${2}"           # closing delimeter
+    "${green}"      "${status}"      # status symbol
     "${reset}"
   )
-
   printf %s "${git_prompt[@]}"
 }
 
-# return exit code of last command.
+function __jobs() {
+  printf "%d" "$(jobs | wc -l)"
+}
+
+function __exit_status() {
 # https://www.tldp.org/LDP/abs/html/exitcodes.html
-function __prompt_exit_status() {
-  local last_command="$?"
-  if [[ "$last_command" -ne 0 ]]; then
-    if [[ "$last_command" -eq 139 ]]; then
-      # bring back cursor on segmentation fault.
-      command tput cvvis
+  local last_="$?"
+  if [[ "$last_" -ne 0 ]]; then
+    if [[ "$last_" -eq 139 ]]; then
+      # bring back cursor on SEGFAULT error.
+       tput cvvis
     fi
-    echo " ${shade}[$last_command]"
+    echo "[$last_]"
   fi
 }
 
-# change color of commandline stdout.
-function __colorize_stdout() {
-  echo -ne "${dimgrey}"
+function __pwd {
+  # shellcheck disable=SC2015
+  [[ "${1}" == '~' ]] && printf "home" || basename "$PWD"
 }
 
 main && unset -f main

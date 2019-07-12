@@ -1,0 +1,39 @@
+
+BASH SHELL
+
+1.) Completion
+---------------------
+ - bash-completion
+
+ if asdf; hen
+   adf
+   sdf
+   asdf
+ endif
+
+2.) Utility
+---------------------
+- tickeys (mechanical keyboard sound)
+- acpi (battery)
+ - tmux  (multiplexer) (devs)
+ - nvim  (text editor) (editor)
+ - vifm  (vi file manager)
+ - xclip (interface to selection)
+ - up    (ultimate plumber)
+ - git   (version control) (devs)
+ - gitsh (git shell)
+ - Lamp Stack (server)
+   * Apache2
+   * MySQL
+   * PHP
+ - Optional (entertainment)
+   * mps-youtube
+   * wpm
+- linters (vim ale)
+   * vint
+   * shellcheck
+3.) Fuzzy finder
+---------------------
+ - fzf (fuzzy finder)
+ - ag  (silver searcher)
+ - rg  (ripgrep)

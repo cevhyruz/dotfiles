@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+function __complete_envar() {
+  if [[ -n "${READLINE_LINE}" ]]; then
+       READLINE_LINE="${READLINE_LINE} Testigo Daw!"
+       READLINE_POINT=$
+  fi
+}

@@ -6,6 +6,24 @@ cnoremap kj <Esc>:redraw<cr>
 nnoremap <c-n> :q<cr>
 " Additional key for quitting.
 nnoremap q :q<cr>
+" commandline history navigation.
+cnoremap K <up>
+cnoremap J <down>
+" split navigation.
+nnoremap <c-k> :wincmd k<cr>
+nnoremap <c-j> :wincmd j<cr>
+nnoremap <c-l> :wincmd l<cr>
+nnoremap <c-h> :wincmd h<cr>
+
+" view navigation.
+qnoremap <c-j> q
+qnoremap <c-k> q
+qnoremap <c-l> q
+qnoremap <c-h> q
+
+" faster scrolling
+nnoremap <c-e> <c-e><c-e>
+nnoremap <c-y> <c-y><c-y>
 
 " Accept command.
 cnoremap jj <cr>

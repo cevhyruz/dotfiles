@@ -96,7 +96,6 @@ function setw_name() {
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function _is_fullscreen() {
   command xprop -name "namehere" _NET_WM_STATE | grep -q _NET_WM_STATE_FULLSCREEN

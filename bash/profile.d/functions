@@ -1,153 +1,188 @@
 #!/usr/bin/env bash
 
-source ~/Projects/dotfiles/bash/bin/helpers.bash
 
-# ------------------------------------------------------------------
-#  [?] create notes
-# ------------------------------------------------------------------
-# usage:    note [file]
-# location: Documents/notes
-
-function note() {
-  local file location
-
-  file="$1"
-  location="$HOME/Documents/notes"
-
-  if [[ "$#" -ne 0 ]]; then
-    md "$location"
-    if [[ "$(has df)" ]]; then
-      command nvim --noplugin -c 'set ft=help' "$HOME/Documents/notes/$file"
-    fi
-    cd - &> /dev/null || return
-  else
-    if [[ -z "$(ls "$location")" ]]; then
-       echo "You don't have notes yet"
-    else
-      echo "--> notes from " "$location"
-      printf "%b\\n" "$(ls "${location}")"
-    fi
-  fi
-}
-# ------------------------------------------------------------------
-# interactive directory bookmark (vifm)
-# ------------------------------------------------------------------
-# keys:   <space> - toggle between MRU and bookmarks
-# config: $XDG_CONFIG_HOME/idm
-function idm() {
-  local config
-  local bookmark mru_dir
-
-  config="${XDG_CONFIG_HOME}/idm"
-  bookmark="${XDG_CONFIG_HOME}/bm"
-  mru_dir="${XDG_CONFIG_HOME}/mru"
-
-  if test -d "${confdig}"; then
-    vifm --choose-dir "${config}"
-    #statements
-    echo "test"
-  else
-    echo 'false' >&2
-    # mkdir -p "${config}"
-  fi
-}
-
-# ------------------------------------------------------------------
-#  [?] quick-start a Go project.
-# ------------------------------------------------------------------
-# usage: golang [path] [module name]
-function golang() {
-  local path module_name
-  local main app
-
-  main="package main"
-
-  read -rp "module name: (github.com/cevhyruz/testify)"
-
-  # create the directory
-  command mkdir -p "$path" && cd "$path" || return
-
-  command touch "main.go"
-}
-
-#  [?] Safer rm
-# ------------------------------------------------------------------
-function trash() {
-  local OPTIND # Must be local
-  while getopts ":[a]:[h]" opt; do
-    case $opt in
-      a) echo "using option a";;
-      h) echo "print this help file and exit";;
-      *) echo "error"; break;;
-    esac
-  done
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# [?] lazy load nvm ( Modified version of @fl0w's gist )
-# https://gist.github.com/fl0w/07ce79bd44788f647deab307c94d6922
-function lazynvm() {
+# lazy-load nvm and it's packages
+function lazyload_nvm() { # {{{1
   unset -f nvm node npm npx
   export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] \
+    && source "$NVM_DIR/nvm.sh";
+  [ -f "$NVM_DIR/bash_completion" ] && [ -s "$NVM_DIR/bash_completion" ] \
+    && source "$NVM_DIR/bash_completion";
+}
+nvm()  { lazyload_nvm && nvm  "$@"; }
+node() { lazyload_nvm && node "$@"; }
+npm()  { lazyload_nvm && npm  "$@"; }
+npx()  { lazyload_nvm && npx  "$@"; }
 
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-
-  if [ -f "$NVM_DIR/bash_completion" ]; then
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  fi
+# print a nice 256colors chart
+function colormap() { # {{{1
+  for (( i = 0; i < 256; i++ )); do
+    printf "\\e[48;5;${i}m%s" "$i"
+    printf '\e[0m'
+    [ ! $(( (i - 15) % 6)) -eq 0 ] && printf ' ' || printf '\n'
+  done
+  unset i
 }
 
-nvm()  { lazynvm && nvm "$@";  }
-node() { lazynvm && node "$@"; }
-npm()  { lazynvm && npm "$@";  }
-npx()  { lazynvm && npx "$@";  }
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# [?] create directory and `cd`.
-# usage: md [directory]
-function md() {
-  local dir="${1}"
-  mkdir -p "${dir}" && cd "${dir}" || return
-  command dirs
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# [?] interactive `ls` browser (require fzf installed).
-function lsfile() {
-  local output
-
-  while output=$(ls -l "$@" |
-  fzf --ansi --query="$query" --print-query --expect=ctrl-d --toggle-sort=\`); do
-
-    query=$(head -1 <<< "$output")
-    key=$(head -2 <<< "$output" | tail -1)
-    # shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$output" | awk '{print $1}')
-
-    # [[ -z "$shas" ]] && continue
-
-    if [[ "$key" = ctrl-d ]]; then
-      echo "ctrl - d"
-    else
-        echo "enter"
-    fi
+# list bash aliases
+function aliases() { # {{{1
+  local
+  aliases=$(alias | fzf --preview 'pygmentize -l bash {}')
+  for (( i = 0; i < $(echo "$aliases" | wc -l); i++ )); do
+    echo "$aliases"
   done
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function projects() {
+local
+}
+
+function manlist() {
+local
+}
+
+# get current terminal cursor position in a
+# form that can be reused as `tput` argument.
+function tcup() {
+  exec < /dev/tty;
+  oldstty=$(stty -g);
+  stty raw -echo min 0;
+  echo -en "\\033[6n" > /dev/tty;
+  IFS=';' read -r -d R -a pos;
+  stty "$oldstty";
+  echo "$(( ${pos[0]:2} - 1 )) $(( pos[1] - 1))";
+}
+
+# toggle multiple bash options for current session at once.
+# useful for fiddling with bash (require: fzf)
+# Issue: doesn't return the right exit status for user interrupts
+function bashopts() { # {{{1
+  local options shopt_status
+  local entry opt_name opt_status
+  local reset grey green;
+  reset="[m";
+  grey="[1;38;5;242m";
+  green="[1;38;5;072m";
+  declare -a shopt_status
+  options=$(shopt | awk '{ printf "%-24s%s\n", $1, $2 }' \
+    | sed "s/off/${grey}off${reset}/" \
+    | sed "s/on$/${green}on${reset}/"| fzf);
+  for (( i = 1; i < $(echo "$options" | wc -l) + 1; i++ )); do
+    entry=$(echo "${options[*]}" | head -$i | tail -1);
+    opt_name=$(awk '{ print $1 }' <<< "$entry")
+    opt_status=$(awk '{ print $2 }' <<< "$entry");
+    if [[ "$opt_status" == 'on' ]]; then
+      shopt -u "$opt_name" \
+        && shopt_status+=("$(shopt "$opt_name" \
+        | sed "s/off/${grey}off${reset}/" \
+        | awk '{ printf "%s > %s\\n", $1, $2 }')");
+    elif [ -z "$options" ]; then # nothing selected / user interrupts
+      return 1
+    else
+      shopt -s "$opt_name" \
+        && shopt_status+=("$(shopt "$opt_name" \
+        | sed "s/on$/${green}on${reset}/" \
+        | awk '{ printf "%s > %s\\n", $1, $2 }')");
+    fi
+  done;
+  unset i;
+  echo "${shopt_status[*]}" | column -t \
+    && return 0;
+}
+
+# simple note-taking tool.
+# shellcheck disable=SC2164
+function note() { # {{{1
+  local location
+  location="$HOME/Documents/notes"
+  pushd "$location" &> /dev/null
+  if [[ "$#" -eq 0 ]]; then
+    # shellcheck disable=SC2012
+    notes=$(ls "$location" | fzf --height=100% --preview 'cat {}')
+    # shellcheck disable=SC2086
+    ! [[ -z "$notes" ]] \
+      && command nvim -c 'set ft=help' "${notes[*]}"
+  else
+    [[ -x /usr/bin/nvim ]] || [[ -x /usr/local/bin/nvim ]] \
+      && command nvim -c 'set ft=help' "$@"
+  fi
+  popd &> /dev/null
+}
+
+# create directory and enter it
+# usage: md [directory]
+function md() { # {{{1
+  mkdir -p "$1" && cd "$_" || return 1
+}
 
 # [?] `cd` to last `vifm` location after quitting.
-vicd() {
-  local dest="$(command vifm --choose-dir - "$@")"
-
+function vicd() { # {{{1
+  local dest
+  dest="$(command vifm --choose-dir - "$@")"
   if [ -z "$dest" ]; then
     echo 'Directory picking cancelled/failed'
     return 1
   fi
+  cd "$dest" || return
+}
 
-  cd "$dest"
+# Start a PHP server from a directory.
+# usage: phpserver [port|default=3000]
+function phpserver() { # {{{1
+  local port ip
+  port="${1:-3000}"
+  [ "$(command -v ipconfig &> /dev/null)" ] \
+    && ip=$(ipconfig getifaddr en1);
+  ip=$(ifconfig | grep -w inet | awk '{print $2}' | tail -1);
+  sleep 0.100 \
+    && open "http://$ip:$port/" &
+  php -S "$ip:$port"
+}
+
+# Determine size of a file or total size of a directory
+function fs() { # {{{1
+  if du -b /dev/null > /dev/null 2>&1; then
+    local arg=-sbh;
+  else
+    local arg=-sh;
+  fi
+  # shellcheck disable=SC2199
+  if [[ -n "$@" ]]; then
+    du $arg -- "$@";
+  else
+    du $arg .[^.]* ./*;
+  fi
+}
+
+# UTF-8-encode a string of Unicode symbols
+function escape() { # {{{1
+  printf "\\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)";
+  # print a newline unless we’re piping the output to another program
+  if [ -t 1 ]; then
+    echo ""
+  fi
+}
+
+# Syntax-highlight JSON strings or files
+# Usage: `json '{"foo":42}'` or `echo '{"foo":42}' | json`
+function json() { # {{{1
+  if [ -t 0 ]; then # argument
+    python -mjson.tool <<< "$*" | pygmentize -l javascript;
+  else # pipe
+    python -mjson.tool | pygmentize -l javascript;
+  fi;
+}
+
+# create a dataURL from a file
+# require: fzf
+# How to open dataurl from terminal
+function dataurl() { # {{{1
+  local mimeType
+  mimeType=$(file -b --mime-type "$1");
+  [[ "$mimeType" == text/* ]] \
+    && mimeType="$mimeType;charset=utf-8";
+  echo "data:$mimeType;base64,$(openssl base64 -in "$1" | tr -d '\n')" #\
+     # | xclip -selection clipboard \
+     # && echo "dataturl copied into clipboard";
 }

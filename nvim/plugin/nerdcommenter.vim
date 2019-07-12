@@ -6,4 +6,3 @@ let g:NERDDefaultAlign = 'left'
 
 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDCommentEmptyLines = 1
-

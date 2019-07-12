@@ -1,147 +1,118 @@
 #!/usr/bin/env bash
+function main() {
+  # This is probably set already.
+  XDG_CONFIG_HOME="$HOME/.config";    export XDG_CONFIG_HOME
+  XDG_DATA_HOME="$HOME/.local/share"; export XDG_DATA_HOME
 
-# unused variable
-# shellcheck disable=SC2034
+  declare -a hist_ignore=(
+    "bash:"  "fish:"   "zsh:"   "dash:"
+    "exit:"  "logout:" "clear:"
+    "pushd:" "popd:"   "rm:"
+    "echo:"  "ls:"
+  )
+  HISTSIZE=500     # (default: 500)
+  HISTFILESIZE=500 # (default: 500)
+  HISTCONTROL=ignorespace:erasedups
+  HISTIGNORE="$(printf %s "${hist_ignore[@]}")"
 
-# This is probably set already.
-XDG_CONFIG_HOME="$HOME/.config";    export XDG_CONFIG_HOME
-XDG_DATA_HOME="$HOME/.local/share"; export XDG_DATA_HOME
+  # shellcheck disable=SC2155
+  export EDITOR="$( command -v nvim || command -v vim )"
+  export MANWIDTH=96
 
-# ------------------------------------------------------------------
-# [?] bash variables
-# ------------------------------------------------------------------
-# https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+  _set_golang_envars
+  _set_prompts_envar
+  _set_nvim_manpager
+  _set_less_envars
+  _set_shellcheck_envars
+  _set_fzf_envars
 
-TERM="xterm-256color"
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-EDITOR="$( command -v nvim || command -v vim )"; export EDITOR
-FCEDIT="$EDITOR -u /home/devs/Projects/dotfiles/nvim/fcedit.vim"
+  cleanup && unset -f cleanup
+}
 
-###### History ######
+function _set_golang_envars() {
+! printenv PATH | grep '/usr/local/go/bin' &> /dev/null \
+  && PATH="$PATH:/usr/local/go/bin"
+! printenv PATH | grep "$(go env GOPATH)" &> /dev/null \
+  && PATH="$PATH:$(go env GOPATH)/bin"
+}
 
-declare -a hist_ignore=(
-  "bash:"
-  "exit:"
-  "pwd:"
-  "dir:"
-  "dirs:"
-  "ls:"
-  "clear:"
-  "echo:" )
+function _set_prompts_envar() {
+  declare -a ps1=(
+    "\\[${shade}\\]"
+    "\$( __exit_status )"      # last command exit code
+    "\\[${bold}\\]"
+    "\\[${cyan}\\]"
+    "\$( __pwd \"\\W\" )"      # current working directory
+    "\\[${reset}\\]"
+    "\$( __repo \"(\" \")\" )"
+    "\\[${pink}\\]"            # command color
+    "\\n"                      # newline
+    "\\$ "                     # user privilege
+  )
 
-HISTSIZE=32768     # (default: 500)
-HISTFILESIZE=32768 # (default: 500)
-HISTCONTROL=ignorespace:erasedups
-HISTIGNORE="$(printf %s "${hist_ignore[@]}")"
+  PS1="\\n$(printf %s "${ps1[@]}")"
+  PS2="\\[${pink}\\]\\$ $(trap __colorize_stdout DEBUG)"
+}
 
-###### Paths ######
-
-# Golang executable
-if ! printenv PATH | grep '/usr/local/go/bin' &> /dev/null; then
-  PATH="$PATH:/usr/local/go/bin"
-fi
-
-if ! printenv PATH | grep "$(go env GOPATH)" &> /dev/null; then
-  PATH="$PATH:$(go env GOPATH)/bin"
-fi
-
-###### Shell Prompts ######
-
-declare -a ps1=(
-  "\$( __prompt_exit_status )"     # last command exit code
-  "\\[${bold}\\]"
-  "\\[${cyan}\\]"
-  " "
-  "\\W"                            # current working directory
-  "\\[${reset}\\]"
-  "\$( __prompt_git \"(\" \")\" )"
-  "\\[${pink}\\]"                  # command color
-  " "
-  "\\n"                            # newline
-  " "
-  "\\$"                            # user privilege
-  " " )
-
-# PS1 - Default prompt
-PS1="\\n$(printf %s "${ps1[@]}")"
-
-# PS1 - Continuation prompt
-PS2="\\[${pink}\\] \\$ "
-
-# ------------------------------------------------------------------
-# ls - list directory contents
-# ------------------------------------------------------------------
-
-declare -a ls_colors=(
-  "no=0;39:"    # Global default
-  "di=0;36:"    # Directory
-  "ex=0;32:"    # Executable file
-  "fi=0;39:"    # File
-  "ec=:"        # Non-filename text
-  "mi=1;31:"    # Non-existent file pointed to by a symlink
-  "ln=target:"  # Symbolic link
-  "or=31;01:" ) # Symbolic link pointing to a non-existent file
-
-LS_COLORS="$(printf %s "${ls_colors[@]}")"
-
-# ------------------------------------------------------------------
-# [?] man page
-# ------------------------------------------------------------------
-
-if [[ $(command -v nvim) ]]; then
+function _set_nvim_manpager() {
+  ! [ "$(command -v nvim)" ] && return
   declare -ag args=(-c "'set ft=man'")
   export MANPAGER="nvim --noplugin ${args[*]}"
-fi
+}
 
-# Pager column width.
-export MANWIDTH=96
+function _set_less_envars() {
+  # @note: exporting LESS will pagerize some git commands and aliases,
+  # be sure to set "core.pager" and/or "pager.<cmd/alias>" accordingly.
+  export LESS="--quiet --raw-control-chars --ignore-case"
+}
 
-# ------------------------------------------------------------------
-# Less - the oppossite of more
-# ------------------------------------------------------------------
-#   [!] Exporting this will pagerize some git commands and alias
-#   set "core.pager" or "pager.<cmd/alias>" to 'false' in gitconfig.
+function _set_shellcheck_envars() {
+  ! [ "$(command -v shellcheck)" ] && return
+  declare -a shellcheck_exclude=(
+    "SC1090" # don't follow external sources.
+  )
+  declare -a shellcheck_opts=(
+    "--shell=bash"
+    "--exclude=$(printf %s "${shellcheck_exclude[@]}")"
+  )
+  export SHELLCHECK_OPTS="${shellcheck_opts[*]}"
+}
 
-LESS+="--ignore-case" # concat values from "bash/colors.bash".
+function _set_fzf_envars() {
+  declare -a fzf_bindkeys=(
+    "ctrl-e:preview-down+preview-down," # vim-like preview-scroll-down by 2 lines.
+    "ctrl-y:preview-up+preview-up,"     # vim-like preview-scroll-up by 2 lines.
+    "ctrl-space:accept"                 # additional accept key.
+  )
+  declare -a fzf_opts=(
+    "--ansi"
+    "--bind=$(printf %s "${fzf_bindkeys[@]}")"
+    "--margin=0,0,1"
+    "--multi"
+    "--height=20"
+    "--no-bold"
+    "--reverse"
+    "--inline-info"
+    "--header="
+  )
+  declare -a fzf_cmd=(
+    "ag"                 # The Silver Searcher.
+    "--skip-vcs-ignores" # include files ignored by VCS.
+    "--hidden"           # include hidden files.
+    "--ignore .git/"     # exlude ".git/" directory.
+    "-g ''"              # print filenames.
+  )
+  export FZF_DEFAULT_COMMAND="${fzf_cmd[*]}"
+  export FZF_DEFAULT_OPTS+="${fzf_opts[*]}"
+}
 
-# ------------------------------------------------------------------
-# Shellcheck - shell script analysis tool
-# ------------------------------------------------------------------
+function cleanup() {
+  unset -f _set_golang_envars
+  unset -f _set_prompts_envar
+  unset -f _set_nvim_manpager
+  unset -f _set_less_envars
+  unset -f _set_shellcheck_envars
+  unset -f _set_fzf_envars
+}
 
-declare -a shellcheck_exclude=(
-  "SC1090" ) # don't follow external sources.
-
-declare -a shellcheck_opts=(
-  "--shell=bash"
-  "--exclude=$(printf %s "${shellcheck_exclude[@]}")" )
-
-export SHELLCHECK_OPTS="${shellcheck_opts[*]}"
-
-# ------------------------------------------------------------------
-# [?] FZF - fuzzy file finder
-# ------------------------------------------------------------------
-
-declare -a fzf_bindkeys=(
-  "ctrl-e:preview-down+preview-down," # vim-like preview-scroll-down by 2 lines.
-  "ctrl-y:preview-up+preview-up,"     # vim-like preview-scroll-up by 2 lines.
-  "ctrl-space:accept" )               # additional accept key.
-
-declare -a fzf_opts=(
-  "--bind=$(printf %s "${fzf_bindkeys[@]}")"
-  "--margin=0,0,1"
-  "--multi"
-  "--height=20"
-  "--no-bold"
-  "--reverse"
-  "--inline-info"
-  "--header=" )
-
-declare -a fzf_cmd=(
-  "ag"                 # The Silver Searcher.
-  "--skip-vcs-ignores" # include files ignored by VCS.
-  "--hidden"           # include hidden files.
-  "--ignore .git/"     # exlude ".git/" directory.
-  "-g ''" )            # print filenames.
-
-export FZF_DEFAULT_COMMAND="${fzf_cmd[*]}"
-FZF_DEFAULT_OPTS+="${fzf_opts[*]}" # concat values from "bash/colors.bash".
+main && unset -f main

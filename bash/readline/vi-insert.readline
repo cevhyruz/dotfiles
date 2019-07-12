@@ -1,0 +1,24 @@
+# vim: ft=readline
+set keymap vi-insert
+
+TAB: menu-complete
+# exit insert mode
+"kj": "\e[\e["
+# "kj": "\e[2 q"
+# auto-pairs (experimental)
+# "`":  '``\ei'
+# "\'": "''\ei" "\"": """\ei"
+# "(":  "()\ei"
+# "{":  "{}\ei"
+# "[":  "[]\ei"
+# ">":  "<>\ei"
+
+set keymap vi-command
+# "j":  accept-line
+
+# history navigation and completion
+"K": history-search-backward
+"J": history-search-forward
+
+# quit the terminal (experimental)
+";q": "dd\C-d"

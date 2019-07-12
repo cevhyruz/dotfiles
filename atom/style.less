@@ -1,0 +1,70 @@
+// vim-styled theme
+atom-text-editor { // Editor
+    font-weight: 400;
+       color: white;
+     line-height: 19px;
+      background-color: #222;
+  font-family:  mono;
+    letter-spacing: 0.039em;
+    .gutter .line-number { // Passive Gutter
+    color: white;
+    }
+    .gutter {
+      background-color: #333!important;
+    // make linenumbers unresizable
+    font-weight: bold;
+    }
+  }
+  .cursor {
+  }
+
+  span.icon-file-directory { // Folders Icon and File
+      font-weight: bold;
+      font-style: italic;
+  }
+  atom-text-editor .syntax--comment { // Comments
+    color: #049372;
+    font-style: normal;
+  }
+  .tree-view {        // File Explorere (Sidebar)
+    background-color: #444;
+    font-size: 14px;
+  }
+  atom-text-editor::shadow .lines .line.cursor-line { // Cursor-Line
+    background-color: #333;
+  }
+  atom-text-editor .gutter .line-number.cursor-line { // Active Gutter Cursor-Line
+      background-color: #D3D5D8 !important;
+      font-weight: bold !important;
+      color: #333;
+  }
+
+  // active pane
+  .pane {
+
+    .gutter,
+    ul.tab-bar {
+      opacity: 0.4;
+    }
+  }
+  .pane.active {
+    .gutter {
+      opacity: 1;
+    }
+    ul.tab-bar {
+      opacity: 1;
+      .tab.active {
+        color: #eee;
+      font-size: 14px;
+      letter-spacing: .039em;
+        font-weight: 400;
+        background-color: #444;
+
+      }
+    }
+  }
+  atom-text-editor .syntax--variable {
+    color: #409C97;
+    font-weight:800;
+  }
+

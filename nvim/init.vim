@@ -1,21 +1,31 @@
-call plug#begin()
-call plug#end()
+scriptencoding utf8
+"
+"             /$$
+"            |__/
+"  /$$    /$$ /$$ /$$$$$$/$$$$   /$$$$$$   /$$$$$$$
+" |  $$  /$$/| $$| $$_  $$_  $$ /$$__  $$ /$$_____/
+"  \  $$/$$/ | $$| $$ \ $$ \ $$| $$  \__/| $$
+"   \  $$$/  | $$| $$ | $$ | $$| $$      | $$$$$$$$
+"    \___/   |__/|__/ |__/ |__/|__/       \_______/
+"                           of John Fred Fadrigalan
+"
 
-set background=dark
-colorscheme tpope
-" syntax on
-" filetype plugin indent on
+colorscheme gruvbox
+syntax      on
+filetype    plugin indent on
+
+" SECTION: Options {{{1
+
 set history=10000
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 set updatetime=100
 set undofile
 set foldcolumn=1
 set scrolloff=10
-set nomodeline
 set textwidth=120
 set number relativenumber
 set spell spelllang=en_us
-set foldtext=dotvim#myFoldText()
+set foldtext=vimrc#foldtext('.')
 set showbreak=↳
 set listchars=trail:~,tab:\▸\ ,extends:❯,precedes:❮,nbsp:␣
 set guicursor=cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor
@@ -38,91 +48,51 @@ set backupdir=/tmp//,.
 set directory=/tmp//,.
 set undodir=/tmp//,.
 
-" generate helptags
-" call execute('helptags ALL', 'silent')
+source ~/Projects/cloned-repo/fzf/plugin/fzf.vim
 
-" ------------------------------------------------------------------
-"  [?] Mapping
-" ------------------------------------------------------------------
-let mapleader = ","
-" wrapped-lines traversal
-nnoremap j gj
-nnoremap k gk
-" Toggles
-nnoremap <expr> <space> (&hls == 0 ? ":set hls" : ":set nohls")."<cr>"
-nnoremap <expr> <leader>s<space> (&spell == 0 ? ":set spell" : ":set nospell")."<cr>"
-" Breakline.
-nnoremap mm i<c-m><esc>
-" Move line upward / downward
-nnoremap J mz:m+<cr>`z
-vnoremap J :m'>+<cr>`<my`>mzgv`yo`z
-nnoremap K mz:m-2<cr>`z
-vnoremap K :m'<-2<cr>`>my`<mzgv`yo`z
-" preserve state upon running :only
-nnoremap <c-w>o :mksession! /tmp/stateB4only.vim <bar> wincmd o<cr>
-" revert to previous state after running '<c-w>o'
-nnoremap <c-w>u :source /tmp/stateB4only.vim<cr>
-" kj | Escaping!
-inoremap kj <esc>
-xnoremap kj <esc>
-cnoremap kj <c-c>
-vnoremap kj <esc>
-" Scrolling/skimming (increments by 3).
-nnoremap <c-e> 2<c-e>
-nnoremap <c-y> 2<c-y>
-" commandline navigation.
-cnoremap <c-h> <left>
-cnoremap <c-l> <right>
-" command history navigation
-cnoremap J <down>
-cnoremap K <up>
-" Run the last entered command.
-nnoremap <leader><space> :<up><cr>
-" Run a command
-nnoremap ; :
-" Open command bar.
-nnoremap ;<space> q:
-" Mouse whell (one line)
-noremap <ScrollWheelDown> 1<c-e>
-noremap <ScrollWheelUp> 1<c-y>
-" visual line.
-nnoremap vv V
-" paste register" to cmdline.
-cnoremap <F9> <C-R>"
-" indent whole line
-nnoremap <silent> <tab> ml>>`l :delmarks l<cr>
-" Save session
-nnoremap <c-s> :mksession! /tmp/mysession.vim<cr>
-
-
-" [?] Plugin mapping
-" nmap <leader>5 <Plug>(TriggerPrompt)
-
-" [?] Navigation
-" simplified version of christoomey's vim-tmux-navigator
-" https://github.com/christoomey/vim-tmux-navigator
-
-  nnoremap <silent><c-l> :NavRight<cr>
-  nnoremap <silent><c-h> :NavLeft<cr>
-  nnoremap <silent><c-k> :NavUp<cr>
-  nnoremap <silent><c-j> :NavDown<cr>
-  nnoremap <silent><c-\> :NavPrev<cr>
+" SECTION: Commands {{{1
 
 if empty($TMUX)
-  command NavRight call vimrc#navigate('l')
-  command NavLeft  call vimrc#navigate('h')
-  command NavUp    call vimrc#navigate('k')
-  command NavDown  call vimrc#navigate('j')
-  command NavPrev  call vimrc#navigate('p')
+  command! NavRight call vimrc#navigate('l')
+  command! NavLeft  call vimrc#navigate('h')
+  command! NavUp    call vimrc#navigate('k')
+  command! NavDown  call vimrc#navigate('j')
+  command! NavPrev  call vimrc#navigate('p')
 else
-  command NavRight call vimrc#tmuxNav('l')
-  command NavLeft  call vimrc#tmuxNav('h')
-  command NavUp    call vimrc#tmuxNav('k')
-  command NavDown  call vimrc#tmuxNav('j')
-  command NavPrev  call vimrc#tmuxNav('p')
+  command! NavRight call vimrc#tmux_navigate('l')
+  command! NavLeft  call vimrc#tmux_navigate('h')
+  command! NavUp    call vimrc#tmux_navigate('k')
+  command! NavDown  call vimrc#tmux_navigate('j')
+  command! NavPrev  call vimrc#tmux_navigate('p')
 endif
 
-" [?] localrc
-if filereadable("/home/devs/Projects/dotfiles/_localrc/local.nvimrc")
-  source /home/devs/Projects/dotfiles/_localrc/local.nvimrc
+" SECTION: AutoCommands {{{1
+
+augroup strip_whitespace
+  autocmd!
+  autocmd BufWrite,BufWritePre * call vimrc#strip_whitespaces()
+augroup END
+
+augroup push_tab
+  autocmd!
+  autocmd TabLeave * let g:prev_tab = tabpagenr()
+augroup END
+
+augroup close_if_only_nerdtree
+  autocmd!
+  autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup END
+
+" SECTION: Abbreviations {{{1
+
+" completions
+cnoreabbrev <silent>f FZF<cr>
+
+" SECTION: localrc {{{1
+
+let s:local_vimrc = expand('~/Projects/dotfiles/_localrc/local.nvimrc')
+if filereadable(s:local_vimrc)
+  execute 'source' s:local_vimrc
+else
+  echo 'no'
 endif

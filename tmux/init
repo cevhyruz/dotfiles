@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# shellcheck disable=SC1090
+
+function main() {
+  init_sources
+}
+
+function init_sources() {
+  tmux source-file ~/Projects/dotfiles/tmux/command-aliases/init.aliases.tmux
+  tmux source-file ~/Projects/dotfiles/tmux/keybindings/init.keybindings.tmux
+  tmux source-file ~/Projects/dotfiles/tmux/statusbar/simple/simple.status.tmux
+  tmux source-file ~/Projects/dotfiles/_localrc/tmuxrc.local
+}
+
+main
