@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 #
+# vim wrapper for bash readline
+
 # This is ridiculous! seriously.
 # Reasons why I should do this:
 # 1) I want to have customized prompt
@@ -12,54 +14,60 @@
 
 REGISTER_PLUS="$(xclip -selection clipboard -out)"
 
+
 function main() {
   shopt -oq vi && {
-    # unbind defaults keybindings
-    bind -m vi-command -r h
-    bind -m vi-command -r l
-    bind -m vi-command -r 1
-    bind -m vi-command -r 2
-    bind -m vi-command -r 3
-    bind -m vi-command -r 4
-    bind -m vi-command -r 5
-    bind -m vi-command -r 6
-    bind -m vi-command -r 7
-    bind -m vi-command -r 8
-    bind -m vi-command -r 9
-
-    bind -m vi-command -x  '"dd": "_vim_delete_to            "'
-    bind -m vi-command -x  '"dl": "_vim_delete_to            "' # alias x
-    bind -m vi-command -x  '"dh": "_vim_delete_to            "' # alias X
-    bind -m vi-command -x  ' "p": "_vim_put                  "'
-    bind -m vi-command -x  ' "P": "_vim_put                P "'
-    bind -m vi-command -x  ' "x": "_vim_delete               "'
-    bind -m vi-command -x  ' "X": "_vim_delete             X "'
-    bind -m vi-command -x  ' "r": "_vim_change_char          "'
-    bind -m vi-command -x  ' "h": "_vim_backward_char        "'
-    bind -m vi-command -x  ' "l": "_vim_forward_char         "'
-    bind -m vi-command -x  ' "1": "_vim_arg_digit          1 "'
-    bind -m vi-command -x  ' "2": "_vim_arg_digit          2 "'
-    bind -m vi-command -x  ' "3": "_vim_arg_digit          3 "'
-    bind -m vi-command -x  ' "4": "_vim_arg_digit          4 "'
-    bind -m vi-command -x  ' "5": "_vim_arg_digit          5 "'
-    bind -m vi-command -x  ' "6": "_vim_arg_digit          6 "'
-    bind -m vi-command -x  ' "7": "_vim_arg_digit          7 "'
-    bind -m vi-command -x  ' "8": "_vim_arg_digit          8 "'
-    bind -m vi-command -x  ' "9": "_vim_arg_digit          9 "'
-    bind -m vi-command -x  ' "0": "_vim_beginning_of_line    "'
-    bind -m vi-command -x  ' "$": "_vim_end_of_line          "'
-    bind -m vi-command -x  ' "m": "_vim_set_mark             "'
-    bind -m vi-command -x  ' "`": "_vim_goto_mark            "'
-    bind -m vi-command -x  ' "q": "_vim_record_macro         "'
-    bind -m vi-command -x  ' ".": "_vim_play_last_macro      "'
-    bind -m vi-command -x  ' "j":"_vim_accept_line           "'
+    __set_keybindings
   };
 }
+
+function __set_keybindings() {
+  declare -A vim_func=(
+   [dd]='_vim_delete_to'
+   [dl]='_vim_delete_to' # aliased x
+   [dh]='_vim_delete_to' # aliased X
+   [p]='_vim_put'
+   [P]='_vim_put P'
+   [x]='_vim_delete'
+   [X]='_vim_delete X'
+   [r]='_vim_change_char'
+   [h]='_vim_backward_char'
+   [l]='_vim_forward_char'
+   [1]='_vim_arg_digit 1'
+   [2]='_vim_arg_digit 2'
+   [3]='_vim_arg_digit 3'
+   [4]='_vim_arg_digit 4'
+   [5]='_vim_arg_digit 5'
+   [6]='_vim_arg_digit 6'
+   [7]='_vim_arg_digit 7'
+   [8]='_vim_arg_digit 8'
+   [9]='_vim_arg_digit 9'
+   [0]='_vim_beginning_of_line'
+   [$]='_vim_end_of_line'
+   [m]='_vim_set_mark'
+   ['`']='_vim_goto_mark'
+   [q]='_vim_record_macro'
+   [.]='_vim_play_last_macro'
+   [j]='_vim_accept_line'
+   [j]='_vim_accept_line'
+  );
+
+  # insert mode
+  bind -m vi-insert -x '"kj":"_vim_movement_mode"'
+
+  # shellcheck disable=SC2140
+  for key in ${!vim_func[*]}; do
+    bind -m vi-command -x \""$key\"":\ \""${vim_func[$key]}"\"
+  done
+}
+
+
+__set_keybindings
 
 # ------------------------------------------------------------------
 # helper functions
 # ------------------------------------------------------------------
-
+#
 # repeat 'expr'  by 'count' and print the concatenated results
 # if there's no [count] input, only print [expr] once.
 # usage: repeat [expr] [count]
@@ -150,7 +158,7 @@ function _vim_command_() {
 
 # bind -m vi-command -r kj bind -m vi-insert -x '"kj": "_vim_movement_mode"'
 function _vim_movement_mode() {
- tmux send-keys ""
+ tmux send-keys ""
  _bring_back_readline_color
 }
 
@@ -159,6 +167,7 @@ function _vim_insertion_move() {
 }
 
 # accept the line regardless of where the cursor is.
+bind -m vi-command -x '"j": "_vim_accept_line"'
 function _vim_accept_line() {
   send_key ''
   # clear markers
@@ -262,6 +271,10 @@ function _vim_set_mark() {
   VIM_MARKERS+=([$VIM_PROMPT]=$READLINE_POINT)
 }
 
+
+# marks should be linewise
+# save curent line count, subtract to new linecount
+# add to mark column
 function _vim_goto_mark() {
   init_variable
   _vim_prompt "${red}[goto]${pink} ${readline[*]}"
@@ -299,4 +312,4 @@ function _vim_put() {
   _bring_back_readline_color
 }
 
-# main && unset -f main
+main && unset -f main
