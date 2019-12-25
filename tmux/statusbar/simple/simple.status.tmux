@@ -14,7 +14,6 @@ tmx_status_git='/home/devs/Projects/dotfiles/tmux'
 
 
 # Terminal title.
-set -g set-titles-string '#S ( #W : #P )'
 
 set -g pane-border-status off
 set -g pane-border-style 'bg=colour237'
@@ -33,7 +32,6 @@ set -g  status-right-length  70
 set -g  status-left-length   90
 set -g  status-bg            $tmx_status_bg
 set -g  status-fg            $tmx_status_fg
-
 
 set -g @stl-sepR ' : '
 

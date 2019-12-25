@@ -7,10 +7,20 @@ function main() {
 }
 
 function init_sources() {
-  tmux source-file ~/Projects/dotfiles/tmux/command-aliases/init.aliases.tmux
-  tmux source-file ~/Projects/dotfiles/tmux/keybindings/init.keybindings.tmux
-  tmux source-file ~/Projects/dotfiles/tmux/statusbar/simple/simple.status.tmux
-  tmux source-file ~/Projects/dotfiles/_localrc/tmuxrc.local
+  declare -ra source_files=(
+    "tmux/command-aliases/init.aliases.tmux"
+    "tmux/keybindings/init.keybindings.tmux"
+    "tmux/statusbar/simple/simple.status.tmux"
+    "_localrc/tmuxrc.local");
+
+  for file in ${source_files[*]}; do
+    command tmux source-file "$HOME/Projects/dotfiles/${file}"
+  done
+  unset file
+}
+
+function set_command() {
+ local test
 }
 
 main

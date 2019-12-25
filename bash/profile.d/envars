@@ -19,21 +19,27 @@ function main() {
   export EDITOR="$( command -v nvim || command -v vim )"
   export MANWIDTH=96
 
-  _set_golang_envars
-  _set_prompts_envar
-  _set_nvim_manpager
-  _set_less_envars
-  _set_shellcheck_envars
-  _set_fzf_envars
+  _set_golang_envars;
+  _set_symfony_cli;
+  _set_prompts_envar;
+  _set_nvim_manpager;
+  _set_less_envars;
+  _set_shellcheck_envars;
+  _set_fzf_envars;
 
   cleanup && unset -f cleanup
 }
 
+function _set_symfony_cli() {
+  ! printenv PATH | grep 'symfony' &> /dev/null \
+    && PATH="$HOME/.symfony/bin:$PATH";
+}
+
 function _set_golang_envars() {
-! printenv PATH | grep '/usr/local/go/bin' &> /dev/null \
-  && PATH="$PATH:/usr/local/go/bin"
-! printenv PATH | grep "$(go env GOPATH)" &> /dev/null \
-  && PATH="$PATH:$(go env GOPATH)/bin"
+  ! printenv PATH | grep '/usr/local/go/bin' &> /dev/null \
+    && PATH="$PATH:/usr/local/go/bin";
+  ! printenv PATH | grep "$(go env GOPATH)" &> /dev/null \
+    && PATH="$PATH:$(go env GOPATH)/bin";
 }
 
 function _set_prompts_envar() {

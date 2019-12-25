@@ -2,7 +2,6 @@
 #
 #
 #
-
 # [?] set key binding depending on user option value.
 # usage: set_keys "-r C-y" "[cmd]"
 function set_key() {
