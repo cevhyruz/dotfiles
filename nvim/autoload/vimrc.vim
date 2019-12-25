@@ -8,11 +8,11 @@ let s:vimrc = {}
 let g:vimrc = s:vimrc
 
 function vimrc#strip_whitespaces() "{{{1
-  let l:save_curpos = getpos(".")
-  let l:old_query = getreg("/")
+  let l:save_curpos = getpos('.')
+  let l:old_query = getreg('/')
   %s/\s\+$//e
-  call setpos(".", l:save_curpos)
-  call setreg("/", l:old_query)
+  call setpos('.', l:save_curpos)
+  call setreg('/', l:old_query)
 endfunction
 
 function! vimrc#jumpto_prev_tab()
@@ -28,7 +28,7 @@ function! vimrc#jumpto_prev_tab()
 endfunction
 
 function vimrc#navigate(direction)
-  execute "wincmd" a:direction
+  execute 'wincmd' a:direction
 endfunction
 
 function vimrc#tmux_navigate(direction) "{{{1
@@ -38,7 +38,7 @@ function vimrc#tmux_navigate(direction) "{{{1
   endif
   if (l:curwin is# winnr())
     let l:pane = shellescape($TMX_PANE)
-    let l:jump = "select-pane -t " . l:pane . " -" .tr(a:direction, "phjkl", "lLDUR")
+    let l:jump = 'select-pane -t ' . l:pane . ' -' .tr(a:direction, 'phjkl', 'lLDUR')
     call system("tmux -S".split($TMUX, ",")[0]." ".l:jump)
   endif
 endfunction

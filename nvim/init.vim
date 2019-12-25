@@ -1,5 +1,4 @@
 scriptencoding utf8
-"
 "             /$$
 "            |__/
 "  /$$    /$$ /$$ /$$$$$$/$$$$   /$$$$$$   /$$$$$$$
@@ -8,7 +7,6 @@ scriptencoding utf8
 "   \  $$$/  | $$| $$ | $$ | $$| $$      | $$$$$$$$
 "    \___/   |__/|__/ |__/ |__/|__/       \_______/
 "                           of John Fred Fadrigalan
-"
 
 colorscheme gruvbox
 syntax      on
@@ -94,5 +92,5 @@ let s:local_vimrc = expand('~/Projects/dotfiles/_localrc/local.nvimrc')
 if filereadable(s:local_vimrc)
   execute 'source' s:local_vimrc
 else
-  echo 'no'
+  echo 'no local_vimrc'
 endif

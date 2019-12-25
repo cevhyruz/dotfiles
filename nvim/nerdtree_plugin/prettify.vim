@@ -79,6 +79,7 @@ call s:prettify_extension(get(g:, 'prettify_extension', {
 \ 'sh':        ['none', 'none', '23'],
 \}))
 
+
 " TODO: make this theme-customizable
 call s:prettify_glyphs(get(g:, 'prettify_glyphs', {
   \ 'emphasize': [''],

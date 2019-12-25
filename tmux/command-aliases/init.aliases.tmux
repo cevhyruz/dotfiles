@@ -1,6 +1,7 @@
 # alias[0-5]  - tmux predefined alias
 # alias[6-10] - for temporary alias.
 
+display "aliases"
 # TODO: Please remove this variables! it's cluttering the env.
 # programs and scripts status.
 is_gslive=" ps -o command --tty '#{pane_tty}' | grep --silent 'gslive' "
@@ -18,20 +19,38 @@ lowermost=" -fvl  "
  leftmost=" -fhbl "
 rightmost=" -fhl  "
 
+
+set -s command-alias[85] command-prompt={
+  # display-message 'yow command prompt'
+  run;
+
+}
+
+set -s command-alias[35] command={
+  display-message 'my commando'
+}
 # ------------------------------------------------------------------
 # navigation (vim and fzf aware)
 # ------------------------------------------------------------------
 # [?] goto upper pane.
-set -s command-alias[10] \
-     up='run -b "( $is_vim && tmux send C-k ) || \
+# set -s command-alias[10] \
+   up='run -b "( $is_vim && tmux send C-k ) || \
                  ( $is_fzf && tmux send C-k ) || \
-                   tmux selectp -U "'
+                   tmux select-pane -U "'
+
+# [?] goto upper pane.
+set -s command-alias[10] up={
+  run -b "( $is_vim && tmux send C-k ) || \
+          ( $is_fzf && tmux send C-k ) || \
+            tmux select-pane -U"
+}
+
 
 # [?] goto lower pane
 set -s command-alias[11] \
    down='run -b "( $is_vim && tmux send C-j ) || \
                  ( $is_fzf && tmux send C-j ) || \
-                   tmux selectp -D "'
+                   tmux select-pane -D "'
 
 # [?] goto left-side pane.
 set -s command-alias[12] \
@@ -97,6 +116,10 @@ set -s command-alias[19] \
                ( command -v 'htop' && tmux splitw $bot 5 'htop' )" ''\
                " $err404 "'
 
+set -s command-alias[34] \
+     proclist='run-shell "ps -o command --tty #{pane_tty}"'
+
+
 set -s command-alias[50] \
   myshell='bash'
 
@@ -128,7 +151,7 @@ set -s command-alias[22] \
 # split window (using previous pane's start-directory)
 # ------------------------------------------------------------------
 # [?] split window horizontally.
-set -s command-alias[23] \
+# set -s command-alias[23] \
     hsplit="split-window -vc '#{@window_current_path}'"
 
 # [?] split window vertically.
@@ -138,7 +161,8 @@ set -s command-alias[23] \
 # [?] split window vertically.
 # vsplit [pos] {[dir], [shortcut]} {[size], [percentage]} [target-pane] [shell-command] [format]
 set -s command-alias[24] \
-    vsplit="split-window"
+    vsplit="split-window -h"
+
 
 set -g @packages '$XDG_CONFIG_HOME/nvim/pack/bundle/start'
 # [?] neovim packages

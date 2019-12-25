@@ -3,7 +3,7 @@ set keymap vi-insert
 
 TAB: menu-complete
 # exit insert mode
-"kj": "\e[\e["
+# "kj": "\e[\e["
 # "kj": "\e[2 q"
 # auto-pairs (experimental)
 # "`":  '``\ei'

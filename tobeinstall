@@ -5,12 +5,6 @@ BASH SHELL
 ---------------------
  - bash-completion
 
- if asdf; hen
-   adf
-   sdf
-   asdf
- endif
-
 2.) Utility
 ---------------------
 - tickeys (mechanical keyboard sound)

@@ -5,7 +5,7 @@ bind-key -T prefix c tabnew
 
 # window splits
 bind-key -T prefix %  vsplit
-bind-key -T prefix \; hsplit
+bind-key -T prefix \; command
 
 # programs & executables.
 # bind-key -T prefix n ftpane

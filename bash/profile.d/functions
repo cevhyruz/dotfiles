@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # lazy-load nvm and it's packages
 function lazyload_nvm() { # {{{1
   unset -f nvm node npm npx
@@ -28,7 +27,7 @@ function colormap() { # {{{1
 # list bash aliases
 function aliases() { # {{{1
   local
-  aliases=$(alias | fzf --preview 'pygmentize -l bash {}')
+  aliases=$(alias | fzf)
   for (( i = 0; i < $(echo "$aliases" | wc -l); i++ )); do
     echo "$aliases"
   done

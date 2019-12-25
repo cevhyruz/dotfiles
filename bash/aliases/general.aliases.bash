@@ -7,6 +7,10 @@ alias ex='echo disables vim ex mode'
 
 alias tre="tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX"
 
+# map capslock to backspace and double shift to capslock,
+# and make capslock (now backspace) repeatable when on-hold.
+alias k='setxkbmap -option caps:backspace -option shift:both_capslock && xset r 66'
+
 alias which="which -a"
 
 # pretty print pathnames
