@@ -24,6 +24,7 @@ function colormap() { # {{{1
   unset i
 }
 
+
 # list bash aliases
 function aliases() { # {{{1
   local
@@ -31,14 +32,6 @@ function aliases() { # {{{1
   for (( i = 0; i < $(echo "$aliases" | wc -l); i++ )); do
     echo "$aliases"
   done
-}
-
-function projects() {
-local
-}
-
-function manlist() {
-local
 }
 
 # get current terminal cursor position in a
