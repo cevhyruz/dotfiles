@@ -6,7 +6,8 @@ display "aliases"
 # programs and scripts status.
 is_gslive=" ps -o command --tty '#{pane_tty}' | grep --silent 'gslive' "
    is_fzf=" ps -o command --tty '#{pane_tty}' | grep --silent 'fzf' "
-   is_vim=" ps -o command --tty '#{pane_tty}' | grep --silent 'vim' "
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
   is_vifm=" ps -o command --tty '#{pane_tty}' | grep --silent 'vifm' "
   is_htop=" ps -o command --tty '#{pane_tty}' | grep --silent 'htop' "
   is_bash=" ps -o comm --tty '#{pane_tty}' | tail -1 | grep -q 'bash' "
