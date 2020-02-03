@@ -12,32 +12,32 @@ function main() {
 
 function __set_keybindings() {
   declare -A vim_func=(
-   [dd]='delete_to'
-   [dl]='delete_to' # aliased x
-   [dh]='delete_to' # aliased X
-   [p]='put'
-   [P]='put P'
-   [x]='delete'
-   [X]='delete X'
-   [r]='change_char'
-   [h]='backward_char'
-   [l]='forward_char'
-   [1]='arg_digit 1'
-   [2]='arg_digit 2'
-   [3]='arg_digit 3'
-   [4]='arg_digit 4'
-   [5]='arg_digit 5'
-   [6]='arg_digit 6'
-   [7]='arg_digit 7'
-   [8]='arg_digit 8'
-   [9]='arg_digit 9'
-   [0]='beginning_of_line'
-   [$]='end_of_line'
-   [m]='set_mark'
-   ['`']='goto_mark'
-   [q]='record_macro'
-   [.]='last_macro'
-   [j]='accept_line'
+   [dd]='_vim_delete_to'
+   [dl]='_vim_delete_to' # aliased x
+   [dh]='_vim_delete_to' # aliased X
+   [p]='_vim_put'
+   [P]='_vim_put P'
+   [x]='_vim_delete'
+   [X]='_vim_delete X'
+   [r]='_vim_change_char'
+   [h]='_vim_backward_char'
+   [l]='_vim_forward_char'
+   [1]='_vim_arg_digit 1'
+   [2]='_vim_arg_digit 2'
+   [3]='_vim_arg_digit 3'
+   [4]='_vim_arg_digit 4'
+   [6]='_vim_arg_digit 6'
+   [7]='_vim_arg_digit 7'
+   [8]='_vim_arg_digit 8'
+   [9]='_vim_arg_digit 9'
+   [0]='_vim_beginning_of_line'
+   [$]='_vim_end_of_line'
+   [m]='_vim_set_mark'
+   ['`']='_vim_goto_mark'
+   [q]='_vim_record_macro'
+   [.]='_vim_play_last_macro'
+   [j]='_vim_accept_line'
+   [j]='_vim_accept_line'
   );
 
   # insert mode
@@ -45,9 +45,12 @@ function __set_keybindings() {
 
   # shellcheck disable=SC2140
   for key in ${!vim_func[*]}; do
-    bind -m vi-command -x \""$key\"":\ \""_vim_${vim_func[$key]}"\"
+    bind -m vi-command -x \""$key\"":\ \""${vim_func[$key]}"\"
   done
 }
+
+
+__set_keybindings;
 
 # ------------------------------------------------------------------
 # helper functions
