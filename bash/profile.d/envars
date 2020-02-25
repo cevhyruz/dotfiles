@@ -50,14 +50,14 @@ function _set_prompts_envar() {
     "\\[${cyan}\\]"
     "\$( __pwd \"\\W\" )"      # current working directory
     "\\[${reset}\\]"
-    "\$( __repo \"(\" \")\" )"
+    "\$( __repo \"::\" \" \" )"
     "\\[${pink}\\]"            # command color
     "\\n"                      # newline
-    "\\$ "                     # user privilege
+    " "                       # user privilege
   )
 
   PS1="\\n$(printf %s "${ps1[@]}")"
-  PS2="\\[${pink}\\]\\$ $(trap __colorize_stdout DEBUG)"
+  PS2="\\[${pink}\\] $(trap __colorize_stdout DEBUG)"
 }
 
 function _set_nvim_manpager() {
@@ -88,8 +88,8 @@ function _set_fzf_envars() {
   declare -a fzf_bindkeys=(
     "ctrl-e:preview-down+preview-down," # vim-like preview-scroll-down by 2 lines.
     "ctrl-y:preview-up+preview-up,"     # vim-like preview-scroll-up by 2 lines.
-    "ctrl-space:accept"                 # additional accept key.
-  )
+    "ctrl-space:accept" )               # additional accept key.
+
   declare -a fzf_opts=(
     "--ansi"
     "--bind=$(printf %s "${fzf_bindkeys[@]}")"
@@ -99,15 +99,16 @@ function _set_fzf_envars() {
     "--no-bold"
     "--reverse"
     "--inline-info"
-    "--header="
-  )
+    "--header=" )
+
   declare -a fzf_cmd=(
-    "ag"                 # The Silver Searcher.
-    "--skip-vcs-ignores" # include files ignored by VCS.
-    "--hidden"           # include hidden files.
-    "--ignore .git/"     # exlude ".git/" directory.
-    "-g ''"              # print filenames.
-  )
+    "ag"                    # The Silver Searcher.
+    "--skip-vcs-ignores"    # include files ignored by VCS.
+    "--hidden"              # include hidden files.
+    "--ignore .git/"        # exlude ".git/" directory.
+    "--ignore node_modules" # exlude "node_modules" directory.
+    "-g ''" )               # print filenames.
+
   export FZF_DEFAULT_COMMAND="${fzf_cmd[*]}"
   export FZF_DEFAULT_OPTS+="${fzf_opts[*]}"
 }
