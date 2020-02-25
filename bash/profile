@@ -11,6 +11,7 @@ function main() {
   _enable_private_bin
   _enable_bash_completion
   _disable_completion_for_custom_func
+  _load_utility_functions
 
   # extra local configuration
   [ -r "${HOME}/Projects/dotfiles/_localrc/local.bashrc" ] \
@@ -21,6 +22,16 @@ function main() {
   bind -m vi-command -r k
 
   _cleanup && unset -f _cleanup
+}
+
+function _load_utility_functions() {
+  local file bash_bin
+  bash_bin="${HOME}/Projects/dotfiles/bash/bin"
+  [[ -d $bash_bin ]] && {
+    # for file in ${HOME}/Projects/dotfiles/bash/bin/*; do
+      source "${bash_bin}/bashopts"
+    # done
+  };
 }
 
 function _send_key() {

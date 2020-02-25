@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # lazy-load nvm and it's packages
+# caveats: you have to call npm first
+# before you can call your global package.
 function lazyload_nvm() { # {{{1
   unset -f nvm node npm npx
   export NVM_DIR=~/.nvm
@@ -24,7 +26,6 @@ function colormap() { # {{{1
   unset i
 }
 
-
 # list bash aliases
 function aliases() { # {{{1
   local
@@ -46,42 +47,6 @@ function tcup() {
   echo "$(( ${pos[0]:2} - 1 )) $(( pos[1] - 1))";
 }
 
-# toggle multiple bash options for current session at once.
-# useful for fiddling with bash (require: fzf)
-# Issue: doesn't return the right exit status for user interrupts
-function bashopts() { # {{{1
-  local options shopt_status
-  local entry opt_name opt_status
-  local reset grey green;
-  reset="[m";
-  grey="[1;38;5;242m";
-  green="[1;38;5;072m";
-  declare -a shopt_status
-  options=$(shopt | awk '{ printf "%-24s%s\n", $1, $2 }' \
-    | sed "s/off/${grey}off${reset}/" \
-    | sed "s/on$/${green}on${reset}/"| fzf);
-  for (( i = 1; i < $(echo "$options" | wc -l) + 1; i++ )); do
-    entry=$(echo "${options[*]}" | head -$i | tail -1);
-    opt_name=$(awk '{ print $1 }' <<< "$entry")
-    opt_status=$(awk '{ print $2 }' <<< "$entry");
-    if [[ "$opt_status" == 'on' ]]; then
-      shopt -u "$opt_name" \
-        && shopt_status+=("$(shopt "$opt_name" \
-        | sed "s/off/${grey}off${reset}/" \
-        | awk '{ printf "%s > %s\\n", $1, $2 }')");
-    elif [ -z "$options" ]; then # nothing selected / user interrupts
-      return 1
-    else
-      shopt -s "$opt_name" \
-        && shopt_status+=("$(shopt "$opt_name" \
-        | sed "s/on$/${green}on${reset}/" \
-        | awk '{ printf "%s > %s\\n", $1, $2 }')");
-    fi
-  done;
-  unset i;
-  echo "${shopt_status[*]}" | column -t \
-    && return 0;
-}
 
 # simple note-taking tool.
 # shellcheck disable=SC2164
@@ -93,7 +58,7 @@ function note() { # {{{1
     # shellcheck disable=SC2012
     notes=$(ls "$location" | fzf --height=100% --preview 'cat {}')
     # shellcheck disable=SC2086
-    ! [[ -z "$notes" ]] \
+   [[ -z "$notes" ]] \
       && command nvim -c 'set ft=help' "${notes[*]}"
   else
     [[ -x /usr/bin/nvim ]] || [[ -x /usr/local/bin/nvim ]] \
@@ -149,7 +114,7 @@ function fs() { # {{{1
 
 # UTF-8-encode a string of Unicode symbols
 function escape() { # {{{1
-  printf "\\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)";
+e printf "\\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)";
   # print a newline unless we’re piping the output to another program
   if [ -t 1 ]; then
     echo ""
@@ -164,6 +129,10 @@ function json() { # {{{1
   else # pipe
     python -mjson.tool | pygmentize -l javascript;
   fi;
+}
+
+function goto() {
+  cd "$(ls -d */ | fzf)";
 }
 
 # create a dataURL from a file

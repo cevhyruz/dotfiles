@@ -1,4 +1,7 @@
+" vi:fdm=marker
+
 scriptencoding utf8
+
 "             /$$
 "            |__/
 "  /$$    /$$ /$$ /$$$$$$/$$$$   /$$$$$$   /$$$$$$$
@@ -7,6 +10,9 @@ scriptencoding utf8
 "   \  $$$/  | $$| $$ | $$ | $$| $$      | $$$$$$$$
 "    \___/   |__/|__/ |__/ |__/|__/       \_______/
 "                           of John Fred Fadrigalan
+"
+" ASCII Art From:
+" http://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=vimrc
 
 colorscheme gruvbox
 syntax      on

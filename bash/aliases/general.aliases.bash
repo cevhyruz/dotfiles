@@ -5,10 +5,10 @@ alias h='help'
 alias reload='exec ${SHELL}'
 alias ex='echo disables vim ex mode'
 
-alias tre="tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX"
+alias tre="tree -a -C -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX"
 
 # map capslock to backspace and double shift to capslock,
-# and make capslock (now backspace) repeatable when on-hold.
+# also make capslock (now backspace) repeatable when on-hold.
 alias k='setxkbmap -option caps:backspace -option shift:both_capslock && xset r 66'
 
 alias which="which -a"
@@ -22,6 +22,9 @@ alias parent='ps --no-headers -o comm "${PPID}"'
 # list files with TODO: and FIXME: notation
 alias todo="grep --recursive 'TOD[O]: '"
 alias fixme="grep --recursive 'FIXM[E]: '"
+
+alias r="reset"
+alias cr="clear"
 
 alias e="exit"
 alias q="exit"

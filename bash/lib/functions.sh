@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# -----------------------------------------------------------------------------
+#  File:          functions.sh
+#  Description:   Helper utility function for easy BASH shell scripting
+#  Author:        John Fred Fadrigalan <github.com/cevhyruz>
+#  License:       DWTFYWTPL
+# -----------------------------------------------------------------------------
 
 # repeat 'expr'  by 'count' and return the concatenated results.
 # usage: repeat [expr] [count]

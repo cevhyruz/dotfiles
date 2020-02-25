@@ -1,74 +1,71 @@
 #!/usr/bin/env bash
 
-declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles"
+declare -r VCS="https://github.com"
+declare -r REPO="cevhyruz/dotfiles";
+declare -r ORIGIN="git@github.com:$REPO.git";
+declare -r TARBALL="$VCS/$REPO/tarball/master";
+declare -r UTILS="$VCS/raw.githubusercontent.com/$REPO/_tools/util.sh"
 
-declare -r DOTFILES_ORIGIN="git@github.com:$GITHUB_REPOSITORY.git"
-declare -r DOTFILES_TARBALL_URL="https://github.com/$GITHUB_REPOSITORY/tarball/master"
+# declare dotfiles_home="$HOME/Projects/dotfiles";
+declare dotfiles_home="/tmp/dotfiles";
+declare skip_question=false;
 
-declare dotfiles_directory="$HOME/Projects/dotfiles"
+main() {
+  # ensure that cwd is relative to this script file.
+  cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+  # load utils
+  [[ -x "utils.sh" ]] && {
+    . "utils.sh" || exit 1
+  } || download_utils || exit 1
+}
 
-
-# Internal Function -- - - - - - - - - -  - - - - -   - -- - - - - - -
-
- _print_in_color() { #{{{
-
-  printf "%b" \
-    "$(tput setaf "$2" 2> /dev/null)" \
-    "$1" \
-    "$(tput sgr0 2> /dev/null)"
-} #}}}
-
-print_in_green() { #{{{
- _print_in_color "$1" 23
-} #}}}
-
-function installing() { #{{{
-
-local spinner=""
-
-while :; do
-  for (( i = 0; i<${#spinner}; i++ )); do
-    sleep 0.7
-    echo -en "   ${spinner:$i:1} Installing precompiled binaries" "\\r"
-    #     │└─ do not output trailing newlines
-    #     └─ enable interpretation of backslash escapes
+# show spinner
+function install() {
+  local spinner=⣾⣽⣻⢿⡿⣟⣯⣷
+  while :; do
+    for (( i = 0; i<${#spinner}; i++ )); do
+      sleep 0.1
+      echo -en " ${green}${bold}${spinner:$i:1}${reset}  " "\\r"
+    done
   done
+  unset i spinner
+}
 
-done
+# download from [url] using curl/get and save to [output].
+# usage donwload [rul] [output]
+download() {
+  local url="$1"
+  local output="$2"
+  if command -v "curl" &> /dev/null; then
+    curl -LsSo "$output" "$url" &> /dev/null
+    return $?
+  elif command -v "wget" &> /dev/null; then
+    wget -qO "$output" "$url" &> /dev/null
+    return $?
+  fi
+  unset url output
+  return 1
+}
 
-} #}}}
-installing
+# download utility helper file.
+download_utils() {
+  local tmp_file='';
+  tmp_file="$(mktemp /tmp/XXXXX)";
+  download "$UTILS" "$tmp_file" \
+    && . "$tmp_file" \
+    && rm -rf "$tmp_file" \
+    return 0;
+  unset tmp_file
+  return 1
+}
 
-function downLoad() { #{{{
+download_dotfiles() {
+  local tmp_file=""
+  print_header "\n • Download and extract archive\n\n";
+  tmp_file="$(mktemp /tmp/XXXXX)";
+  download "$TARBALL" "$tmp_file";
+  print_result $? "Download archive" "true";
+  printf "\n";
+}
 
-    local url="$1"
-    local output="$2"
-
-    if command -v "curl" &> /dev/null; then
-
-        curl -LsSo "$output" "$url" &> /dev/null
-        #     │││└─ write output to file
-        #     ││└─ show error messages
-        #     │└─ don't show the progress meter
-        #     └─ follow redirects
-
-        return $?
-
-    elif command -v "wget" &> /dev/null; then
-
-        wget -qO "$output" "$url" &> /dev/null
-        #     │└─ write output to file
-        #     └─ don't show output
-
-        return $?
-    fi
-
-    return 1
-
-} #}}}
-
-function download_dotfiles() { #{{{
-
-  local tmpfile=""
-
-} #}}}
+main && unset -f main

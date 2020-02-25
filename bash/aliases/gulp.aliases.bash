@@ -1,0 +1,2 @@
+
+alias gt='gulp --tasks'
