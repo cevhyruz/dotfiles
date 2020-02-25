@@ -23,6 +23,8 @@ BASH SHELL
  - Optional (entertainment)
    * mps-youtube
    * wpm
+   * mplayer
+   * fmui
 - linters (vim ale)
    * vint
    * shellcheck

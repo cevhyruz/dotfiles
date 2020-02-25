@@ -56,13 +56,33 @@ set -g  status-left       " #[dim]  #S#[dim] [#(tmux list-session | wc -l)] :
 # setw -g window-status-fg     $tmx_status_fg
 # setw -g window-status-bg     $tmx_status_bg
 # setw -g window-status-attr   dim
-setw -g window-status-format '  #[fg=colour155,bold]#I#[fg=colour240,bold][#[default] #W (#{window_panes})#[fg=colour240]]  '
+
+set-option -g @_SIMPLE_WINDOW_BG colour234
+set-option -g @_SIMPLE_WINDOW_FG colour234
+
+setw -g window-status-format   {
+#[fg=colour155,bold]
+  #I
+#[fg=#{@_SIMPLE_WINDOW_FG},bold]
+[
+ #W (#{window_panes})
+#[fg=colour240]]
+}
 
 # current window.
 # setw -g window-status-current-fg     $tmx_status_fg
 # setw -g window-status-current-bg     $tmx_term_bg_active
 # setw -g window-status-current-attr   default
-setw -g window-status-current-format '  #[fg=colour155,bold]#I#[fg=colour240,bold] #[default] #W (#{window_panes})#[fg=colour240,bold]   '
+
+set-option -g @_SIMPLE_CURRENT_WINDOW_BG colour23
+set-option -g @_SIMPLE_CURRENT_WINDOW_FG colour155
+
+setw -g window-status-current-format {
+#[fg=colour155,bg=#{@_TMUX_CURRENT_WINDOW_BG}]
+  #I
+#[fg=colour255,bg=#{@_TMUX_CURRENT_WINDOW_BG},bold]
+ #W (#{window_panes}) #[fg=colour240,bold]
+}
 
 # windows style.
 setw -g window-active-style 'bg=colour235'
