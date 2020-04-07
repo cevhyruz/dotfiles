@@ -73,7 +73,7 @@
   s       = "!git status --short | fzf" # Working tree status using short format.
   b       = branch --all # Show local and remote branches.
   r       = remote --verbose # Show remote url after name.
-  lg      = log --oneline --graph -25 # display commit history.
+  lg      = log --oneline --graph -25 --all # display commit history.
   # List all ignored files.
   si      = ls-files --ignored --others --exclude-standard
   #               │              │        └> Use standard ignore rules.
