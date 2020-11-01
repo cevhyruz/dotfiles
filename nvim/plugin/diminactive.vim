@@ -17,7 +17,18 @@ function! DimInactiveWindows()
   endfor
 endfunction
 
-augroup diminactivewindows
-autocmd!
-autocmd WinEnter * call DimInactiveWindows()
-augroup END
+" augroup diminactivewindows
+" autocmd!
+" autocmd WinEnter * call DimInactiveWindows()
+" augroup END
+
+
+" augroup remove_cul_in_inactive_windows
+"   autocmd!
+"   autocmd WinEnter * call Remove_Cul()
+" augroup END
+"
+" function! Remove_Cul()
+"   setlocal cul
+" endfunction
+"

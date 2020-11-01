@@ -24,20 +24,20 @@
   ui     = always # colored `diff`, `show`, `log`.
 
 [color "status"]
-  untracked = 203
-  changed   = 208 italic
-  added     = 35  bold
+  untracked = 203        # red
+  changed   = 208 italic # orange
+  added     = 35  bold   # green
 
 [color "branch"]
-  current = 35 italic bold
-  local   = 248
-  remote  = 203 bold
+  current = 35  italic bold # green
+  local   = 248             # dimgrey
+  remote  = 203 bold        # red
 
 [color "diff"]
   meta = 241 bold
-  frag = 142 bold  # line info
-  old  = 203       # deletions
-  new  = 35        # additions
+  frag = 142 bold # line info
+  old  = 203      # deletions (red)
+  new  = 35       # additions (green)
 
 [commit]
   gpgsign = true # https://help.github.com/articles/signing-commits-using-gpg
@@ -67,23 +67,28 @@
   alias = false
 
 [alias]
-  amend   = commit --amend --reuse-message=HEAD # Amend all staged files.
-  alias   = "!git config --get-regexp alias | fzf" # list all git aliases.
-  c       = clone --recursive # Always clone with submodules included.
-  s       = "!git status --short | fzf" # Working tree status using short format.
-  b       = branch --all # Show local and remote branches.
-  r       = remote --verbose # Show remote url after name.
-  lg      = log --oneline --graph -25 # display commit history.
-  # List all ignored files.
-  si      = ls-files --ignored --others --exclude-standard
-  #               │              │        └> Use standard ignore rules.
-  #               │              └─────────> Show other files (i.e. untracked).
-  #               └────────────────────────> Show only ignored files
+  amend = commit --amend --reuse-message=HEAD
+  alias = "!git config --get-regexp alias | fzf"
+  c     = clone --recursive
+  s     = "!git status --short | fzf"
+  b     = branch --all
+  r     = remote --verbose
+  lg    = log --oneline --graph -25 --all
+
+  # list all ignored files.
+  si = ls-files --ignored --others --exclude-standard
+  #               │         │        └> Use standard ignore rules.
+  #               │         └─────────> Show other files (i.e. untracked).
+  #               └───────────────────> Show only ignored files
+ 
   # Create a branch or switch if it exists.
-  mb = "!a(){ git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\";}; a"
+  mb = "!a(){ git checkout -b \"${1}\" 2> /dev/null || git checkout \"${1}\";}; a"
+
   # Credit an author on the last commit
-  credit = "!git commit --amend --author \"$1 <$2>\" -C HEAD"
+  credit = "!git commit --amend --author \"${1} <${2}>\" -C HEAD"
+
   # Delete merged local branches.
-  dm   = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
   # List contributors with number of commits
   contrib = shortlog --summary --numbered

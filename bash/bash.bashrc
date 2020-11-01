@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-[[ -n "$PS1" ]] \
-  && . /etc/profile;
+# If not interactive do nothing.
+[[ -n "$PS1" ]] && source /etc/profile;

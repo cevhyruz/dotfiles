@@ -1,110 +1,63 @@
 #!/usr/bin/env bash
+#
+# -----------------------------------------------------------------------------
+#  File:          functions.sh
+#  Description:   Helper utility function for easy BASH shell scripting
+#  Author:        John Fred Fadrigalan <github.com/cevhyruz>
+#  License:       DWTFYWTPL
+# -----------------------------------------------------------------------------
 
-function main() {
-  # if not interactive, don't do anything
-  [[ -z "$PS1" ]] && return;
+# shellcheck disable=SC2231 source=/dev/null
 
-  source ~/Projects/dotfiles/bash/options;
 
-  _load_bash_components # _enable_bash_completion
-  _load_profile_dir_files
-  _enable_private_bin
-  _enable_bash_completion
-  _disable_completion_for_custom_func
-  _load_utility_functions
+declare DOTFILES_LIBPATH="${HOME}/Projects/dotfiles/bash/lib/lib.bash";
 
-  # extra local configuration
-  [ -r "${HOME}/Projects/dotfiles/_localrc/local.bashrc" ] \
-    && source "${HOME}/Projects/dotfiles/_localrc/local.bashrc";
 
-  # temporary
-  bind -f ~/Projects/cloned-repo/bash-surround/inputrc-surround
-  bind -m vi-command -r k
 
-  _cleanup && unset -f _cleanup
-}
-
-function _load_utility_functions() {
-  local file bash_bin
-  bash_bin="${HOME}/Projects/dotfiles/bash/bin"
-  [[ -d $bash_bin ]] && {
-    # for file in ${HOME}/Projects/dotfiles/bash/bin/*; do
-      source "${bash_bin}/bashopts"
-    # done
-  };
-}
-
-function _send_key() {
-  [[ -n "$1" ]] && {
-    command tmux send-keys -l "$1"
+function profile::init() {
+  source "${DOTFILES_LIBPATH}" &> /dev/null || {
+    printf "%b" "[Error]: Library file not found.\n"
+    return 1;
   }
 }
 
-function _disable_completion_for_custom_func() {
-  complete -W '' bashopts
+function profile::load_aliases() {
+  _load_bash_components
+  lib::source_all_from "/etc/profile.d"
+
 }
 
-function _enable_private_bin() {
-  ! printenv PATH | grep "$HOME/bin" &> /dev/null \
-    && [ -d "$HOME/bin" ] \
-      && PATH="$HOME/bin:$PATH";
-  ! printenv PATH | grep "$HOME/.local/bin" &> /dev/null \
-    && [ -d "$HOME/.local/bin" ] \
-      && PATH="$HOME/.local/bin:$PATH";
+# Extra local configuration.
+function profile::load_local() {
+  [[ -r "${HOME}/Projects/dotfiles/_localrc/local.bashrc" ]] \
+    && source "${HOME}/Projects/dotfiles/_localrc/local.bashrc";
 }
 
-function _load_profile_dir_files() {
-  [[ -d /etc/profile.d ]] && {
-    for content in /etc/profile.d/*; do
-      if [ -d "${content}" ]; then
-        # shellcheck disable=SC2231
-        for file in ${content}/*; do
-          if [ -s "${file}" ] && [ -r "${file}" ]; then
-            source "${file}"
-          fi
-        done
-        unset file
-      elif [ -s "${content}" ] && [ -r "${content}" ]; then
-        source "${content}"
-      fi
-    done
-    unset content
+function profile::main() {
+  profile::init
+  profile::init || {
+    return 1;
   };
-}
+  profile::load_local;
+  profile::load_aliases;
 
-function _enable_bash_completion() {
-  ! shopt -oq posix && {
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-      source /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-      source /etc/bash_completion
-    fi
-  };
 }
 
 function _load_bash_components() {
-  declare -r bash_dir="$HOME/Projects/dotfiles/bash"
+  declare -r bash_dir="${HOME}/Projects/dotfiles/bash"
   declare -ra components=(
     "colors"
     "lib/functions.sh"
     "keybindings"
     "completion/tmux"
-    "completion/fzf"
-  )
-  for file in ${components[*]}; do
+    "completion/fzf");
+
+  for file in "${components[@]}";  do
     [ -r "${bash_dir}/${file}" ] \
       && [ -s "${bash_dir}/${file}" ] \
-        && source "${bash_dir}/${file}"
+    && source "${bash_dir}/${file}"
   done
   unset file
 }
 
-function _cleanup() {
-  unset -f _load_bash_components
-  unset -f _enable_bash_completion
-  unset -f _load_profile_dir_files
-  unset -f _enable_private_bin
-  unset -f _disable_completion_for_custom_func
-}
-
-main && unset -f main
+profile::main "${@}"

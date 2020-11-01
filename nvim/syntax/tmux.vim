@@ -1,6 +1,10 @@
 
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+"   tmux syntax extensions
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-if exists("b:current_syntax")
-    finish
-endif
-echo 'hi'
+hi def link tmuxConditional Keyword
+
+syn keyword tmuxConditional
+\ if else elif endif
+

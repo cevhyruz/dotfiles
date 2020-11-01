@@ -1,0 +1,16 @@
+snippet null "foo is 'NULL'"
+"#{==:#{${1:foo}},}"
+endsnippet
+
+snippet eq "foo is 'EQUAL' to value"
+"#{==:#{${1:foo}},${2:value}}"
+endsnippet
+
+snippet ne "foo is 'NOT EQUAL' to value"
+"#{!=:#{${1:foo}},${2:value}}"
+endsnippet
+
+snippet if "if..else" b
+%if ${1:condition}
+%endif
+endsnippet

@@ -77,7 +77,7 @@
   "command": "-deleteFile",
   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
 },
-// renaming file  
+// renaming file
 {
   "key": "shift+r",
   "command": "renameFile",
@@ -88,13 +88,13 @@
   "command": "-renameFile",
   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
 },
-// creating newfile 
+// creating newfile
 {
   "key": "shift+n",
   "command": "explorer.newFile",
   "when": "filesExplorerFocus"
 },
-// creating newfolder 
+// creating newfolder
 {
   "key": "ctrl+n",
   "command": "explorer.newFolder",
