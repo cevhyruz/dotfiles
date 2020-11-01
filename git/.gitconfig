@@ -67,7 +67,6 @@
   alias = false
 
 [alias]
-
   amend = commit --amend --reuse-message=HEAD
   alias = "!git config --get-regexp alias | fzf"
   c     = clone --recursive

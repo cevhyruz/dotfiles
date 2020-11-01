@@ -1,0 +1,4 @@
+# vim:ft=tmux
+
+#set -g window-status-current-style "bg=colour237, bold"
+

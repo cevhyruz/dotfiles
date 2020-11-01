@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 # -----------------------------------------------------------------------------
 #  File:          functions.sh
 #  Description:   Helper utility function for easy BASH shell scripting
@@ -9,10 +8,7 @@
 
 # shellcheck disable=SC2231 source=/dev/null
 
-
 declare DOTFILES_LIBPATH="${HOME}/Projects/dotfiles/bash/lib/lib.bash";
-
-
 
 function profile::init() {
   source "${DOTFILES_LIBPATH}" &> /dev/null || {
@@ -24,13 +20,12 @@ function profile::init() {
 function profile::load_aliases() {
   _load_bash_components
   lib::source_all_from "/etc/profile.d"
-
 }
 
 # Extra local configuration.
 function profile::load_local() {
-  [[ -r "${HOME}/Projects/dotfiles/_localrc/local.bashrc" ]] \
-    && source "${HOME}/Projects/dotfiles/_localrc/local.bashrc";
+  [[ -r "${HOME}/Projects/dotfiles/localrc/local.bashrc" ]] \
+    && source "${HOME}/Projects/dotfiles/localrc/local.bashrc";
 }
 
 function profile::main() {
@@ -40,7 +35,6 @@ function profile::main() {
   };
   profile::load_local;
   profile::load_aliases;
-
 }
 
 function _load_bash_components() {

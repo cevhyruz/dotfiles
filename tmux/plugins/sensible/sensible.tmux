@@ -4,13 +4,6 @@
 # Description: setup necesarry things for tmux accordingly
 # --------------------------------------------------------------------------
 
-# Theme Bootstrapper
-%if "#{!=:#{@theme},''}"
-  source-file -F "${TMUX_THEME_DIR}/#{@theme}/*.tmux"
-%else
-  source-file "${TMUX_THEME_DIR}/powerliner/*.tmux"
-%endif
-
 # Terminfo
 %if "#{m:*256col*,#{default-terminal}}"
   set-option -as terminal-overrides \
@@ -31,8 +24,7 @@ if-shell -F "#{||:#{!=:#{prefix},C-b},#{!=:#{prefix2},None}}" {
 
 # Remove unused mode keys.
 run-shell -b {
-  tmux unbind-key -aT \
-    "#{?#{==:#{mode-keys},vi},copy-mode,copy-mode-vi}" &> /dev/null;
+  tmux unbind-key -aT "#{?#{==:#{mode-keys},vi},copy-mode,copy-mode-vi}" &> /dev/null;
 }
 
 # mouse keybindings
