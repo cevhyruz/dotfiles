@@ -1,6 +1,6 @@
 # vi:ft=tmux fdm=marker
 # ---------------------------------------------------------------------------
-#        FILE : components.tmux
+#        FILE : statusbar.tmux
 # DESCRIPTION : default tmux statusbar components API.
 #       USAGE : source this after the {theme}.conf file.
 # ---------------------------------------------------------------------------

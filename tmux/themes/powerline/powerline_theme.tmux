@@ -5,11 +5,11 @@
 # vi:ft=tmux
 
 # pallete
-powerline_bg_main="colour235"
-powerline_fg_light="white"
-powerline_status="colour237"
-powerline_current="colour237"
-powerline_left_status="#81A1C1"
+%hidden powerline_bg_main="colour235"
+%hidden powerline_fg_light="white"
+%hidden powerline_status="colour237"
+%hidden powerline_current="colour237"
+%hidden powerline_left_status="#81A1C1"
 
 set -g @powerline                   on
 set -g status                       on
