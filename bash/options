@@ -3,7 +3,7 @@
 # enable vi-style line editing
 set -o vi
 
-declare -ra options=(
+readonly _OPTIONS=(
 "no_empty_cmd_completion" # no auto-completion on empty line
 "autocd"                  # allow omitting `cd` to directory names
 "cdspell"                 # auto-correct typos in path names
@@ -19,7 +19,7 @@ declare -ra options=(
 "failglob"                # if fail to match filenames return expansion error
 "globstar"                # ** will match all files and zero more more dir & subdir
 "gnu_errfmt"              # set error messages same as GNU error messages format
-"histappend"              # append to history rather than override
+"histappend"              # append to history rather, don't overwrite it
 "histreedit"              # allow readline to re-edit failed history substitution
 "histverify"              # allow further modification for history-substitution results
 "hostcomplete"            # hostname completion if '@' is being completed
@@ -30,7 +30,7 @@ declare -ra options=(
 "progcomp_alias"          # completion using the word resulting from expanded alias
 "xpg_echo" )              # expand backslash-escape sequences
 
-for opts in ${options[*]}; do
+for opts in "${_OPTIONS[@]}"; do
   shopt -s "${opts}"
 done
 unset opts

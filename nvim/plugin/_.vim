@@ -8,6 +8,7 @@
 let g:_ = {}
 let s:_ = g:_
 
+" message
 let s:_.message = {}
 
 function s:_.message.error(msg)
@@ -28,6 +29,7 @@ function s:_.message.warn(msg)
   echohl None
 endfunction
 
+" term
 let s:_.term = {}
 
 function! s:_.term.run(command)

@@ -1,3 +1,12 @@
 {
-    "window.zoomLevel": -1
+    "window.zoomLevel": -1,
+    "keyboard.dispatch": "keyCode",
+    "workbench.sideBar.location": "left",
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["k", "j"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "typescript.updateImportsOnFileMove.enabled": "always"
 }

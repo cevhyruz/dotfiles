@@ -1,32 +1,34 @@
-# allow sudoing aliases
-alias sudo='sudo '
-alias h='help'
+# allow sudo'ing aliases
+alias sudo="sudo "
+alias reload='exec ""${SHELL}'
 
-alias reload='exec ${SHELL}'
-alias ex='echo disables vim ex mode'
+function song() {
+  lsof -c mplayer | fgrep ".webm" | awk -F"/" '{ print $NF; }'
+}
 
-alias tre="tree -a -C -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX"
+alias ex="echo disables vim ex mode"
 
-# map capslock to backspace and double shift to capslock,
-# also make capslock (now backspace) repeatable when on-hold.
-alias k='setxkbmap -option caps:backspace -option shift:both_capslock && xset r 66'
+alias exa="exa --colour=always -la"
 
+alias mv="mv --interactive"
+
+# list all which matches
 alias which="which -a"
 
-# pretty print pathnames
-alias path='printf "%b" "${PATH//:/\\n}"'
+# pretty print path names
+alias path='printf "%b" "${PATH//:/\\n}" | fzf'
+alias envars='printenv | fzf'
 
-# which spawns the current shell?
+alias coverage='echo -e "$(cat /home/devs/Projects/dotfiles/destinnation.back)" | fzf --ansi'
+
+# which spawns the current shell
 alias parent='ps --no-headers -o comm "${PPID}"'
-
-# list files with TODO: and FIXME: notation
-alias todo="grep --recursive 'TOD[O]: '"
-alias fixme="grep --recursive 'FIXM[E]: '"
 
 alias r="reset"
 alias cr="clear"
 
-alias e="exit"
+# alias wpm="TERM='xterm-256color' wpm"
+
 alias q="exit"
 alias c="clear"
 
@@ -35,16 +37,37 @@ alias open="xdg-open"
 # navigation
 alias -- -='cd -'
 
-# language aliases
-alias py='python'
-
-# packages
-alias ls='ls --color=always --almost-all --group-directories-first --classify'
+alias ls='ls --color=always --almost-all --group-directories-first'
 alias dir='dir --color=always --almost-all --group-directories-first --dereference'
 
-alias dircolor="dir --color=always"
-alias egrep="egrep --color=always"
-alias fgrep="fgrep --color=always"
-alias grep="grep --color=always"
-alias lscolor="ls --color=always"
-alias vdir="vdir --color=always"
+# copy paste
+if [[ $(command -v xclip) ]]; then
+  alias pbcopy="xclip -selection clipboard"
+  alias pbpaste="xclip -selection clipboard -out"
+fi
+
+# bird's eye view of directory
+if [[ $(command -v tree) ]]; then
+  alias tre="tree -a -C -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX"
+fi
+
+alias gt='gulp --tasks'
+
+alias npmlg="npm list --global --depth 0";
+
+# sysmtemd service
+
+alias sc='systemctl'
+alias scr='systemctl daemon-reload'
+alias scu='systemctl --user'
+alias scur='systemctl --user daemon-reload'
+alias sce='systemctl stop'
+alias scue='systemctl --user stop'
+alias scs='systemctl start'
+alias scus='systemctl --user start'
+
+# terminal multiplexer
+
+alias ta='tmux attach -t'
+alias tls='tmux list-session'
+alias tnew='tmux new -s'

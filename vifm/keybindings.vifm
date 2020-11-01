@@ -1,3 +1,5 @@
+" vim:set ft=vim
+
 " Jump to commandline.
 nnoremap ; :
 " Exit commandline.

@@ -4,10 +4,15 @@
 " License:  DWTFYWTPL
 "------------------------------------------------------------------------------
 
+if exists('g:loaded_vimrc')
+  finish
+endif
+let g:loaded_vimrc = 1
+
 let s:vimrc = {}
 let g:vimrc = s:vimrc
 
-function vimrc#strip_whitespaces() "{{{1
+function s:vimrc.strip_whitespaces() "{{{
   let l:save_curpos = getpos('.')
   let l:old_query = getreg('/')
   %s/\s\+$//e
@@ -19,7 +24,7 @@ function! vimrc#jumpto_prev_tab()
   if exists('g:prev_tab')
     try
       execute 'tabn' g:prev_tab
-		catch /^Vim\%((\a\+)\)\=:E474/ " Invalid argument
+    catch /^Vim\%((\a\+)\)\=:E474/ " Invalid argument
       echom 'cant find tab '. g:prev_tab
     endtry
   else
@@ -60,7 +65,7 @@ function s:foldline_percentage()
 endfunction
 
 function vimrc#foldtext(delim) " {{{1
-  let l:line = substitute(getline(v:foldstart), split(&cms, '%s')[0] . '\|{{{\d\=', '', 'g')
+  let l:line = substitute(getline(v:foldstart), split(&commentstring, '%s')[0] . '\|{{{\d\=', '', 'g')
   " indent foldtext corresponding to foldlevel
   let l:indent = repeat(' ', shiftwidth())
   let l:foldLevelStr = repeat(l:indent, v:foldlevel - v:count1)
@@ -68,7 +73,7 @@ function vimrc#foldtext(delim) " {{{1
   " size foldtext according to window width
   let l:foldSize = (1 + (v:foldend - v:foldstart))
   " estimate fold length
-  let l:foldSizeStr = " " . l:foldSize . " lines "
+  let l:foldSizeStr = ' ' . l:foldSize . ' lines '
   " build up foldtext
   let l:foldLineTail = l:foldSizeStr . s:foldline_percentage()
   let l:lengthTail = strwidth(l:foldLineTail)
@@ -76,10 +81,12 @@ function vimrc#foldtext(delim) " {{{1
   if strwidth(l:foldLineHead) > l:lengthHead
     let l:foldLineHead = strpart(l:foldLineHead, 0, l:lengthHead - 2) . '...'
   endif
+  let l:foldlineWidth = 80
   let l:lengthMiddle = (s:editor_width() - strwidth(l:foldLineHead.l:foldLineTail))
   " truncate foldtext according to window width
   let l:expansionString = repeat(a:delim, l:lengthMiddle)
-  return l:foldLineHead . l:expansionString . l:foldLineTail
+  let l:conceal = repeat(' ', (s:editor_width() - l:foldlineWidth))
+  return l:foldLineHead . l:expansionString . l:foldLineTail. l:conceal
 endfunction
 
 
@@ -90,8 +97,6 @@ function! vimrc#helptab()
     nnoremap <buffer> q :q<cr>
   endif
 endfunction
-
-
 
 " Section: Fuzzy finder {{{1
 

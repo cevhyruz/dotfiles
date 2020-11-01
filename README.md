@@ -1,6 +1,9 @@
 # dotfiles
 # inspired by Alrra, mathiasbynes
 
+# Code Convention/style guide:
+bash - http://google.github.io/styleguide/shellguide.html#quoting
+
 # bash/bin/
   - for scripts that are either too large or too complicated to
     - be on bash/profile.d/functions.sh, where they are split
@@ -12,7 +15,8 @@
 
   Three layer IDE tmux, bash, nvim
 
-# Please don't astray to what the real purpose of my Dotfiles
+
+# Please don't astray to what the real purpose of this Dotfiles
 
     Bash, TMUX, VIM
 # - It should be an interactive, customizable IDE like for

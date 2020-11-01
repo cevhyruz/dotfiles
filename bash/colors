@@ -1,65 +1,70 @@
 #!/usr/bin/env bash
 
-function main() {
- _enable_color_support
- _set_color_variables
- _enable_command_color
-
-  cleanup && unset -f cleanup
-}
-
-function _enable_color_support() {
-  if [[ $COLORTERM == gnome-* && $TERM == xterm ]] \
-    && infocmp gnome-256color &> /dev/null; then
-    export TERM="gnome-256color";
-  elif infocmp xterm-256color &> /dev/null; then
-    export TERM="xterm-256color";
-  fi
-}
-
-function _set_color_variables() {
-# http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
-# https://unix.stackexchange.com/questions/269077/tput-setaf-color-table-how-to-determine-color-codes
 # shellcheck disable=SC2034
-  if [ -x /usr/bin/tput ] \
-    && tput setaf 1 &> /dev/null; then
-    # reset everything first
-    tput sgr0;
-    # attributes.
-    reset="$(tput sgr0)";
-    bold="$(tput bold)";
-    # colors
-    black="$(tput setaf 234)";
-    cyan="$(tput setaf 30)";
-    dimgrey="$(tput setaf 248)";
-    pink="$(tput setaf 216)";
-    yellow="$(tput setaf 178)";
-    green="$(tput setaf 30)";
-    red="$(tput setaf 203)";
-    white="$(tput setaf 246)";
-    shade="$(tput setaf 241)";
+function _set_color_variables() {
+  bold="\\e[1m";
+  reset="\\e[0m";
+  black="\\e[1;30m";
+  blue="\\e[1;34m";
+  green="\\e[1;32m";
+  orange="\\e[1;33m";
+  violet="\\e[1;35m";
+  white="\\e[1;37m";
+
+  grey="\\e[38;5;244m";
+  cyan="\\e[1;36m";
+  dimgrey="\\e[0;38;5;248m";
+  shade="\\e[38;5;242m";
+  pink="\\e[0;38;5;216m";
+  red="\\e[1;38;5;203m";
+  yellow="\\e[1;38;5;178m";
+  # pink="\\e[0;38;5;107m";
+}
+
+function _other_cmd_color() {
+  if command -v exa &> /dev/null; then
+    alias exa="exa --color=always"
   fi
 }
 
 function _enable_command_color() {
-  if [ -x /usr/bin/dircolors ]; then
-    if test -r ~/Projects/dotfiles/bash/LS_COLORS; then
-      eval "$(dircolors -b ~/Projects/dotfiles/bash/LS_COLORS)"
-    fi
+  if [[ -x "/usr/bin/dircolors" ]]; then
+
+    # if [[ -r ~/.dircolors ]]; then
+    #   eval "$(dircolors -b ~/dircolors)"
+    # fi
+
+    alias dir="dir --color=always"
+    alias egrep="egrep --color=always"
+    alias fgrep="fgrep --color=always"
+    alias grep="grep --color=always"
+    alias lscolor="ls --color=always"
+    alias vdir="vdir --color=always"
   fi
-  declare -a ls_colors=(
-    "no=0;39:"    # Global default
-    "di=0;36:"    # Directory
-    "ex=0;32:"    # Executable file
-    "fi=0;39:"    # File
-    "ec=:"        # Non-filename text
-    "mi=1;31:"    # Non-existent file pointed to by a symlink
-    "ln=target:"  # Symbolic link
-    "ow=0;35:"    # Other writable
-    "or=31;01:"   # Symbolic link pointing to a non-existent file
-  )
-  export LS_COLORS="$(printf %s "${ls_colors[@]}")"
+
+  # grey="\\e[38;5;244m";
+  # cyan="\\e[1;36m";
+  # dimgrey="\\e[0;38;5;248m";
+  # shade="\\e[38;5;242m";
+  # pink="\\e[0;38;5;216m";
+  # red="\\e[1;38;5;203m";
+  # yellow="\\e[1;38;5;178m";
+
+  LS_COLORS="";
+  LS_COLORS+="no=0;39:";   # Global default
+  LS_COLORS+="di=1;36:";   # Directory
+  LS_COLORS+="ex=0;32:";   # Executable file
+  LS_COLORS+="fi=0;39:";   # File
+  LS_COLORS+="ec=:";       # Non-filename text
+  LS_COLORS+="mi=1;31:";   # Non-existent file pointed to by a symlink
+  LS_COLORS+="ln=target:"; # Symbolic link
+  LS_COLORS+="ow=0;35:";   # Other writable
+  LS_COLORS+="or=31;01:";  # Symbolic link pointing to a non-existent file
+
+  export LS_COLORS;
 }
+
+# time _enable_command_color ~0ms
 
 function cleanup() {
   unset -f _enable_color_support
@@ -67,5 +72,14 @@ function cleanup() {
   unset -f _set_color_variables
 }
 
+function main() {
+  # _enable_color_support
+  _set_color_variables
+  _enable_command_color
+  _other_cmd_color
+
+  cleanup && unset -f cleanup
+}
+
 # time main
-main && unset -f main
+main
