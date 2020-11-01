@@ -67,6 +67,7 @@
   alias = false
 
 [alias]
+
   amend = commit --amend --reuse-message=HEAD
   alias = "!git config --get-regexp alias | fzf"
   c     = clone --recursive
@@ -80,7 +81,7 @@
   #               │         │        └> Use standard ignore rules.
   #               │         └─────────> Show other files (i.e. untracked).
   #               └───────────────────> Show only ignored files
- 
+
   # Create a branch or switch if it exists.
   mb = "!a(){ git checkout -b \"${1}\" 2> /dev/null || git checkout \"${1}\";}; a"
 
