@@ -10,31 +10,31 @@
 
 declare DOTFILES_LIBPATH="${HOME}/Projects/dotfiles/bash/lib/lib.bash";
 
-function profile::init() {
+function Profile::init() {
   source "${DOTFILES_LIBPATH}" &> /dev/null || {
     printf "%b" "[Error]: Library file not found.\n"
     return 1;
   }
 }
 
-function profile::load_aliases() {
+function Profile::load_aliases() {
   _load_bash_components
   lib::source_all_from "/etc/profile.d"
 }
 
 # Extra local configuration.
-function profile::load_local() {
+function Profile::load_local() {
   [[ -r "${HOME}/Projects/dotfiles/localrc/local.bashrc" ]] \
     && source "${HOME}/Projects/dotfiles/localrc/local.bashrc";
 }
 
-function profile::main() {
-  profile::init
-  profile::init || {
+function Profile::main() {
+  Profile::init
+  Profile::init || {
     return 1;
   };
-  profile::load_local;
-  profile::load_aliases;
+  Profile::load_local;
+  Profile::load_aliases;
 }
 
 function _load_bash_components() {
@@ -54,4 +54,4 @@ function _load_bash_components() {
   unset file
 }
 
-profile::main "${@}"
+Profile::main "${@}"
