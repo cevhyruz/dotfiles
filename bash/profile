@@ -29,7 +29,6 @@ function Profile::load_local() {
 }
 
 function Profile::main() {
-  Profile::init
   Profile::init || {
     return 1;
   };
