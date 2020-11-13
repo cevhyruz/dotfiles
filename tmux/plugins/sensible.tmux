@@ -32,13 +32,8 @@ run-shell -b {
   unbind -T copy-mode-vi MouseDragEnd1Pane
 %endif
 
-# Local Config
-
-%if "#{!=:#{@extra-config},}"
-  run-shell -b { tmux source-file "#{@extra-config}" }
-%endif
-
 # Extra config file
+
 set-hook -ag after-new-session {
   %if "#{!=:#{@extra-config},}"
     run-shell -b { tmux source-file "#{@extra-config}" }
