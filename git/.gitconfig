@@ -69,7 +69,8 @@
 [alias]
   amend = commit --amend --reuse-message=HEAD
   alias = "!git config --get-regexp alias | fzf"
-  c     = clone --recursive
+  c     = "!a(){ echo \"${PWD}/$(basename \"${1}\" .git)\"; }; a"
+  cd ="!a(){ cd \"${1}\"; }; a"
   s     = "!git status --short | fzf"
   b     = branch --all
   r     = remote --verbose

@@ -71,3 +71,5 @@ alias scus='systemctl --user start'
 alias ta='tmux attach -t'
 alias tls='tmux list-session'
 alias tnew='tmux new -s'
+
+alias g='git'
