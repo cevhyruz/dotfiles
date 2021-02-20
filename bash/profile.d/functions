@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # quickly edit files matching input string.
 function query() {
 
@@ -48,6 +47,9 @@ function lazyload_nvm() { # {{{1
   };
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# TODO:
+# list multiple tmux builds. if none were found, fireup tmux from path.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # list bash aliases
