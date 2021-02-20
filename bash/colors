@@ -19,6 +19,17 @@ function _set_color_variables() {
   red="\\e[1;38;5;203m";
   yellow="\\e[1;38;5;178m";
   # pink="\\e[0;38;5;107m";
+
+  # only set $TERM when we're not inside tmux
+  #! [[ "$TERM" =~ ^screen ]] && {
+    #if [[ $COLORTERM = gnome-* && $TERM = xterm ]] \
+      #&& infocmp gnome-256color >/dev/null 2>&1; then
+      #export TERM='gnome-256color';
+    #elif infocmp xterm-256color >/dev/null 2>&1; then
+      #export TERM='xterm-256color';
+    #fi;
+  #};
+
 }
 
 function _other_cmd_color() {

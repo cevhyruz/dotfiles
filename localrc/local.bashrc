@@ -43,15 +43,49 @@ alias tmuxtest='tmux -Ltmuxtest -f /home/devs/Projects/cloned-repo/tmux/tmux.con
 #alias tmux='tmux kill-serve; tmux'
 #alias exit='tmux kill-server'
 
+#[ -e "$HOME/.config/tmuxvm/bin" ] && export PATH="$HOME/.config/tmuxvm/bin:$PATH"
 
-#function exit() {
-  #if pgrep tmux; then
-    #tmux kill-server
-  #else
-    #builtin exit
+
+
+#[ -z "${TVM_CURRENT}" ] && {
+  #readonly PREV_PATH="${PATH}"
+  #export PATH="${HOME}/.tvm/3.1/bin:${PATH}"
+#}
+
+#function tvm() {
+
+  #if [[ "${1}" == 'use' ]]; then
+    #if [[ -d "${HOME}/.tvm/${2}" ]]; then
+      #export TVM_CURRENT="${2}"
+      #echo 'switching...';
+      #sleep .500;
+      ## restore path
+      #export PATH="${PREV_PATH}"
+      ## add new version to path
+      #export PATH="${HOME}/.tvm/${TVM_CURRENT}/bin:${PATH}"
+      #echo "Now using tmux ${TVM_CURRENT}";
+    #else
+      #echo "tmux ${2} is not installed yet"
+    #fi
   #fi
+
 #}
 
-#function tmux() {
-  #echo 'test'
-#}
+
+function fman() {
+  man -k . | fzf --preview $"echo {} | tr -d '()' | awk '{printf \"%s \", \$2} {print \$1}' | xargs -r man"
+}
+ 
+
+
+# fshow - git commit browser
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}

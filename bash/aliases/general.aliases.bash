@@ -1,12 +1,14 @@
 # allow sudo'ing aliases
 alias sudo="sudo "
-alias reload='exec ""${SHELL}'
+alias reload='exec "${SHELL}"'
 
 function song() {
   lsof -c mplayer | fgrep ".webm" | awk -F"/" '{ print $NF; }'
 }
 
 alias ex="echo disables vim ex mode"
+
+alias please="fuck"
 
 alias exa="exa --colour=always -la"
 
@@ -71,3 +73,5 @@ alias scus='systemctl --user start'
 alias ta='tmux attach -t'
 alias tls='tmux list-session'
 alias tnew='tmux new -s'
+
+alias g='git'

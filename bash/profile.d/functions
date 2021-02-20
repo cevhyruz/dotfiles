@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # quickly edit files matching input string.
 function query() {
 
@@ -30,8 +29,8 @@ function fixme() { query "FIXM[E]:"; }
 
 for func in $(printf "nvm node npm npx"); do
   eval "${func}() { lazyload_nvm && ${func} \"\$@\"; }";
-done
-unset func
+done;
+unset func;
 
 function lazyload_nvm() { # {{{1
   export NVM_DIR="${HOME}/.nvm";
@@ -48,6 +47,9 @@ function lazyload_nvm() { # {{{1
   };
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# TODO:
+# list multiple tmux builds. if none were found, fireup tmux from path.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # list bash aliases
@@ -171,11 +173,15 @@ function terminfo() {
   # \033[XXm   Octal
   echo -e "\e[1mbold\e[0m"
   echo -e "\e[2mdim\e[0m"
+  echo -e "\e[5mBlink\e[0m"
   echo -e "\e[3mitalic\e[0m"
   echo -e "\e[4mstraight underline\e[0m"
+  echo -e "\e[7minverted\e[0m"
   echo -e "\e[9mstrikethrough\e[0m"
   echo -e "\e[31mcolored\e[0m"
+
   echo -e "\033[53moverline\033[55m"
+
   echo -e "\e[4:3mcurvy underline"
   echo -e "\e[4:2mdouble underline"
   echo -e "\e[4:5mdashed underline\e[0m"

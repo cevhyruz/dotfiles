@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#
+#
+#
+# check something
+#
+#
+#
+#
+
+
+function version() {
+  tmux split-window -h
+}
+
+version "$@"
