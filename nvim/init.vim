@@ -32,15 +32,15 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'benmills/vimux'
   Plug 'easymotion/vim-easymotion'
   "Plug 'edkolev/tmuxline.vim'
-  Plug 'mhinz/vim-startify'
+  "Plug 'mhinz/vim-startify'
 "  Plug 'blueyed/vim-diminactive'
-  Plug 'sjl/gundo.vim'
-  Plug 'voldikss/vim-floaterm'
+  "Plug 'sjl/gundo.vim'
+  "Plug 'voldikss/vim-floaterm'
   Plug 'itchyny/lightline.vim'
   Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
-" section: fzf {{{1
+" section: fzf
 let g:fzf_layout = {'down': '~23%'}
 
 let g:fzf_action = {
@@ -82,14 +82,14 @@ colorscheme    codedark
 syntax         on
 filetype       plugin indent on
 
-" SECTION: Options {{{1
+" SECTION: Options 
 
 set history=10000
 set clipboard+=unnamedplus
 set updatetime=100
 set undofile
 
-set termguicolors
+"set termguicolors
 set noswapfile
 set foldcolumn=1
 set textwidth=120
@@ -118,7 +118,7 @@ set backupdir=/tmp//,.
 set directory=/tmp//,.
 set undodir=/tmp//,.
 
-" SECTION: Commands {{{1
+" SECTION: Commands 
 
 if empty($TMUX)
   command! NavRight call vimrc#navigate('l')
@@ -134,7 +134,7 @@ else
   command! NavPrev  call vimrc#tmux_navigate('p')
 endif
 
-" SECTION: AutoCommands {{{1
+" SECTION: AutoCommands 
 
 "augroup strip_whitespace
 "  autocmd!
@@ -152,12 +152,12 @@ augroup close_if_only_nerdtree
   autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 
-" SECTION: Abbreviations {{{1
+" SECTION: Abbreviations 
 
 " completions
 cnoreabbrev <silent>f FZF<cr>
 
-" SECTION: Mappings {{{1
+" SECTION: Mappings 
 
 let mapleader = ','
 
@@ -284,7 +284,7 @@ let NERDTreeWinPos                = 'left'
 let NERDTreeIgnore                = [ '\.git$', '\~$', 'node_modules' ]
 let NERDTreeWinSize               = 35
 
-" SECTION: localrc {{{1
+" SECTION: localrc 
 
 let s:local_vimrc = expand('~/Projects/dotfiles/_localrc/local.nvimrc')
 if filereadable(s:local_vimrc)
@@ -311,7 +311,7 @@ let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 " let g:UltiSnipsListSnippets = ""
 
 
-" Plug: GitGutter {{{1
+" Plug: GitGutter 
 
   let g:sign = ' ┃'                " Git Gutter Sign.
   let g:gitgutter_map_keys = 0     " Dont set mappings.
@@ -330,8 +330,7 @@ let g:UltiSnipsJumpBackwardTrigger='<c-k>'
  
 
 
-" SECTION: indentLine {{{1
-
+" SECTION: indentLine 
 
 nnoremap <leader>i<space> :IndentLinesToggle <cr>
 

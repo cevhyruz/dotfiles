@@ -2,3 +2,6 @@
 
 #set -g window-status-current-style "bg=colour237, bold"
 
+
+set-option -g @theme powerline
+#set status 2
