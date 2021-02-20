@@ -1,13 +1,37 @@
 #!/usr/bin/env bash
 #
-# Set up environment variables for bash.
+# Set up environment variables for:
+# rust, android, distribution ruby, environment path, bash history,
+# bash prompt, man page, less, shellcheck, fzf, xdg specifications.
+
+function main() {
+  if [[ -z "${ENVARS_INIT}" ]] || [[ -n "${TMUX}" ]]; then
+    set_xdg_specs;
+    set_editors;
+
+    set_path;
+    set_android_dev_path;
+    set_ruby_distrib_path;
+
+    set_hist_envars;
+    set_prompts_envars;
+    set_manpager;
+    set_less_envars;
+    set_shellcheck_envars;
+    set_fzf_envars;
+    set_rust_envars;
+
+    cleanup && unset -f "${FUNCNAME[0]}";
+    export ENVARS_INIT='TRUE'
+  fi
+}
+
 
 function set_rust_envars() {
   lib::add_to_path "${HOME}/.cargo/bin";
 }
 
 function set_android_dev_path() {
-
   if [[ -d '/usr/lib/Android' ]] && [[ -z "${ANDROID_HOME}" ]]; then
 
     export readonly ANDROID_HOME='/usr/lib/Android';
@@ -20,8 +44,7 @@ function set_android_dev_path() {
       "${ANDROID_HOME}/tools/bin"
       "${ANDROID_HOME}/platform-tools"
       "${ANDROID_SDK_ROOT}"
-      "${GRADLE_HOME}"
-    );
+      "${GRADLE_HOME}" );
 
     for path in "${_ANDROID_PATH[@]}"; do
       if [[ -d "${path}" ]]; then
@@ -37,7 +60,7 @@ function set_ruby_distrib_path() {
   if [[ -d "${HOME}/.ruby" ]] && [[ -z "${GEM_HOME}" ]]; then
     readonly GEM_HOME="${HOME}/.ruby";
     lib::add_to_path "${GEM_HOME}/bin";
-    export GEM_HOME
+    export GEM_HOME;
   fi
 }
 
@@ -100,7 +123,7 @@ function set_manpager() {
   export MANWIDTH=96;
   # set neovim as manpager
   export MANPAGER="nvim -c ':set ft=man'";
-  # [?] for faster manpager uncomment the line below
+  # [?] for faster manpager without plugins uncomment the line below.
   # export MANPAGER="nvim --noplugin -c ':set ft=man'";
 }
 
@@ -126,13 +149,12 @@ function set_fzf_envars() {
   local -ar FZF_BINDKEYS=(
     "ctrl-e:preview-down+preview-down," # preview scroll-down by 2 lines.
     "ctrl-y:preview-up+preview-up,"     # preview scroll-up by 2 lines.
-    "ctrl-space:accept"                 # additional accept key.
-  );
+    "ctrl-space:accept" );              # additional accept key.
 
   local -ar FZF_OPTS=(
     "--ansi"
     "--bind=$(printf "%s" "${FZF_BINDKEYS[@]}")"
-    "--margin=0,0,1"
+    "--margin=0,0,1" # T,RL,B
     "--multi"
     "--height=25"
     "--no-bold"
@@ -163,6 +185,7 @@ function set_fzf_envars() {
 
   # Rg
   elif command -v rg &> /dev/null; then
+
     for dir in "${FZF_IGNORE[@]}"; do
       ignored_dirs+="!${dir}*,";
     done
@@ -219,30 +242,6 @@ function set_xdg_specs() {
 
   declare -xr XDG_DATA_HOME="${HOME}/.local/share" && \
     export XDG_DATA_HOME;
-}
-
-function main() {
-  if [[ -z "${ENVARS_INIT}" ]] || [[ -n "${TMUX}" ]]; then
-
-    set_xdg_specs;
-    set_editors;
-
-    set_path;
-    set_android_dev_path;
-    set_ruby_distrib_path;
-
-    set_hist_envars;
-    set_prompts_envars;
-    set_manpager;
-    set_less_envars;
-    set_shellcheck_envars;
-    set_fzf_envars;
-    set_rust_envars;
-
-    cleanup && unset -f "${FUNCNAME[0]}";
-
-    export ENVARS_INIT='TRUE'
-  fi
 }
 
 main "$@";

@@ -2,3 +2,48 @@
 
 #set -g window-status-current-style "bg=colour237, bold"
 
+
+set-option -g @theme powerline
+#set status 2
+
+
+# temporary commandbar
+#bind-key 'T' split -l1
+
+# open a new window,
+# zoom, run command
+# unzoom then close window
+
+#bind-key 'v' neww -n "#[fg=yellow, italics]-choose alias-" \
+#"tmux run-shell \"fzf\""
+
+#bind-key 'G' \
+#command-prompt -p 'run-foo:' \
+#'new-window "${TMUX_SCRIPTS}/run-alias \"%%\""'
+
+
+
+# temporary command-alias for tmux later than 2.4
+if-shell '[ $(echo "$TMUX_VERSION < 2.4" | bc) = 1 ]' \
+" bind-key 'u' command-prompt -p 'run-alias: ' \
+'run-shell \" ${TMUX_SCRIPTS}/run-alias '%%' \"'; "
+
+
+# linux pipes with instant live preview
+#bind-key 'T' command-prompt -p 'up:' "split-window '"%1" | up'"
+
+
+# quick man page
+bind-key '/' new-window \
+"echo $(man -k . | fzf --height=100 --preview 'echo {} \
+  | tr -d \"()\"  \
+  | awk '\"'{print \\$2, \\$1}'\"' \
+  | xargs -r man ') \
+  | tr -d '()' | awk '{print $2, $1}' | xargs -r man"
+
+
+bind-key 'T' new-window \
+"tmux show-options -g \
+  | column -t \
+  | awk '{print $1, $2 $3}' \
+  | column -t | fzf --height=0 --preview='echo {2}'"

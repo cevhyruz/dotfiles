@@ -8,13 +8,15 @@
 
 # shellcheck disable=SC2231 source=/dev/null
 
-declare DOTFILES_LIBPATH="${HOME}/Projects/dotfiles/bash/lib/lib.bash";
+declare DOTFILES_LIBPATH="${HOME}/Projects/dotfiles/bash/lib";
+
+source "${DOTFILES_LIBPATH}/lib.bash" || {
+  echo "can't load library files."
+  return 1;
+}
 
 function Profile::init() {
-  source "${DOTFILES_LIBPATH}" &> /dev/null || {
-    printf "%b" "[Error]: Library file not found.\n"
-    return 1;
-  }
+  source "${DOTFILES_LIBPATH}/composure.bash"
 }
 
 function Profile::load_aliases() {
