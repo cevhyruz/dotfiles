@@ -12,7 +12,9 @@ declare skip_questions=false;
 
 
 function setup() {
-  cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
+  cd "$(dirname "${BASH_SOURCE[0]}")" || {
+   echo 'something is wrong'
+  }
 
   if [[ -x "utils/setup_utils.sh" ]]; then
     source "utils/setup_utils.sh" || exit 1;
