@@ -8,7 +8,7 @@ declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git";
 declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
 declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/utils/setup_utils.sh"
 declare dotfiles_directory="${HOME}/Projects/dotfiles";
-declare skipQuestions=false;
+declare skip_questions=false;
 
 
 function setup() {
@@ -21,7 +21,7 @@ function setup() {
   fi
 
   # shellcheck disable=SC2034
-  skip_questions "$@" && skipQuestions=true
+  skip_questions "$@" && skip_questions=true
 
   ask_for_sudo;
 
@@ -34,7 +34,7 @@ function setup() {
     if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
       ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
     fi
-    if ! $skipQuestions; then
+    if ! $skip_questions; then
       ./update_content.sh
     fi
   fi
@@ -67,7 +67,7 @@ function download_dotfiles() {
   printf "\n";
 
   # install location
-  if ! $skipQuestions; then
+  if ! $skip_questions; then
     ask_for_confirmation \
       "Do you want to store the dotfiles in '$dotfiles_directory'?";
     if ! answer_is_yes; then
