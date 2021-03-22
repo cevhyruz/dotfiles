@@ -33,11 +33,16 @@ function kill_all_subprocesses() {
   done
 }
 
+function set_trap() {
+    trap -p "$1" | grep "$2" &> /dev/null \
+        || trap '$2' "$1"
+        echo 'trap has been set'
+}
+
 function execute() {
   local -r CMDS="$1"
   local -r MSG="${2:-$1}"
   local -r TMP_FILE="$(mktemp /tmp/XXXXX)"
-
   local exitCode=0
   local cmdsPID=""
 

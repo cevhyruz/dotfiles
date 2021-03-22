@@ -2,58 +2,43 @@
 #
 # [?] setup and install necessary things to make dotfiles up and running.
 
-declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
 
+declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
 declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git";
 declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
 declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/utils/setup_utils.sh"
-
 declare dotfiles_directory="${HOME}/Projects/dotfiles";
-declare skip_question=false;
+declare skipQuestions=false;
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
 
   if [[ -x "utils/setup_utils.sh" ]]; then
     source "utils/setup_utils.sh" || exit 1;
   else
-    download_utils || {
-      echo "something went wrong there"
-      exit 1;
-    }
+    download_utils || exit 1;
   fi
 
-  skip_questions "$@" \
-    && skipQuestions=true;
+  # shellcheck disable=SC2034
+  skip_questions "$@" && skipQuestions=true
 
   ask_for_sudo;
 
-  # Check if this script was run directly (./<path>/setup.sh),
-  # and if not, it most likely means that the dotfiles were not
-  # yet set up, and they will need to be downloaded.
-  printf "%s" "${BASH_SOURCE[0]}" \
-    | grep "setup.sh" &> /dev/null \
+  printf "%s" "${BASH_SOURCE[0]}" | grep "setup.sh" &> /dev/null \
     || download_dotfiles;
 
-  #./create_directories.sh
-  #./create_symbolic_links.sh "$@"
-  #./create_local_config_files.sh
-  #./install/main.sh
-  #./preferences/main.sh
+  # scripts ...
 
-  #if cmd_exists "git"; then
-    #[[ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]] \
-      #&& ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
+  if cmd_exists "git"; then
+    if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
+      ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
+    fi
+    if ! $skipQuestions; then
+      ./update_content.sh
+    fi
+  fi
 
-    #if ! $skipQuestions; then
-      #./update_content.sh
-    #fi
-  #fi
-
-  #if ! $skipQuestions; then
-    #./restart.sh
-  #fi
 }
 
 function download() {
@@ -82,55 +67,56 @@ function download_dotfiles() {
   printf "\n";
 
   # install location
-  if ! $skip_question; then
+  if ! $skipQuestions; then
     ask_for_confirmation \
       "Do you want to store the dotfiles in '$dotfiles_directory'?";
     if ! answer_is_yes; then
-      dotfilesDirectory=""
-      while [ -z "$dotfilesDirectory" ]; do
+      dotfiles_directory=""
+      while [ -z "$dotfiles_directory" ]; do
         ask "Please specify another location for the dotfiles (path): ";
-        dotfilesDirectory="$(get_answer)"
+        dotfiles_directory="$(get_answer)"
       done
     fi
-    while [[ -e "$dotfilesDirectory" ]]; do
+    while [[ -e "$dotfiles_directory" ]]; do
       ask_for_confirmation \
-        "'$dotfilesDirectory' already exists, do you want to overwrite it?";
+        "'$dotfiles_directory' already exists, do you want to overwrite it?";
       if answer_is_yes; then
-        rm -rf "$dotfilesDirectory";
+        rm -rf "$dotfiles_directory";
         break;
       else
-        dotfilesDirectory="";
-        while [ -z "$dotfilesDirectory" ]; do
+        dotfiles_directory="";
+        while [ -z "$dotfiles_directory" ]; do
           ask "Please specify another location for the dotfiles (path): ";
-          dotfilesDirectory="$(get_answer)";
+          dotfiles_directory="$(get_answer)";
         done
       fi
     done
     printf "\n";
   else
-    rm -rf "$dotfilesDirectory" &> /dev/null;
+    rm -rf "$dotfiles_directory" &> /dev/null;
   fi
 
-  mkdir -p "$dotfilesDirectory"
-  print_result $? "Create '$dotfilesDirectory'" "true"
+  mkdir -p "$dotfiles_directory"
+  print_result $? "Create '$dotfiles_directory'" "true"
 
-  extract "$tmpFile" "$dotfilesDirectory"
+  extract "$tmpFile" "$dotfiles_directory"
   print_result $? "Extract archive" "true"
 
   rm -rf "$tmpFile"
   print_result $? "Remove archive"
 
-  cd "$dotfilesDirectory/src/os" \
+  cd "$dotfiles_directory/src/os" \
       || return 1
 }
 
 function download_utils() {
   local tmpFile="";
   tmpFile="$(mktemp /tmp/XXXXX)";
-  download "$DOTFILES_UTILS_URL" "$tmpFile" \
-    && . "$tmpFile" \
-    && rm -rf "$tmpFile" \
-    && return 0
+  download "$DOTFILES_UTILS_URL" "$tmpFile" && {
+    . "$tmpFile"
+    rm -rf "$tmpFile"
+    return 0
+  }
   return 1
 }
 
