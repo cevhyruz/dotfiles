@@ -2,58 +2,43 @@
 #
 # [?] setup and install necessary things to make dotfiles up and running.
 
-declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
 
+declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
 declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git";
 declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
 declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/utils/setup_utils.sh"
-
 declare dotfiles_directory="${HOME}/Projects/dotfiles";
-declare skip_question=false;
+declare skipQuestions=false;
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
 
   if [[ -x "utils/setup_utils.sh" ]]; then
     source "utils/setup_utils.sh" || exit 1;
   else
-    download_utils || {
-      echo "something went wrong there"
-      exit 1;
-    }
+    download_utils || exit 1;
   fi
 
-  skip_questions "$@" \
-    && skipQuestions=true;
+  # shellcheck disable=SC2034
+  skip_questions "$@" && skipQuestions=true
 
   ask_for_sudo;
 
-  # Check if this script was run directly (./<path>/setup.sh),
-  # and if not, it most likely means that the dotfiles were not
-  # yet set up, and they will need to be downloaded.
-  printf "%s" "${BASH_SOURCE[0]}" \
-    | grep "setup.sh" &> /dev/null \
+  printf "%s" "${BASH_SOURCE[0]}" | grep "setup.sh" &> /dev/null \
     || download_dotfiles;
 
-  #./create_directories.sh
-  #./create_symbolic_links.sh "$@"
-  #./create_local_config_files.sh
-  #./install/main.sh
-  #./preferences/main.sh
+  # scripts ...
 
-  #if cmd_exists "git"; then
-    #[[ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]] \
-      #&& ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
+  if cmd_exists "git"; then
+    if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
+      ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
+    fi
+    if ! $skipQuestions; then
+      ./update_content.sh
+    fi
+  fi
 
-    #if ! $skipQuestions; then
-      #./update_content.sh
-    #fi
-  #fi
-
-  #if ! $skipQuestions; then
-    #./restart.sh
-  #fi
 }
 
 function download() {
@@ -82,7 +67,7 @@ function download_dotfiles() {
   printf "\n";
 
   # install location
-  if ! $skip_question; then
+  if ! $skipQuestions; then
     ask_for_confirmation \
       "Do you want to store the dotfiles in '$dotfiles_directory'?";
     if ! answer_is_yes; then
@@ -127,10 +112,11 @@ function download_dotfiles() {
 function download_utils() {
   local tmpFile="";
   tmpFile="$(mktemp /tmp/XXXXX)";
-  download "$DOTFILES_UTILS_URL" "$tmpFile" \
-    && . "$tmpFile" \
-    && rm -rf "$tmpFile" \
-    && return 0
+  download "$DOTFILES_UTILS_URL" "$tmpFile" && {
+    . "$tmpFile"
+    rm -rf "$tmpFile"
+    return 0
+  }
   return 1
 }
 
