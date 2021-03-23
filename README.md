@@ -1,55 +1,40 @@
-# dotfiles
-# inspired by Alrra, mathiasbynes
+# Dotfiles
 
-# Code Convention/style guide:
-bash - http://google.github.io/styleguide/shellguide.html#quoting
+This repository is a collection of configurations and settings for a
+friction-free development environment.  Composed of tmux, neovim, bash, fzf,
+and all other stuff to make development a breeze.
 
-# bash/bin/
-  - for scripts that are either too large or too complicated to
-    - be on bash/profile.d/functions.sh, where they are split
-    - into multiple smaller functions.
-  - they are loaded by creating a symbolic link to /usr/local/bin
-    - which was already on the environment path by default.
+Heavily inspired by [Alrra's](https://github.com/Alrra/dotfiles)
+and [mathiasbynens's](https://github.com/mathiasbynens/dotfiles) dotfiles.
 
-  NOTE: they are not standalone scripts!
+## Setting up
 
-  Three layer IDE tmux, bash, nvim
+Using your terminal if you don't have `git` installed yet:
 
+```bash
+bash -c "$(curl -LsS https://raw.github.com/alrra/dotfiles/main/src/os/setup.sh)"
+```
 
-# Please don't astray to what the real purpose of this Dotfiles
+Or if you already have `git` installed:
 
-    Bash, TMUX, VIM
-# - It should be an interactive, customizable IDE like for
-#   Software Development inside for linux.
+```bash
+# clone this repository
+git clone https://github.com/cevhyruz/dotfiles.git ~/Projects/dotfiles
 
-# Meaning, It packs as one big IDE so there should'nt be any
-# portable parts of code, especially for scripts (aside from configs).
+# go into the repository
+cd ~/Projects/dotfiles
 
-# This Dotfiles should be strictly modal!
+# run setup script
+./setup.sh
+```
 
-# One setup file (setup necessary things)
-# One package manager to rule them all. bash, tmux, vim/nvim etc.
-# - maybe using curl or wget?
+## Issues and Improvements
 
-# One library/API to serve them all
-# - Meaning, If I have to: I'll shamefully ripoff those existing
-#   plugins out there, and customize them according to my needs
+Spotted a bug? want to add that feature you want?
+Please don't hesitate to file an issue using Github's issue tracker
+or submit your pull request.
 
-# since I'm being greedy. I should just rewrite and  reinvent everything!
+## Code convention
 
-# Interactive configuration: like spacemacs
-
-# Interactive documentation/help using less/man/nvim/vim or should I just write
-# my own? yeah, I'm greedy!
-
-
-# maybe write my own commandline: as alternative to tmux's.
-
-# Code convention:
-# lol
-
-# What goodies does an IDE has?
-# maybe a browser?
-# debugger?
-# task runner?
-# should support android development
+[Google Style guide](http://google.github.io/styleguide/shellguide.html#quoting)
+for shell scripting.
