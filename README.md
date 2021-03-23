@@ -12,7 +12,7 @@ and [mathiasbynens's](https://github.com/mathiasbynens/dotfiles) dotfiles.
 Using your terminal if you don't have `git` installed yet:
 
 ```bash
-bash -c "$(curl -LsS https://raw.github.com/alrra/dotfiles/main/src/os/setup.sh)"
+bash -c "$(curl -LsS https://raw.github.com/cevhyruz/dotfiles/master/setup.sh)"
 ```
 
 Or if you already have `git` installed:
