@@ -12,9 +12,7 @@ declare skip_questions=false;
 
 
 function setup() {
-  cd "$(dirname "${BASH_SOURCE[0]}")" || {
-   echo 'something is wrong'
-  }
+  cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
 
   if [[ -x "utils/setup_utils.sh" ]]; then
     source "utils/setup_utils.sh" || exit 1;
@@ -25,7 +23,7 @@ function setup() {
   # shellcheck disable=SC2034
   skip_questions "$@" && skip_questions=true
 
-  ask_for_sudo;
+  ask::sudo;
 
   printf "%s" "${BASH_SOURCE[0]}" | grep "setup.sh" &> /dev/null \
     || download_dotfiles;
@@ -60,19 +58,19 @@ function download() {
 function download_dotfiles() {
   local tmpFile="";
 
-  print_in_purple "\n • Download and extract archive\n\n";
+  _print::purple "\n • Download and extract dotfiles tarball\n\n";
 
   tmpFile="$(mktemp /tmp/XXXXX)";
 
   download "$DOTFILES_TARBALL_URL" "$tmpFile";
-  print_result $? "Download archive" "true";
+  print::result $? "Download archive" "true";
   printf "\n";
 
   # install location
   if ! $skip_questions; then
-    ask_for_confirmation \
+    ask::confirm \
       "Do you want to store the dotfiles in '$dotfiles_directory'?";
-    if ! answer_is_yes; then
+    if ! get_answer::yes; then
       dotfiles_directory=""
       while [ -z "$dotfiles_directory" ]; do
         ask "Please specify another location for the dotfiles (path): ";
@@ -80,9 +78,9 @@ function download_dotfiles() {
       done
     fi
     while [[ -e "$dotfiles_directory" ]]; do
-      ask_for_confirmation \
+      ask::confirm \
         "'$dotfiles_directory' already exists, do you want to overwrite it?";
-      if answer_is_yes; then
+      if get_answer::yes; then
         rm -rf "$dotfiles_directory";
         break;
       else
@@ -99,13 +97,13 @@ function download_dotfiles() {
   fi
 
   mkdir -p "$dotfiles_directory"
-  print_result $? "Create '$dotfiles_directory'" "true"
+  print::result $? "Create '$dotfiles_directory'" "true"
 
   extract "$tmpFile" "$dotfiles_directory"
-  print_result $? "Extract archive" "true"
+  print::result $? "Extract archive" "true"
 
   rm -rf "$tmpFile"
-  print_result $? "Remove archive"
+  print::result $? "Remove archive"
 
   cd "$dotfiles_directory/src/os" \
       || return 1
@@ -116,7 +114,6 @@ function download_utils() {
   tmpFile="$(mktemp /tmp/XXXXX)";
   download "$DOTFILES_UTILS_URL" "$tmpFile" && {
     . "$tmpFile"
-    rm -rf "$tmpFile"
     return 0
   }
   return 1
