@@ -30,14 +30,14 @@ function setup() {
 
   # scripts ...
 
-  if cmd_exists "git"; then
-    if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
-      ./initialize_git_repository.sh "$DOTFILES_ORIGIN"
-    fi
-    if ! $skip_questions; then
-      ./update_content.sh
-    fi
-  fi
+  #if cmd_exists "git"; then
+    #if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
+      #./initialize_git_repository.sh "$DOTFILES_ORIGIN"
+    #fi
+    #if ! $skip_questions; then
+      #./update_content.sh
+    #fi
+  #fi
 
 }
 

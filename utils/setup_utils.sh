@@ -34,7 +34,7 @@ function print::result() {
   return "$1";
 }
 
-function ask() { print::question "$1" read -r; }
+function ask() { print::question "$1"; read -r; }
 
 function ask::confirm() {
   print::question "$1 (y/n) ";
