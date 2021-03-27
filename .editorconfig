@@ -1,8 +1,12 @@
-root = true
+# EditorConfig is awesome: http://EditorConfig.org
 
 [*]
 indent_style = space
-indent_size = 4
+indent_size = 2
+
+[git*]
+indent_style = space
+indent_size = 2
 
 [{*.rb,Rakefile}]
 indent_style = space
