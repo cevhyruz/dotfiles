@@ -10,6 +10,7 @@ declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSI
 declare dotfiles_directory="${HOME}/Projects/dotfiles";
 declare skip_questions=false;
 
+declare -a TMP_FILES=();
 
 function setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;

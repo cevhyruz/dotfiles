@@ -83,6 +83,11 @@ function set_trap() {
     || trap "$2" "$1"
 }
 
+function cleanup() {
+  execute::_kill_subproc;
+  \rm "${TMP_FILES[@]}";
+}
+
 function execute() {
   local -r FRAMES='/-\|'
   local -r NUMBER_OR_FRAMES=${#FRAMES}
@@ -90,13 +95,15 @@ function execute() {
   local -r MSG="${2:-$1}"
   local -r TMP_FILE="$(mktemp /tmp/XXXXX)"
 
+  TMP_FILES+=("${TMP_FILE}")
+
   local exitCode=0
   local cmdsPID=""
 
   local i=0
   local frameText=""
 
-  set_trap "EXIT" "execute::_kill_subproc; \rm -v ${TMP_FILE};"
+  set_trap "EXIT" "cleanup"
 
   eval "$CMDS" \
     &> /dev/null \
