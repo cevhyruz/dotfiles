@@ -34,12 +34,36 @@ function print::result() {
   return "$1";
 }
 
-function ask() { print::question "$1"; read -r; }
 
 function ask::confirm() {
   print::question "$1 (y/n) ";
   read -r -n 1;
+
   printf "\n";
+
+  case "${REPLY}" in
+    y) return 0;
+      ;;
+    n) return 1;
+      ;;
+    *) ask::confirm "${1}";
+  esac
+}
+
+function ask() { print::question "$1"; read -r; }
+
+function ask::path()  {
+  declare -g  _PATH
+  ask "${1} (path:)"
+
+  if [[ -d "${REPLY}" ]] \
+    && [[ -w ${REPLY} ]]; then
+    dotfiles_dir="${REPLY}"
+    return 0;
+  else
+    dotfiles_dir="${REPLY}"
+    return 1;
+  fi
 }
 
 function ask::sudo() {
@@ -58,17 +82,6 @@ function cmd_exists() { command -v "$1" &> /dev/null; }
 function get_answer() { printf "%s" "${REPLY}"; }
 function get_answer::yes() { [[ "$REPLY" =~ ^[Yy]$ ]] && return 0 || return 1; }
 
-function skip_questions() {
-  while :; do
-    case $1 in
-      -y|--yes) return 0 ;;
-       *) break ;;
-    esac
-    shift 1;
-  done
-  return 1;
-}
-
 function execute::_kill_subproc() {
   local i=""
   for i in $(jobs -p); do
@@ -85,7 +98,7 @@ function set_trap() {
 
 function cleanup() {
   execute::_kill_subproc;
-  \rm "${TMP_FILES[@]}";
+  \rm -v "${TMP_FILES[@]}";
 }
 
 function execute() {
@@ -110,7 +123,6 @@ function execute() {
     2> "$TMP_FILE" &
   cmdsPID=$!;
 
-  # show spinner while the commands are running.
   while kill -0 "$cmdsPID" &>/dev/null; do
     frameText="   [${FRAMES:i++%NUMBER_OR_FRAMES:1}] $MSG"
     printf "%s" "$frameText";
