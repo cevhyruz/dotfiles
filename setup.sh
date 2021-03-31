@@ -4,13 +4,12 @@
 
 
 declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
-declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git";
-declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
+declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git"; declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
 declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/utils/setup_utils.sh"
-declare dotfiles_directory="${HOME}/Projects/dotfiles";
-declare skip_questions=false;
+declare -g dotfiles_dir="${HOME}/Projects/dotfiles";
 
-declare -a TMP_FILES=();
+declare -ag TMP_FILES=();
+declare INDENTION="   "
 
 function setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
@@ -21,13 +20,12 @@ function setup() {
     download_utils || exit 1;
   fi
 
-  # shellcheck disable=SC2034
-  skip_questions "$@" && skip_questions=true
-
   ask::sudo;
 
-  printf "%s" "${BASH_SOURCE[0]}" | grep "setup.sh" &> /dev/null \
+  printf "%s" "${BASH_SOURCE[0]}"  \
+    | grep "setup.sh" &> /dev/null \
     || download_dotfiles;
+
 
   # scripts ...
 
@@ -35,9 +33,7 @@ function setup() {
     #if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
       #./initialize_git_repository.sh "$DOTFILES_ORIGIN"
     #fi
-    #if ! $skip_questions; then
       #./update_content.sh
-    #fi
   #fi
 
 }
@@ -56,6 +52,25 @@ function download() {
   return 1
 }
 
+function confirm::location() {
+  if ask::confirm "Dotfiles will be installed to '${dotfiles_dir}'"; then
+      echo "installing to '${dotfiles_dir}'"
+      return 0;
+  else
+    ask::install_location;
+  fi
+
+  while [[ -d "${dotfiles_dir}" ]]; do
+    if ask::confirm "'${dotfiles_dir}' already exists, overwrite?"; then
+      return 0;
+    else
+      ask::install_location;
+    fi
+  done
+
+  return 0;
+}
+
 function download_dotfiles() {
   local tmpFile="";
 
@@ -67,57 +82,26 @@ function download_dotfiles() {
   print::result $? "Download archive" "true";
   printf "\n";
 
-  # install location
-  if ! $skip_questions; then
-    ask::confirm \
-      "Do you want to store the dotfiles in '$dotfiles_directory'?";
-    if ! get_answer::yes; then
-      dotfiles_directory=""
-      while [ -z "$dotfiles_directory" ]; do
-        ask "Please specify another location for the dotfiles (path): ";
-        dotfiles_directory="$(get_answer)"
-      done
-    fi
-    while [[ -e "$dotfiles_directory" ]]; do
-      ask::confirm \
-        "'$dotfiles_directory' already exists, do you want to overwrite it?";
-      if get_answer::yes; then
-        rm -rf "$dotfiles_directory";
-        break;
-      else
-        dotfiles_directory="";
-        while [ -z "$dotfiles_directory" ]; do
-          ask "Please specify another location for the dotfiles (path): ";
-          dotfiles_directory="$(get_answer)";
-        done
-      fi
-    done
-    printf "\n";
-  else
-    rm -rf "$dotfiles_directory" &> /dev/null;
-  fi
+  confirm::location && {
+    mkdir -p "$dotfiles_dir"
+    print::result $? "Create '${dotfiles_dir}'"
 
-  mkdir -p "$dotfiles_directory"
-  print::result $? "Create '$dotfiles_directory'" "true"
+    extract "$tmpFile" "$dotfiles_dir"
+    print::result $? "Extract archive"
 
-  extract "$tmpFile" "$dotfiles_directory"
-  print::result $? "Extract archive" "true"
-
-  rm -rf "$tmpFile"
-  print::result $? "Remove archive"
-
-  cd "$dotfiles_directory/src/os" \
-      || return 1
+    rm -rf "$tmpFile"
+    print::result $? "Remove archive"
+  }
 }
 
 function download_utils() {
   local tmpFile="";
   tmpFile="$(mktemp /tmp/XXXXX)";
   download "$DOTFILES_UTILS_URL" "$tmpFile" && {
-    . "$tmpFile"
-    return 0
+    source "$tmpFile";
+    return 0;
   }
-  return 1
+  return 1;
 }
 
 function extract() {

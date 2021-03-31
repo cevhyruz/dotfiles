@@ -14,10 +14,11 @@ function _print::purple() { _print "$1" 5; }
 function _print::red()    { _print "$1" 1; }
 function _print::yellow() { _print "$1" 3; }
 
-function print::question() { _print::yellow "   [?] $1";        }
-function print::success()  { _print::green  "   [Done] $1\n";   }
-function print::warn()     { _print::yellow "   [Warn] $1\n";   }
-function print::error()    { _print::red    "   [Err] $1 $2\n"; }
+function print::question() { _print::yellow "${INDENTION}[?] $1";        }
+function print::success()  { _print::green  "${INDENTION}[Done] $1\n";   }
+function print::warn()     { _print::yellow "${INDENTION}[Warn] $1\n";   }
+
+function print::error()    { _print::red    "${INDENTION}[Err] $1 $2\n"; }
 
 function print::error_stream() {
   while read -r line; do
@@ -34,13 +35,32 @@ function print::result() {
   return "$1";
 }
 
-function ask() { print::question "$1"; read -r; }
+function ask() {
+  print::question "$1";
+  read -r;
+}
 
 function ask::confirm() {
   print::question "$1 (y/n) ";
   read -r -n 1;
   printf "\n";
+  case "${REPLY}" in
+    y) return 0;
+      ;;
+    n) return 1;
+      ;;
+    *) ask::confirm "${1}";
+  esac
 }
+
+function ask::install_location() {
+  dotfiles_dir="";
+  while [[ -z "${dotfiles_dir}" ]]; do
+    ask "Please choose another location for installation (path)";
+    dotfiles_dir=${REPLY};
+  done
+}
+
 
 function ask::sudo() {
   sudo -v &> /dev/null
@@ -54,20 +74,6 @@ function ask::sudo() {
 }
 
 function cmd_exists() { command -v "$1" &> /dev/null; }
-
-function get_answer() { printf "%s" "${REPLY}"; }
-function get_answer::yes() { [[ "$REPLY" =~ ^[Yy]$ ]] && return 0 || return 1; }
-
-function skip_questions() {
-  while :; do
-    case $1 in
-      -y|--yes) return 0 ;;
-       *) break ;;
-    esac
-    shift 1;
-  done
-  return 1;
-}
 
 function execute::_kill_subproc() {
   local i=""
@@ -85,7 +91,7 @@ function set_trap() {
 
 function cleanup() {
   execute::_kill_subproc;
-  \rm "${TMP_FILES[@]}";
+  \rm -v "${TMP_FILES[@]}";
 }
 
 function execute() {
@@ -110,7 +116,6 @@ function execute() {
     2> "$TMP_FILE" &
   cmdsPID=$!;
 
-  # show spinner while the commands are running.
   while kill -0 "$cmdsPID" &>/dev/null; do
     frameText="   [${FRAMES:i++%NUMBER_OR_FRAMES:1}] $MSG"
     printf "%s" "$frameText";
