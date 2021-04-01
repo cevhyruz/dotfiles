@@ -61,7 +61,6 @@ function ask::install_location() {
   done
 }
 
-
 function ask::sudo() {
   sudo -v &> /dev/null
   # Keep-alive: update existing sudo time stamp until script is done.

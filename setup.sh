@@ -84,11 +84,19 @@ function download_dotfiles() {
 
   confirm::location && {
     mkdir -p "$dotfiles_dir"
+<<<<<<< HEAD
     print::result $? "Create '${dotfiles_dir}'"
 
     extract "$tmpFile" "$dotfiles_dir"
     print::result $? "Extract archive"
 
+=======
+    print::result $? "Create '$dotfiles_dir'" "true"
+
+    extract "$tmpFile" "$dotfiles_dir"
+    print::result $? "Extract archive" "true"
+
+>>>>>>> e15bb8d6589dab647e73a56f875fff6b2c7364ec
     rm -rf "$tmpFile"
     print::result $? "Remove archive"
   }
