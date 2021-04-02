@@ -34,6 +34,7 @@ function setup() {
     if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
       #./initialize_git_repository.sh "$DOTFILES_ORIGIN"
       _print::purple "\n • Initialize Git repository\n\n"
+      \cd "${dotfiles_dir}" || exit 1;
       #execute "git init && git remote add origin ${DOTFILES_ORIGIN}" \
         #"Initialize dotfiles as Git repository"
         echo "will be installed to - $(dirs)"
