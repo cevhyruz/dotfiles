@@ -4,7 +4,8 @@
 
 
 declare -r GITHUB_REPOSITORY="cevhyruz/dotfiles";
-declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git"; declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
+declare -r DOTFILES_ORIGIN="git@github.com:${GITHUB_REPOSITORY}.git";
+declare -r DOTFILES_TARBALL_URL="https://github.com/${GITHUB_REPOSITORY}/tarball/master";
 declare -r DOTFILES_UTILS_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/utils/setup_utils.sh"
 declare -g dotfiles_dir="${HOME}/Projects/dotfiles";
 
@@ -33,8 +34,9 @@ function setup() {
     if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
       #./initialize_git_repository.sh "$DOTFILES_ORIGIN"
       _print::purple "\n • Initialize Git repository\n\n"
-      execute "git init && git remote add origin ${DOTFILES_ORIGIN}" \
-        "Initialize dotfiles as Git repository"
+      #execute "git init && git remote add origin ${DOTFILES_ORIGIN}" \
+        #"Initialize dotfiles as Git repository"
+        echo "will be installed to - $(dirs)"
     fi
       #./update_content.sh
   fi
