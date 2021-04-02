@@ -32,13 +32,14 @@ function setup() {
 
   if cmd_exists "git"; then
     if [ "$(git config --get remote.origin.url)" != "$DOTFILES_ORIGIN" ]; then
-      #./initialize_git_repository.sh "$DOTFILES_ORIGIN"
       _print::purple "\n • Initialize Git repository\n\n"
-      \cd "${dotfiles_dir}" || exit 1;
-      execute "git init && git remote add origin ${DOTFILES_ORIGIN}" \
-        "Initialize dotfiles as Git repository"
+
+      if ! git rev-parse &> /dev/null; then
+        \cd "${dotfiles_dir}" || exit 1;
+        execute "git init && git remote add origin ${DOTFILES_ORIGIN}" \
+          "Initialize dotfiles as Git repository"
+      fi
     fi
-      #./update_content.sh
   fi
 
 }
