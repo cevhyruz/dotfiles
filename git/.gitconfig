@@ -1,7 +1,7 @@
 [user]
   name       = cevhyruz
   email      = johnfred.fadrigalan@hotmail.com
-  signingkey = John Fred Fadrigalan <johnfred.fadrigalan@hotmail.com>
+  signingkey = 4C23960F72FC911F # Kali Linux (Samsung - Personal Laptop)
 
 [core]
   # Use custom `.gitignore` and `.gitattributes`.
