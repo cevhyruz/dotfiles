@@ -9,14 +9,23 @@
 let g:ycm_key_list_select_completion   = ['J', '<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['K', '<C-p>', '<Up>']
 
-call plug#begin(stdpath('data') . '/plugged')
+if has('nvim')
+  let g:which_vim = 'nvim'
+  call plug#begin(stdpath('data') . '/plugged')
+else
+  let g:which_vim = 'vim'
+  call plug#begin('~/.vim/plugged')
+endif
+
   Plug 'yuki-ycino/fzf-preview.vim'
   Plug 'digitaltoad/vim-pug'
   Plug 'tomasiser/vim-code-dark'
   Plug 'dense-analysis/ale'
-  Plug 'preservim/nerdtree'
+  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
   Plug 'preservim/nerdcommenter'
   Plug 'ryanoasis/vim-devicons'
+  " TODO: Add catch here for YCM breaking change commit.
+  " https://github.com/ycm-core/YouCompleteMe/issues/3764
   Plug 'ycm-core/YouCompleteMe'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
@@ -30,15 +39,10 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'Yggdroot/indentLine' " hides startup message
   Plug 'majutsushi/tagbar'
-"  Plug 'mattn/emmet-vim'  " <c-y> (scrollup) conflict
   Plug 'godlygeek/tabular'
   Plug 'benmills/vimux'
   Plug 'easymotion/vim-easymotion'
-  "Plug 'edkolev/tmuxline.vim'
-  "Plug 'mhinz/vim-startify'
-"  Plug 'blueyed/vim-diminactive'
-  "Plug 'sjl/gundo.vim'
-  "Plug 'voldikss/vim-floaterm'
+  Plug 'blueyed/vim-diminactive'
   Plug 'itchyny/lightline.vim'
   Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
@@ -56,7 +60,6 @@ let g:fzf_action = {
 \ 'alt-k':  'aboveleft split',
 \ 'alt-l':  'rightbelow vsplit',
 \ 'alt-t':  'tab split' }
-
 let g:fzf_colors = {
 \ 'fg':      ['fg', 'Normal'],
 \ 'bg':      ['bg', 'Error'],
@@ -74,10 +77,24 @@ let g:fzf_colors = {
 
 "# changes current selected highlight color
 " \ 'bg':      ['bg', 'Normal'],
+
+" FIXME: Please stop using autocommands for everything,
+" specially for *Leave, *Enter events.
 augroup hide_fzf_statusline
   autocmd!
   autocmd FileType fzf setlocal ls=0 noshowmode noruler nonu nornu fdc=0 scl=no
     \| autocmd BufLeave <buffer> set ls=2 showmode ruler
+augroup END
+
+augroup change_cursor_shape
+  au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"'
+  au InsertEnter,InsertChange *
+    \ if v:insertmode == 'i' |
+    \   silent execute '!echo -ne "\e[5 q"' |
+    \ elseif v:insertmode == 'r' |
+    \   silent execute '!echo -ne "\e[3 q"' |
+    \ endif
+  au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
 augroup END
 
 scriptencoding utf8
@@ -85,12 +102,18 @@ colorscheme    codedark
 syntax         on
 filetype       plugin indent on
 
-" SECTION: Options 
+" SECTION: Options
 
 set history=10000
 set clipboard+=unnamedplus
 set updatetime=100
 set undofile
+set laststatus=2
+set showtabline=2
+set showcmd
+set ttimeout
+set ttimeoutlen=50
+
 
  "Enable true color 启用终端24位色
 "if exists('+termguicolors')
@@ -377,4 +400,3 @@ function! LightlineFugitive()
  endif
 return ''
 endfunction
-
