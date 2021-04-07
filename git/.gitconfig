@@ -1,32 +1,19 @@
 [user]
-  name       = cevhyruz
-  email      = johnfred.fadrigalan@hotmail.com
-  signingkey = 4C23960F72FC911F # Kali Linux (Samsung - Personal Laptop)
+  useConfigOnly = true
 
 [core]
-  # Use custom `.gitignore` and `.gitattributes`.
   excludesfile   = "$HOME/Projects/dotfiles/git/.gitignore"
   attributesfile = "$HOME/Projects/dotfiles/git/.gitattributes"
-
-  # Set default editor to be use by git.
-  editor = "nvim"
-
-  # Speed up commands involving untracked files such as `git status`.
-  # https://git-scm.com/docs/git-update-index#_untracked_cache
+  editor         = "nvim"
   untrackedCache = true
 
 [commit]
-  # Set custom git message.
+  gpgsign  = true
   template = /home/devs/Projects/dotfiles/git/.gitmessage
 
 [color]
-  status = always # colored `status`.
-  ui     = always # colored `diff`, `show`, `log`.
-
-[color "status"]
-  untracked = 203        # red
-  changed   = 208 italic # orange
-  added     = 35  bold   # green
+  status = always
+  ui     = always
 
 [color "branch"]
   current = 35  italic bold # green
@@ -38,9 +25,6 @@
   frag = 142 bold # line info
   old  = 203      # deletions (red)
   new  = 35       # additions (green)
-
-[commit]
-  gpgsign = true # https://help.github.com/articles/signing-commits-using-gpg
 
 [url "git@github.com:"]
   insteadOf     = "gh:"
@@ -93,3 +77,8 @@
 
   # List contributors with number of commits
   contrib = shortlog --summary --numbered
+
+# Local git configuration. Include all your personal credentials
+# and overrides here.
+[include]
+  path = ~/.gitconfig.local
