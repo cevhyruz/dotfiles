@@ -12,19 +12,40 @@
   template = /home/devs/Projects/dotfiles/git/.gitmessage
 
 [color]
-  status = always
-  ui     = always
+  status    = always
+  ui        = always
+  transport = always
+
+[color "transport"]
+  rejected = red
 
 [color "branch"]
-  current = 35  italic bold # green
-  local   = 248             # dimgrey
-  remote  = 203 bold        # red
+  current = 35  # green
+  local   = 248 # dimgrey
+  remote  = 203 # red
 
 [color "diff"]
-  meta = 241 bold
-  frag = 142 bold # line info
-  old  = 203      # deletions (red)
-  new  = 35       # additions (green)
+  meta = 241
+  frag = 142 # line info
+  old  = 203 # deletions (red)
+  new  = 35  # additions (green)
+
+[color "status"]
+  added     = 35
+  changed   = 214 # yellow
+  untracked = 203 # true
+
+[init]
+  defaultBranch = master
+
+[push]
+  followTags = true
+
+[advice]
+  statusHints      = false
+  statusUoption    = false
+  addEmptyPathspec = false
+  detachedHead     = false
 
 [url "git@github.com:"]
   insteadOf     = "gh:"
@@ -52,22 +73,25 @@
 
 [alias]
   amend = commit --amend --reuse-message=HEAD
-  alias = "!git config --get-regexp alias | fzf"
-  c     = "!a(){ echo \"${PWD}/$(basename \"${1}\" .git)\"; }; a"
-  cd ="!a(){ cd \"${1}\"; }; a"
-  s     = "!git status --short | fzf"
-  b     = branch --all
-  r     = remote --verbose
-  lg    = log --oneline --graph -25 --all
+  done  = push origin HEAD
+  alias = config --get-regexp alias
+  undo  = reset HEAD~1 --mixed
+  del   = branch --delete --force
 
-  # list all ignored files.
-  si = ls-files --ignored --others --exclude-standard
-  #               │         │        └> Use standard ignore rules.
-  #               │         └─────────> Show other files (i.e. untracked).
-  #               └───────────────────> Show only ignored files
+  # quick detach head
+
+  # Shorteners
+  co    = checkout
+  s     = status --short
+
+  ba    = branch --all
+  r     = remote --verbose
+
+  lg    = log --oneline --graph -15
+
 
   # Create a branch or switch if it exists.
-  mb = "!a(){ git checkout -b \"${1}\" 2> /dev/null || git checkout \"${1}\";}; a"
+  ;mb = "!a(){ git checkout -b \"${1}\" 2> /dev/null || git checkout \"${1}\";}; a"
 
   # Credit an author on the last commit
   credit = "!git commit --amend --author \"${1} <${2}>\" -C HEAD"
@@ -78,7 +102,7 @@
   # List contributors with number of commits
   contrib = shortlog --summary --numbered
 
-# Local git configuration. Include all your personal credentials
-# and overrides here.
 [include]
+  # Local git configuration. Include all your personal credentials
+  # and overrides here.
   path = ~/.gitconfig.local
