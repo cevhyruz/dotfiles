@@ -1,3 +1,6 @@
+[init]
+  defaultBranch = master
+
 [user]
   useConfigOnly = true
 
@@ -5,6 +8,7 @@
   excludesfile   = "$HOME/Projects/dotfiles/git/.gitignore"
   attributesfile = "$HOME/Projects/dotfiles/git/.gitattributes"
   editor         = "nvim"
+  pager          = "nvim -R"
   untrackedCache = true
 
 [commit]
@@ -25,10 +29,18 @@
   remote  = 203 # red
 
 [color "diff"]
-  meta = 241
-  frag = 142 # line info
-  old  = 203 # deletions (red)
-  new  = 35  # additions (green)
+  meta   = 241
+  frag   = 142      # line info
+  commit = 214 bold # (yellow)
+  old    = 203      # deletions (red)
+  new    = 35       # additions (green)
+  whitespace = 203  # (red)
+
+[color "diff-highlight"]
+  oldNormal    = red bold
+  oldHighlight = red bold 52
+  newNormal    = green bold
+  newHighlight = green bold 22
 
 [color "status"]
   added     = 35
@@ -71,33 +83,64 @@
   contrib = false
   alias = false
 
+[difftool]
+  prompt = false
+
+[diff]
+  tool = nvimdiff
+
+[merge]
+  stat = true
+  tool = nvimdiff
+
+
+[difftool "nvimdiff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
+[stash]
+  showPatch = true
+  showStat = true
+
+[log]
+  abbrevCommit = true
+
 [alias]
-  amend = commit --amend --reuse-message=HEAD
+  amend = commit --amend --no-edit
+  typo  = commit --amend
   done  = push origin HEAD
-  alias = config --get-regexp alias
   undo  = reset HEAD~1 --mixed
   del   = branch --delete --force
+  alias = config --get-regexp "alias.*"
+  res   = reset --hard
+  unstage = reset HEAD --
+  last = log -1 HEAD --stat
+  diff = difftool -t nvimdiff
+  discard = checkout --
+  l = log --pretty=format:\"%C(yellow)%h%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset %C(black bold)%ar%Creset\"
+  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "${sha%% *}"
 
   # quick detach head
+  credit = "!f() { \
+      if [ -n \"$1\" ] && [ -n \"$2\" ]; then \
+          git commit --amend --author \"$1 <$2>\" --no-edit --reuse-message=HEAD; \
+      fi \
+  }; f"
 
-  # Shorteners
+  # shorteners
+  a     = add
+  c     = commit
+  ca    = !git add --all && git commit
   co    = checkout
-  s     = status --short
+  cp    = cherry-pick
+  s     = status --short --branch --show-stash --ahead-behind --renames
+  br    = branch --all
+  rv    = remote --verbose
+  lg    = log --oneline --graph -15 --all
 
-  ba    = branch --all
-  r     = remote --verbose
-
-  lg    = log --oneline --graph -15
-
-
-  # Create a branch or switch if it exists.
-  ;mb = "!a(){ git checkout -b \"${1}\" 2> /dev/null || git checkout \"${1}\";}; a"
-
-  # Credit an author on the last commit
-  credit = "!git commit --amend --author \"${1} <${2}>\" -C HEAD"
-
-  # Delete merged local branches.
-  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  mb = "!f() { \
+    git checkout -b \"${1}\" 2> /dev/null \
+      || git checkout \"${1}\"; \
+  }; f"
 
   # List contributors with number of commits
   contrib = shortlog --summary --numbered
