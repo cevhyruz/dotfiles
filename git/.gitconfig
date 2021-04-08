@@ -104,7 +104,17 @@
 [log]
   abbrevCommit = true
 
+[format]
+  pretty = "%C(yellow bold)%h %C(auto)%d% %C(249)%s %Creset"
+
+[pretty]
+  little = "%C(yellow bold)%h %C(auto)%d% %C(249)%s %Creset"
+  detail = "%C(blue)<%an> %C(yellow bold)%h %C(auto)%d% %C(249)%s %C(green italic)%ar%Creset"
+
 [alias]
+  # command wrappers
+  fzf = !fzf
+
   amend = commit --amend --no-edit
   typo  = commit --amend
   done  = push origin HEAD
@@ -116,15 +126,6 @@
   last = log -1 HEAD --stat
   diff = difftool -t nvimdiff
   discard = checkout --
-  l = log --pretty=format:\"%C(yellow)%h%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset %C(black bold)%ar%Creset\"
-  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "${sha%% *}"
-
-  # quick detach head
-  credit = "!f() { \
-      if [ -n \"$1\" ] && [ -n \"$2\" ]; then \
-          git commit --amend --author \"$1 <$2>\" --no-edit --reuse-message=HEAD; \
-      fi \
-  }; f"
 
   # shorteners
   a     = add
@@ -135,7 +136,8 @@
   s     = status --short --branch --show-stash --ahead-behind --renames
   br    = branch --all
   rv    = remote --verbose
-  lg    = log --oneline --graph -15 --all
+  lg    = log --graph --all -12 # git lg --format=detail
+  lga   = log --graph --all # git lg --format=detail
 
   mb = "!f() { \
     git checkout -b \"${1}\" 2> /dev/null \
