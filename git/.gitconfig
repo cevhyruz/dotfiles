@@ -123,7 +123,7 @@
   br = branch --all
   lg = log --decorate --graph --all -10
   lga = log --decorate --graph --all --format=detail
-  contrib = shortlog --sumarry --numbered
+  contrib = shortlog --summary --numbered
 
   amend = "!f() { \
     git commit --amend --no-edit; \
