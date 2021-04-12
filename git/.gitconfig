@@ -112,42 +112,85 @@
   detail = "%C(blue)<%an> %C(yellow bold)%h %C(auto)%d% %C(249)%s %C(green italic)%ar%Creset"
 
 [alias]
-  # command wrappers
-  fzf = !fzf
 
-  amend = commit --amend --no-edit
-  typo  = commit --amend
-  done  = push origin HEAD
-  undo  = reset HEAD~1 --mixed
-  del   = branch --delete --force
-  alias = config --get-regexp "alias.*"
-  res   = reset --hard
-  unstage = reset HEAD --
-  last = log -1 HEAD --stat
-  diff = difftool -t nvimdiff
-  discard = checkout --
-
-  # shorteners
-  a     = add
-  c     = commit
-  ca    = !git add --all && git commit
-  co    = checkout
-  cp    = cherry-pick
-  s     = status --short --branch --show-stash --ahead-behind --renames
-  br    = branch --all
-  rv    = remote --verbose
-  lg    = log --graph --all -12 # git lg --format=detail
-  lga   = log --graph --all # git lg --format=detail
-
-  mb = "!f() { \
-    git checkout -b \"${1}\" 2> /dev/null \
-      || git checkout \"${1}\"; \
+  amend = "!f() { \
+    git commit --amend --no-edit; \
+    git s; \
   }; f"
 
-  # List contributors with number of commits
-  contrib = shortlog --summary --numbered
+  typo = "!f() { \
+    git commit --amend; \
+    git s; \
+  }; f"
+
+  done = push origin HEAD
+  dif = diftool -t nvimdiff
+  s = status --short --branch --show-stash --ahead-behind --renames
+  br = branch --all
+  lg = log --decorate --graph --all -10
+  lga = log --decorate --graph --all --format=detail
+  contrib = shortlog --sumarry --numbered
+
+  a = "!f() { \
+    git add "$@" && git s; \
+  }; f"
+
+  unstage = "!f() { \
+    git reset HEAD --quiet -- "$@"; \
+    git s; \
+  }; f"
+
+  c = "!f() { \
+    git commit; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  undo = "!f() { \
+    git reset HEAD~1 --quiet --mixed; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  alias = "!f() { \
+    git config --get-regexp "alias.*" \
+    | awk '{ $1=$1; print }' \
+    | sed 's/^alias.//'; \
+  }; f"
+
+  mb = "!f() { \
+    git checkout --quiet -b "$1" 2> /dev/null \
+      || git checkout --quiet "$1"; \
+    git br;\
+  }; f"
+
+  delb = "!f() { \
+    git branch --delete --force "$1"; \
+    git br; \
+    git s; \
+  }; f"
+
+  cob = "!f() { \
+    [$# -gt 0] && exec git switch --quiet "$1"; \
+    branch=$( git br 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) \
+      && git switch --quiet "${branch}"; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  discard = "!f() { \
+    git checkout --quiet "$@" \
+      && git s; \
+  }; f"
+
+  screwthis = "!f() { \
+    git stash push --keep-index --message 'screwthis reset backup' \
+      && git reset --hard; \
+    git s; \
+    git lg -4; \
+  }; f"
 
 [include]
   # Local git configuration. Include all your personal credentials
   # and overrides here.
-  path = ~/.gitconfig.local
+  path = ~/.gitconfig-local
