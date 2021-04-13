@@ -105,11 +105,11 @@
   abbrevCommit = true
 
 [format]
-  pretty = "%C(yellow bold)%h %C(auto)%d% %C(249)%s %Creset"
+  pretty = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
 
 [pretty]
-  little = "%C(yellow bold)%h %C(auto)%d% %C(249)%s %Creset"
-  detail = "%C(blue)<%an> %C(yellow bold)%h %C(auto)%d% %C(249)%s %C(green italic)%ar%Creset"
+  little = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
+  detail = "%C(blue)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
 
 [alias]
 
