@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)";
+BATS_EXECUTABLE="${TEST_DIRECTORY}/_lib/bats-core/bin/bats";
+
+git submodule init && git submodule update;
+
+if [[ -z "${DOTFILES_BASH_DIR}" ]]; then
+  declare DOTFILES_BASH_DIR
+  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)")
+  export DOTFILES_BASH_DIR
+fi
+
+if [[ -z "$1" ]]; then
+  # shellcheck disable=SC2206
+  TEST_DIRS=(${TEST_DIRECTORY}/install);
+else
+  TEST_DIRS=("$1");
+fi
+
+exec "${BATS_EXECUTABLE}" "${TEST_DIRS[@]}"
