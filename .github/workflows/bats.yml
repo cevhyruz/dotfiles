@@ -1,8 +1,7 @@
-name: CI
+name: 'BATS'
 
 # Triggers the workflow on push or pull request events but only for the master branch
-on:
-  push: [pull_request, push]
+on: [pull_request, push]
 
 jobs:
   bats-test:
