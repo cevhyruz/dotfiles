@@ -1,6 +1,7 @@
 # Dotfiles
 
-![Build Status](https://github.com/cevhyruz/dotfiles/workflows/CI/badge.svg?branch=master)
+![Build Status](https://github.com/cevhyruz/dotfiles/actions/workflows/main.yml/badge.svg)
+![Build Status](https://github.com/cevhyruz/dotfiles/actions/workflows/shellcheck.yml/badge.svg)
 ![License](https://img.shields.io/github/license/cevhyruz/dotfiles)
 
 This repository is a collection of configurations and settings for a
