@@ -1,5 +1,8 @@
 # Dotfiles
 
+![Build Status](https://github.com/cevhyruz/dotfiles/workflows/CI/badge.svg?branch=master)
+![License](https://img.shields.io/github/license/cevhyruz/dotfiles)
+
 This repository is a collection of configurations and settings for a
 friction-free development environment.  Composed of tmux, neovim, bash, fzf,
 and all other stuff to make development a breeze.
