@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        shell: bash
+        shell:
+          - bash
         file:
           - ./install.sh
 
