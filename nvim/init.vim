@@ -150,7 +150,7 @@ set backupdir=/tmp//,.
 set directory=/tmp//,.
 set undodir=/tmp//,.
 
-" SECTION: Commands 
+" SECTION: Commands
 
 if empty($TMUX)
   command! NavRight call vimrc#navigate('l')
@@ -166,7 +166,7 @@ else
   command! NavPrev  call vimrc#tmux_navigate('p')
 endif
 
-" SECTION: AutoCommands 
+" SECTION: AutoCommands
 
 "augroup strip_whitespace
 "  autocmd!
@@ -184,12 +184,12 @@ augroup close_if_only_nerdtree
   autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 
-" SECTION: Abbreviations 
+" SECTION: Abbreviations
 
 " completions
 cnoreabbrev <silent>f FZF<cr>
 
-" SECTION: Mappings 
+" SECTION: Mappings
 
 let mapleader = ','
 
@@ -316,7 +316,7 @@ let NERDTreeWinPos                = 'left'
 let NERDTreeIgnore                = [ '\.git$', '\~$', 'node_modules' ]
 let NERDTreeWinSize               = 35
 
-" SECTION: localrc 
+" SECTION: localrc
 
 let s:local_vimrc = expand('~/Projects/dotfiles/_localrc/local.nvimrc')
 if filereadable(s:local_vimrc)
@@ -343,7 +343,7 @@ let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 " let g:UltiSnipsListSnippets = ""
 
 
-" Plug: GitGutter 
+" Plug: GitGutter
 
   let g:sign = ' ┃'                " Git Gutter Sign.
   let g:gitgutter_map_keys = 0     " Dont set mappings.
@@ -359,10 +359,8 @@ let g:UltiSnipsJumpBackwardTrigger='<c-k>'
      autocmd! UpdateGitGutterOnSave
      autocmd BufWritePost * GitGutter
    augroup end
- 
 
-
-" SECTION: indentLine 
+" SECTION: indentLine
 
 nnoremap <leader>i<space> :IndentLinesToggle <cr>
 

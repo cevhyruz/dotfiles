@@ -65,7 +65,7 @@ set-option -g status-interval 10
 set-option -g status-justify left
 set-option -g status-keys vi
 set-window-option -g mode-keys vi
- 
+
 set-option -g status-position bottom
 
 set-option -g visual-activity off

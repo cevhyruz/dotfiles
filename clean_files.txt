@@ -1,0 +1,29 @@
+#######################################################################
+# Allow-list of files to be lint-checked by build action
+#
+# Directory Suport
+#  Directory references are allowed within the file, ie:
+#
+#    bash/options
+#
+#  All files under the referenced directory will be checked
+#
+# Checking Files Locally
+#  You can manually invoke the check by running:
+#
+#    lint.sh
+#
+
+# root files
+.editorconfig
+.env
+.gitattributes
+.gitignore
+.gitmodules
+.pre-commit-config.yaml
+.shellcheckrc
+clean_files.txt
+#install.sh
+LICENSE
+lint.sh
+README.md

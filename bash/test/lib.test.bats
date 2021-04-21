@@ -51,4 +51,3 @@ PROC_ENV="TEST";
   #run lib::source_all_from "${VALID_DIR_PATH}"
   #[ "${output}" = "dir" ];
 #}
-
