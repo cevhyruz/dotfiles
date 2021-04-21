@@ -35,4 +35,4 @@ jobs:
     - name: Install pre-commit
       run: python3 -m pip install -r pre-commit==2.3.0
     - name: Run lint
-      run: ./lint_clean_files.sh
+      run: ./lint.sh
