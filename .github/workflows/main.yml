@@ -33,6 +33,6 @@ jobs:
     - name: Install shellcheck
       run: brew install shellcheck
     - name: Install pre-commit
-      run: python3 -m pip install -r pre-commit==2.3.0
+      run: python3 -m pip install pre-commit==2.3.0
     - name: Run lint
       run: ./lint.sh
