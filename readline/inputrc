@@ -50,6 +50,6 @@ set  menu-complete-display-prefix on
 set keyseq-timeout 3000
 
 # readline components
-$include ~/Projects/dotfiles/bash/readline/prompt
-$include ~/Projects/dotfiles/bash/readline/vi-insert.readline
+$include ~/Projects/dotfiles/readline/prompt
+$include ~/Projects/dotfiles/readline/vi-insert.readline
 # $include ~/Projects/dotfiles/bash/readline/vi-command.readline
