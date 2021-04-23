@@ -1,49 +1,44 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# vi:ft=sh
 
 function main() {
   # shellcheck disable=SC2154
-
-FIRST_PROMPT=1;
-trap 'prompt_pre_command' DEBUG
-}
-
-function prompt_pre_command() {
-  echo -ne "${dimgrey}"
-}
-
-function prompt_post_command() {
-  AT_PROMPT=1
-
-  if [[ -n "$FIRST_PROMPT" ]]; then
-    unset FIRST_PROMPT;
-    return
-  fi
+  trap 'echo -ne "${dimgrey}"' DEBUG
 }
 
 function __repo() {
   # TODO: make status get it's colors depending on gitconfig
   local status branch_name
+
   ! git rev-parse &> /dev/null && return;
-  [ "$( git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ] && {
+
+  if [ "$( git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]; then
+
     git update-index --really-refresh -q &> /dev/null;
+
     ! git diff --quiet --ignore-submodules --cached \
       && status+="+"; # staged
+
     ! git diff-files --quiet --ignore-submodules -- \
       && status+="!"; # modified
+
     [ -n "$( git ls-files --others --exclude-standard)" ] \
       && status+="?"; # untracked
+
     git rev-parse --verify refs/stash &> /dev/null \
       && status+="⁕";
-  }
+  fi
+
   branch_name+="$( git symbolic-ref --quiet --short HEAD 2> /dev/null || \
     git rev-parse --short HEAD 2> /dev/null || echo "unknown")"
+
   declare -a git_prompt=(
-    "${bold}"                   # make everything bold
-    "${dimgrey}"    "${1}"      # open delimeter
-    "${red}"        "${branch_name}"   # current branch
-    "${dimgrey}"    "${2}"      # close delimeter
-    "${yellow}"     "${status}" # status symbol
-    "${reset}"                  # terminate tput codes
+    "${bold}"                        # make everything bold
+    "${dimgrey}"    "${1}"           # open delimeter
+    "${red}"        "${branch_name}" # current branch
+    "${dimgrey}"    "${2}"           # close delimeter
+    "${yellow}"     "${status}"      # status symbol
+    "${reset}"                       # terminate tput codes
   );
 
   printf "%b" "${git_prompt[@]}"
@@ -54,18 +49,23 @@ function __jobs() {
 }
 
 function __exit_status() {
-# https://www.tldp.org/LDP/abs/html/exitcodes.html
+  # https://www.tldp.org/LDP/abs/html/exitcodes.html
   local last_="$?"
   if [[ "$last_" -ne 0 ]]; then
-    printf "${red}%d" "$last_"
+    print "${red}"
   else
-    printf "${green}%d" 0
+    print "${green}"
   fi
 }
 
+# if dir is ~ expand to 'home'
 function __pwd {
   # shellcheck disable=SC2015
-  [[ "${1}" == '~' ]] && printf "home" || basename "$PWD"
+  if [[ "${1}" == '~' ]]; then
+    printf "%s" "${HOME}"
+  else
+    basename "${PWD}"
+  fi
 }
 
 main && unset -f main

@@ -88,14 +88,15 @@ function set_hist_envars() {
 
 function set_prompts_envars() {
   local -ra PS1_PROMPT=(
-    "\\[${shade}\\]"
+    "\\[${green}\\]"
     "╭─["
+    " "
     "\\[${white}\\]"
     "\\u@\\H"
-    " \\j "
-    "\\[${shade}\\]"
+    "\\[${green}\\]"
+    " "
     "]"
-    " "
+    " "
     "\\[${bold}\\]"
     "\\[${cyan}\\]"
     "\$( __pwd \"\\W\" )"       # current working directory
@@ -104,7 +105,11 @@ function set_prompts_envars() {
     "\\[${pink}\\]"             # command color
     "\\n"                       # newline
     ""
-    "\\[${shade}\\]╰─\\$"
+    "\\[${green}\\]"
+    "╰─"
+    "\\[${shade}\\]"
+    " "
+    "\\$"
     "\\[${pink}\\] "
   );
 
