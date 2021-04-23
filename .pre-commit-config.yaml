@@ -15,6 +15,7 @@ repos:
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
+        exclude: bash/plugin/composure.bash
       - id: shfmt
   - repo: local
     hooks:
@@ -26,7 +27,7 @@ repos:
         types: [file]
       - id: dot-bash
         name: Check .bash files against dotfiles requirements
-        exclude: "test/test_helper.bash"
+        exclude: bash/plugin/composure.bash
         entry: ./hooks/dot-bash.sh
         language: system
         files: "\\.bash$"
