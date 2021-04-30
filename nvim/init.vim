@@ -16,7 +16,7 @@ else
   let g:which_vim = 'vim'
   call plug#begin('~/.vim/plugged')
 endif
-
+  Plug 'aliou/bats.vim'
   Plug 'yuki-ycino/fzf-preview.vim'
   Plug 'digitaltoad/vim-pug'
   Plug 'tomasiser/vim-code-dark'
@@ -318,7 +318,7 @@ let NERDTreeWinSize               = 35
 
 " SECTION: localrc
 
-let s:local_vimrc = expand('~/Projects/dotfiles/_localrc/local.nvimrc')
+let s:local_vimrc = expand('~/Projects/dotfiles/localrc/local.nvimrc')
 if filereadable(s:local_vimrc)
   execute 'source' s:local_vimrc
 endif

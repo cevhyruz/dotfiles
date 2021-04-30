@@ -21,14 +21,14 @@ function _set_color_variables() {
   # pink="\\e[0;38;5;107m";
 
   # only set $TERM when we're not inside tmux
-  #! [[ "$TERM" =~ ^screen ]] && {
-    #if [[ $COLORTERM = gnome-* && $TERM = xterm ]] \
-      #&& infocmp gnome-256color >/dev/null 2>&1; then
-      #export TERM='gnome-256color';
-    #elif infocmp xterm-256color >/dev/null 2>&1; then
-      #export TERM='xterm-256color';
-    #fi;
-  #};
+  if ! [[ "${TERM}" =~ ^screen ]] || [[ "${TERM}" =~ ^tmux ]] ; then
+    if [[ "${COLORTERM}" = gnome-* && "${TERM}" = xterm ]] \
+      && infocmp gnome-256color >/dev/null 2>&1; then
+      export TERM='gnome-256color'
+    elif infocmp xterm-256color >/dev/null 2>&1; then
+      export TERM='xterm-256color'
+    fi
+  fi
 
 }
 
@@ -75,8 +75,6 @@ function _enable_command_color() {
   export LS_COLORS;
 }
 
-# time _enable_command_color ~0ms
-
 function cleanup() {
   unset -f _enable_color_support
   unset -f _enable_command_color
@@ -92,5 +90,4 @@ function main() {
   cleanup && unset -f cleanup
 }
 
-# time main
 main

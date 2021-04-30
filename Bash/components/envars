@@ -28,7 +28,7 @@ function main() {
 
 
 function set_rust_envars() {
-  lib::add_to_path "${HOME}/.cargo/bin";
+  _::add_to_path "${HOME}/.cargo/bin";
 }
 
 function set_android_dev_path() {
@@ -48,7 +48,7 @@ function set_android_dev_path() {
 
     for path in "${_ANDROID_PATH[@]}"; do
       if [[ -d "${path}" ]]; then
-        lib::add_to_path "${path}";
+        _::add_to_path "${path}";
       fi
     done
 
@@ -59,7 +59,7 @@ function set_android_dev_path() {
 function set_ruby_distrib_path() {
   if [[ -d "${HOME}/.ruby" ]] && [[ -z "${GEM_HOME}" ]]; then
     readonly GEM_HOME="${HOME}/.ruby";
-    lib::add_to_path "${GEM_HOME}/bin";
+    _::add_to_path "${GEM_HOME}/bin";
     export GEM_HOME;
   fi
 }
@@ -73,7 +73,7 @@ function set_path() {
 
   for path in "${_ENV_PATH[@]}"; do
     if [[ -d "${path}" ]]; then
-      lib::add_to_path "${path}";
+      _::add_to_path "${path}";
     fi
   done
   unset path;
