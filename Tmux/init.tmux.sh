@@ -14,11 +14,11 @@ function theme() {
 }
 
 function plug() {
-  Util::source_files "${TMUX_PLUG_DIR}/*";
+  Util::source_files "${TMUX_PLUG_DIR}/*"
 }
 
 function component() {
-  Util::source_files "${TMUX_COMPONENT_DIR}/*";
+  Util::source_files "${TMUX_COMPONENT_DIR}/*"
 }
 
-Tmux::main "${@}";
+Tmux::main "${@}"

@@ -20,6 +20,7 @@ repos:
   - repo: local
     hooks:
       - id: dot-sh
+        exclude: Tmux/lib/util.sh
         name: Check .sh files against dotfiles requirements
         entry: ./hooks/dot-sh.sh
         language: system

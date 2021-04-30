@@ -28,11 +28,10 @@ function run-alias() {
   fi
 }
 
-
 function commands() {
   declare -ar CMDS=(
     "$(tmux list-commands | cut -d' ' -f1)"
-    "$(ls "${TMUX_SCRIPTS}")" );
+    "$(ls "${TMUX_SCRIPTS}")")
   echo "${CMDS[@]}" | tr ' ' '\n'
 }
 
