@@ -13,7 +13,7 @@ fi
 
 if [[ -z "$1" ]]; then
   # shellcheck disable=SC2206
-  TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
+  TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash,Tmux})
 else
   TEST_DIRS=("$1")
 fi
