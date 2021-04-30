@@ -5,15 +5,15 @@
   useConfigOnly = true
 
 [core]
-  excludesfile   = "$HOME/Projects/dotfiles/git/.gitignore"
-  attributesfile = "$HOME/Projects/dotfiles/git/.gitattributes"
+  excludesfile   = "$HOME/Projects/dotfiles/Git/.gitignore"
+  attributesfile = "$HOME/Projects/dotfiles/Git/.gitattributes"
   editor         = "nvim"
   pager          = "nvim -R"
   untrackedCache = true
 
 [commit]
   gpgsign  = true
-  template = /home/devs/Projects/dotfiles/git/.gitmessage
+  template = /home/devs/Projects/dotfiles/Git/.gitmessage
 
 [color]
   status    = always
