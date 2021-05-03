@@ -5,7 +5,7 @@
 # Entry file to load all library file for bash.
 
 # prevent sourcing this script multiple times.
-[[ $UTIL_LOADED ]] && return || UTIL_LOADED=true
+#[[ -n $UTIL_LOADED ]] && return || UTIL_LOADED=true
 
 #  _::die() Exit gracefully. {{{1
 # Args [message] (optional)
