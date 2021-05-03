@@ -2,7 +2,7 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load ../test_helper
-load "${HOME}/Projects/dotfiles/utils/util.bash"
+load ../../utils/util
 
 function local_setup() {
   FIXTURE_LOCATION="/tmp/bash-test-fixture"
