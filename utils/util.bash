@@ -5,7 +5,7 @@
 # Entry file to load all library file for bash.
 
 # prevent sourcing this script multiple times.
-#[[ -n $UTIL_LOADED ]] && return || UTIL_LOADED=true
+[[ -n ${UTIL_LOADED-} ]] && return || UTIL_LOADED=true
 
 #  _::die() Exit gracefully. {{{1
 # Args [message] (optional)
@@ -21,7 +21,7 @@ function _::die() {
 #   0 if path is dir with contents,
 #   1 if it's empty, non-existent, glob or points to a file.
 function _::is_dir() {
-  local -r DIR_PATH="$1"
+  local -r DIR_PATH="${1-}"
 
   [[ -z "$(ls --almost-all "${DIR_PATH}" 2>/dev/null)" ]] && return 1
 
