@@ -12,11 +12,9 @@ function local_setup() { true; }
 function local_teardown() { true; }
 
 function setup() {
-
   local_setup
 }
 
 function teardown() {
-
   local_teardown
 }
