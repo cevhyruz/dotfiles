@@ -27,7 +27,7 @@ readonly _OPTIONS=(
 "lithist"                 # save multi-line cmd history with embedded newlines
 "mailwarn"                # warn if mail has been accessed since the last time it was checked
 "nullglob"                # expand patterns with no match to null string
-"progcomp_alias"          # completion using the word resulting from expanded alias
+#"progcomp_alias"          # completion using the word resulting from expanded alias
 "xpg_echo" )              # expand backslash-escape sequences
 
 for opts in "${_OPTIONS[@]}"; do
