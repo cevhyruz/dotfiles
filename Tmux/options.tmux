@@ -20,7 +20,6 @@ set-option -g default-terminal "screen-256color"
 
 set-window-option -g xterm-keys on
 
-set-option -g repeat-time 600
 set-option -g assume-paste-time 1
 set-option -g base-index 1
 set-option -g bell-action none
@@ -41,7 +40,7 @@ if-shell '[ $(echo "$TMUX_VERSION < 2.1" | bc) = 1 ]' \
 "
 
 ## In version 2.1 "mouse" replaced the previous 4 options
-if-shell '[[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]]' \
+if-shell '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
 "set-option -g mouse "on""
 
 # UTF8 is autodetected in 2.2 onwards,

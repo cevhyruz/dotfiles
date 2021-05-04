@@ -14,8 +14,7 @@ bind-key  -r '>' resize-pane -R
 
 # last pane
 if-shell -b '[ "$(echo "${TMUX_VERSION} < 3.0" | bc)" = 1 ]' \
-"bind-key -n 'C-\\' if-shell \"$IS_VIM\" 'send-keys C-\\'   'select-pane -l'" \
-"bind-key -n 'C-\\' if-shell \"$IS_VIM\" 'send-keys C-\\\\' 'select-pane -l'"
+"bind-key -n 'C-\\' if-shell \"$IS_VIM\" 'send-keys C-\\'   'select-pane -l'"
 
 # easy reloading
 bind-key 'r' source-file "/etc/tmux.conf" \; \

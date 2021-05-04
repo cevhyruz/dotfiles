@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
 #
-# ---------------------------------------------------------------------------
-# File:        util.conf
-# Description: helper functions for tmux config
-# ---------------------------------------------------------------------------
+# Init file for tmux
 
-# get option value at runtime.
-# param: [source] [option]
-# return: option value
+#source util.bash
+
+# Tmux::get_opts() Get option value at runtime {{{1
+# Args: [source file] [tmux option]
+# Outputs: option value
+# Returns: 0 if the option has value, 1 otherwise
 function Util::get_opts() {
   # shellcheck disable=SC2002
   cat "${1}" | grep "${2}" | awk '{print $4}'
@@ -36,3 +37,22 @@ function Util::source_files() {
   done
   unset FILES
 }
+
+function theme() {
+  tmux source-file "${TMUX_THEME_DIR}/$(Util::get_theme).tmux"
+}
+
+function plug() {
+  Util::source_files "${TMUX_PLUG_DIR}/*"
+}
+
+function component() {
+  Util::source_files "${TMUX_COMPONENT_DIR}/*"
+}
+
+function Tmux::main() {
+  Util::source_files "${TMUX_DIR}/*.tmux"
+  theme
+}
+
+[[ $# -gt 0 ]] && Tmux::main
