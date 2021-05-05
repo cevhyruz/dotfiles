@@ -80,10 +80,10 @@ function local_teardown() {
 @test "bash-lib: Test '_::add_to_path()'" {
   # for path that is already on the environment
   run _::add_to_path "/usr/local/bin"
-  [ "${status}" -eq 1 ];
+  assert_success
 
   run _::add_to_path "${DIR}"
-  [ "${status}" -eq 0 ];
+  assert_success
 }
 
 # _::source_file {{{1

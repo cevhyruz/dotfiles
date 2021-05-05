@@ -5,7 +5,7 @@
 # Entry file to load all library file for bash.
 
 # prevent sourcing this script multiple times.
-[[ -n ${UTIL_LOADED-} ]] && return || UTIL_LOADED=true
+#[[ -n ${UTIL_LOADED-} ]] && return || UTIL_LOADED=true
 
 #  _::die() Exit gracefully. {{{1
 # Args [message] (optional)
@@ -53,18 +53,15 @@ function _::is_file() {
 # Globals:
 #   PATH
 # Returns:
-#   0 if [path] was added, 1 otherwise.
+#   0 if [path] was added, 1 if path doesnt exist.
 function _::add_to_path() {
   local -r DIR_PATH="$1"
 
   if _::is_dir "${DIR_PATH}"; then
     if ! echo "${PATH//:/\\n}" | grep --quiet "${DIR_PATH}"; then
-      PATH="$1:${PATH}"
-      return $?
+      export PATH="$1:${PATH}"
     fi
   fi
-
-  return 1
 }
 
 # _::source_file() Source a file. {{{1
