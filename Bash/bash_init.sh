@@ -4,9 +4,6 @@
 #
 # Initialize Dotfiles Bash configuration.
 
-set -u # treat unset variables as an error when substituting.
-set +T # Disable trap DEBUG on subshells.
-
 # load utility helper file.
 source "${DOT_BASH}/lib/util.bash"
 
