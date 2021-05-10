@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 #
@@ -17,6 +18,14 @@ export DOT_BASH="{{DOTFILES}}/Bash"
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# larger history (default: 500)
+HISTSIZE=20000
+HISTFILESIZE=20000
 
 # enable color support of ls and also add handy aliases.
 if [[ -x "/usr/bin/dircolors" ]]; then
