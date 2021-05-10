@@ -16,6 +16,14 @@ for file in "$@"; do
     echo "Bash include file \`${file}\` has bad/missing shellcheck header"
     exit_code=1
   fi
+
+  # Confirm expected vim modeline
+  #
+  LINE3="$(head -n 3 "${file}" | tail -n 1)"
+  if [[ "${LINE3}" != "# vi:ft=sh fdm=marker ts=2 sw=2 et" ]]; then
+    echo "Bash file \`${file}\` don't have expected vim modeline"
+    exit_code=1
+  fi
 done
 
 exit $exit_code
