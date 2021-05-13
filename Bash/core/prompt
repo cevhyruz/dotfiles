@@ -24,7 +24,7 @@ function _post_command() {
 
   AT_PROMPT=1
 
-  if [ -n "${FIRST_PROMPT+x}" ]; then
+  if [[ -n "${FIRST_PROMPT+x}" ]]; then
     unset FIRST_PROMPT
     return
   fi
