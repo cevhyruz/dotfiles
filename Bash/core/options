@@ -30,10 +30,8 @@ declare -a _OPTIONS=(
   "hostcomplete"            # hostname completion if '@' is being completed
   "huponexit"               # send SIGHUP to all jobs when interative login shell exits
   "lithist"                 # save multi-line cmd history with embedded newlines
-  "mailwarn"                # warn if mail has been accessed since the last time it was checked
   "nullglob"                # expand patterns with no match to null string
   "xpg_echo")               # expand backslash-escape sequences
-
 
 for opts in "${_OPTIONS[@]}"; do
   shopt -s "${opts}" &> /dev/null

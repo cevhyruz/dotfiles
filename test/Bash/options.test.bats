@@ -2,14 +2,13 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load ../test_helper
-load ../../Bash/components/options
+load ../../Bash/core/options
 
 function _show_bash_opts() {
   shopt "$1" | awk '{print $2}'
 }
 
 @test "Bash-options: Verify all bash options has been properly set" {
-
   run _show_bash_opts "no_empty_cmd_completion"
   assert_output on
 
@@ -24,6 +23,7 @@ function _show_bash_opts() {
 
   run _show_bash_opts "checkwinsize"
   assert_output on
+
   run _show_bash_opts "cmdhist"
   assert_output on
 
@@ -72,15 +72,12 @@ function _show_bash_opts() {
   run _show_bash_opts "lithist"
   assert_output on
 
-  run _show_bash_opts "mailwarn"
-  assert_output on
-
   run _show_bash_opts "nullglob"
   assert_output on
 
-  #run _show_bash_opts "progcomp_alias"
-  #assert_output on
-
   run _show_bash_opts "xpg_echo"
   assert_output on
+
+  run _show_bash_opts "mailwarn"
+  assert_output off
 }
