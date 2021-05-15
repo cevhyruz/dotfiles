@@ -8,11 +8,11 @@ function _core::() {
   PROMPT_COMMAND='_post_command'
 
   trap _pre_command DEBUG
-
-  PS1="$(_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash")"
 }
 
 function _pre_command() {
+  PS1="$(_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash")"
+
   if [[ -z "${AT_PROMPT+x}" ]]; then
     return
   fi
