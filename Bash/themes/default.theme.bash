@@ -9,7 +9,7 @@
 #   PS1
 
 function _set_default_prompt() {
-  local -ra FORMAT=(
+  local -ra PS1_PROMPT=(
     "\\[${green}\\]"
     "╭─"
     "\\[${white}\\]"
@@ -34,7 +34,7 @@ function _set_default_prompt() {
     "\\[${pink}\\] "
   )
 
-  PS1="\\n$(printf %s "${FORMAT[@]}")"
+  printf "%b%s" "\\n" "${PS1_PROMPT[@]}"
 }
 
 _set_default_prompt && unset _set_default_prompt

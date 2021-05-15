@@ -9,7 +9,7 @@ function _core::() {
 
   trap _pre_command DEBUG
 
-  _::source_file "${DOT_BASH}/themes/${BASH_PROMPT_THEME:-default}.theme.bash"
+  PS1="$(_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash")"
 }
 
 function _pre_command() {

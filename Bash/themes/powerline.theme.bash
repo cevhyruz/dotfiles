@@ -30,7 +30,7 @@ function _set_powerline_prompt() {
     "\\[${pink}\\] "
   )
 
-  PS1="\\n$(printf %s "${PS1_PROMPT[@]}")"
+  printf "%b%s" "\\n" "${PS1_PROMPT[@]}"
 }
 
 _set_powerline_prompt && unset _set_powerline_prompt
