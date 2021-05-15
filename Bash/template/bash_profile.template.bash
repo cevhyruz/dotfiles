@@ -21,9 +21,7 @@ PROMPT_COMMAND="_post_command"
 # Load a custom theme file, Leaving empty will use default theme.
 # theme location: {{DOTFILES}}/Bash/themes/
 # shellcheck disable=SC2034
-BASH_PROMPT_THEME="default"
-
-# prompt command sh*t
+BASH_THEME="default"
 
 # enable color support of ls and also add handy aliases.
 if [[ -x "/usr/bin/dircolors" ]]; then
