@@ -7,14 +7,11 @@
 function main() {
   set_xdg_specs
   set_path
-  set_android_dev_path
   set_ruby_distrib_path
 
-  set_hist_envars
   set_manpager
   set_less_envars
   set_shellcheck_envars
-  set_fzf_envars
   set_rust_envars
 
   cleanup && unset -f "${FUNCNAME[0]}";
@@ -22,31 +19,6 @@ function main() {
 
 function set_rust_envars() {
   _::add_to_path "${HOME}/.cargo/bin";
-}
-
-function set_android_dev_path() {
-  if [[ -d '/usr/lib/Android' ]]; then
-
-    export readonly ANDROID_HOME='/usr/lib/Android';
-    export readonly ANDROID_SDK_ROOT="${ANDROID_HOME}";
-    export readonly GRADLE_HOME='/opt/gradle/gradle-5.6.2';
-
-    declare -ra _ANDROID_PATH=(
-      "${ANDROID_HOME}"
-      "${ANDROID_HOME}/tools"
-      "${ANDROID_HOME}/tools/bin"
-      "${ANDROID_HOME}/platform-tools"
-      "${ANDROID_SDK_ROOT}"
-      "${GRADLE_HOME}" );
-
-    for path in "${_ANDROID_PATH[@]}"; do
-      if [[ -d "${path}" ]]; then
-        _::add_to_path "${path}";
-      fi
-    done
-
-    unset path;
-  fi
 }
 
 function set_ruby_distrib_path() {
@@ -61,13 +33,6 @@ function set_path() {
   _::add_to_path "${HOME-}/.yarn/bin"
   _::add_to_path "${HOME-}/symfony/bin"
   _::add_to_path "/usr/local/go/bin"
-}
-
-function set_hist_envars() {
-  HISTSIZE=500;     # (default: 500)
-  HISTFILESIZE=500; # (default: 500)
-  HISTCONTROL='ignorespace:erasedups';
-  HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';
 }
 
 function set_manpager() {
@@ -100,88 +65,13 @@ function set_shellcheck_envars() {
   export SHELLCHECK_OPTS="${SHELLCHECK_LOCAL_OPTS[*]}";
 }
 
-function set_fzf_envars() {
-  local fzf_command;
-  local -ar FZF_BINDKEYS=(
-    "ctrl-e:preview-down+preview-down," # preview scroll-down by 2 lines.
-    "ctrl-y:preview-up+preview-up,"     # preview scroll-up by 2 lines.
-    "ctrl-space:accept" );              # additional accept key.
-
-  local -ar FZF_OPTS=(
-    "--ansi"
-    "--bind=$(printf "%s" "${FZF_BINDKEYS[@]}")"
-    "--margin=0,0,1" # T,RL,B
-    "--multi"
-    "--height=25"
-    "--no-bold"
-    "--reverse"
-    "--inline-info"
-    "--header=" );
-
-  local -ar FZF_IGNORE=(
-    "node_modules/"
-    "bower_components/"
-    ".git/"
-    "vendors/" );
-
-  # [?] exlude directories (default: find)
-
-  # Ag
-  if command -v ag &> /dev/null; then
-    for dir in "${FZF_IGNORE[@]}"; do
-      ignored_dirs+="*${dir}*,";
-    done
-
-    fzf_command=(
-      "ag --skip-vcs-ignores"
-      "--hidden"
-      "--ignore={${ignored_dirs}}"
-      "-g ''"
-    );
-
-  # Rg
-  elif command -v rg &> /dev/null; then
-
-    for dir in "${FZF_IGNORE[@]}"; do
-      ignored_dirs+="!${dir}*,";
-    done
-
-    fzf_command=(
-      "rg --files"
-      "--no-ignore"
-      "--hidden"
-      "--follow"
-      "--glob={${ignored_dirs}}"
-    );
-
-  # find
-  else
-    for dir in "${FZF_IGNORE[@]}"; do
-      ignored_dirs+=("! -path './${dir}*'");
-    done
-
-    fzf_command=(
-      "find . -type f,l,s,p"
-      "${ignored_dirs[*]}"
-      "| sed 's/^..//'" );
-  fi
-
-  unset dir ignored_dirs
-
-  export FZF_DEFAULT_COMMAND="${fzf_command[*]}"
-  export FZF_DEFAULT_OPTS="${FZF_OPTS[*]}"
-}
-
 function cleanup() {
   unset -f set_path \
-           set_android_dev_path \
            set_ruby_distrib_path;
   unset -f set_hist_envars \
-           set_prompts_envars \
            set_manpager \
            set_less_envars \
-           set_shellcheck_envars \
-           set_fzf_envars;
+           set_shellcheck_envars
   unset -f "${FUNCNAME[0]}";
 }
 

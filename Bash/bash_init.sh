@@ -10,6 +10,7 @@ source "${DOT_BASH}/lib/util.bash"
 # initliaze configurations.
 _::source_files_from "${DOT_BASH}/core"
 _::source_files_from "${DOT_BASH}/aliases"
+_::source_files_from "${DOT_BASH}/plugins"
 
 # local config file.
 _::source_file "${DOTFILES}/localrc/local.bashrc"
