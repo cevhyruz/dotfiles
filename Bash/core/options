@@ -2,13 +2,13 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
-set -u          # treat unset variables as an error when substituting.
-set -o vi       # enable vi-style line editing interface.
 set +T          # disable trap DEBUG on subshells.
+set -o nounset  # treat unset variables as an error when substituting.
+set -o vi       # enable vi-style line editing interface.
 set -o pipefail # value of pipeline is the status of the last command.
 set -o errtrace # ERR trap will be inherited by shell functions.
 
-readonly _OPTIONS=(
+declare -a _OPTIONS=(
   "no_empty_cmd_completion" # no auto-completion on empty line
   "autocd"                  # allow omitting `cd` to directory names
   "cdspell"                 # auto-correct typos in path names
@@ -34,7 +34,24 @@ readonly _OPTIONS=(
   "nullglob"                # expand patterns with no match to null string
   "xpg_echo")               # expand backslash-escape sequences
 
+
 for opts in "${_OPTIONS[@]}"; do
-  shopt -s "${opts}"
+  shopt -s "${opts}" &> /dev/null
 done
+
 unset opts
+
+# Don't check mail when opening terminal.
+shopt -u mailwarn && unset MAILCHECK
+
+# useful editors.
+VISUAL="$(command -v nvim || command -v vim || command -v )"
+EDITOR="$(command -v ed || echo "${VISUAL}")"
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# larger history (default: 500)
+HISTSIZE=20000
+HISTFILESIZE=20000

@@ -4,19 +4,6 @@
 # rust, android, distribution ruby, environment path, bash history,
 # bash prompt, man page, less, shellcheck, fzf, xdg specifications.
 
-
-# useful editors.
-VISUAL="$(command -v nvim || command -v vim || command -v )"
-EDITOR="$(command -v ed || echo "${VISUAL}")"
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# larger history (default: 500)
-HISTSIZE=20000
-HISTFILESIZE=20000
-
 function main() {
   set_xdg_specs
   set_path
