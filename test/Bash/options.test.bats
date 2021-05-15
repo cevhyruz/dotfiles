@@ -77,7 +77,4 @@ function _show_bash_opts() {
 
   run _show_bash_opts "xpg_echo"
   assert_output on
-
-  run _show_bash_opts "mailwarn"
-  assert_output off
 }
