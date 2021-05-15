@@ -1,14 +1,17 @@
+#!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh
+# vi:ft=sh fdm=marker ts=2 sw=2 et
 
-function main() {
-
-  PROMPT_COMMAND="_post_command"
+# main entry function.
+function _core::() {
+  FIRST_PROMPT=1
+  PROMPT_COMMAND='_post_command'
 
   trap _pre_command DEBUG
+
+  _::source_file "${DOT_BASH}/themes/${BASH_PROMPT_THEME:-default}.theme.bash"
 }
 
-FIRST_PROMPT=1
 function _pre_command() {
   if [[ -z "${AT_PROMPT+x}" ]]; then
     return
@@ -20,7 +23,8 @@ function _pre_command() {
 }
 
 function _post_command() {
-  _exit_status $?
+   export exit_code=$?
+  _exit_status $exit_code
 
   AT_PROMPT=1
 
@@ -30,7 +34,7 @@ function _post_command() {
   fi
 }
 
-function __repo() {
+function _core::_parse_SCM() {
   # TODO: make status get it's colors depending on gitconfig
   local status branch_name
 
@@ -53,14 +57,15 @@ function __repo() {
       && status+="⁕";
   fi
 
-  branch_name+="$( git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-    git rev-parse --short HEAD 2> /dev/null || echo "unknown")"
+  branch_name+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null \
+    || git rev-parse --short HEAD 2> /dev/null \
+    || echo "unknown")"
 
   declare -a git_prompt=(
     "${bold}"                        # make everything bold
-    "${dimgrey}"    "${1}"           # open delimeter
+    "${dimgrey}"    "$1"             # open delimeter
     "${red}"        "${branch_name}" # current branch
-    "${dimgrey}"    "${2}"           # close delimeter
+    "${dimgrey}"    "$2"             # close delimeter
     "${yellow}"     "${status}"      # status symbol
     "${reset}"                       # terminate tput codes
   );
@@ -68,22 +73,18 @@ function __repo() {
   printf "%b" "${git_prompt[@]}"
 }
 
+function _exit_code() {
+  if [[ $exit_code -ne 0 ]]; then
+   printf "%b" "exited ${red//1/0}${exit_code}"
+  fi
+}
+
 function _exit_status() {
   if [[ $1 -ne 0 ]]; then
     PS1="${PS1//${green/#\\e/}/${red/#\\e/}}"
   else
-    PS1="${PS1//${red//\\e/}/${green//\\e/}}"
+    PS1="${PS1//${red/#\\e/}/${green/#\\e/}}"
   fi
 }
 
-# if dir is ~ expand to 'home'
-function __pwd {
-  # shellcheck disable=SC2015
-  if [[ "${1}" == '~' ]]; then
-    printf "%s" "${HOME}"
-  else
-    basename "${PWD}"
-  fi
-}
-
-main && unset -f main
+_core:: && unset -f _core::

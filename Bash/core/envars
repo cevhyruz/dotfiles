@@ -4,15 +4,26 @@
 # rust, android, distribution ruby, environment path, bash history,
 # bash prompt, man page, less, shellcheck, fzf, xdg specifications.
 
+
+# useful editors.
+VISUAL="$(command -v nvim || command -v vim || command -v )"
+EDITOR="$(command -v ed || echo "${VISUAL}")"
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# larger history (default: 500)
+HISTSIZE=20000
+HISTFILESIZE=20000
+
 function main() {
   set_xdg_specs
-  set_editors
   set_path
   set_android_dev_path
   set_ruby_distrib_path
 
   set_hist_envars
-  set_prompts_envars
   set_manpager
   set_less_envars
   set_shellcheck_envars
@@ -70,39 +81,6 @@ function set_hist_envars() {
   HISTFILESIZE=500; # (default: 500)
   HISTCONTROL='ignorespace:erasedups';
   HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';
-}
-
-function set_prompts_envars() {
-  local -ra PS1_PROMPT=(
-    "\\[${green}\\]"
-    "╭─["
-    " "
-    "\\[${white}\\]"
-    "\\u@\\H"
-    "\\[${green}\\]"
-    " "
-    "]"
-    " "
-    "\\[${bold}\\]"
-    "\\[${cyan}\\]"
-    "\$( __pwd \"\\W\" )"       # current working directory
-    "\\[${reset}\\]"
-    "\$( __repo \"::\" \" \" )"
-    "\\[${pink}\\]"             # command color
-    "\\n"                       # newline
-    ""
-    "\\[${green}\\]"
-    "╰─"
-    "\\[${shade}\\]"
-    " "
-    "\\$"
-    "\\[${pink}\\] "
-  );
-
-  PS1="\\n$(printf %s "${PS1_PROMPT[@]}")";
-  PS2="\\[${pink}\\] $(trap __colorize_stdout DEBUG)";
-  export PS1;
-  export PS2;
 }
 
 function set_manpager() {
@@ -218,11 +196,6 @@ function cleanup() {
            set_shellcheck_envars \
            set_fzf_envars;
   unset -f "${FUNCNAME[0]}";
-}
-
-function set_editors() {
-  VISUAL="$(command -v nvim || command -v vim || command -v )";
-  EDITOR="$(command -v ed || echo "${VISUAL}")";
 }
 
 function set_xdg_specs() {

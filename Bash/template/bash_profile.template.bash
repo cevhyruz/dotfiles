@@ -16,16 +16,14 @@ esac
 export DOTFILES="{{DOTFILES}}"
 export DOT_BASH="{{DOTFILES}}/Bash"
 
-# Don't check mail when opening terminal.
-unset MAILCHECK
+PROMPT_COMMAND="_post_command"
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
+# Load a custom theme file, Leaving empty will use default theme.
+# theme location: {{DOTFILES}}/Bash/themes/
+# shellcheck disable=SC2034
+BASH_PROMPT_THEME="default"
 
-# larger history (default: 500)
-HISTSIZE=20000
-HISTFILESIZE=20000
+# prompt command sh*t
 
 # enable color support of ls and also add handy aliases.
 if [[ -x "/usr/bin/dircolors" ]]; then
