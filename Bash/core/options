@@ -55,3 +55,6 @@ HISTCONTROL=ignoreboth
 # larger history (default: 500)
 HISTSIZE=20000
 HISTFILESIZE=20000
+
+HISTCONTROL='ignorespace:erasedups';
+HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';
