@@ -53,21 +53,13 @@ function _enable_command_color() {
     alias vdir="vdir --color=always"
   fi
 
-  # grey="\\e[38;5;244m";
-  # cyan="\\e[1;36m";
-  # dimgrey="\\e[0;38;5;248m";
-  # shade="\\e[38;5;242m";
-  # pink="\\e[0;38;5;216m";
-  # red="\\e[1;38;5;203m";
-  # yellow="\\e[1;38;5;178m";
-
   LS_COLORS="";
   LS_COLORS+="no=0;39:";   # Global default
-  LS_COLORS+="di=1;36:";   # Directory
+  LS_COLORS+="di=0;36:";   # Directory
   LS_COLORS+="ex=0;32:";   # Executable file
   LS_COLORS+="fi=0;39:";   # File
   LS_COLORS+="ec=:";       # Non-filename text
-  LS_COLORS+="mi=1;31:";   # Non-existent file pointed to by a symlink
+  LS_COLORS+="mi=0;31:";   # Non-existent file pointed to by a symlink
   LS_COLORS+="ln=target:"; # Symbolic link
   LS_COLORS+="ow=0;35:";   # Other writable
   LS_COLORS+="or=31;01:";  # Symbolic link pointing to a non-existent file
