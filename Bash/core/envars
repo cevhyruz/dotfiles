@@ -5,7 +5,6 @@
 # bash prompt, man page, less, shellcheck, fzf, xdg specifications.
 
 function main() {
-  set_xdg_specs
   set_path
   set_ruby_distrib_path
 
@@ -73,15 +72,6 @@ function cleanup() {
            set_less_envars \
            set_shellcheck_envars
   unset -f "${FUNCNAME[0]}";
-}
-
-function set_xdg_specs() {
-  # This is probably set already.
-  declare -xr XDG_CONFIG_HOME="${HOME}/.config" && \
-    export XDG_CONFIG_HOME;
-
-  declare -xr XDG_DATA_HOME="${HOME}/.local/share" && \
-    export XDG_DATA_HOME;
 }
 
 main "$@"
