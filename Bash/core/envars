@@ -3,6 +3,10 @@
 #
 # Set up shell variables for Bash
 
+# Prefer US English and use UTF-8 encoding.
+LANG="en_US"
+LC_ALL="en_US.UTF-8"
+
 # disable mailcheck.
 if [[ $( shopt mailwarn | awk '{ print $2 }' ) == 'off' ]]; then
   unset MAILCHECK
