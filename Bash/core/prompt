@@ -5,8 +5,7 @@
 # main entry function.
 function _core::() {
   FIRST_PROMPT=1
-  PROMPT_COMMAND='_post_command'
-
+  PROMPT_COMMAND+=('_post_command')
   trap _pre_command DEBUG
 }
 
