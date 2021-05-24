@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 #
@@ -20,9 +21,6 @@ alias which="which -a"
 
 # pretty print path names.
 alias path='echo "${PATH//:/\\n}"'
-
-# printenv with fuzzy finder.
-alias envars='printenv | fzf'
 
 # print which spawns the current shell session.
 alias parent='ps --no-headers -o comm "${PPID}"'
