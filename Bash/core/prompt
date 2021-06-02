@@ -4,86 +4,78 @@
 
 # main entry function.
 function _core::() {
-  FIRST_PROMPT=1
-  PROMPT_COMMAND+=('_post_command')
-  trap _pre_command DEBUG
-}
-
-function _pre_command() {
-  PS1="$(_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash")"
-
-  if [[ -z "${AT_PROMPT+x}" ]]; then
-    return
+  if [[ "${PROMPT_COMMANDS_ENABLED:-1}" -eq 1 ]]; then
+    FIRST_PROMPT=1 # prevent post_command from firing before the prompt.
+    trap pre_command DEBUG # setup pre_command.
+    PROMPT_COMMAND+=("post_command") # setup post_command.
   fi
-  unset AT_PROMPT
 
-  # shellcheck disable=SC2154
-  echo -ne "${dimgrey}"
+  # lock and load theme file
+  _::source_file  "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash"
+
 }
 
-function _post_command() {
-   export exit_code=$?
-  _exit_status $exit_code
+function _exit_code() {
+  local -a exit_prompt=(
+    "\e[0m" # reset
+    "$1"
+    "$2"
+    "${EXIT_CODE:-}"
+    "\e[0m" # reset
+  )
 
-  AT_PROMPT=1
-
-  if [[ -n "${FIRST_PROMPT+x}" ]]; then
-    unset FIRST_PROMPT
-    return
+  if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
+    printf "%b" "${exit_prompt[@]}"
   fi
 }
 
 function _core::_parse_SCM() {
   # TODO: make status get it's colors depending on gitconfig
-  local status branch_name
+  local status branch_name git_prompt
 
-  ! git rev-parse &> /dev/null && return;
+  # check if we are inside a Git repository
+  if ! git rev-parse &> /dev/null; then
+    return
+  fi
 
-  if [ "$( git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]; then
+  # Check that we are not inside '.git' directory.
+  if [[ "$( git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]]; then
 
-    git update-index --really-refresh -q &> /dev/null;
+    # make sure git index is updated
+    git update-index --really-refresh -q &> /dev/null
 
-    ! git diff --quiet --ignore-submodules --cached \
-      && status+="+"; # staged
+    if ! git diff --quiet --ignore-submodules --cached; then
+      status+="${_gs_staged:-A}"
+    fi
 
-    ! git diff-files --quiet --ignore-submodules -- \
-      && status+="!"; # modified
+    if ! git diff-files --quiet --ignore-submodules --; then
+      status+="${_gs_modified:-M}"
+    fi
 
-    [ -n "$( git ls-files --others --exclude-standard)" ] \
-      && status+="?"; # untracked
+    if [[ -n "$( git ls-files --others --exclude-standard )" ]]; then
+      status+="${_gs_untracked:-U}"
+    fi
 
-    git rev-parse --verify refs/stash &> /dev/null \
-      && status+="⁕";
+    if git rev-parse --verify refs/stash &> /dev/null; then
+      status+="${_gs_stash:--}"
+    fi
   fi
 
   branch_name+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null \
     || git rev-parse --short HEAD 2> /dev/null \
     || echo "unknown")"
 
-  declare -a git_prompt=(
-    "${bold}"                        # make everything bold
-    "${dimgrey}"    "$1"             # open delimeter
-    "${red}"        "${branch_name}" # current branch
-    "${dimgrey}"    "$2"             # close delimeter
-    "${yellow}"     "${status:-}"      # status symbol
-    "${reset}"                       # terminate tput codes
+  git_prompt=(
+    "\e[0m"          # reset
+    "$1"             # open delimeter
+    "${branch_name}" # current branch
+    "\e[0m"          # reset all
+    "$2"             # close delimeter
+    "${status:-}"    # status symbol
+    "\e[0m"          # reset all
   );
 
   printf "%b" "${git_prompt[@]}"
-}
-
-function _exit_code() {
-  if [[ $exit_code -ne 0 ]]; then
-   printf "%b" "exited ${red//1/0}${exit_code}"
-  fi
-}
-
-function _exit_status() {
-  if [[ $1 -ne 0 ]]; then
-    PS1="${PS1//${green/#\\e/}/${red/#\\e/}}"
-  else
-    PS1="${PS1//${red/#\\e/}/${green/#\\e/}}"
-  fi
 }
 
 _core:: && unset -f _core::
