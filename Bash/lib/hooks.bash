@@ -4,7 +4,7 @@
 #
 # Execute hook-command before and after the executing a command
 
-[[ -n ${HOOKS_LOADED:-} ]] && return || HOOKS_LOADED=true
+[[ -n ${HOOKS_LOADED:-} ]] && return 1 || HOOKS_LOADED=true
 
 function pre_command() {
   if [[ -z "${AT_PROMPT:-}" ]]; then
