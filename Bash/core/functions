@@ -1,0 +1,217 @@
+#!/usr/bin/env bash
+# quickly edit files matching input string.
+function query() {
+
+  # TODO: Add another way of previewing files without the double line numbers.
+  [[ -z "${1}" ]] && {
+    echo "please input search string" && return 1;
+  } \
+    || query="${1}";
+
+  [[ "$(rg "${query}")" ]] && {
+    rg --files-with-matches --no-messages "${query}" \
+      | fzf --preview "highlight -O ansi -l {} 2> /dev/null \
+      | rg --colors 'match:bg:yellow' -i --pretty --context 10 ${query} \
+      || rg --colors 'match:bg:yellow' -i --pretty --context 10 ${query} {}" \
+    | xargs --no-run-if-empty "${EDITOR}" -c "/${query}"
+  } \
+    || echo 'No match'
+
+}
+function todo()  { query "TOD[O]:";  }
+function fixme() { query "FIXM[E]:"; }
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# only fireup NVM and/or it's packages if it's explicitly invoked.
+# TODO: for any new global packages create a function,
+#       so we can just directly call the binary and load.
+
+for func in $(printf "nvm node npm npx"); do
+  eval "${func}() { lazyload_nvm && ${func} \"\$@\"; }";
+done;
+unset func;
+
+function lazyload_nvm() { # {{{1
+  export NVM_DIR="${HOME}/.nvm";
+  unset -f nvm node npm npx;
+
+  # loads nvm
+  [[ -s "${NVM_DIR}/nvm.sh" ]] && {
+    source "${NVM_DIR}/nvm.sh";
+  };
+
+  # loads nvm bash_completion
+  [[ -f "${NVM_DIR}/bash_completion" ]] && {
+    source "${NVM_DIR}/bash_completion";
+  };
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# TODO:
+# list multiple tmux builds. if none were found, fireup tmux from path.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# list bash aliases
+function aliases() { # {{{1
+  aliases=$(alias | fzf)
+  # for (( i = 0; i < $(echo "$aliases" | wc -l); i++ )); do
+  #   echo "$aliases"
+  # done
+}
+
+# simple note-taking tool.
+# shellcheck disable=SC2164
+function note() { # {{{1
+  local location
+  location="$HOME/Documents/notes"
+  pushd "$location" &> /dev/null
+  if [[ "$#" -eq 0 ]]; then
+    # shellcheck disable=SC2012
+    notes=$(ls "$location" | fzf --height=100% --preview 'cat {}')
+    # shellcheck disable=SC2086
+    [[ -z "${notes}" ]] \
+      && command nvim -c 'set ft=help' "${notes[*]}"
+  else
+    [[ -x /usr/bin/nvim ]] || [[ -x /usr/local/bin/nvim ]] \
+      && command nvim -c 'set ft=help' "$@"
+  fi
+  popd &> /dev/null
+}
+
+# create directory and enter it
+# usage: md [directory]
+function md() { # {{{1
+  mkdir -p "$1" && cd "$_" || return 1
+}
+
+# [?] `cd` to last `vifm` location after quitting.
+function goto() { # {{{1
+  local dest
+  dest="$(command vifm --choose-dir - "$@")"
+  if [ -z "$dest" ]; then
+    echo 'Directory picking cancelled/failed'
+    return 1
+  fi
+  cd "$dest" || return
+}
+
+# Start a PHP server from a directory.
+# usage: phpserver [port|default=3000]
+function phpserver() { # {{{1
+  local port ip
+  port="${1:-3000}"
+  [ "$(command -v ipconfig &> /dev/null)" ] \
+    && ip=$(ipconfig getifaddr en1);
+  ip=$(ifconfig | grep -w inet | awk '{print $2}' | tail -1);
+  sleep 0.100 \
+    && open "http://$ip:$port/" &
+  php -S "$ip:$port"
+}
+
+# Determine size of a file or total size of a directory
+function fs() { # {{{1
+  [ "$(du -b /dev/null > /dev/null 2>&1)" ] && { arg="-sbh"; } || arg="-sh"
+  # shellcheck disable=SC2015
+  [ -n "$*" ] && {
+    du $arg -- "$@";
+  } || du $arg .[^.]* ./*;
+}
+
+# UTF-8-encode a string of Unicode symbols
+function escape() { # {{{1
+  printf "\\\\x%s" "$(printf "%s" "$@" | xxd -p -c1 -u)";
+  # print a newline unless we’re piping the output to another program
+  if [ -t 1 ]; then
+    echo ""
+  fi
+}
+
+# Syntax-highlight JSON strings or files
+# Usage: `json '{"foo":42}'` or `echo '{"foo":42}' | json`
+function json() { # {{{1
+  if [ -t 0 ]; then # argument
+    python -mjson.tool <<< "$*" | pygmentize -l javascript;
+  else # pipe
+    python -mjson.tool | pygmentize -l javascript;
+  fi;
+}
+
+# generate dataURL from a file
+function dataurl() { # {{{1
+  local mimeType
+  mimeType=$(file -b --mime-type "$1");
+  [[ "$mimeType" == text/* ]] \
+    && mimeType="$mimeType;charset=utf-8";
+  echo "data:$mimeType;base64,$(openssl base64 -in "$1" | tr -d '\n')" \
+     | xclip -selection clipboard \
+     && echo "dataturl copied into clipboard";
+}
+
+# https://gist.github.com/cevhyruz/c0a95a927d59c9690e6a2c63c038a77d
+# print a nice truecolors rgb strip
+function truecolors() {
+  awk 'BEGIN {
+      s="          "; s=s s s s s s s s;
+      for (colnum = 0; colnum<77; colnum++) {
+          r = 255-(colnum*255/76);
+          g = (colnum*510/76);
+          b = (colnum*255/76);
+          if (g>255) g = 510-g;
+          printf "\033[48;2;%d;%d;%dm", r,g,b;
+          printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+          printf "%s\033[0m", substr(s,colnum+1,1);
+      }
+      printf "\n";
+  }'
+}
+
+function terminfo() {
+  # escape sequence
+  # \e[XXm
+  # \x1B[XXm   Hex
+  # \033[XXm   Octal
+  echo -e "\e[1mbold\e[0m"
+  echo -e "\e[2mdim\e[0m"
+  echo -e "\e[5mBlink\e[0m"
+  echo -e "\e[3mitalic\e[0m"
+  echo -e "\e[4mstraight underline\e[0m"
+  echo -e "\e[7minverted\e[0m"
+  echo -e "\e[9mstrikethrough\e[0m"
+  echo -e "\e[31mcolored\e[0m"
+
+  echo -e "\033[53moverline\033[55m"
+
+  echo -e "\e[4:3mcurvy underline"
+  echo -e "\e[4:2mdouble underline"
+  echo -e "\e[4:5mdashed underline\e[0m"
+
+  echo "${shade}\nSmol (overline)${reset}"
+  echo -e "- \e[53moverline\e[55m ${reset}"
+
+  echo "${shade}\nSmulx (styled underscore)${reset}"
+  echo -e "- \e[4:0m no underscore ${reset}"
+  echo -e "- \e[4:1m normal underscore ${reset}"
+  echo -e "- \e[4:2m double underscore ${reset}"
+  echo -e "- \e[4:3m curly underscore ${reset}"
+  echo -e "- \e[4:4m dotted underscore ${reset}" # not supported in gnome-terminal
+  echo -e "- \e[4:5m dashed underscore ${reset}" # not supported in gnome-terminal
+
+  echo "${shade}\nSetulc (underscore colour)${reset}"
+  echo -e "- \e[4:0m\e[58;5;100m normal underscore ${reset}"
+  echo -e "- \e[4:1m\e[9m\e[58;5;22m normal underscore ${reset}"
+  echo -e "- \e[4:2m\e[58;5;100m double underscore ${reset}"
+  echo -e "- \e[4:3m\e[58;5;100m curly underscore ${reset}"
+  echo -e "- \e[4:4m\e[58;5;100m dotted underscore${reset}"
+  echo -e "- \e[4:5m\e[58;5;100m dashed underscore${reset}"
+}
+
+# print a nice 256colors chart
+function colormap() { # {{{1
+  for (( i = 0; i < 256; i++ )); do
+    printf "\\e[48;5;${i}m%s" "$i"
+    printf '\e[0m'
+    [ ! $(( (i - 15) % 6)) -eq 0 ] && printf ' ' || printf '\n'
+  done
+  unset i
+}

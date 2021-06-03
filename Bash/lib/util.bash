@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 #
@@ -6,7 +5,7 @@
 # Entry file to load all library file for bash.
 
 # prevent sourcing this script multiple times.
-[[ -n ${UTIL_LOADED:-} ]] && return || UTIL_LOADED=true
+#[[ -n ${UTIL_LOADED-} ]] && return || UTIL_LOADED=true
 
 #  _::die() Exit gracefully. {{{1
 # Args [message] (optional)
@@ -69,7 +68,6 @@ function _::add_to_path() {
 # Args [script file]
 # Returns:
 #   0 if the file was successfully sourced, 1 otherwise.
-# shellcheck source=/dev/null
 function _::source_file() {
   source "$1" 2>/dev/null ||
     _::die "can't source '$1'"
