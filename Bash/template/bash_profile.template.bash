@@ -16,11 +16,29 @@ esac
 export DOTFILES="{{DOTFILES}}"
 export DOT_BASH="{{DOTFILES}}/Bash"
 
+PROMPT_COMMAND="_post_command"
+
 # Load a custom theme file, Leaving empty will use default theme.
 # theme location: {{DOTFILES}}/Bash/themes/
 # shellcheck disable=SC2034
 BASH_THEME="default"
 
+# enable color support of ls and also add handy aliases.
+if [[ -x "/usr/bin/dircolors" ]]; then
+
+  if [[ -r ~/.dircolors ]]; then
+    eval "$(dircolors -b ~/dircolors)" ||
+      eval "$(dircolors -b)"
+  fi
+
+  alias dir="dir --color=always"
+  alias ls="ls --color=always"
+  alias vdir="vdir --color=always"
+
+  alias grep="grep --color=always"
+  alias fgrep="fgrep --color=always"
+  alias egrep="egrep --color=always"
+fi
+
 # Load dotfiles Bash.
-# shellcheck source=/dev/null
 source "${DOT_BASH}/bash_init.sh"

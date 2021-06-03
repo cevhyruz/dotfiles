@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2034
+function _set_color_variables() {
+  bold="\\e[1m";
+  reset="\\e[0m";
+  black="\\e[1;30m";
+  blue="\\e[1;34m";
+  green="\\e[1;32m";
+  orange="\\e[1;33m";
+  violet="\\e[1;35m";
+  white="\\e[1;37m";
+
+  grey="\\e[38;5;244m";
+  cyan="\\e[1;36m";
+  dimgrey="\\e[0;38;5;248m";
+  shade="\\e[38;5;242m";
+  pink="\\e[0;38;5;216m";
+  red="\\e[1;38;5;203m";
+  yellow="\\e[1;38;5;178m";
+  # pink="\\e[0;38;5;107m";
+
+  # only set $TERM when we're not inside tmux
+  if ! [[ "${TERM}" =~ ^screen ]] || [[ "${TERM}" =~ ^tmux ]] ; then
+    if [[ "${COLORTERM}" = gnome-* && "${TERM}" = xterm ]] \
+      && infocmp gnome-256color >/dev/null 2>&1; then
+      export TERM='gnome-256color'
+    elif infocmp xterm-256color >/dev/null 2>&1; then
+      export TERM='xterm-256color'
+    fi
+  fi
+
+}
+
+function _other_cmd_color() {
+  if command -v exa &> /dev/null; then
+    alias exa="exa --color=always"
+  fi
+}
+
+function _enable_command_color() {
+  if [[ -x "/usr/bin/dircolors" ]]; then
+
+    # if [[ -r ~/.dircolors ]]; then
+    #   eval "$(dircolors -b ~/dircolors)"
+    # fi
+
+    alias dir="dir --color=always"
+    alias egrep="egrep --color=always"
+    alias fgrep="fgrep --color=always"
+    alias grep="grep --color=always"
+    alias lscolor="ls --color=always"
+    alias vdir="vdir --color=always"
+  fi
+
+  LS_COLORS="";
+  LS_COLORS+="no=0;39:";   # Global default
+  LS_COLORS+="di=0;36:";   # Directory
+  LS_COLORS+="ex=0;32:";   # Executable file
+  LS_COLORS+="fi=0;39:";   # File
+  LS_COLORS+="ec=:";       # Non-filename text
+  LS_COLORS+="mi=0;31:";   # Non-existent file pointed to by a symlink
+  LS_COLORS+="ln=target:"; # Symbolic link
+  LS_COLORS+="ow=0;35:";   # Other writable
+  LS_COLORS+="or=31;01:";  # Symbolic link pointing to a non-existent file
+
+  export LS_COLORS;
+}
+
+function cleanup() {
+  unset -f _enable_color_support
+  unset -f _enable_command_color
+  unset -f _set_color_variables
+}
+
+function main() {
+  # _enable_color_support
+  _set_color_variables
+  _enable_command_color
+  _other_cmd_color
+
+  cleanup && unset -f cleanup
+}
+
+main
