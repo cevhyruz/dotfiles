@@ -5,7 +5,10 @@
 # Initialize Dotfiles Bash configuration.
 
 # load utility helper file.
-source "${DOT_BASH}/lib/util.bash"
+# shellcheck source=/dev/null
+for file in "${DOT_BASH}/lib"/*; do
+  source "${file}"
+done
 
 # initliaze configurations.
 _::source_files_from "${DOT_BASH}/core"

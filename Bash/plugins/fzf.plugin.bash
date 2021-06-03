@@ -2,6 +2,20 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
+if ! command -v fzf &>/dev/null; then
+  return 1
+fi
+
+function main() {
+  _set_fzf_plugin
+  _set_aliases_with_fzf
+}
+
+function _set_aliases_with_fzf() {
+  alias aliases='alias | fzf'   # list aliases.
+  alias envars='printenv | fzf' # print environment variables.
+}
+
 function _set_fzf_plugin() {
   local fzf_command
   local -ar FZF_BINDKEYS=(
@@ -74,4 +88,4 @@ function _set_fzf_plugin() {
   export FZF_DEFAULT_OPTS="${FZF_OPTS[*]}"
 }
 
-_set_fzf_plugin && unset _set_fzf_plugin
+main

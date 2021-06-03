@@ -8,6 +8,7 @@ set -o vi       # enable vi-style line editing interface.
 set -o pipefail # value of pipeline is the status of the last command.
 set -o errtrace # ERR trap will be inherited by shell functions.
 
+# enabled options.
 declare -a _OPTIONS=(
   "no_empty_cmd_completion" # no auto-completion on empty line
   "autocd"                  # allow omitting `cd` to directory names
@@ -36,23 +37,7 @@ declare -a _OPTIONS=(
 for opts in "${_OPTIONS[@]}"; do
   shopt -s "${opts}" &> /dev/null
 done
-
 unset opts
 
-# Don't check mail when opening terminal.
-shopt -u mailwarn && unset MAILCHECK
-
-# useful editors.
-VISUAL="$(command -v nvim || command -v vim || command -v )"
-EDITOR="$(command -v ed || echo "${VISUAL}")"
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# larger history (default: 500)
-HISTSIZE=20000
-HISTFILESIZE=20000
-
-HISTCONTROL='ignorespace:erasedups';
-HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';
+# disabled options.
+shopt -u mailwarn # Don't check mail when opening terminal.
