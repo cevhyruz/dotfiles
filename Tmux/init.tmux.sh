@@ -55,4 +55,4 @@ function Tmux::main() {
   theme
 }
 
-[[ $# -gt 0 ]] && Tmux::main
+Tmux::main
