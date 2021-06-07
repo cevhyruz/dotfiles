@@ -67,7 +67,7 @@ function _set_prompt() {
   PS1+="\[\$( _exit_code \" \[\e[3;37m\]exited \" \"\[\e[38;5;203m\]\" )\]"
   PS1+="\n"
   PS1+="\[\$( _return_arrow_style )\]"
-  PS1+="\[╰\]"
+  PS1+="╰"
   PS1+="\[\e[0m\] $: " # begin reset
   PS1+="\[\e[38;5;216m\]"
 }
