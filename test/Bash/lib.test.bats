@@ -125,3 +125,13 @@ function local_teardown() {
   run _::source_all_from "${DIR}"
   assert_output --partial "can't source '${DIR}/file2'"
 }
+
+# _::command_exists {{{1
+#
+@test "bash-lib: Test '_::command_exists()'" {
+  run _::command_exists 'foo'
+  assert_failure 1
+
+  run _::command_exists 'test'
+  assert_success
+}

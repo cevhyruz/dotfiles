@@ -120,3 +120,15 @@ function _::source_all_from() {
 
   return 1
 }
+
+# _::command_exists() Check if a given command is installed {{{1
+# Args [command]
+# Returns:
+#  0 if command exists on path, 1 otherwise
+function _::command_exists() {
+  local cmd="$1"
+  if command -v "${cmd}" &>/dev/null; then
+    return 0
+  fi
+  return 1
+}
