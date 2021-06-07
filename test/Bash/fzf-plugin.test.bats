@@ -3,7 +3,7 @@
 
 load ../test_helper
 
-load ../../Bash/lib/util
+#load ../../Bash/lib/util
 
 load ../../Bash/plugins/fzf.plugin
 
