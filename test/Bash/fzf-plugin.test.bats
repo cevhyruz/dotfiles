@@ -9,8 +9,8 @@ load ../../Bash/plugins/fzf.plugin
 
 function local_setup() {
   local -r dependency="fzf"
-  _::command_exists "${dependency}" \
-    || skip "Missing dependency: ${dependency}"
+  command -v "${dependency}" &>/dev/null \
+   || skip "Missing dependency: ${dependency}"
 }
 
 TEST_NAME="bash-plugin [FZF]"
