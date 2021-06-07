@@ -8,7 +8,7 @@ load ../../Bash/plugins/pyenv.plugin
 
 TEST_NAME="bash-plugin [Pyenv]"
 
-@test "${TEST_NAME}: Verify that pyenv hay properly loaded." {
+@test "${TEST_NAME}: Verify that pyenv has properly loaded." {
   run bash -c "echo ${PATH} | grep 'pyenv'"
   assert_success
 
