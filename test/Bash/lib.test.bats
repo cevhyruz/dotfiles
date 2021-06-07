@@ -132,6 +132,6 @@ function local_teardown() {
   run _::command_exists 'foo'
   assert_failure 1
 
-  run _::command_exists 'bash'
+  run _::command_exists 'test'
   assert_success
 }
