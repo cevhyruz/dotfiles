@@ -5,38 +5,59 @@
 # shellcheck source=/dev/null
 # Node version manager Plugin for Bash
 #
-# load nvm on-demand to make bash startup faster.
+# load nvm (Node Version Manager) if it is present.
+#
+# Globals:
+#   LAZYLOAD_NVM (default 0)
+#   set to 1 to enable loading nvm on-demand, 0 otherwise.
 
-# We can't really test if nvm exist like 'command -v nvm',
-# so we'll just check if the default installation dir exists.
-if ! [[ -d "${HOME}/.nvm" ]] ||
-  which -a node &>/dev/null; then
-  return 1
-fi
+function _set_nvm() {
+  # If these two functions are present, then nvm is installed.
+  if ! declare -F 'nvm' && ! declare -F 'nvm_echo'; then
+    if [[ -d "${HOME}/.nvm" ]]; then
+      export NVM_DIR="$HOME/.nvm"
 
-function _load_nvm() {
-  NVM_DIR="${HOME}/.nvm"
+      # load nvm on-demand.
+      if [[ "${LAZYLOAD_NVM:-0}" -eq 1 ]]; then
+        echo 'on-demand'
+        _lazy_load_nvm
+        return 0
+      fi
+      # load nvm normally.
+      _load_script_files
+      echo 'loaded normally'
 
+      return 0
+    fi
+
+    echo 'nothing'
+    _set_nvm::_cleanup
+    return 1
+  fi
+}
+
+function _lazy_load_nvm() {
   for func in nvm node npm npx; do
     eval "${func}() {
-      _load_nvm::_lazy_load
+      #if [[ -n ${assert_call:-} ]]; then
+        #return 0
+      #fi
+      _load_script_files
       ${func} \"\$@\"
     }"
   done
   unset func
 }
 
-function _load_nvm::_lazy_load() {
-  unset -f nvm \
-    node \
-    npm \
-    npx
-
-  _load_nvm::_load_script
-  _load_nvm::_bash_compl
+function _load_script_files() {
+  #if [[ "${LAZYLOAD_NVM:-0}" -eq 1 ]]; then
+  unset -f nvm node npm npx
+  #fi
+  _load_nvm_script
+  _load_nvm_bash_compl
 }
 
-function _load_nvm::_load_script() {
+function _load_nvm_script() {
   if command -v brew &>/dev/null &&
     [[ -s "$(brew --prefix nvm)/nvm.sh" ]]; then
     source "$(brew --prefix nvm)/nvm.sh"
@@ -45,10 +66,19 @@ function _load_nvm::_load_script() {
   fi
 }
 
-function _load_nvm::_bash_compl() {
+function _load_nvm_bash_compl() {
   if [[ -f "${NVM_DIR}/bash_completion" ]]; then
     source "${NVM_DIR}/bash_completion"
   fi
 }
 
-_load_nvm
+function _set_nvm::_cleanup() {
+  unset -f _set_nvm \
+    _lazy_load_nvm \
+    _load_script_files \
+    _load_nvm_script \
+    _load_nvm_bash_compl \
+    _set_nvm::_cleanup
+}
+
+_set_nvm

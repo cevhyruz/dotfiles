@@ -3,22 +3,19 @@
 
 load ../test_helper
 
-load ../../Bash/plugins/nvm.plugin
+
+function local_setup() {
+  unset LAZYLOAD_NVM
+}
 
 TEST_NAME="bash-plugin [NVM]"
 
-@test "${TEST_NAME}: Make sure no node/npm/npx is already on path" {
-  run which -a node
-  assert_failure 1
+@test "${TEST_NAME}: Make sure lazyloading works as expected." {
 
-  run which -a npm
-  assert_failure 1
+  LAZYLOAD_NVM=1
+  load ../../Bash/plugins/nvm.plugin
 
-  run which -a npx
-  assert_failure 1
-}
-
-@test "${TEST_NAME}: Make sure node/npm/npx functions has been setup" {
+   #>&3 echo 'test'
   run declare -F node
   assert_success
 
@@ -29,10 +26,9 @@ TEST_NAME="bash-plugin [NVM]"
   assert_success
 }
 
+@test "${TEST_NAME}: Make sure normal loading works as expected." {
 
-@test "${TEST_NAME}: Make sure cleanup works as expected." {
-  # We now load nvm main script file.
-  nvm --version
+  load ../../Bash/plugins/nvm.plugin
 
   run declare -F node
   assert_failure 1
