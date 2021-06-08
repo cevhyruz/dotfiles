@@ -17,15 +17,11 @@ function _set_nvm() {
     if [[ -d "${HOME}/.nvm" ]]; then
       export NVM_DIR="$HOME/.nvm"
 
-      # load nvm normally.
       if [[ "${LAZYLOAD_NVM:-1}" -eq 0 ]]; then
         _load_script_files
-        echo 'loaded normally'
         return 0
       fi
 
-      # load nvm on-demand.
-      echo 'on-demand'
       _lazy_load_nvm
       return 0
     fi
