@@ -18,4 +18,27 @@ else
   TEST_DIRS=("$1")
 fi
 
-exec "${BATS_EXECUTABLE}" ${CI:+--tap} "${TEST_DIRS[@]}"
+# Try to run tests in parallel processes for faster execution.
+if command -v parallel &>/dev/null &&
+  parallel -V &>/dev/null &&
+  { parallel -V 2>/dev/null | grep -q '^GNU\>'; }; then
+
+  # should be able to run atleast on a dual-core CPU.
+  declare -ir TEST_JOBS_PROC=2
+  declare -i TEST_JOBS_EFFECTIVE=
+
+  readonly TEST_JOBS_EFFECTIVE="$(
+    if [[ "${TEST_JOBS:-detect}" = "detect" ]] &&
+      command -v nproc &>/dev/null; then
+      nproc
+    else
+      echo "${TEST_JOBS:-${TEST_JOBS_PROC}}"
+    fi
+  )"
+
+  exec "${BATS_EXECUTABLE}" ${CI:+--tap} \
+    --jobs "${TEST_JOBS_EFFECTIVE}" "${TEST_DIRS[@]}"
+else
+  # Run `bats` in single-threaded mode.
+  exec "${BATS_EXECUTABLE}" ${CI:+--tap} "${TEST_DIRS[@]}"
+fi
