@@ -8,8 +8,8 @@
 # load nvm (Node Version Manager) if it is present.
 #
 # Globals:
-#   LAZYLOAD_NVM (default 0)
-#   set to 1 to enable loading nvm on-demand, 0 otherwise.
+#   LAZYLOAD_NVM (default 1)
+#   set to 0 to disable loading nvm on-demand, 0 otherwise.
 
 function _set_nvm() {
   # If these two functions are present, then nvm is installed.
@@ -17,16 +17,16 @@ function _set_nvm() {
     if [[ -d "${HOME}/.nvm" ]]; then
       export NVM_DIR="$HOME/.nvm"
 
-      # load nvm on-demand.
-      if [[ "${LAZYLOAD_NVM:-0}" -eq 1 ]]; then
-        echo 'on-demand'
-        _lazy_load_nvm
+      # load nvm normally.
+      if [[ "${LAZYLOAD_NVM:-1}" -eq 0 ]]; then
+        _load_script_files
+        echo 'loaded normally'
         return 0
       fi
-      # load nvm normally.
-      _load_script_files
-      echo 'loaded normally'
 
+      # load nvm on-demand.
+      echo 'on-demand'
+      _lazy_load_nvm
       return 0
     fi
 
@@ -50,9 +50,8 @@ function _lazy_load_nvm() {
 }
 
 function _load_script_files() {
-  #if [[ "${LAZYLOAD_NVM:-0}" -eq 1 ]]; then
   unset -f nvm node npm npx
-  #fi
+
   _load_nvm_script
   _load_nvm_bash_compl
 }

@@ -3,7 +3,6 @@
 
 load ../test_helper
 
-
 function local_setup() {
   unset LAZYLOAD_NVM
 }
@@ -12,7 +11,6 @@ TEST_NAME="bash-plugin [NVM]"
 
 @test "${TEST_NAME}: Make sure lazyloading works as expected." {
 
-  LAZYLOAD_NVM=1
   load ../../Bash/plugins/nvm.plugin
 
    #>&3 echo 'test'
@@ -28,6 +26,7 @@ TEST_NAME="bash-plugin [NVM]"
 
 @test "${TEST_NAME}: Make sure normal loading works as expected." {
 
+  LAZYLOAD_NVM=0
   load ../../Bash/plugins/nvm.plugin
 
   run declare -F node
