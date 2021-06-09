@@ -1,14 +1,16 @@
 #!/usr/bin/env bats
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
-load ../test_helper
+load "${TEST_DIRECTORY}/test_helper.bash"
+
 load ../../Bash/core/options
 
 function _show_bash_opts() {
   shopt "$1" | awk '{print $2}'
 }
 
-@test "Bash-options: Verify all bash options has been properly set" {
+@test "${TEST_FILE} Verify all bash options has been properly set" {
+
   run _show_bash_opts "no_empty_cmd_completion"
   assert_output on
 

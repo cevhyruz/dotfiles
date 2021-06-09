@@ -1,8 +1,7 @@
 #!/usr/bin/env bats
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
-load ../test_helper
-load ../../Bash/lib/util
+load "${TEST_DIRECTORY}/test_helper.bash"
 
 function local_setup() {
   FIXTURE_LOCATION="/tmp/bash-test-fixture"
@@ -30,7 +29,7 @@ function local_teardown() {
 
 # _::die {{{1
 #
-@test "bash-lib: Test '_::die()'" {
+@test "${TEST_FILE}: bash-lib: Test '_::die()'" {
   run _::die "died"
   [ $status -eq 1 ]
 
@@ -39,7 +38,7 @@ function local_teardown() {
 
 # _::is_dir {{{1
 #
-@test "bash-lib: Test '_::is_dir()'" {
+@test "${TEST_FILE}: Test '_::is_dir()'" {
   # non empty directory
   run _::is_dir "${DIR}"
   [ "${status}" -eq 0 ];
@@ -60,7 +59,7 @@ function local_teardown() {
 
 # _::is_file {{{1
 #
-@test "bash-lib: Test '_::is_file()'" {
+@test "${TEST_FILE}: Test '_::is_file()'" {
   run _::is_file "/non/existing/path"
   [ "${status}" -eq 1 ];
 
@@ -77,7 +76,7 @@ function local_teardown() {
 
 # _::add_to_path {{{1
 #
-@test "bash-lib: Test '_::add_to_path()'" {
+@test "${TEST_FILE}: Test '_::add_to_path()'" {
   # for path that is already on the environment
   run _::add_to_path "/usr/local/bin"
   assert_success
@@ -88,7 +87,7 @@ function local_teardown() {
 
 # _::source_file {{{1
 #
-@test "bash-lib: Test '_::source_file()'" {
+@test "${TEST_FILE}: Test '_::source_file()'" {
   run _::source_file "${DIR}/file1"
   [ $status -eq 0 ]
 
@@ -104,7 +103,7 @@ function local_teardown() {
 
 # _::source_files_from {{{1
 #
-@test "bash-lib: Test '_::source_files_from()'" {
+@test "${TEST_FILE}: Test '_::source_files_from()'" {
   # dir with scripts that has syntax error (file2)
   run _::source_files_from "${DIR}"
   assert_output --partial "can't source '${DIR}/file2'"
@@ -115,7 +114,7 @@ function local_teardown() {
 
 # _::source_all_from {{{1
 #
-@test "bash-lib: Test '_::source_all_from()'" {
+@test "${TEST_FILE}: Test '_::source_all_from()'" {
   run _::source_all_from "${EMPTY_DIR}"
   [ "${status}" -eq 1 ];
 
@@ -128,7 +127,7 @@ function local_teardown() {
 
 # _::command_exists {{{1
 #
-@test "bash-lib: Test '_::command_exists()'" {
+@test "${TEST_FILE}: Test '_::command_exists()'" {
   run _::command_exists 'foo'
   assert_failure 1
 

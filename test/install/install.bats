@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-load ../test_helper
+load "${TEST_DIRECTORY}/test_helper.bash"
 
-@test "install: verify that the install script exists" {
+@test "${TEST_FILE}: verify that the install script exists" {
   assert_file_exist "${DOTFILES_BASH_DIR}/install.sh"
 }

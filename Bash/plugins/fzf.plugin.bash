@@ -9,7 +9,7 @@
 # _FZF_IGNORED_DIRS  : directory to be ignored.
 # _FZF_OPTS          : options for fzf.
 
-#command -v "fzf" &>/dev/null || return 1
+_::command_exists "fzf" || return 0
 
 function _set_fzf() {
 
