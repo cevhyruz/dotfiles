@@ -56,4 +56,4 @@ jobs:
     - name: Run script
       run: bashcov test/run
     - name: Upload reports to Codecov
-      run: bash <(curl -s https://codecov.io/bash) -Z -t f8600ac2-af99-4ded-81a1-05d110488d08
+      run: bash <(curl -s https://codecov.io/bash) -Z
