@@ -14,8 +14,10 @@ function local_setup() {
 
   mkdir "${EMPTY_DIR}" "${DIR}" "${DIR2}"
 
-  echo 'echo "file1"' >> "${DIR2}/file1"
+  echo 'echo "file1"' >> "${DIR}/file1"
   echo 'echo "file3"' >> "${DIR}/file3"
+
+  echo 'echo "valid-file"' >> "${DIR2}/valid-file"
 
 # a file with syntax error
 cat << EOF > "${DIR}/file2"
