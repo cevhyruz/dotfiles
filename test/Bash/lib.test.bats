@@ -7,13 +7,14 @@ function local_setup() {
   FIXTURE_LOCATION="/tmp/bash-test-fixture"
   EMPTY_DIR="${FIXTURE_LOCATION}/empty_dir"
   DIR="${FIXTURE_LOCATION}/a_dir"
+  DIR2="${FIXTURE_LOCATION}/b_dir"
 
   mkdir -p "${FIXTURE_LOCATION}" \
     && cd "${FIXTURE_LOCATION}" || return 1
 
-  mkdir "${EMPTY_DIR}" "${DIR}"
+  mkdir "${EMPTY_DIR}" "${DIR}" "${DIR2}"
 
-  echo 'echo "file1"' >> "${DIR}/file1"
+  echo 'echo "file1"' >> "${DIR2}/file1"
   echo 'echo "file3"' >> "${DIR}/file3"
 
 # a file with syntax error
@@ -123,6 +124,9 @@ function local_teardown() {
 
   run _::source_all_from "${DIR}"
   assert_output --partial "can't source '${DIR}/file2'"
+
+  run _::source_all_from "${DIR2}"
+  assert_success
 }
 
 # _::command_exists {{{1
