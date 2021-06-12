@@ -11,12 +11,12 @@ function local_setup() {
   mkdir -p "${FIXTURE_LOCATION}" \
     && cd "${FIXTURE_LOCATION}" || return 1
 
-  mkdir -p "${EMPTY_DIR}" "${DIR}/b_dir"
+  mkdir -p "${EMPTY_DIR}" "${DIR}" "${DIR}/b_dir"
 
   echo 'echo "file1"' >> "${DIR}/file1"
   echo 'echo "file3"' >> "${DIR}/file3"
 
-  echo 'echo "valid-file"' >> "${DIR1}/b_dir/valid-file"
+  echo 'echo "valid-file"' >> "${DIR}/b_dir/valid-file"
 
 # a file with syntax error
 cat << EOF > "${DIR}/file2"
