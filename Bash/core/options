@@ -37,7 +37,7 @@ declare -a _OPTIONS=(
 for opts in "${_OPTIONS[@]}"; do
   shopt -s "${opts}" &> /dev/null
 done
-unset opts
+unset -v opts _OPTIONS
 
 # disabled options.
 shopt -u mailwarn # Don't check mail when opening terminal.
