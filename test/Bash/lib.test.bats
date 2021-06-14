@@ -11,10 +11,12 @@ function local_setup() {
   mkdir -p "${FIXTURE_LOCATION}" \
     && cd "${FIXTURE_LOCATION}" || return 1
 
-  mkdir "${EMPTY_DIR}" "${DIR}"
+  mkdir -p "${EMPTY_DIR}" "${DIR}" "${DIR}/b_dir"
 
   echo 'echo "file1"' >> "${DIR}/file1"
   echo 'echo "file3"' >> "${DIR}/file3"
+
+  echo 'echo "valid-file"' >> "${DIR}/b_dir/valid-file"
 
 # a file with syntax error
 cat << EOF > "${DIR}/file2"
@@ -123,6 +125,9 @@ function local_teardown() {
 
   run _::source_all_from "${DIR}"
   assert_output --partial "can't source '${DIR}/file2'"
+
+  run _::source_all_from "${DIR}/b_dir"
+  assert_success
 }
 
 # _::command_exists {{{1

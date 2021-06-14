@@ -16,7 +16,7 @@ if [[ -z "$1" ]]; then
   # shellcheck disable=SC2206
   TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
 else
-  TEST_DIRS=("$1")
+  TEST_DIRS=("$@")
 fi
 
 exec "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
