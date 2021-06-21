@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
 
+set -o privileged
+set -o nounset
+set -o errexit
+
 export TEST_DIRECTORY
 TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
 BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
 
 git submodule init && git submodule update
 
-if [[ -z "${DOTFILES_BASH_DIR}" ]]; then
+if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
   declare DOTFILES_BASH_DIR
   DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)")
   export DOTFILES_BASH_DIR
 fi
 
-if [[ -z "$1" ]]; then
+if [[ $# -eq 0 ]]; then
   # shellcheck disable=SC2206
   TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
 else
