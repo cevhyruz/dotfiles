@@ -48,4 +48,4 @@ VIMRC
 "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 
 :
-eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! ${HOME}/Projects/dotfiles/test/Vim/test.vader' > /dev/null"
+eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! test/Nvim/test.vader' > /dev/null"
