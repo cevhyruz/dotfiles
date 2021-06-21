@@ -6,6 +6,7 @@ set -o errexit
 
 export TEST_DIRECTORY
 TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck disable=SC2034
 BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
 
 git submodule init && git submodule update
@@ -20,6 +21,7 @@ if [[ $# -eq 0 ]]; then
   # shellcheck disable=SC2206
   TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
 else
+  # shellcheck disable=SC2034
   TEST_DIRS=("$@")
 fi
 
@@ -45,7 +47,7 @@ cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
   scriptnames
 VIMRC
 
-"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+#"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
 #eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! test/Nvim/test.vader' > /dev/null"
 
