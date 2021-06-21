@@ -26,22 +26,3 @@ Execute (Verify 'junegunn/fzf' has been loaded):
 
 "Execute (Verify 'preservim/nerdcommenter' has been loaded):
   "AssertEqual 1, g:loaded_nerd_comments
-
-###################
-# Typical comment #
-###################
-
-Given (fixture):
-================
-  Hello
-
-Do (modification):
-------------------
-* change inner word
-  ciw
-* to
-  World
-
-Expect (result):
-~~~~~~~~~~~~~~~~
-  World

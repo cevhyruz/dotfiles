@@ -49,7 +49,9 @@ VIMRC
 
 #"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
-eval "$(_select_vim) -Nu \"${HOME}/Projects/dotfiles/nvim/init.vim\" -c 'Vader! test/Nvim/*.vader' > /dev/null"
+eval "$(_select_vim) -EsNu \"${HOME}/Projects/dotfiles/nvim/init.vim\" -c 'Vader! test/Nvim/*.vader' > /dev/null"
+
+# @NOTE: in vim -Es should not be included, however there is an error
 
 #eval "nvim -Nu ${HOME}/Projects/dotfiles/nvim/init.vim -c 'Vader! test/Nvim/*' > /dev/null"
 #eval "vim -EsNu ${HOME}/Projects/dotfiles/nvim/init.vim -c 'Vader! test/Nvim/*' > /dev/null"
