@@ -26,7 +26,7 @@ endif
   Plug 'ryanoasis/vim-devicons'
   " TODO: Add catch here for YCM breaking change commit.
   " https://github.com/ycm-core/YouCompleteMe/issues/3764
-  Plug 'ycm-core/YouCompleteMe'
+  "Plug 'ycm-core/YouCompleteMe'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
