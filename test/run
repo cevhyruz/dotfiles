@@ -23,4 +23,6 @@ else
   TEST_DIRS=("$@")
 fi
 
+export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
+
 exec "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
