@@ -25,4 +25,27 @@ fi
 
 export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 
-exec "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+function _select_vim() {
+  local vim=/usr/bin/vim
+  if [ -n "${DEPS:-}" ] && [ -e "${DEPS}/bin/vim" ]; then
+    vim="${DEPS}/bin/vim"
+  elif [ -e "/usr/local/bin/vim" ]; then
+    vim=/usr/local/bin/vim
+  fi
+  echo $vim
+}
+
+export TEMP_DIR="/tmp/dotfiles-vimscript-test"
+rm -rf "${TEMP_DIR}"
+mkdir -p "${TEMP_DIR}"
+
+cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
+  set runtimepath+=${TEST_DEPS_DIR}/vader.vim
+  set shell=/bin/bash
+  scriptnames
+VIMRC
+
+"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+
+:
+eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! test/Vim/test.vader' > /dev/null"
