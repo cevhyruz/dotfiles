@@ -16,3 +16,16 @@ Do (modification):
 Expect (result):
 ~~~~~~~~~~~~~~~~
   World
+
+Given (fixture):
+================
+  Hello
+
+Do (modification):
+------------------
+* surround word
+  ysiw'
+
+Expect (result):
+~~~~~~~~~~~~~~~~
+  'Hello'
