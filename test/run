@@ -50,7 +50,10 @@ export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 #"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
 # shellcheck disable=SC2086
-eval "vim -EsNu Nvim/init.vim -c 'Vader! test/Nvim/*' > /dev/null"
+#eval "vim -EsNu Nvim/init.vim -c 'Vader! test/Nvim/*' > /dev/null"
+
+#vim -Nu Nvim/init.vim -c 'PlugInstall!'
+eval "nvim -EsNu Nvim/init.vim -c 'Vader! test/Nvim/*' > /dev/null"
 
 # @NOTE: in vim -Es should not be included, however there is an error
 
