@@ -1,22 +1,51 @@
 #!/usr/bin/env bash
 
+set -o privileged
+set -o nounset
+set -o errexit
+
 export TEST_DIRECTORY
 TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
 BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
 
 git submodule init && git submodule update
 
-if [[ -z "${DOTFILES_BASH_DIR}" ]]; then
+if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
   declare DOTFILES_BASH_DIR
   DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)")
   export DOTFILES_BASH_DIR
 fi
 
-if [[ -z "$1" ]]; then
+if [[ $# -eq 0 ]]; then
   # shellcheck disable=SC2206
   TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
 else
   TEST_DIRS=("$@")
 fi
 
-exec "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
+
+function _select_vim() {
+  local vim=/usr/bin/vim
+  if [ -n "${DEPS:-}" ] && [ -e "${DEPS}/bin/vim" ]; then
+    vim="${DEPS}/bin/vim"
+  elif [ -e "/usr/local/bin/vim" ]; then
+    vim=/usr/local/bin/vim
+  fi
+  echo $vim
+}
+
+export TEMP_DIR="/tmp/dotfiles-vimscript-test"
+rm -rf "${TEMP_DIR}"
+mkdir -p "${TEMP_DIR}"
+
+cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
+  set runtimepath+=${TEST_DEPS_DIR}/vader.vim
+  set shell=/bin/bash
+  scriptnames
+VIMRC
+
+"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+
+:
+eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! test/Nvim/test.vader' > /dev/null"

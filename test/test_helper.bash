@@ -2,8 +2,6 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
-export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
-
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"

@@ -1,0 +1,18 @@
+###################
+# Typical comment #
+###################
+
+Given (fixture):
+================
+  Hello
+
+Do (modification):
+------------------
+* change inner word
+  ciw
+* to
+  World
+
+Expect (result):
+~~~~~~~~~~~~~~~~
+  World

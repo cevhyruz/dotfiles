@@ -10,3 +10,6 @@
 [submodule "test_lib/bats-file"]
   path = test_lib/bats-file
   url = https://github.com/bats-core/bats-file
+[submodule "test_lib/vader.vim"]
+  path = test_lib/vader.vim
+  url = https://github.com/junegunn/vader.vim
