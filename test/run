@@ -27,15 +27,15 @@ fi
 
 export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 
-function _select_vim() {
-  local vim=/usr/bin/vim
-  if [ -n "${DEPS:-}" ] && [ -e "${DEPS}/bin/vim" ]; then
-    vim="${DEPS}/bin/vim"
-  elif [ -e "/usr/local/bin/vim" ]; then
-    vim=/usr/local/bin/vim
-  fi
-  echo $vim
-}
+#function _select_vim() {
+#local vim=/usr/bin/vim
+#if [ -n "${DEPS:-}" ] && [ -e "${DEPS}/bin/vim" ]; then
+#vim="${DEPS}/bin/vim"
+#elif [ -e "/usr/local/bin/vim" ]; then
+#vim=/usr/local/bin/vim
+#fi
+#echo $vim
+#}
 
 #export TEMP_DIR="/tmp/dotfiles-vimscript-test"
 #rm -rf "${TEMP_DIR}"
@@ -49,7 +49,7 @@ function _select_vim() {
 
 #"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
-eval "$(_select_vim) -EsNu \"${HOME}/Projects/dotfiles/nvim/init.vim\" -c 'Vader! test/Nvim/*' > /dev/null"
+eval "vim -EsNu \"${HOME}/Projects/dotfiles/nvim/init.vim\" -c 'Vader! test/Nvim/*' > /dev/null"
 
 # @NOTE: in vim -Es should not be included, however there is an error
 
