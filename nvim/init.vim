@@ -17,8 +17,8 @@ else
   call plug#begin('~/.vim/plugged')
 endif
   Plug 'aliou/bats.vim'
-  Plug 'yuki-ycino/fzf-preview.vim'
-  Plug 'digitaltoad/vim-pug'
+  "Plug 'yuki-ycino/fzf-preview.vim'
+  "Plug 'digitaltoad/vim-pug'
   Plug 'tomasiser/vim-code-dark'
   Plug 'dense-analysis/ale'
   Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
