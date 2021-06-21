@@ -34,6 +34,7 @@ endif
   Plug 'jiangmiao/auto-pairs'
   Plug 'SirVer/ultisnips'
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/vader.vim'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'airblade/vim-gitgutter'
