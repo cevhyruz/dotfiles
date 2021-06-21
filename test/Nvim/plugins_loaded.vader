@@ -8,8 +8,8 @@ Execute (Verify 'junegunn/fzf' has been loaded):
 Execute (Verify 'tpope/vim-surround' has been loaded):
   AssertEqual 1, g:loaded_surround
 
-Execute (Verify 'ycm-core/YouCompleteMe' has been loaded):
-  AssertEqual 1, g:loaded_youcompleteme
+"Execute (Verify 'ycm-core/YouCompleteMe' has been loaded):
+  "AssertEqual 1, g:loaded_youcompleteme
 
 Execute (Verify 'ryanoasis/vim-devicons' has been loaded):
   AssertEqual 1, g:loaded_webdevicons
