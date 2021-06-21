@@ -1,28 +1,47 @@
-
-Execute (Verify 'aliou/bats.vim' has been loaded):
-  AssertEqual 1, g:bats_vim_consider_dollar_as_part_of_word
-
 Execute (Verify 'junegunn/fzf' has been loaded):
   AssertEqual 1, g:loaded_fzf
 
-Execute (Verify 'tpope/vim-surround' has been loaded):
-  AssertEqual 1, g:loaded_surround
+"Execute (Verify 'aliou/bats.vim' has been loaded):
+  "AssertEqual 1, g:bats_vim_consider_dollar_as_part_of_word
 
-"Execute (Verify 'ycm-core/YouCompleteMe' has been loaded):
-  "AssertEqual 1, g:loaded_youcompleteme
 
-Execute (Verify 'ryanoasis/vim-devicons' has been loaded):
-  AssertEqual 1, g:loaded_webdevicons
+"Execute (Verify 'tpope/vim-surround' has been loaded):
+  "AssertEqual 1, g:loaded_surround
 
-Execute (Verify 'tomasiser/vim-code-dark' has been loaded):
-  AssertEqual 'codedark', g:colors_name
+""Execute (Verify 'ycm-core/YouCompleteMe' has been loaded):
+  ""AssertEqual 1, g:loaded_youcompleteme
 
-Execute (Verify 'dense-analysis/ale' has been loaded):
-  AssertEqual 1, g:loaded_ale_dont_use_this_in_other_plugins_please
+"Execute (Verify 'ryanoasis/vim-devicons' has been loaded):
+  "AssertEqual 1, g:loaded_webdevicons
 
-Execute (Verify 'preservim/nerdtree' has been loaded):
-  :NERDTreeToggle " TODO: avoid toggling here if possible.
-  AssertEqual 1, g:loaded_nerd_tree
+"Execute (Verify 'tomasiser/vim-code-dark' has been loaded):
+  "AssertEqual 'codedark', g:colors_name
 
-Execute (Verify 'preservim/nerdcommenter' has been loaded):
-  AssertEqual 1, g:loaded_nerd_comments
+"Execute (Verify 'dense-analysis/ale' has been loaded):
+  "AssertEqual 1, g:loaded_ale_dont_use_this_in_other_plugins_please
+
+"Execute (Verify 'preservim/nerdtree' has been loaded):
+  ":NERDTreeToggle " TODO: avoid toggling here if possible.
+  "AssertEqual 1, g:loaded_nerd_tree
+
+"Execute (Verify 'preservim/nerdcommenter' has been loaded):
+  "AssertEqual 1, g:loaded_nerd_comments
+
+###################
+# Typical comment #
+###################
+
+Given (fixture):
+================
+  Hello
+
+Do (modification):
+------------------
+* change inner word
+  ciw
+* to
+  World
+
+Expect (result):
+~~~~~~~~~~~~~~~~
+  World
