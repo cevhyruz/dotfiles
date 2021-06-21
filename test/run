@@ -50,7 +50,7 @@ VIMRC
 #"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
 # shellcheck disable=SC2086
-$(_select_vim) -EsNu ${HOME}/Projects/dotfiles/nvim/init.vim -c 'Vader! test/Nvim/*' >/dev/null
+eval "$(_select_vim) -EsNu ${HOME}/Projects/dotfiles/nvim/init.vim -c 'Vader! test/Nvim/*' >/dev/null"
 
 # @NOTE: in vim -Es should not be included, however there is an error
 
