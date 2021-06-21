@@ -37,15 +37,15 @@ function _select_vim() {
   echo $vim
 }
 
-export TEMP_DIR="/tmp/dotfiles-vimscript-test"
-rm -rf "${TEMP_DIR}"
-mkdir -p "${TEMP_DIR}"
+#export TEMP_DIR="/tmp/dotfiles-vimscript-test"
+#rm -rf "${TEMP_DIR}"
+#mkdir -p "${TEMP_DIR}"
 
-cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
-  set runtimepath+=${TEST_DEPS_DIR}/vader.vim
-  set shell=/bin/bash
-  scriptnames
-VIMRC
+#cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
+#set runtimepath+=${TEST_DEPS_DIR}/vader.vim
+#set shell=/bin/bash
+#scriptnames
+#VIMRC
 
 #"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 :
