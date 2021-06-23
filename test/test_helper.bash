@@ -8,8 +8,12 @@ load "${TEST_DEPS_DIR}/bats-file/load.bash"
 
 load "${TEST_DEPS_DIR}/../Bash/lib/util.bash"
 
-# shellcheck disable=SC2155
-export TEST_FILE="$(echo -e "[\e[1m$(basename "${BATS_TEST_FILENAME}")\e[0m]")"
+function _make_test_name() {
+  printf "\e[1m[%s]\e[0m" "$(basename "${BATS_TEST_FILENAME}")"
+}
+
+TEST_FILE="$(_make_test_name)"
+export TEST_FILE
 
 function local_setup() { true; }
 function local_teardown() { true; }

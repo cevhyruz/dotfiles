@@ -1,51 +1,82 @@
 #!/usr/bin/env bash
 
+# Test runner for dotfiles.
+#
+# Usage:
+#   ./test/run [test_file]
+#
+# Description:
+#   Run all test files located in 'test' directory
+#   if no [test_file] is supplied.
+#
+#   Test files is any of *.bats and/or *.vader files.
+
 set -o privileged
 set -o nounset
 set -o errexit
 
-export TEST_DIRECTORY
-TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
-BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
+function run() {
+  _init_tests_lib
+  if ! _set_test_suite "$@"; then
+    declare -ag BATS_SPEC=()
+    declare -ag VADER_SPEC=()
 
-git submodule init && git submodule update
+    for spec in "$@"; do
+      case "${spec: -5}" in
+      '.bats') BATS_SPEC+=("${spec}") ;;
+      'vader') VADER_SPEC+=("${spec}") ;;
+      esac
+    done
 
-if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-  declare DOTFILES_BASH_DIR
-  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)")
-  export DOTFILES_BASH_DIR
-fi
+    if [[ "${#BATS_SPEC[@]}" -gt 0 ]]; then
+      _run_bats "${BATS_SPEC[@]}"
+    fi
 
-if [[ $# -eq 0 ]]; then
-  # shellcheck disable=SC2206
-  TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
-else
-  TEST_DIRS=("$@")
-fi
-
-export TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
-
-function _select_vim() {
-  local vim=/usr/bin/vim
-  if [ -n "${DEPS:-}" ] && [ -e "${DEPS}/bin/vim" ]; then
-    vim="${DEPS}/bin/vim"
-  elif [ -e "/usr/local/bin/vim" ]; then
-    vim=/usr/local/bin/vim
+    if [[ "${#VADER_SPEC[@]}" -gt 0 ]]; then
+      _run_vader "${VADER_SPEC[@]}"
+    fi
+  else
+    _run_bats && _run_vader
   fi
-  echo $vim
 }
 
-export TEMP_DIR="/tmp/dotfiles-vimscript-test"
-rm -rf "${TEMP_DIR}"
-mkdir -p "${TEMP_DIR}"
+function _run_bats() {
+  eval "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]:-$@}"
+}
 
-cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
-  set runtimepath+=${TEST_DEPS_DIR}/vader.vim
-  set shell=/bin/bash
-  scriptnames
-VIMRC
+function _run_vader() {
+  echo "_run_vader is not yet configured!"
+}
 
-"${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+function _set_test_suite() {
+  if [[ $# -eq 0 ]]; then
+    # shellcheck disable=SC2206
+    TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
+    return 0
+  fi
+  return 1
+}
 
-:
-eval "$(_select_vim) -EsNu "${TEMP_DIR}/mini-vimrc" -c 'Vader! test/Nvim/test.vader' > /dev/null"
+function _init_tests_lib() {
+  TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" &&
+    export TEST_DIRECTORY
+
+  TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib" &&
+    export TEST_DEPS_DIR
+
+  BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
+
+  git submodule init &&
+    git submodule update
+
+  _set_dotfiles_dirs_path
+}
+
+function _set_dotfiles_dirs_path() {
+  if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
+    DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
+      export DOTFILES_BASH_DIR
+  fi
+}
+
+run "$@"
