@@ -16,17 +16,13 @@ function _set_nvm() {
   if ! declare -F 'nvm' && ! declare -F 'nvm_echo'; then
     if [[ -d "${HOME}/.nvm" ]]; then
       export NVM_DIR="$HOME/.nvm"
-
       if [[ "${LAZYLOAD_NVM:-1}" -eq 0 ]]; then
         _load_script_files
         return 0
       fi
-
       _lazy_load_nvm
       return 0
     fi
-
-    echo 'nothing'
     _set_nvm::_cleanup
     return 1
   fi
