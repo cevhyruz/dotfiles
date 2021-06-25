@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
 
 # Test runner for dotfiles.
 #
@@ -15,68 +17,54 @@ set -o privileged
 set -o nounset
 set -o errexit
 
-function run() {
-  _init_tests_lib
-  if ! _set_test_suite "$@"; then
-    declare -ag BATS_SPEC=()
-    declare -ag VADER_SPEC=()
+TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" &&
+  export TEST_DIRECTORY
 
-    for spec in "$@"; do
-      case "${spec: -5}" in
-      '.bats') BATS_SPEC+=("${spec}") ;;
-      'vader') VADER_SPEC+=("${spec}") ;;
-      esac
-    done
+TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib" &&
+  export TEST_DEPS_DIR
 
-    if [[ "${#BATS_SPEC[@]}" -gt 0 ]]; then
-      _run_bats "${BATS_SPEC[@]}"
-    fi
+BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
 
-    if [[ "${#VADER_SPEC[@]}" -gt 0 ]]; then
-      _run_vader "${VADER_SPEC[@]}"
-    fi
-  else
-    _run_bats && _run_vader
-  fi
-}
+git submodule init && git submodule update
 
-function _run_bats() {
-  eval "${BATS_EXECUTABLE}" ${CI:+--tap} --recursive "${TEST_DIRS[@]:-$@}"
-}
+if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
+  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
+    export DOTFILES_BASH_DIR
+fi
 
-function _run_vader() {
-  echo "_run_vader is not yet configured!"
-}
+if [[ $# -eq 0 ]]; then
+  # shellcheck disable=2206
+  TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
+  VADER_TEST_DIRS="${TEST_DIRECTORY}/Nvim"
+else
+  declare -ag BATS_SPEC=()
+  declare -ag VADER_SPEC=()
 
-function _set_test_suite() {
-  if [[ $# -eq 0 ]]; then
-    # shellcheck disable=SC2206
-    TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
-    return 0
-  fi
-  return 1
-}
+  for spec in "$@"; do
+    case "${spec: -5}" in
+    '.bats') BATS_SPEC+=("${spec}") ;;
+    'vader') VADER_SPEC+=("${spec}") ;;
+    esac
+  done
+fi
 
-function _init_tests_lib() {
-  TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" &&
-    export TEST_DIRECTORY
+export TEMP_DIR="/tmp/dotfiles-vimscript-test"
+rm -rf "${TEMP_DIR}"
+mkdir -p "${TEMP_DIR}"
 
-  TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib" &&
-    export TEST_DEPS_DIR
+cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
+set runtimepath+=${TEST_DEPS_DIR:0}/vader.vim
+set shell=/bin/bash
+scriptnames
+VIMRC
 
-  BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
+if [[ -n "${BATS_SPEC[*]:-}" ]] || [[ -n "${TEST_DIRS[*]:-}" ]]; then
+  eval "${BATS_EXECUTABLE} ${CI:+--tap} --recursive" \
+    "${TEST_DIRS[@]:-${BATS_SPEC[@]}}"
+fi
 
-  git submodule init &&
-    git submodule update
-
-  _set_dotfiles_dirs_path
-}
-
-function _set_dotfiles_dirs_path() {
-  if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-    DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
-      export DOTFILES_BASH_DIR
-  fi
-}
-
-run "$@"
+if [[ -n "${VADER_SPEC[*]:-}" ]] || [[ -n "${VADER_TEST_DIRS:-}" ]]; then
+  eval "vim -EsNu ${TEMP_DIR}/mini-vimrc -c" \
+    "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS}/*}'" \
+    "> /dev/null"
+fi
