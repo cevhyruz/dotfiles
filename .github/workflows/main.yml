@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  bats-test:
+  tests:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-18.04, ubuntu-16.04]
@@ -15,6 +15,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install vim or neovim
+      uses: rhysd/action-setup-vim@v1
+      id: vim
+      with:
+        neovim: ${{ matrix.neovim }}
 
     - name: Test code
       run: test/run

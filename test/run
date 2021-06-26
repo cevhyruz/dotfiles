@@ -52,6 +52,8 @@ export TEMP_DIR="/tmp/dotfiles-vimscript-test"
 rm -rf "${TEMP_DIR}"
 mkdir -p "${TEMP_DIR}"
 
+#cp "${TEST_DIRECTORY}/../nvim/init.vim" "${HOME}/.vim/vimrc"
+
 cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
 set runtimepath+=${TEST_DEPS_DIR:0}/vader.vim
 set shell=/bin/bash
