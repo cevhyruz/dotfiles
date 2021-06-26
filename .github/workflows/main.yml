@@ -10,6 +10,11 @@ jobs:
   tests:
     strategy:
       matrix:
+        neovim: [true, false]
+        version: [nightly, stable]
+        exclude:
+          - neovim: false
+            version: stable
         os: [ubuntu-20.04, ubuntu-18.04, ubuntu-16.04]
     runs-on: ${{ matrix.os }}
 
