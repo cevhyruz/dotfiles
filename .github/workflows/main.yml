@@ -10,6 +10,8 @@ jobs:
   tests:
     strategy:
       matrix:
+        vim-version: [stable]
+        neovim: [true, false]
         os: [ubuntu-20.04, ubuntu-18.04, ubuntu-16.04]
     runs-on: ${{ matrix.os }}
 
@@ -20,7 +22,8 @@ jobs:
       uses: rhysd/action-setup-vim@v1
       id: vim
       with:
-        neovim: true
+        version: ${{ matrix.vim-version }}
+        neovim: ${{ matrix.neovim }}
 
     - name: Test code
       run: test/run
