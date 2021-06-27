@@ -120,7 +120,7 @@ scriptnames
 VIMRC
 
   if [[ -n "${VADER_SPEC[*]:-}" ]] || [[ -n "${VIM_ONLY:-}" ]]; then
-    eval "vim -EsNu ${TEMP_DIR}/mini-vimrc -c" \
+    eval "${CI_VIM_EXEC:-nvim} -EsNu ${TEMP_DIR}/mini-vimrc -c" \
       "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'" \
       "> /dev/null"
   fi
