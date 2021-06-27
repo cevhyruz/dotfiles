@@ -33,9 +33,10 @@ jobs:
         neovim: ${{ matrix.neovim }}
 
     - name: Test vimscript
+    - uses: actions/checkout@v2
       env:
         CI_VIM_EXEC: ${{ steps.vim.outputs.executable }}
-      run: ls -a
+      run: test/run --vim-only
 
   lint:
     runs-on: ubuntu-latest
