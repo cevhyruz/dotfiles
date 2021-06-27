@@ -37,7 +37,7 @@ jobs:
     - name: Test vimscript
       env:
         CI_VIM_EXEC: ${{ steps.neovim.outputs.executable }}
-      run: test/run --vim-only
+      run: export CI_EXEC="${{ steps.neovim.outputs.executable }};" test/run --vim-only
 
   lint:
     runs-on: ubuntu-latest
