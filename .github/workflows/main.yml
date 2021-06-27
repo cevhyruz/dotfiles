@@ -32,8 +32,8 @@ jobs:
       with:
         neovim: ${{ matrix.neovim }}
 
-    - name: Test vimscript
     - uses: actions/checkout@v2
+    - name: Test vimscript
       env:
         CI_VIM_EXEC: ${{ steps.vim.outputs.executable }}
       run: test/run --vim-only
