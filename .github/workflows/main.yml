@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Test code
-      run: test/run
+      run: test/run --bats-only
 
   vim-tests:
     strategy:
@@ -27,12 +27,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install vim or neovim
+    - name: Setup vim/neovim
       uses: rhysd/action-setup-vim@v1
       id: vim
       with:
         version: ${{ matrix.vim-version }}
         neovim: ${{ matrix.neovim }}
+
+    - name: Test vimscript
+      run: test/run --vim-only
 
   lint:
     runs-on: ubuntu-latest
