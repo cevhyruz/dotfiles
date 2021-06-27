@@ -22,22 +22,20 @@ jobs:
   vim-tests:
     strategy:
       matrix:
-        vim-version: [stable]
-        neovim: [true, false]
+        neovim: [false, true]
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup vim/neovim
+    - name: Setup vim or neovim
       uses: rhysd/action-setup-vim@v1
       id: vim
       with:
-        version: ${{ matrix.vim-version }}
         neovim: ${{ matrix.neovim }}
 
     - name: Test vimscript
       env:
-        CI_VIM_EXEC: ${{ steps.neovim.outputs.executable }}
-      run: export CI_EXEC="${{ steps.neovim.outputs.executable }};" test/run --vim-only
+        CI_VIM_EXEC: ${{ steps.vim.outputs.executable }}
+      run: test/run "--vim-only"
 
   lint:
     runs-on: ubuntu-latest
