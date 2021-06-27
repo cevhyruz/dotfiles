@@ -54,6 +54,10 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Setup vim-vint
+      run: python3 -m pip install vim-vint
+      run: vint --warning --verbose --enable-neovim nvim/*
+
     - name: Install shfmt
       run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
 

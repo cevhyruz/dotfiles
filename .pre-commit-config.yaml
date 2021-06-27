@@ -15,7 +15,6 @@ repos:
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
-        exclude: Bash/plugin/composure.bash
       - id: shfmt
   - repo: local
     hooks:
@@ -32,4 +31,10 @@ repos:
         entry: ./hooks/dot-bash.sh
         language: system
         files: "\\.bash$"
+        types: [file]
+      - id: vim-vint
+        name: Lint vimscript files
+        entry: vint --warning --verbose --enable-neovim
+        language: system
+        files: "\\.vim$"
         types: [file]
