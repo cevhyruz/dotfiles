@@ -10,12 +10,15 @@ repos:
       - id: check-merge-conflict
       - id: mixed-line-ending
       - id: check-added-large-files
+
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 2.1.4
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
       - id: shfmt
+      - id: markdownlint
+
   - repo: local
     hooks:
       - id: dot-sh
@@ -25,6 +28,7 @@ repos:
         language: system
         files: "\\.sh$"
         types: [file]
+
       - id: dot-bash
         name: Check .bash files against dotfiles requirements
         exclude: Bash/plugin/composure.bash
@@ -32,6 +36,7 @@ repos:
         language: system
         files: "\\.bash$"
         types: [file]
+
       - id: vim-vint
         name: Lint vimscript files
         entry: vint --warning --verbose --enable-neovim
