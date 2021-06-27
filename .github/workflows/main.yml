@@ -57,6 +57,8 @@ jobs:
 
     - name: Setup vim-vint
       run: python3 -m pip install vim-vint
+
+    - name: Run vim-vint
       run: vint --warning --verbose --enable-neovim nvim/*
 
     - name: Install shfmt
