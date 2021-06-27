@@ -35,7 +35,7 @@ jobs:
     - name: Test vimscript
       env:
         CI_VIM_EXEC: ${{ steps.vim.outputs.executable }}
-      run: test/run "--vim-only"
+      run: ./test/run --vim-only
 
   lint:
     runs-on: ubuntu-latest
