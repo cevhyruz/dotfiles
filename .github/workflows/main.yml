@@ -56,7 +56,7 @@ jobs:
         python-version: 3.8
 
     - name: Setup vim-vint
-      run: python3 -m pip install vim-vint
+      run: python3 -m pip install vim-vint==0.4a1
 
     - name: Run vim-vint
       run: vint --warning --verbose --enable-neovim nvim/*
