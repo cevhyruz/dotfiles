@@ -16,7 +16,9 @@ repos:
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
+        exclude: ".bats$"
       - id: shfmt
+        exclude: ".bats$"
       - id: markdownlint
 
   - repo: local
