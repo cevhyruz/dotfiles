@@ -1,4 +1,3 @@
-
 " let g:ale_open_list = 1   " Always show the location list if there are errors.
 " let g:ale_list_window_size = 1  " Fix height for location list.
 

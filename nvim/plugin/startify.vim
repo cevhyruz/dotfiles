@@ -1,8 +1,3 @@
-
-let g:startify_custom_header = [
-"loladf""
-
-]
 let g:startify_bookmarks = [
   \ {'c': '~/Projects/dotfiles/nvim/init.vim'},
   \ {'t': '~/Projects/dotfiles/tmux/tmux.conf'},

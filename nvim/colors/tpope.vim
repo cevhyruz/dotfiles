@@ -11,8 +11,8 @@ set background=dark
 " and vim splits, `Normal` highlighting should be cleared if tmux is active,
 " and let tmux window-active-style/window-style option to pass through.
 call execute((empty($TMUX)        ? ':hi clear'     : ':hi clear Normal'))
-call execute((exists("syntax_on") ? ':syntax reset' :                 ''))
-let g:colors_name = "mytheme" "}}}
+call execute((exists('syntax_on') ? ':syntax reset' :                 ''))
+let g:colors_name = 'mytheme' "}}}
 
 " hi Normal ctermbg=235
 hi colorcolumn cterm=none ctermbg=233

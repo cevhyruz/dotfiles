@@ -1,4 +1,3 @@
-
 hi shFunctionKey cterm=none ctermfg=216
 hi shFunction cterm=none ctermfg=108
 

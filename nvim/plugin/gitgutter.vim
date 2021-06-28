@@ -1,3 +1,4 @@
+scriptencoding utf-8
 
 let g:sign = ' ┃'                " Git Gutter Sign.
 let g:gitgutter_map_keys = 0     " Dont set mappings.

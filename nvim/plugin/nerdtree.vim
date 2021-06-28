@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeMapActivateNode       = '<space>'

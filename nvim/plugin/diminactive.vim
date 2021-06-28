@@ -1,6 +1,6 @@
 function! DimInactiveWindows()
   for i in range(1, tabpagewinnr(tabpagenr(), '$'))
-    let l:range = ""
+    let l:range = ''
     if i != winnr()
       if &wrap
         " HACK: when wrapping lines is enabled, we use the maximum number

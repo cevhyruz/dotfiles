@@ -9,11 +9,11 @@
 " - - - - - - - - - - - -
 set background=dark
 highlight clear
-if exists("syntax_on")
+if exists('syntax_on')
   syntax reset
 endif
-call execute((!empty($TMUX) ? ":hi clear Normal" : ":hi Normal ctermbg=235"))
-let g:colors_name = "mytheme"
+call execute((!empty($TMUX) ? ':hi clear Normal' : ':hi Normal ctermbg=235'))
+let g:colors_name = 'mytheme'
 
 "tmp: re-arrange:
 hi Nontext cterm=none ctermbg=none ctermfg=none

@@ -1,8 +1,4 @@
-"------------------------------------------------------------------------------
-" File:     autoload/vimrc.vim
-" Author:   John Fred Fadrigalan <github.com/cevhyruz>
-" License:  DWTFYWTPL
-"------------------------------------------------------------------------------
+scriptencoding utf-8
 
 if exists('g:loaded_vimrc')
   finish
@@ -12,15 +8,7 @@ let g:loaded_vimrc = 1
 let s:vimrc = {}
 let g:vimrc = s:vimrc
 
-function s:vimrc.strip_whitespaces() "{{{
-  let l:save_curpos = getpos('.')
-  let l:old_query = getreg('/')
-  %s/\s\+$//e
-  call setpos('.', l:save_curpos)
-  call setreg('/', l:old_query)
-endfunction
-
-function! vimrc#jumpto_prev_tab()
+function! vimrc#jumpto_prev_tab() abort
   if exists('g:prev_tab')
     try
       execute 'tabn' g:prev_tab
@@ -32,11 +20,11 @@ function! vimrc#jumpto_prev_tab()
   endif
 endfunction
 
-function vimrc#navigate(direction)
+function! vimrc#navigate(direction) abort
   execute 'wincmd' a:direction
 endfunction
 
-function vimrc#tmux_navigate(direction) "{{{1
+function! vimrc#tmux_navigate(direction) abort "{{{1
   let l:curwin = winnr()
   if a:direction !=# 'p'
     call vimrc#navigate(a:direction)
@@ -44,27 +32,27 @@ function vimrc#tmux_navigate(direction) "{{{1
   if (l:curwin is# winnr())
     let l:pane = shellescape($TMX_PANE)
     let l:jump = 'select-pane -t ' . l:pane . ' -' .tr(a:direction, 'phjkl', 'lLDUR')
-    call system("tmux -S".split($TMUX, ",")[0]." ".l:jump)
+    call system('tmux -S'.split($TMUX, ',')[0].' '.l:jump)
   endif
 endfunction
 
-function s:editor_width()
-  return (winwidth(0) - &fdc - (&nu ? &nuw : 0) - (&scl ==# "yes" ? 2 : 0))
+function! s:editor_width() abort
+  return (winwidth(0) - &foldcolumn - (&number ? &numberwidth : 0) - (&scl ==# 'yes' ? 2 : 0))
 endfunction
 
-function s:foldline_percentage()
+function! s:foldline_percentage() abort
   let l:fold_size = (1 + (v:foldend - v:foldstart))
-  let l:line_count = line("$")
-  if has("float")
+  let l:line_count = line('$')
+  if has('float')
     try
-      return "[" . printf("%4s", printf("%.1f", (l:fold_size * 1.0) / l:line_count * 100)) . "%]"
+      return '[' . printf('%4s', printf('%.1f', (l:fold_size * 1.0) / l:line_count * 100)) . '%]'
     catch #^Vim\%((\a\+)\)\=:E806# " using Float as a String
-        return printf("[of %d lines] ", l:line_count)
+        return printf('[of %d lines] ', l:line_count)
     endtry
   endif
 endfunction
 
-function vimrc#foldtext(delim) " {{{1
+function! vimrc#foldtext(delim) abort " {{{1
   let l:line = substitute(getline(v:foldstart), split(&commentstring, '%s')[0] . '\|{{{\d\=', '', 'g')
   " indent foldtext corresponding to foldlevel
   let l:indent = repeat(' ', shiftwidth())
@@ -91,8 +79,8 @@ endfunction
 
 
 " Section: Help
-function! vimrc#helptab()
-  if &buftype == 'help'
+function! vimrc#helptab() abort
+  if &buftype ==# 'help'
     execute 'wincmd T'
     nnoremap <buffer> q :q<cr>
   endif
@@ -107,13 +95,13 @@ let s:fzf_action = {
   \ 'alt-t': 'tab split',
   \ 'alt-i': 'split' }
 
-function! s:callback.on_exit(id, status, event)
+function! s:callback.on_exit(id, status, event) abort
   bdelete!
 endfunction
 
-function! vimrc#execute(cmd)
+function! vimrc#execute(cmd) abort
   let height = 13
-  execute "botright" height "new"
+  execute 'botright' height 'new'
   call termopen(a:cmd, s:callback)
   setlocal nospell bufhidden=wipe nobuflisted nonumber nornu
   setfiletype fzf
