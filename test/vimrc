@@ -1,0 +1,20 @@
+set runtimepath+=${TEST_DEPS_DIR}/vader.vim
+set shell=/bin/bash
+
+if has('nvim')
+  let g:which_vim = 'nvim'
+  call plug#begin(stdpath('data') . '/plugged')
+else
+  let g:which_vim = 'vim'
+  call plug#begin('~/.vim/plugged')
+endif
+  Plug 'tomasiser/vim-code-dark'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-endwise'
+  Plug 'junegunn/fzf.vim'
+  Plug 'blueyed/vim-diminactive'
+  Plug 'itchyny/lightline.vim'
+  Plug 'christoomey/vim-tmux-navigator'
+call plug#end()

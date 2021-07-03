@@ -22,7 +22,7 @@ jobs:
   vim-tests:
     strategy:
       matrix:
-        neovim: [false, true]
+        neovim: [false]
     runs-on: ubuntu-latest
 
     steps:
