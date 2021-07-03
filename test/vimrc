@@ -1,6 +1,6 @@
 set runtimepath+=${TEST_DEPS_DIR}/vader.vim
 set shell=/bin/bash
 
-source $HOME/Projects/dotfiles/nvim/init.vim
+source ${TEST_DIRECTORY}/../nvim/init.vim
 
 echom 'testigo daw'
