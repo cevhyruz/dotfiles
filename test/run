@@ -119,10 +119,10 @@ function _prepare() {
 function _run_vim_tests() {
   if [[ -n "${VADER_SPEC[*]:-}" ]] || [[ -n "${VIM_ONLY:-}" ]]; then
 
-    if [[ -n "${CI_VIM_EXEC}" ]] && [[ "${CI_VIM_EXEC}" == "vim" ]]; then
-      curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    fi
+    #if [[ -n "${CI_VIM_EXEC}" ]] && [[ "${CI_VIM_EXEC}" == "vim" ]]; then
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    #fi
 
     ${CI_VIM_EXEC:-vim} -Nu "${TEST_DIRECTORY}/vimrc" \
       -c "PlugInstall" \
