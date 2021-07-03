@@ -32,11 +32,9 @@ fi
 git submodule init && git submodule update
 
 function main() {
-
   if [[ $# -eq 0 ]]; then
     # shellcheck disable=2206
     TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
-    VADER_TEST_DIRS="${TEST_DIRECTORY}/Nvim/*"
   fi
 
   _get_opts "$@"
@@ -108,21 +106,28 @@ function _get_opts() {
   shift $((OPTIND - 1))
 }
 
+function _prepare() {
+  if [[ "${CI_VIM_EXEC}" == 'vim' ]]; then
+    # for Unix
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    mkdir -p "/tmp/.vim"
+    cp "${TEST_DIRECTORY}/../nvim/init.vim" "${HOME}/.vim/vimrc"
+  fi
+}
+
 function _run_vim_tests() {
-  export TEMP_DIR="/tmp/dotfiles-vimscript-test"
-  rm -rf "${TEMP_DIR}"
-  mkdir -p "${TEMP_DIR}"
-
-  cat >"${TEMP_DIR}/mini-vimrc" <<-VIMRC
-set runtimepath+=${TEST_DEPS_DIR:0}/vader.vim
-set shell=/bin/bash
-scriptnames
-VIMRC
-
   if [[ -n "${VADER_SPEC[*]:-}" ]] || [[ -n "${VIM_ONLY:-}" ]]; then
-    eval "${CI_VIM_EXEC:-nvim} -EsNu ${TEMP_DIR}/mini-vimrc -c" \
-      "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'" \
-      "> /dev/null"
+
+    if [[ -n "${CI_VIM_EXEC}" ]] && [[ "${CI_VIM_EXEC}" == "vim" ]]; then
+      curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    fi
+
+    ${CI_VIM_EXEC:-vim} -Nu "${TEST_DIRECTORY}/vimrc" \
+      -c "PlugInstall"
+    #"> /dev/null"
+    #-c "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'" \
   fi
 }
 
