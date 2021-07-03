@@ -8,34 +8,12 @@ else
   let g:which_vim = 'vim'
   call plug#begin('~/.vim/plugged')
 endif
-  Plug 'aliou/bats.vim'
-  Plug 'yuki-ycino/fzf-preview.vim'
-  Plug 'digitaltoad/vim-pug'
   Plug 'tomasiser/vim-code-dark'
-  Plug 'dense-analysis/ale'
-  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
-  Plug 'preservim/nerdcommenter'
-  Plug 'ryanoasis/vim-devicons'
-  " TODO: Add catch here for YCM breaking change commit.
-  " https://github.com/ycm-core/YouCompleteMe/issues/3764
-  Plug 'ycm-core/YouCompleteMe'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-endwise'
-  Plug 'jiangmiao/auto-pairs'
-  Plug 'SirVer/ultisnips'
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'junegunn/vader.vim'
   Plug 'junegunn/fzf.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'yuezk/vim-js'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'Yggdroot/indentLine' " hides startup message
-  Plug 'majutsushi/tagbar'
-  Plug 'godlygeek/tabular'
-  Plug 'benmills/vimux'
-  Plug 'easymotion/vim-easymotion'
   Plug 'blueyed/vim-diminactive'
   Plug 'itchyny/lightline.vim'
   Plug 'christoomey/vim-tmux-navigator'

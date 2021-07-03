@@ -125,9 +125,8 @@ function _run_vim_tests() {
     #fi
 
     ${CI_VIM_EXEC:-vim} -Nu "${TEST_DIRECTORY}/vimrc" \
-      -c "PlugInstall" \
-      -c "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'" \
-      "> /dev/null"
+      -c "PlugInstall"
+    #-c "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'"
   fi
 }
 
