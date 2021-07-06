@@ -25,10 +25,13 @@ let g:fzf_colors = {
 \ 'spinner': ['fg', 'Label'],
 \ 'header':  ['fg', 'Comment'] }
 
-"# changes current selected highlight color
-" \ 'bg':      ['bg', 'Normal'],
+" FIXME: Please stop using autocommands for everything,
+" specially for *Leave, *Enter events.
 augroup hide_fzf_statusline
   autocmd!
-  autocmd FileType fzf setlocal ls=0 noshowmode noruler nonu nornu fdc=0 scl=no
+  autocmd FileType fzf
+    \ setlocal ls=0
+    \ nonumber norelativenumber
+    \ foldcolumn=1 scl=no
     \| autocmd BufLeave <buffer> set ls=2 showmode ruler
 augroup END

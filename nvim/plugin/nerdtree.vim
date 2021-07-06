@@ -14,6 +14,6 @@ let NERDTreeIgnore                = [ '\.git$', '\~$', 'node_modules' ]
 let NERDTreeWinSize               = 35
 let NERDTreeHijackNetrw           = 0
 
-" hi  NERDTreeClosable cterm=bold ctermbg=none ctermfg=240
-" hi  NERDTreeOpenable cterm=bold ctermbg=none ctermfg=237
-" hi NERDTreeDir cterm=bold
+hi  NERDTreeClosable cterm=bold ctermbg=none ctermfg=240
+hi  NERDTreeOpenable cterm=bold ctermbg=none ctermfg=237
+hi NERDTreeDir cterm=bold
