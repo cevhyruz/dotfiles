@@ -8,6 +8,7 @@
 # shellcheck source=/dev/null
 for file in "${DOT_BASH}/lib"/*; do
   source "${file}"
+  unset file
 done
 
 # initliaze configurations.
