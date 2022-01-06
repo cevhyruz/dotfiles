@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# enable bash vi mode
+set -o vi
+
+# vi-editing-mode
+bind -m vi-insert -x '"\C-n": vifm'
+
+# exit insert mode
+bind -m vi-insert '"kj": vi-movement-mode' # ESC
+
+bind -m vi-command '"K": history-search-backward'
+bind -m vi-command '"J": history-search-forward'
+
+# terminate current session
+bind -m vi-command '";q": "dd\C-d"'
+
+# macro
+bind -m vi-command '"qa": start-kbd-macro'
+bind -m vi-command '"q":  end-kbd-macro'
+bind -m vi-command '".": call-last-kbd-macro'
+bind -m vi-command '"z": print-last-kbd-macro'
+
+# https://unix.stackexchange.com/questions/128240
+bind -m vi-insert '"\n": self-insert'

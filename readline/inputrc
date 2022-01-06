@@ -9,7 +9,7 @@ set input-meta   on
 set output-meta  on
 set convert-meta off
 
-#set editing-mode vi
+set editing-mode vi
 
 set colored-stats on
 set colored-completion-prefix on
@@ -51,5 +51,3 @@ set keyseq-timeout 3000
 
 # readline components
 $include ~/Projects/dotfiles/readline/prompt
-$include ~/Projects/dotfiles/readline/vi-insert.readline
-# $include ~/Projects/dotfiles/bash/readline/vi-command.readline
