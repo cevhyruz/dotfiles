@@ -1,2 +1,4 @@
 # disable warning on unresolved source paths.
 source=/dev/null
+
+# test amend merge
