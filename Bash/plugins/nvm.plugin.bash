@@ -22,11 +22,9 @@ function set_nvm() {
     case "${LAZYLOAD_NVM:-1}" in
     1 | true | TRUE | yes | YES)
       lazy_load_nvm
-      echo 'lazyload'
       ;;
     0 | false | FALSE | no | NO)
       _load_script_files
-      echo 'on-demand'
       ;;
     esac
   fi
@@ -51,7 +49,7 @@ function load_script_files() {
 function lazy_load_nvm() {
   for func in nvm node npm npx; do
     eval "function ${func}() {
-       unset -f nvm node npm npx;
+       unset -f ${func};
        $(declare -f load_script_files | tail +3 | head)
       ${func} \"\$@\"
     }"
