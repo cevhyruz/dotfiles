@@ -30,3 +30,17 @@ load "${TEST_DIRECTORY}/test_helper.bash"
   run declare -F npx
   assert_failure 1
 }
+
+@test "${TEST_FILE}: Make sure no functions and variables were leaking." {
+  run declare -F __set_nvm
+  assert_failure 1
+
+  run declare -F __load_script_files
+  assert_failure 1
+
+  run declare -F __lazy_load_nvm
+  assert_failure 1
+
+  run declare -F __cleanup
+  assert_failure 1
+}
