@@ -15,24 +15,23 @@
 # these function will be set by default if lazyloading is enabled.
 # npm, node, npm, npx.
 
-function set_nvm() {
+function __set_nvm() {
   export NVM_DIR="${HOME}/.nvm"
 
   if [[ -d "${NVM_DIR}" ]]; then
     case "${LAZYLOAD_NVM:-1}" in
     1 | true | TRUE | yes | YES)
-      lazy_load_nvm
+      __lazy_load_nvm
       ;;
     0 | false | FALSE | no | NO)
-      _load_script_files
+      __load_script_files
       ;;
     esac
   fi
-
-  set_nvm::_cleanup
+  __cleanup
 }
 
-function load_script_files() {
+function __load_script_files() {
   # bootstrap nvm
   if command -v brew &>/dev/null &&
     [[ -s "$(brew --prefix nvm)/nvm.sh" ]]; then
@@ -46,23 +45,23 @@ function load_script_files() {
   fi
 }
 
-function lazy_load_nvm() {
+function __lazy_load_nvm() {
   for func in nvm node npm npx; do
     eval "function ${func}() {
        unset -f ${func};
-       $(declare -f load_script_files | tail +3 | head)
+       $(declare -f __load_script_files | tail +3 | head)
       ${func} \"\$@\"
     }"
   done
   unset func
 }
 
-function set_nvm::_cleanup() {
+function __cleanup() {
   unset -f \
-    set_nvm \
-    lazy_load_nvm \
-    set_nvm::_cleanup \
-    load_script_files
+    __set_nvm \
+    __lazy_load_nvm \
+    __load_script_files \
+    __cleanup
 }
 
-set_nvm
+__set_nvm
