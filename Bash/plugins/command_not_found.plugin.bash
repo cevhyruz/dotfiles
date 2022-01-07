@@ -5,7 +5,7 @@
 # customized 'command not found' message for bash.
 
 function command_not_found_handle() {
-  printf "%s" "${PREFIX} - "
+  printf "%s" "${PREFIX}"
   printf "${SHELL}: %b\n" "\e[3;38;5;203m${*}\e[0m: Command not found"
   return 127
 }
