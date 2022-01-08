@@ -17,23 +17,3 @@ load "Bash/plugins/fzf.plugin.bash"
   run alias aliases
   assert_success
 }
-
-@test "${TEST_FILE}: Check if fzf plugin has properly cleaned up itself" {
-  run declare -F _set_fzf
-  assert_failure 1
-
-  run declare -F _set_fzf::_as_ag
-  assert_failure 1
-
-  run declare -F _set_fzf::_as_rg
-  assert_failure 1
-
-  run declare -F _set_fzf::_as_find
-  assert_failure 1
-
-  run declare -F _set_fzf::_as_envars
-  assert_failure 1
-
-  run declare -F _set_fzf::_cleanup
-  assert_failure 1
-}
