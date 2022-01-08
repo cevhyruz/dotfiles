@@ -9,39 +9,59 @@
 # _FZF_IGNORED_DIRS  : directory to be ignored.
 # _FZF_OPTS          : options for fzf.
 
-_::command_exists "fzf" || return 0
+_::command_exists "fzf" || return
 
-function _set_fzf() {
-
-  local -ar _FZF_BINDKEYS=(
-    "ctrl-e:preview-down+preview-down," # preview scroll-down by 2 lines.
-    "ctrl-y:preview-up+preview-up,"     # preview scroll-up by 2 lines.
+function __bootstrap_fzf() {
+  local -ar __FZF_BINDKEYS=(
+    "ctrl-e:preview-down+preview-down," # preview scroll down by 2 lines.
+    "ctrl-y:preview-up+preview-up,"     # preview scroll up by 2 lines.
     "ctrl-space:accept")                # additional accept key.
 
-  local -ar _FZF_IGNORED_DIRS=(
+  declare -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
     "bower_components/"
     ".git/"
     "vendors/")
 
-  local -ar _FZF_OPTS=(
+  local -ar __FZF_OPTS=(
     "--ansi"
-    "--bind=$(printf "%s" "${_FZF_BINDKEYS[@]}")"
+    "--bind=$(printf "%s" "${__FZF_BINDKEYS[@]}")"
     "--margin=0,0,1" # Top, Right/Left, Bottom
     "--multi"
     "--height=25"
     "--no-bold"
+    "--color=bw"
     "--reverse"
     "--inline-info"
     "--header=")
 
-  _set_fzf::_envars
-  _set_fzf::_aliases
+  __set_fzf
+  __set_fzf_aliases
+  __cleanup
 }
 
-function _set_fzf::_as_ag() {
-  for dir in "${_FZF_IGNORED_DIRS[@]}"; do
+function __set_fzf() {
+  local available_cmd
+  local ignored_dirs
+  local fzf_command
+
+  available_cmd="$(basename "$(command -v ag || command -v rg)")"
+
+  case "${available_cmd}" in
+  ag) __set_fzf_as_ag ;;
+  rg) __set_fzf_as_rg ;;
+  *) __set_fzf_as_find ;;
+  esac
+
+  unset dir
+
+  export FZF_DEFAULT_COMMAND="${fzf_command[*]}"
+  export FZF_DEFAULT_OPTS="${__FZF_OPTS[*]}"
+}
+
+function __set_fzf_as_ag() {
+  for dir in "${__FZF_IGNORED_DIRS[@]}"; do
     ignored_dirs+="*${dir}*,"
   done
 
@@ -53,8 +73,8 @@ function _set_fzf::_as_ag() {
   )
 }
 
-function _set_fzf::_as_rg() {
-  for dir in "${_FZF_IGNORED_DIRS[@]}"; do
+function __set_fzf_as_rg() {
+  for dir in "${__FZF_IGNORED_DIRS[@]}"; do
     ignored_dirs+="!${dir}*,"
   done
 
@@ -67,8 +87,8 @@ function _set_fzf::_as_rg() {
   )
 }
 
-function _set_fzf::_as_find() {
-  for dir in "${_FZF_IGNORED_DIRS[@]}"; do
+function __set_fzf_as_find() {
+  for dir in "${__FZF_IGNORED_DIRS[@]}"; do
     ignored_dirs+=("! -path './${dir}*'")
   done
 
@@ -78,39 +98,21 @@ function _set_fzf::_as_find() {
     "| sed 's/^..//'")
 }
 
-function _set_fzf::_envars() {
-  local fzf_command \
-    ignored_dirs
-
-  case "$(basename "$(command -v ag || command -v rg)")" in
-  ag) _set_fzf::_as_ag ;;
-  rg) _set_fzf::_as_rg ;;
-  *) _set_fzf::_as_find ;;
-  esac
-
-  export FZF_DEFAULT_COMMAND="${fzf_command[*]}"
-  export FZF_DEFAULT_OPTS="${_FZF_OPTS[*]}"
-
-  unset dir \
-    fzf_command \
-    ignored_dirs
-}
-
-function _set_fzf::_aliases() {
+function __set_fzf_aliases() {
   # list aliases.
   alias aliases='alias | fzf'
-
   # print environment variables.
   alias envars='printenv | fzf'
 }
 
-function _set_fzf::_cleanup() {
-  unset -f _set_fzf \
-    _set_fzf::_as_ag \
-    _set_fzf::_as_rg \
-    _set_fzf::_as_find \
-    _set_fzf::_envars \
-    _set_fzf::_cleanup
+function __cleanup() {
+  unset -f \
+    __set_fzf \
+    __set_fzf_as_ag \
+    __set_fzf_as_rg \
+    __set_fzf_as_find \
+    __set_fzf_command \
+    __cleanup
 }
 
-_set_fzf && _set_fzf::_cleanup
+__bootstrap_fzf
