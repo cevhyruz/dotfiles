@@ -3,7 +3,7 @@
 
 load "${TEST_DIRECTORY}/test_helper.bash"
 
-load "Bash/lib/hooks.bash"
+load "Bash/core/hooks"
 
 @test "${TEST_FILE} pre_command should return if '\$AT_PROMPT' has not been set." {
   AT_PROMPT=''
