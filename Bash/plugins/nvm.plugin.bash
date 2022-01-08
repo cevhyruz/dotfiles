@@ -1,19 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
-
 # shellcheck source=/dev/null
-# Node version manager Plugin for Bash
-#
-# load nvm (Node Version Manager) if it is present.
-#
-# Globals:
-#   LAZYLOAD_NVM (default: 1)
-#   set to 0 to disable lazy loading nvm, 1 otherwise
 
-# ENVIRONMENT:
-# these function will be set by default if lazyloading is enabled.
-# npm, node, npm, npx.
+# Lazyload nvm (Node Version Manager) if it is present.
+
+# Globals:
+#   LAZYLOAD_NVM (default: 1         )
+#   NVM_DIR      (default: $HOME/.nvm)
 
 function __set_nvm() {
   export NVM_DIR="${HOME}/.nvm"
