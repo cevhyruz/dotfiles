@@ -28,6 +28,9 @@ alias parent='ps --no-headers -o comm "${PPID}"'
 # list all to-be-done comments.
 alias todo="grep --recursive 'TOD[O]: '"
 
+# list all to-be-fix task.
+alias fixme="grep --recursive 'FIXM[E]: '"
+
 # quit shell session.
 alias q="exit"
 
