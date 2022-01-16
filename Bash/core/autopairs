@@ -18,6 +18,10 @@ __pairs=(
 )
 
 function __autopair() {
+
+  # FIXME: Hack for hooks triggering on 'bind -x'
+  AT_PROMPT=1
+
   local typed_char="$1"
   local opening_char="$2"
   local closing_char="$3"
@@ -53,6 +57,10 @@ function __autopair() {
 }
 
 function __autopair_remove() {
+
+  # FIXME: Hack for hooks triggering on 'bind -x'
+  AT_PROMPT=1
+
 
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
   local cursor_char="${READLINE_LINE:READLINE_POINT:1}"

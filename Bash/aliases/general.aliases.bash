@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# vi: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Core aliases that I use for a daily basis.
 
@@ -8,7 +8,7 @@
 alias sudo="sudo "
 
 # going home.
-alias home='cd "${HOME}"'
+alias home='cd ${HOME}'
 
 # reload current shell session.
 alias reload='exec "${SHELL}"'
@@ -22,17 +22,30 @@ alias which="which -a"
 # pretty print path names.
 alias path='echo "${PATH//:/\\n}"'
 
+# list enabled bash options.
+if ! declare -F bashopts &>/dev/null; then
+  alias bashopts='printf "%b\n" "${BASHOPTS//:/\\n}"'
+fi
+
+if [[ -x "/usr/bin/dircolors" ]]; then
+  alias dir="dir --color=always"
+  alias egrep="egrep --color=always"
+  alias fgrep="fgrep --color=always"
+  alias grep="grep --color=always"
+  alias lscolor="ls --color=always"
+  alias vdir="vdir --color=always"
+fi
+
 # print which spawns the current shell session.
 alias parent='ps --no-headers -o comm "${PPID}"'
 
-# list all to-be-done comments.
+# list files with TODO: and FIXME: notation
 alias todo="grep --recursive 'TOD[O]: '"
-
-# list all to-be-fix task.
 alias fixme="grep --recursive 'FIXM[E]: '"
 
 # quit shell session.
 alias q="exit"
+alias c="clear"
 
 # go back to the previous directory.
 alias -- -="cd -"

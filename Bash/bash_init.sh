@@ -11,8 +11,12 @@ for file in "${DOT_BASH}/lib"/*; do
   unset file
 done
 
+cite _about _env _group _return _param
+
 # initliaze configurations.
 _::source_files_from "${DOT_BASH}/core"
+
+# ordered
 _::source_files_from "${DOT_BASH}/aliases"
 _::source_files_from "${DOT_BASH}/plugins"
 
