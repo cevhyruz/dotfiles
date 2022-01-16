@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2016
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 
 # enable bash vi mode
 set -o vi

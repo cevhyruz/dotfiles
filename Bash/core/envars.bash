@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Set up shell variables for Bash
 
@@ -14,6 +15,7 @@ PROMPT_COMMAND=('history -a')
 # useful editors.
 VISUAL="$(command -v nvim || command -v vim || command -v )"
 EDITOR="$(command -v ed || echo "${VISUAL}")"
+export EDITOR
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
