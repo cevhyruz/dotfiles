@@ -2,3 +2,7 @@ localrc/
 
 # Code coverage reports
 coverage/
+
+# localrc
+Git/.gitconfig.local
+Bash/.bashrc.local
