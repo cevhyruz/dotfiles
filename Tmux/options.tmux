@@ -7,6 +7,12 @@
 
 # server options
 
+set-option -as terminal-overrides \
+',*:RGB:Smulx=\E[4::%p1%dm:Smol=\E[53m:smxx=\E[9m'\
+',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
+
+set-option -g default-terminal "tmux-256color"
+
 set-option -s buffer-limit 25
 set-option -s escape-time   0
 set-option -s exit-unattached off
@@ -15,8 +21,6 @@ set-option -s set-clipboard on
 set-option -s focus-event on
 
 # session options
-
-set-option -g default-terminal "screen-256color"
 
 set-window-option -g xterm-keys on
 

@@ -74,7 +74,7 @@ function __load_dircolors() {
     "*.vim=${__fg_yellow}:"
   )
 
-  __make_dircolors
+  __make_dircolors "${__dircolors[*]}"
 }
 
 main
