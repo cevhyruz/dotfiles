@@ -61,23 +61,6 @@ let g:fzf_action = {
 \ 'alt-k':  'aboveleft split',
 \ 'alt-l':  'rightbelow vsplit',
 \ 'alt-t':  'tab split' }
-let g:fzf_colors = {
-\ 'fg':      ['fg', 'Normal'],
-\ 'bg':      ['bg', 'Error'],
-\ 'hl':      ['fg', 'Comment'],
-\ 'fg+':     ['fg', 'Comment', 'CursorColumn', 'Normal'],
-\ 'bg+':     ['bg', 'Error', 'CursorColumn'],
-\ 'hl+':     ['fg', 'Statement'],
-\ 'info':    ['fg', 'PreProc'],
-\ 'border':  ['fg', 'Ignore'],
-\ 'prompt':  ['fg', 'Conditional'],
-\ 'pointer': ['fg', 'Exception'],
-\ 'marker':  ['fg', 'Keyword'],
-\ 'spinner': ['fg', 'Label'],
-\ 'header':  ['fg', 'Comment'] }
-
-"# changes current selected highlight color
-" \ 'bg':      ['bg', 'Normal'],
 
 " FIXME: Please stop using autocommands for everything,
 " specially for *Leave, *Enter events.
