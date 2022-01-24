@@ -53,13 +53,6 @@ function __output_style() {
 }
 
 function __set_ps1() {
-  local -arg return_arrow=(
-    '╭'
-    '─'
-    '╰'
-    '➤'
-  )
-
   if [[ -n "${SSH_TTY:-}" ]]; then
    host_style="${bold}${fg_red}"
   else
@@ -70,22 +63,25 @@ function __set_ps1() {
     "\[${reset}\]"
     "\n"
     "\[${reset}${bold}\]"
-    "\[\$( __return_arrow_style )\]"
-    "\[${return_arrow[0]}${return_arrow[1]}\] "
+    "\$( __return_arrow_style )"
+    "╭─"
+    " "
     "\[${host_style}\]\u@\H"
-    "\[${reset}${bold}"
+    "\[${reset}${bold}\]"
     ":"
-    "${fg_cyan}\W"
-    "\[\$( __git_prompt \"${bold}${fg_white} on ${fg_red}\" \"${bold}${fg_yellow} \" )\]"
-    "\[\$( __exit_code \" ${italic}exited \" \"${fg_red}\" )\]"
+    "\[${fg_cyan}\]\W"
+    "\$( __git_prompt \"\[${bold}${fg_white}\] on \[${fg_red}\]\" \"\[${bold}${fg_yellow}\] \")"
+    "\$( __exit_code \"\[${italic}\]exited \" \"\[${fg_red}\]\")"
     "\n"
     "\[\$( __return_arrow_style )\]"
-    "\[${return_arrow[2]}${return_arrow[3]}\]"
-    "\[${reset}\] $: "
+    "\[${return_arrow[2]}\]\[${return_arrow[3]}\]"
+    "╰➤"
+    "\[${reset}\]"
+    " $: "
     "\[\e[38;5;216m\]" # LightSalmon1
   )
 
-  PS1="$(printf "%b" "${ps1[@]}")"
+  PS1="$(printf "%s" "${ps1[@]}")"
 }
 
 function main() {
