@@ -15,8 +15,6 @@ function __bootstrap_fzf() {
     "ctrl-e:preview-down+preview-down,"
     "ctrl-y:preview-up+preview-up,"
     "ctrl-space:accept,"
-    "ctrl-h:backward-char," # will conflict with tmux
-    "ctrl-l:forward-char," # will conflict with tmux
     "ctrl-s:toggle-sort,"
     "ctrl-o:clear-selection,"
     "^:beginning-of-line,"
