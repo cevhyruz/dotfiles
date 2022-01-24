@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 
 # FZF Plugin for Bash
 # Sensible settings for FZF
 #
-# _FZF_BINDKEYS      : keybindings for fzf.
-# _FZF_IGNORED_DIRS  : directory to be ignored.
-# _FZF_OPTS          : options for fzf.
+# Globals:
+# DOT_FZF_DEFAULT_CMD : defaults to Ag.
 
 _::command_exists "fzf" || return
 
 function __bootstrap_fzf() {
   local -ar __FZF_BINDKEYS=(
-    "ctrl-e:preview-down+preview-down," # preview scroll down by 2 lines.
-    "ctrl-y:preview-up+preview-up,"     # preview scroll up by 2 lines.
-    "ctrl-space:accept")                # additional accept key.
+    "ctrl-e:preview-down+preview-down,"
+    "ctrl-y:preview-up+preview-up,"
+    "ctrl-space:accept,"
+    "ctrl-h:backward-char," # will conflict with tmux
+    "ctrl-l:forward-char," # will conflict with tmux
+    "ctrl-s:toggle-sort,"
+    "ctrl-o:clear-selection,"
+    "^:beginning-of-line,"
+    "$:end-of-line,"
+    "ctrl-/:toggle-preview,"
+    "alt-h:change-preview-window(60%|70%|80%),"
+    "?:jump-accept")
 
-  declare -ar __FZF_IGNORED_DIRS=(
+  local -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
     "bower_components/"
@@ -26,38 +34,78 @@ function __bootstrap_fzf() {
 
   local -ar __FZF_OPTS=(
     "--ansi"
-    "--bind=$(printf "%s" "${__FZF_BINDKEYS[@]}")"
-    "--margin=0,0,1" # Top, Right/Left, Bottom
+    "--bind='$(printf "%s" "${__FZF_BINDKEYS[@]}")'"
+    "--margin=0,0,1" # T, RL, B
     "--multi"
+    "--tac"
+    "--pointer='❱'"
     "--height=25"
+    "--marker='✸ '"
     "--no-bold"
-    "--color=bw"
-    "--reverse"
+    "--border=horizontal"
+    "--layout=reverse"
+    "--preview-window=border-sharp"
+    "--preview='cat {}'"
     "--inline-info"
-    "--header=")
+    "--header='' ")
+
+  # fade-in-black theme
+  # yin-yang
+  local -ar __FZF_THEME=(
+    "--color=fg:-1"
+    "--color=bg:235"
+    "--color=preview-fg:244"
+    "--color=preview-bg:234"
+    "--color=hl:-1"
+    "--color=hl+:0"
+    "--color=fg+:0"
+    "--color=bg+:245"
+    "--color=pointer:221:bold"
+    "--color=gutter:235"
+    "--color=info:221"
+    "--color=border:237"
+    "--color=prompt:36"
+    "--color=marker:36"
+    "--color=spinner:196"
+    "--color=header:-1")
 
   __set_fzf
   __set_fzf_aliases
   __cleanup
 }
 
+function __available_command() {
+  basename "$(
+    command -v ag \
+      || command -v rg \
+      || command -v fdfind
+  )"
+}
+
 function __set_fzf() {
-  local available_cmd
   local ignored_dirs
   local fzf_command
 
-  available_cmd="$(basename "$(command -v ag || command -v rg)")"
-
-  case "${available_cmd}" in
-  ag) __set_fzf_as_ag ;;
-  rg) __set_fzf_as_rg ;;
-  *) __set_fzf_as_find ;;
+  case "${DOT_FZF_DEFAULT_CMD:-$(__available_command)}" in
+    fd) __set_fzf_as_fdfind ;;
+    ag) __set_fzf_as_ag ;;
+    rg) __set_fzf_as_rg ;;
+    *) __set_fzf_as_find ;;
   esac
 
   unset dir
 
   export FZF_DEFAULT_COMMAND="${fzf_command[*]}"
-  export FZF_DEFAULT_OPTS="${__FZF_OPTS[*]}"
+  export FZF_DEFAULT_OPTS="${__FZF_OPTS[*]}${__FZF_THEME[*]}"
+}
+
+function __set_fzf_as_fdfind() {
+  fzf_command=(
+    "fdfind"
+    "--hidden"
+    "--no-ignore"
+    "--strip-cwd-prefix"
+    "--type file")
 }
 
 function __set_fzf_as_ag() {
@@ -108,10 +156,12 @@ function __set_fzf_aliases() {
 function __cleanup() {
   unset -f \
     __set_fzf \
+    __set_fzf_as_fd \
     __set_fzf_as_ag \
     __set_fzf_as_rg \
     __set_fzf_as_find \
     __set_fzf_command \
+    __available_command \
     __cleanup
 }
 
