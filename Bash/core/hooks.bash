@@ -46,7 +46,7 @@ function __init_hooks() {
 
 # FIXME: For some reason, bash trap triggers an error
 # when inside bats. We'll skip initializing for now.
-if [[ -x "${BATS_EXECUTABLE:-}" ]]; then
+if [[ -z "${TEST_DIRECTORY:-}" ]]; then
   __init_hooks \
     && unset -f __init_hooks
 fi
