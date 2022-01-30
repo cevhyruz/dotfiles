@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# shellcheck shell=bash disable=SC2034
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 
 # Dotfiles test suite helper file.
 #
@@ -13,17 +13,25 @@ load "${TEST_DEPS_DIR}/bats-file/load.bash"
 
 load "${TEST_DEPS_DIR}/../Bash/lib/util.bash"
 
+RUN=0
 function _make_test_name() {
-  printf "\e[1m[%s]\e[0m" "$(basename "${BATS_TEST_FILENAME}")"
+  ((RUN++))
+  if [[ "${RUN}" -eq 2 ]]; then
+    return
+  fi
+  printf "\e[1m[%s]\e[0m\n" "$(basename "${BATS_TEST_FILENAME}")"
 }
 
 # Usage: @test "${TEST_FILE}: this is a test" { }
 TEST_FILE="$(_make_test_name)"
-export TEST_FILE
 
-function local_setup() { true; }
+function local_setup() {
+  true
+}
 
-function local_teardown() { true; }
+function local_teardown() {
+  true
+}
 
 function setup() {
   # Usage: export LOCAL_DEP="fzf"

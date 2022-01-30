@@ -26,23 +26,23 @@ function main() {
 
 function __prompt_user_at_host() {
   if [[ -n "${SSH_TTY:-}" ]]; then
-    printf "%b" "${resetall}${bold}${fg_red}"
+    printf "%b" "${reset}${bold}${fg_red}"
   else
-    printf "%b" "${resetall}${bold}${fg_white}"
+    printf "%b" "${reset}${bold}${fg_white}"
   fi
 }
 
 function __prompt_return_exit_code () {
   if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
-    printf "%b" "${resetall}${dim}   [exited ${EXIT_CODE}]"
+    printf "%b" "${reset}${dim}   [exited ${EXIT_CODE}]"
   fi
 }
 
 function __exit_color() {
   if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-    printf "%b" "${resetall}${bold}${fg_green}"
+    printf "%b" "${reset}${bold}${fg_green}"
   else
-    printf "%b" "${resetall}${bold}${fg_red}"
+    printf "%b" "${reset}${bold}${fg_red}"
   fi
 }
 

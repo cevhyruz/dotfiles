@@ -17,8 +17,12 @@ cite _about _env _group _return _param
 _::source_files_from "${DOT_BASH}/core"
 
 # ordered
-_::source_files_from "${DOT_BASH}/plugins"
+#_::source_files_from "${DOT_BASH}/plugins"
 _::source_files_from "${DOT_BASH}/aliases"
+
+_::source_files_from "${DOT_BASH}/functions"
+
+_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash"
 
 # local config file.
 _::source_file "${DOT_BASH}/.bashrc.local"

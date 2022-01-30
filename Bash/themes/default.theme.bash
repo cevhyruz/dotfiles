@@ -24,27 +24,37 @@ function main() {
   PS1="\[${reset}${bold}${normal}\]"
   local -a ps1=(
     "\n"
-    "\$(__exit_color)"
+    "\[$(__exit_color)\]"
     "╭─"
     " "
-    "\$(__prompt_user_at_host)"
+    "\[$(__prompt_user_at_host)\]"
     "\u@\H"
     ":"
     "\[${fg_cyan}\]\w"
     " "
-    "\$(__git_prompt)"
-    "\$(__prompt_return_exit_code)"
+    "\[$(__git_prompt)\]"
+    "\[$(__prompt_return_exit_code)\]"
     "\[${reset}\]"
     "\n"
-    "\$(__exit_color)"
+    "\[$(__exit_color)\]"
     "╰➤"
-    "${reset}"
-    "${dim} $: ${resetall}"
+    "\[${reset}\]"
+    "\[${dim}\] \$: \[${reset}\]"
     "\[\e[38;5;216m\]") # LightSalmon1
-  PS1+="$(printf "%s" "${ps1[@]}")"
+  PS1+="$(printf "%b" "${ps1[@]}")"
 
   # change command output color.
   PRE_COMMAND+=('printf "%b" "${normal}";')
+
+
+  # distinguishable cursor shapes for vi mode.
+  # only works on GNU readline v7.0 (bash 4.3 and up).
+  if [[ -z "${BATS_TEST_NAME:-}" ]]; then
+    bind 'set show-mode-in-prompt on'
+    bind 'set vi-ins-mode-string \1\e[5 q\e]12;cyan\a\2'
+    bind 'set vi-cmd-mode-string \1\e[2 q\e]12;cyan\a\2'
+  fi
+
 }
 
 main && unset -f main

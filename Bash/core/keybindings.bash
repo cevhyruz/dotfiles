@@ -2,17 +2,20 @@
 # shellcheck shell=bash disable=SC2016
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-# enable bash vi mode
-set -o vi
-
 # vi-editing-mode
-bind -m vi-insert -x '"\C-n": vifm'
+#bind -m vi-insert -x '"\C-n": vifm'
+
+foobar() {
+  echo "$READLINE_POINT"
+}
+
+bind -m vi-insert -x '"\C-n": foobar'
 
 # exit insert mode
 bind -m vi-insert '"kj": vi-movement-mode' # ESC
 
-bind -m vi-command '"K": history-search-backward'
-bind -m vi-command '"J": history-search-forward'
+bind -m vi-command '"N": history-search-backward'
+bind -m vi-command '"P": history-search-forward'
 
 # terminate current session
 bind -m vi-command '";q": "dd\C-d"'
@@ -23,12 +26,8 @@ bind -m vi-command '"q":  end-kbd-macro'
 bind -m vi-command '".": call-last-kbd-macro'
 bind -m vi-command '"z": print-last-kbd-macro'
 
-# https://unix.stackexchange.com/questions/128240
-bind -m vi-insert '"\n": self-insert'
-
 # ----------------------------------------------------------------------------
-#  surround by liloman
-#  https://github.com/liloman/bash-surRound/blob/master/inputrc-surround
+# Bash surround
 # ----------------------------------------------------------------------------
 
 # inner word-select
@@ -38,7 +37,6 @@ bind -m vi-command '"yiw": "mtlbgye`t"'
 bind -m vi-command '"yiW": "mtlBgyE`t"'
 bind -m vi-command '"ciw": "diwi"'
 bind -m vi-command '"ciW": "diWi"'
-
 # outer word-select
 bind -m vi-command '"daw": "diw"'
 bind -m vi-command '"daW": "diW"'
@@ -46,7 +44,6 @@ bind -m vi-command '"yaw": "yiw"'
 bind -m vi-command '"yaW": "yiW"'
 bind -m vi-command '"caw": "ciw"'
 bind -m vi-command '"caW": "ciW"'
-
 # hardcoded outer and inner selects
 bind -m vi-command    '"da(": "lF(df)"'
 bind -m vi-command    '"da)": "lF(df)"'
@@ -120,10 +117,7 @@ bind -m vi-command   '"ci\"": "di\C-v\"i"'
 bind -m vi-command   '"ca\"": "da\C-v\"i"'
 bind -m vi-command   '"yi\"": "modi\C-v\"hp`o"'
 bind -m vi-command   '"ya\"": "moda\C-v\"hp`o"'
-
-
 # hardcoded bash surround
-
 bind -m vi-command    '"ds)": "mtF(xf)x`th"'
 bind -m vi-command    '"ds(": "mtF(xf)x`th"'
 bind -m vi-command    '"ds]": "mtF[xf]x`th"'
@@ -238,17 +232,11 @@ bind -m vi-command    '"cs\"*": "mtF\"r*f\"r*`t"'
 bind -m vi-command    '"cs\">": "mtF\"r<f\"r>`t"'
 bind -m vi-command    '"cs\"<": "mtF\"xi\C-v< \ef\"xa \C-v>\e`tl"'
 bind -m vi-command    '"cs\"`": "mtF\"r`f\"r``t"'
-
-
-
-
-
 #"Specials"
 bind -m vi-command '"cs][": "mtF[a \ef]i \e`tl"'
 bind -m vi-command '"cs)(": "mtF(a \ef)i \e`tl"'
 bind -m vi-command '"cs}{": "mtF{a \ef}i \e`tl"'
 bind -m vi-command '"cs><": "mtF<a \ef>i \e`tl"'
-
 #ys(w/W)*
 bind -m vi-command     '"ysw)": "mti\C-v(\eea\C-v)\e`tl"'
 bind -m vi-command     '"ysw(": "mti\C-v( \eea \C-v)\e`t2l"'

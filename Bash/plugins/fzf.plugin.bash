@@ -20,7 +20,6 @@ function __bootstrap_fzf() {
     "^:beginning-of-line,"
     "$:end-of-line,"
     "ctrl-/:toggle-preview,"
-    "alt-h:change-preview-window(60%|70%|80%),"
     "?:jump-accept")
 
   local -ar __FZF_IGNORED_DIRS=(
@@ -33,22 +32,22 @@ function __bootstrap_fzf() {
   local -ar __FZF_OPTS=(
     "--ansi"
     "--bind='$(printf "%s" "${__FZF_BINDKEYS[@]}")'"
-    "--margin=0,0,1" # T, RL, B
+    "--margin=0,1,0" # T, RL, B
     "--multi"
     "--tac"
     "--pointer='❱'"
+    "--prompt='➤ '"
     "--height=25"
     "--marker='✸ '"
     "--no-bold"
     "--border=horizontal"
     "--layout=reverse"
-    "--preview-window=border-sharp"
+    "--preview-window=60%:border-sharp:hidden"
     "--preview='cat {}'"
     "--inline-info"
     "--header='' ")
 
-  # fade-in-black theme
-  # yin-yang
+  # fade-in-black
   local -ar __FZF_THEME=(
     "--color=fg:-1"
     "--color=bg:235"
@@ -62,30 +61,29 @@ function __bootstrap_fzf() {
     "--color=gutter:235"
     "--color=info:221"
     "--color=border:237"
-    "--color=prompt:36"
+    "--color=prompt:36:bold"
     "--color=marker:36"
     "--color=spinner:196"
     "--color=header:-1")
 
-  __set_fzf
+  __set_fzf "$( basename "$(
+      command -v ag \
+      || command -v rg \
+      || command -v fdfind
+    )"
+  )"
+
   __set_fzf_aliases
   __cleanup
 }
 
-function __available_command() {
-  basename "$(
-    command -v ag \
-      || command -v rg \
-      || command -v fdfind
-  )"
-}
-
 function __set_fzf() {
+  local available_command="$1"
   local ignored_dirs
   local fzf_command
 
-  case "${DOT_FZF_DEFAULT_CMD:-$(__available_command)}" in
-    fd) __set_fzf_as_fdfind ;;
+  case "${DOT_FZF_DEFAULT_CMD:-${available_command}}" in
+    fd) __set_fzf_as_fdfind;;
     ag) __set_fzf_as_ag ;;
     rg) __set_fzf_as_rg ;;
     *) __set_fzf_as_find ;;
@@ -112,7 +110,8 @@ function __set_fzf_as_ag() {
   done
 
   fzf_command=(
-    "ag --skip-vcs-ignores"
+    "ag"
+    "--skip-vcs-ignores"
     "--hidden"
     "--ignore={${ignored_dirs}}"
     "-g ''"
@@ -125,7 +124,8 @@ function __set_fzf_as_rg() {
   done
 
   fzf_command=(
-    "rg --files"
+    "rg"
+    "--files"
     "--no-ignore"
     "--hidden"
     "--follow"
@@ -139,7 +139,9 @@ function __set_fzf_as_find() {
   done
 
   fzf_command=(
-    "find . -type f,l,s,p"
+    "find"
+    "."
+    "-type f,l,s,p"
     "${ignored_dirs[*]}"
     "| sed 's/^..//'")
 }
@@ -159,7 +161,6 @@ function __cleanup() {
     __set_fzf_as_rg \
     __set_fzf_as_find \
     __set_fzf_command \
-    __available_command \
     __cleanup
 }
 

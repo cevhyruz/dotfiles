@@ -5,9 +5,9 @@
 # enabled options.
 
 set -o nounset   # treat unset variables as an error when substituting.
-set -o vi        # enable vi-style line editing interface.
 set -o pipefail  # value of pipeline is the status of the last command.
 set -o errtrace  # ERR trap will be inherited by shell functions.
+set -o vi
 
 shopt -s  no_empty_cmd_completion # no auto-completion on empty line
 shopt -s  autocd                  # allow omitting `cd` to directory names
@@ -35,8 +35,5 @@ shopt -s  xpg_echo                # expand backslash-escape sequences
 
 # disabled options.
 
-# disable trap DEBUG on subshells.
-set +o functrace
-
-# Don't check mail when opening terminal.
-shopt -u mailwarn
+set +o functrace  # disable trap DEBUG on subshells.
+shopt -u mailwarn # Don't check mail when opening terminal.

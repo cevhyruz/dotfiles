@@ -9,8 +9,6 @@ set input-meta   on
 set output-meta  on
 set convert-meta off
 
-set editing-mode vi
-
 set colored-stats on
 set colored-completion-prefix on
 set completion-display-width 1
@@ -48,6 +46,3 @@ set  menu-complete-display-prefix on
 
 # duration for ambiguous characters (default: 500)
 set keyseq-timeout 3000
-
-# readline components
-$include ~/Projects/dotfiles/readline/prompt
