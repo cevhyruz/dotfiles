@@ -17,7 +17,7 @@ cite _about _env _group _return _param
 _::source_files_from "${DOT_BASH}/core"
 
 # ordered
-#_::source_files_from "${DOT_BASH}/plugins"
+_::source_files_from "${DOT_BASH}/plugins"
 _::source_files_from "${DOT_BASH}/aliases"
 
 _::source_files_from "${DOT_BASH}/functions"
