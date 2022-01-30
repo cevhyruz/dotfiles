@@ -4,6 +4,8 @@
 load "${TEST_DIRECTORY}/test_helper.bash"
 load "Bash/plugins/fzf.plugin.bash"
 
+LOCAL_DEP="fzf"
+
 @test "${TEST_FILE}: Verify that '\$FZF_DEFAULT_COMMAND' has been set properly." {
   run bash -c "echo ${FZF_DEFAULT_COMMAND} | awk '{ print \$1 }'"
   assert_line --index 0 "$(

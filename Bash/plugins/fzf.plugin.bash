@@ -8,7 +8,7 @@
 # Globals:
 # DOT_FZF_DEFAULT_CMD : defaults to Ag.
 
-_::command_exists "fzf" || return
+_::command_exists "fzf" || return 0
 
 function __bootstrap_fzf() {
   local -ar __FZF_BINDKEYS=(
