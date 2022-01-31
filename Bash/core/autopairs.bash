@@ -58,7 +58,7 @@ function __autopair() {
     # close pair
     if [[ "$(( ${#quotes_char} % 2 ))" -eq 1 ]]; then
       readline+="${typed_char}"
-    # already paired, auto close
+     #already paired, auto close
     elif [[ "${cursor_char}" == "${closing_char}" ]]; then
       :
     # pair
@@ -67,15 +67,8 @@ function __autopair() {
     fi
 
   # () and {} and []
-  # pair
   elif [[ "${typed_char}" == "${opening_char}" ]]; then
     readline+="${opening_char}${closing_char}"
-  # already paired, auto close
-  elif [[ "${cursor_char}" == "${closing_char}" ]]; then
-    :
-  # close pair
-  else
-    readline+="${typed_char}"
   fi
 
   readline+="${READLINE_LINE:READLINE_POINT}"
@@ -128,10 +121,6 @@ function __depair() {
       [[ "$cursor_char" == "${pair:1:1}" ]]; then
 
       num_of_char="${READLINE_LINE//[^${pair:0:1}]/}"
-
-      if [[ "$(( ${#num_of_char} % 2))" -eq 1 ]]; then
-        break
-      fi
 
       readline+="${READLINE_LINE:READLINE_POINT+1}"
       autopair_operated=true
