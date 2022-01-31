@@ -10,7 +10,7 @@ if [[ $( shopt mailwarn | awk '{ print $2 }' ) == 'off' ]]; then
 fi
 
 # append current sessions history to the history file.
-PROMPT_COMMAND=('history -a')
+PROMPT_COMMAND=('history -a;')
 
 # useful editors.
 VISUAL="$(command -v nvim || command -v vim || command -v )"

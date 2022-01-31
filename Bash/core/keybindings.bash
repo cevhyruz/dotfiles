@@ -14,8 +14,8 @@ bind -m vi-insert -x '"\C-n": foobar'
 # exit insert mode
 bind -m vi-insert '"kj": vi-movement-mode' # ESC
 
-bind -m vi-command '"N": history-search-backward'
-bind -m vi-command '"P": history-search-forward'
+bind -m vi-command '"K": history-search-backward'
+bind -m vi-command '"J": history-search-forward'
 
 # terminate current session
 bind -m vi-command '";q": "dd\C-d"'

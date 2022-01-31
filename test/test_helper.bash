@@ -13,17 +13,8 @@ load "${TEST_DEPS_DIR}/bats-file/load.bash"
 
 load "${TEST_DEPS_DIR}/../Bash/lib/util.bash"
 
-RUN=0
-function _make_test_name() {
-  ((RUN++))
-  if [[ "${RUN}" -eq 2 ]]; then
-    return
-  fi
-  printf "\e[1m[%s]\e[0m\n" "$(basename "${BATS_TEST_FILENAME}")"
-}
-
-# Usage: @test "${TEST_FILE}: this is a test" { }
-TEST_FILE="$(_make_test_name)"
+TEST_FILE="$(printf "\e[1m[%s]\e[0m\n" "$(basename "${BATS_TEST_FILENAME}")")"
+export TEST_FILE
 
 function local_setup() {
   true

@@ -15,19 +15,17 @@ function __pre_command() {
     return 1
   fi
   unset AT_PROMPT
-  eval "${PRE_COMMAND[@]:-}"
+  eval "${PRE_COMMAND[@]}"
 }
 
 function __post_command() {
-  declare -g EXIT_CODE="$1"
-
+  declare -g EXIT_CODE="$?"
   AT_PROMPT=1
-
   if [[ -n "${FIRST_PROMPT:-}" ]]; then
     unset FIRST_PROMPT
     return 1
   fi
-  eval "${POST_COMMAND[@]:-}"
+  eval "${POST_COMMAND[@]}"
 }
 
 function __init_hooks() {
@@ -41,7 +39,7 @@ function __init_hooks() {
 
   # fireup __post_command after every prompt
   # and pass previous command return status.
-  PROMPT_COMMAND+=('__post_command "$?"')
+  PROMPT_COMMAND+=('__post_command;')
 }
 
 # FIXME: For some reason, bash trap triggers an error
