@@ -24,9 +24,7 @@ load "Bash/functions/general.functions.bash"
 }
 
 @test "${TEST_FILE}: sure general functions have been loaded." {
-  if ! command -v  pygmentize; then
-    skip "test case requires pygmentize to be installed."
-  fi
+  skip "test case requires pygmentize to be installed."
   run json '{"foo":42}'
   assert_success
 }
