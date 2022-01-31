@@ -45,7 +45,7 @@ function dataurl() {
 }
 
 # print a nice 256colors chart
-function colormap() { # {{{1
+function colormap() {
   for (( i = 0; i < 256; i++ )); do
     printf "\\e[48;5;${i}m%s" "$i"
     printf '\e[0m'
