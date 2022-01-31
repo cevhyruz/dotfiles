@@ -5,7 +5,7 @@ nvm.plugin.bash
 options.bash
 pyenv.plugin.bash
 autopairs.bash
-
+general.aliases.bash
 
 envars.bash
 apidoc.bash
@@ -25,6 +25,5 @@ general.functions.bash
 .bashrc.local
 fzf-completion.bash
 keybindings.bash
-general.aliases.bash
 .bashrc.template
 default.theme.bash
