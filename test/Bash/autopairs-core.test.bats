@@ -87,3 +87,10 @@ function local_setup() {
     assert_equal "${READLINE_POINT}" 6
   done
 }
+
+@test "${TEST_FILE}: no backspace when readline is empty" {
+  READLINE_LINE=''
+  READLINE_POINT=1
+  run __depair
+  assert_failure 1
+}

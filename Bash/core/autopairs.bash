@@ -4,13 +4,7 @@
 #
 # shamelessly ripoffed from https://github.com/nkakouros-original/bash-autopairs
 
-__pairs=(
-  "''"
-  '""'
-  '()'
-  '[]'
-  '{}'
-)
+__pairs=( "''" '""' '()' '[]' '{}')
 
 function __smart_space() {
   AT_PROMPT=1
@@ -95,7 +89,7 @@ function __depair() {
   AT_PROMPT=1
 
   if [[ "${#READLINE_LINE}" -eq 0 || "$READLINE_POINT" -eq 0 ]]; then
-    return
+    return 1
   fi
 
   local next_two_char="${READLINE_LINE:READLINE_POINT:2}"
