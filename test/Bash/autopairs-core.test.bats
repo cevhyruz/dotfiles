@@ -88,6 +88,20 @@ function local_setup() {
   done
 }
 
+@test "${TEST_FILE}: auto close open pair" {
+  for test_case in "${case[@]}"; do
+    READLINE_LINE="${test_case:0:1}foobar"
+    READLINE_POINT=7
+    local closing_char="${test_case:1:1}"
+    if [[ "${test_case:0:1}" == "${test_case:1:1}" ]]; then
+      closing_char="${test_case:0:1}"
+    fi
+    __autopair "${closing_char}" "${test_case:0:1}" "${test_case:1:1}"
+    assert_equal "${READLINE_LINE}" "${test_case:0:1}foobar${closing_char}"
+  done
+}
+
+
 @test "${TEST_FILE}: no backspace when readline is empty" {
   READLINE_LINE=''
   READLINE_POINT=1
