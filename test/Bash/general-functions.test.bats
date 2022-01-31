@@ -28,7 +28,5 @@ load "Bash/functions/general.functions.bash"
     skip "test case requires pygmentize to be installed."
   fi
   run json '{"foo":42}'
-  assert_line --index 0 '{'
-  assert_line --index 2 '}'
   assert_success
 }
