@@ -4,24 +4,67 @@
 load "${TEST_DIRECTORY}/test_helper.bash"
 load "Bash/lib/theme.bash"
 
-@test "${TEST_FILE}: Make sure color variables has been set." {
-  assert_equal "${reset_bold}" "\e[22m"
-    assert_equal "${reset_underline}" "\e[24m"
-    assert_equal "${reset_reverse}" "\e[27m"
-    assert_equal "${defaultfg}" "\e[39m"
-    assert_equal "${defaultbg}" "\e[49m"
-    assert_equal "${reset}" "\e[0m"
-    assert_equal "${resetall}" "\e[0m\e[22m\e[24m\e[27m"
-    assert_equal "${bold}" "\e[1m"
-    assert_equal "${dim}" "\e[2m"
-    assert_equal "${italic}" "\e[3m"
-    assert_equal "${underline}" "\e[4m"
-    assert_equal "${blink}" "\e[5m"
-    assert_equal "${reverse}" "\e[7m"
-    assert_equal "${hidden}" "\e[8m"
-    assert_equal "${strikethrough}" "\e[9m"
-    assert_equal "${normal}" "\e[38;5;247m"
-    assert_equal "${curvyline}" "\e[4:3m"
-    assert_equal "${overline}" "\e[53m"
-    assert_equal "${double_underline}" "\e[4:2m"
+@test "${TEST_FILE}: check ANSI attributes has been set." {
+  local _attrib=(
+      "reset_bold"
+      "reset_underline"
+      "reset_reverse"
+      "defaultfg"
+      "defaultbg"
+      "reset"
+      "resetall"
+      "bold"
+      "dim"
+      "italic"
+      "underline"
+      "blink"
+      "reverse"
+      "hidden"
+      "strikethrough"
+      "normal"
+      "curvyline"
+      "overline"
+      "double_underline"
+   )
+
+   for attrib in "${_attrib[@]}"; do
+     run test -v "${attrib}"
+     assert_success
+   done
+}
+
+
+@test "${TEST_FILE}: check default ANSI color pallete will be set." {
+  local color_palette=(
+      "bg_black"
+      "bg_red"
+      "bg_green"
+      "bg_yellow"
+      "bg_blue"
+      "bg_magenta"
+      "bg_cyan"
+      "bg_white"
+      "fg_black"
+      "fg_red"
+      "fg_green"
+      "fg_yellow"
+      "fg_blue"
+      "fg_magenta"
+      "fg_cyan"
+      "fg_white"
+  )
+
+  run __load_default_pallete
+  assert_success
+
+  __load_default_pallete
+  for color in "${color_palette[@]}"; do
+    run test -v "${color}"
+    assert_success
+  done
+}
+
+@test "${TEST_FILE}: check dircolors has been set." {
+  run __make_dircolors_pallete
+  assert_success
 }

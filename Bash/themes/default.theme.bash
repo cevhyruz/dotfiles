@@ -5,6 +5,15 @@
 # Default bash prompt theme when BASH_PROMPT_THEME is not set or is empty.
 
 function main() {
+  __set_colorscheme
+  __make_dircolors_pallete
+  __set_PS1
+  __prompt_stdout_color
+  # TODO: add version check here.
+  __readline_vi_mode
+}
+
+function __set_colorscheme() {
   if [[ "${COLORTERM}" =~ ^(truecolor|24bit)$ ]]; then
     bg_black="\e[48;5;234m"  fg_black="\e[38;5;234m"
     bg_red="\e[48;5;203m"    fg_red="\e[38;5;203m"
@@ -17,31 +26,44 @@ function main() {
   else
     __load_default_pallete
   fi
+}
 
-  __make_dircolors_pallete
+function __prompt_stdout_color() {
+  PRE_COMMAND+=('printf "%b" "${normal}";')
+}
 
-  # set ps1
-  PS1="\[${reset}${bold}${normal}\]"
+function __readline_vi_mode() {
+  # distinguishable cursor shapes for vi mode.
+  # only works on GNU readline v7.0 (bash 4.3 and up).
+  if [[ -z "${BATS_TEST_NAME:-}" ]]; then
+    bind 'set show-mode-in-prompt on'
+    bind 'set vi-ins-mode-string \1\e[5 q\e]12;cyan\a\2'
+    bind 'set vi-cmd-mode-string \1\e[2 q\e]12;cyan\a\2'
+  fi
+}
+
+function __set_PS1() {
+  PS1="\[${reset}${bold}${normal}\]\n"
   local -a ps1=(
-    "\[${reset}\]"
-    "\[${bold}\]"
-    "\n"
     # return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "${fg_green}"
+        printf "%b" "${fg_green}╭─ "
       else
-        printf "%b" "${fg_red}"
+        printf "%b" "${fg_red}╭─ "
       fi )'
-    "╭─"
     # user @ host string depending on if SSH_TTY is set.
     '$( if [[ -n "${SSH_TTY:-}" ]]; then
-        printf "%b" "${reset}${fg_white}"
+        printf "%b" "${reset}${fg_white}\u@\H"
       else
-        printf "%b" "${reset}${fg_white}"
+        printf "%b" "${reset}${fg_white}\u@\H"
     fi)'
-    "\u@\H:"
-    "\[${fg_cyan}\]\w"
-    # current directory git branch and status.
+    # current working directory
+    '$( if [[ "${PWD:-}" == "${HOME}" ]]; then
+      printf "%b" "${fg_cyan}home"
+    else
+      printf "%b" "${fg_cyan}\w"
+    fi)'
+    # display git branch and status if current directory is a git repo.
     '$( ! git rev-parse &> /dev/null && exit
         status="    "
         if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
@@ -74,33 +96,32 @@ function main() {
           "${status}" )
         printf "%b" "${git_prompt[@]}" )'
     # return arrow that colorize depending on command exit code.
-    '$( return_string="    [exited ${EXIT_CODE:-}]"
+    '$( return_string="    [ exited ${EXIT_CODE:-} ]"
     if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
         printf "%b" "${resetall}${dim}${return_string}"
     fi )'
     "\n"
-    # return arrow that colorize depending on command exit code.
+    # [╰➤] return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "${fg_green}"
+        printf "%b" "${fg_green}╰➤"
       else
-      printf "%b" "${fg_red}"
+      printf "%b" "${fg_red}╰➤"
       fi )'
-    "╰➤"
-    "\[${dim}\] \$: \[${reset}\]"
+    "\[${reset}${dim}\] \$: \[${reset}\]"
     "\[\e[38;5;216m\]") # LightSalmon1
 
   PS1+="$(printf "%b" "${ps1[@]}")"
-
-  # change command output color.
-  PRE_COMMAND+=('printf "%b" "${normal}";')
-
-  # distinguishable cursor shapes for vi mode.
-  # only works on GNU readline v7.0 (bash 4.3 and up).
-  if [[ -z "${BATS_TEST_NAME:-}" ]]; then
-    bind 'set show-mode-in-prompt on'
-    bind 'set vi-ins-mode-string \1\e[5 q\e]12;cyan\a\2'
-    bind 'set vi-cmd-mode-string \1\e[2 q\e]12;cyan\a\2'
-  fi
 }
 
-main && unset -f main
+function __cleanup() {
+  unset -f \
+    main \
+    __set_colorscheme \
+    __set_PS1 \
+    __prompt_stdout_color \
+    __readline_vi_mode \
+    __cleanup
+}
+
+
+main && __cleanup
