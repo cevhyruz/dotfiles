@@ -24,62 +24,6 @@ function main() {
   double_underline="${underline::-1}:${dim:3}"
 }
 
-function __prompt_user_at_host() {
-  if [[ -n "${SSH_TTY:-}" ]]; then
-    printf "%b" "${reset}${bold}${fg_red}"
-  else
-    printf "%b" "${reset}${bold}${fg_white}"
-  fi
-}
-
-function __prompt_return_exit_code () {
-  if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
-    printf "%b" "${reset}${dim}   [exited ${EXIT_CODE}]"
-  fi
-}
-
-function __exit_color() {
-  if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-    printf "%b" "${reset}${bold}${fg_green}"
-  else
-    printf "%b" "${reset}${bold}${fg_red}"
-  fi
-}
-
-function __git_prompt() {
-  local status="    "
-
-  ! git rev-parse &> /dev/null && return
-  if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == 'false' ]]; then
-    git update-index --really-refresh -q &> /dev/null
-    if ! git diff --quiet --ignore-submodules --cached; then
-      status="${status/ /+}"
-    fi
-    if ! git diff-files --quiet --ignore-submodules --; then
-      status="${status/ /!}"
-    fi
-    if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-      status="${status/ /?}"
-    fi
-    if git rev-parse --verify refs/stash &> /dev/null; then
-      status="${status/ /*}"
-    fi
-  fi
-  local -a git_prompt=(
-    "${reset}"
-    "${1:-${bold}${fg_red}}"
-    "$(git symbolic-ref --quiet --short HEAD 2> /dev/null \
-    || git rev-parse --short HEAD 2> /dev/null \
-    || echo "unknown")"
-    "${reset}"
-    " "
-    "${2:-${bold}${fg_yellow}}"
-    "${status:-}"
-    "${reset}"
-  );
-  printf "%b" "${git_prompt[@]}"
-}
-
 function __load_default_pallete () {
   bg_black="\e[40m"   fg_black="\e[30m"
   bg_red="\e[41m"     fg_red="\e[31m"
@@ -117,7 +61,7 @@ function __make_dircolors_pallete () {
     "mi=${__fg_red}:"              # MISSING
     "bd=${__fg_blue}:"             # BLOCK, BLK
     "cd=${__fg_red}:"              # CHAR, CHR
-    "ex=${__reset};${__fg_green}:" # EXEC
+    "ex=${__fg_green}:"            # EXEC
     "do=${__normal}:"              # DOOR
     "so=${__normal}:"              # SOCK
     "pi=${__normal}:"              # FIFO, PIPE
