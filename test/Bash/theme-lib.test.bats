@@ -65,6 +65,7 @@ load "Bash/lib/theme.bash"
 }
 
 @test "${TEST_FILE}: check dircolors has been set." {
+  __load_default_pallete
   run __make_dircolors_pallete
   assert_success
 }
