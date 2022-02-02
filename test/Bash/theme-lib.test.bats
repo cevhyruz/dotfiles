@@ -77,13 +77,13 @@ load "Bash/lib/theme.bash"
     '__dim'
     '__normal' )
 
-  __load_default_pallete
-
+  run __load_default_pallete
   for color in "${lscolors[@]}"; do
     run test -v "${color}"
     assert_success
   done
 
+  __load_default_pallete
   run __make_dircolors_pallete
   assert_success
 }
