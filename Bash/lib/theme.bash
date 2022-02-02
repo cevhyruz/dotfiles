@@ -49,7 +49,7 @@ function __make_dircolors_pallete () {
     '__normal' )
 
   for color in ${__lscolors[*]}; do
-    eval "local -r ${color}=$(echo -E \"\$\{${color:2}:3:-1\}\")"
+    eval "export ${color}=$(echo -E \"\$\{${color:2}:3:-1\}\")"
   done
 
   local -ar dircolors=(
