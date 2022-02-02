@@ -47,21 +47,21 @@ function __set_PS1() {
   local -a ps1=(
     # return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "${fg_green}╭─ "
+        printf "%b" "\[${fg_green}\]╭─\u00a0"
       else
-        printf "%b" "${fg_red}╭─ "
+        printf "%b" "\[${fg_red}\]╭─\u00a0"
       fi )'
     # user @ host string depending on if SSH_TTY is set.
     '$( if [[ -n "${SSH_TTY:-}" ]]; then
-        printf "%b" "${reset}${fg_white}\u@\H"
+        printf "%b" "\[${reset}${fg_white}\]\u@\H"
       else
-        printf "%b" "${reset}${fg_white}\u@\H"
+        printf "%b" "\[${reset}${fg_white}\]\u@\H"
     fi)'
     # current working directory
     '$( if [[ "${PWD:-}" == "${HOME}" ]]; then
-      printf "%b" "${fg_cyan}home"
+      printf "%b" "\[${fg_cyan}\]home"
     else
-      printf "%b" "${fg_cyan}\w"
+      printf "%b" "\[${fg_cyan}\]\w"
     fi)'
     # display git branch and status if current directory is a git repo.
     '$( ! git rev-parse &> /dev/null && exit
@@ -94,18 +94,18 @@ function __set_PS1() {
           ")"
           " "
           "${status}" )
-        printf "%b" "${git_prompt[@]}" )'
+        printf "%b" "\[${git_prompt[@]}\]" )'
     # return arrow that colorize depending on command exit code.
     '$( return_string="    [ exited ${EXIT_CODE:-} ]"
     if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
-        printf "%b" "${resetall}${dim}${return_string}"
+        printf "%b" "\[${resetall}${dim}${return_string}\]"
     fi )'
     "\n"
     # [╰➤] return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "${fg_green}╰➤"
+        printf "%b" "\[${fg_green}\]╰➤"
       else
-      printf "%b" "${fg_red}╰➤"
+      printf "%b" "\[${fg_red}\]╰➤"
       fi )'
     "\[${reset}${dim}\] \$: \[${reset}\]"
     "\[\e[38;5;216m\]") # LightSalmon1
