@@ -71,10 +71,6 @@ function local_setup() {
     READLINE_LINE="${backslash}"
     READLINE_POINT=1
     local typed_char="${test_case:0:1}"
-    # escaping double quote
-    if [[ "${typed_char}" == '"' ]]; then
-      READLINE_LINE=\\
-    fi
     # (), {}, []
     if [[ "${test_case:0:1}" != "${test_case:1:1}" ]]; then
       typed_char="${test_case:1:1}"
