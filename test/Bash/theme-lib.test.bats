@@ -63,27 +63,3 @@ load "Bash/lib/theme.bash"
     assert_success
   done
 }
-
-@test "${TEST_FILE}: check dircolors has been set." {
-  local lscolors=(
-    '__reset'         '__bg_black'   '__fg_black'
-    '__bold'          '__bg_red'     '__fg_red'
-    '__italic'        '__bg_green'   '__fg_green'
-    '__reverse'       '__bg_yellow'  '__fg_yellow'
-    '__defaultfg'     '__bg_blue'    '__fg_blue'
-    '__defaultbg'     '__bg_magenta' '__fg_magenta'
-    '__underline'     '__bg_cyan'    '__fg_cyan'
-    '__strikethrough' '__bg_white'   '__fg_white'
-    '__dim'
-    '__normal' )
-
-  run __load_default_pallete
-  for color in "${lscolors[@]}"; do
-    run test -v "${color}"
-    assert_success
-  done
-
-  __load_default_pallete
-  run __make_dircolors_pallete
-  assert_success
-}
