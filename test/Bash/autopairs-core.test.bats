@@ -64,6 +64,25 @@ function local_setup() {
   done
 }
 
+@test "${TEST_FILE}: dont pair escaped character." {
+  for test_case in "${case[@]}"; do
+    backslash='\'
+    READLINE_LINE="${backslash}"
+    READLINE_POINT=1
+    local typed_char="${test_case:0:1}"
+    # escaping double quote
+    if [[ "${typed_char}" == '"' ]]; then
+      READLINE_LINE=\\
+    fi
+    # (), {}, []
+    if [[ "${test_case:0:1}" != "${test_case:1:1}" ]]; then
+      typed_char="${test_case:1:1}"
+    fi
+    __autopair "${typed_char}" "${test_case:0:1}" "${test_case:1:1}"
+    assert_equal "${READLINE_LINE}" "${backslash}${typed_char}"
+  done
+}
+
 @test "${TEST_FILE}: auto pair" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="foo "
