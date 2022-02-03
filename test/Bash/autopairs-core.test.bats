@@ -67,7 +67,7 @@ function local_setup() {
 @test "${TEST_FILE}: dont pair escaped character." {
   for test_case in "${case[@]}"; do
     # shellcheck disable=SC1003
-    backslash='\'
+    backslash="\\"
     READLINE_LINE="${backslash}"
     READLINE_POINT=1
     local typed_char="${test_case:0:1}"
