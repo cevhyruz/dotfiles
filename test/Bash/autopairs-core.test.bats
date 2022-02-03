@@ -66,6 +66,7 @@ function local_setup() {
 
 @test "${TEST_FILE}: dont pair escaped character." {
   for test_case in "${case[@]}"; do
+    # shellcheck disable=SC1003
     backslash='\'
     READLINE_LINE="${backslash}"
     READLINE_POINT=1
@@ -119,7 +120,6 @@ function local_setup() {
     assert_equal "${READLINE_LINE}" "${test_case:0:1}foobar${closing_char}"
   done
 }
-
 
 @test "${TEST_FILE}: no backspace when readline is empty" {
   READLINE_LINE=''
