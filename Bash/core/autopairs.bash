@@ -87,7 +87,7 @@ function __autopair() {
 
   readline+="${READLINE_LINE:READLINE_POINT}"
   READLINE_LINE="${readline}"
-  ((READLINE_POINT++))
+  (( READLINE_POINT++ ))
 }
 
 function __depair() {
@@ -147,7 +147,7 @@ function __depair() {
   fi
 
   READLINE_LINE="${readline}"
-  ((READLINE_POINT--))
+  (( READLINE_POINT-- ))
 }
 
 function _pair() {
