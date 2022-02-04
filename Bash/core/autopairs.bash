@@ -56,7 +56,7 @@ function __autopair() {
   local literal match
 
   match=$( echo "${READLINE_LINE}" \
-    | grep -oE '\\\[|\\\]|\\\(|\\\)|\\\"|\\'\''|\\\{|\\\}' \
+    | grep -oE '\\\[|\\\]|\\\(|\\\)|\\\"|\\'\''|\\\{|\\\}' || true \
     | tr -d '\n' | tr -d '\\' )
 
   literals="${match//[^${typed_char}]}"
