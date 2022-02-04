@@ -10,6 +10,7 @@
 
 __pairs=( "''" '""' '()' '[]' '{}')
 
+
 function __smart_space() {
   AT_PROMPT=1
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
@@ -55,9 +56,13 @@ function __autopair() {
   local quotes_char="${READLINE_LINE//[^${typed_char}]/}"
   local literal match
 
-  match=$( echo "${READLINE_LINE}" \
-    | grep -oE '\\\[|\\\]|\\\(|\\\)|\\\"|\\'\''|\\\{|\\\}' || true \
-    | tr -d '\n' | tr -d '\\' )
+  if [[ "${opening_char}" == "${closing_char}" ]]; then
+    match="$(grep -oE "\\\\${typed_char}" <<< "${READLINE_LINE}" || true \
+      | tr -d '\\\n' )"
+  else
+    match="$(grep -oE "\\${typed_char}" <<< "${READLINE_LINE}" || true\
+      | tr -d '\\\n' )"
+  fi
 
   literals="${match//[^${typed_char}]}"
 

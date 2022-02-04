@@ -64,7 +64,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: don't close escaped opening pair." {
+@test "${TEST_FILE}: don't close open pair if escaped." {
   for test_case in "${case[@]}"; do
     READLINE_LINE="\\"
     READLINE_POINT=1
