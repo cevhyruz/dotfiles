@@ -57,14 +57,13 @@ function __autopair() {
   local literal match
 
   if [[ "${opening_char}" == "${closing_char}" ]]; then
-    match="$(grep -oE "\\\\${typed_char}" <<< "${READLINE_LINE}" || true \
-      | tr -d '\\\n' )"
+    match="$(grep -oE "\\\\${typed_char}" <<< "${READLINE_LINE}" || true )"
   else
-    match="$(grep -oE "\\${typed_char}" <<< "${READLINE_LINE}" || true\
-      | tr -d '\\\n' )"
+    match="$(grep -oE "\\${typed_char}" <<< "${READLINE_LINE}" || true )"
   fi
 
-  literals="${match//[^${typed_char}]}"
+  match="$(tr -d '\\n' <<< "$match")"
+  literals="${match//[^${typed_char}]/}"
 
   # '' and ""
   if [[ "${previous_char}" == "\\" ]]; then
