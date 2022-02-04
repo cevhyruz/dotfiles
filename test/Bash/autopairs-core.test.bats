@@ -64,19 +64,14 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: dont pair escaped character." {
+@test "${TEST_FILE}: don't close escaped opening pair." {
   for test_case in "${case[@]}"; do
-    # shellcheck disable=SC1003
-    backslash="\\"
+    local backslash="\\"
     READLINE_LINE="${backslash}"
     READLINE_POINT=1
-    local typed_char="${test_case:0:1}"
-    # (), {}, []
-    if [[ "${test_case:0:1}" != "${test_case:1:1}" ]]; then
-      typed_char="${test_case:1:1}"
-    fi
-    __autopair "${typed_char}" "${test_case:0:1}" "${test_case:1:1}"
-    assert_equal "${READLINE_LINE}" "${backslash}${typed_char}"
+
+    __autopair "${test_case:0:1}" "${test_case:0:1}" "${test_case:1:1}"
+    assert_equal "${READLINE_LINE}" "${backslash}${test_case:0:1}"
   done
 }
 

@@ -62,8 +62,7 @@ function __autopair() {
   literals="${match//[^${typed_char}]}"
 
   # '' and ""
-  if [[ "${previous_char}" == "\\" ]] \
-    || [[ "${previous_char}" =~ [a-zA-Z0-9] ]]; then
+  if [[ "${previous_char}" == "\\" ]]; then
     readline+="${typed_char}"
   elif [[ "${opening_char}" == "${closing_char}" ]]; then
     if [[ "$(( (${#quotes_char} - ${#literals}) % 2 ))" -eq 1 ]]; then
