@@ -5,9 +5,9 @@ nvm.plugin.bash
 options.bash
 pyenv.plugin.bash
 autopairs.bash
+general.aliases.bash
+
 envars.bash
-
-
 apidoc.bash
 logger.bash
 helpers.bash
@@ -21,11 +21,9 @@ less.plugin.bash
 alias-completion.plugin.bash
 thefuck.plugin.bash
 bash_init.sh
-files_without_test.txt
 general.functions.bash
 .bashrc.local
 fzf-completion.bash
 keybindings.bash
-general.aliases.bash
 .bashrc.template
 default.theme.bash

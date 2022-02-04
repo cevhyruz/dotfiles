@@ -9,7 +9,7 @@
 # usage: md [directory]
 function md() {
   local directory="${1:-}"
-  mkdir -p "$directory" && cd "$_" || return 1
+  mkdir -p "${directory}" && cd "$_" || return 1
 }
 
 # Determine size of a file or total size of a directory
@@ -45,7 +45,7 @@ function dataurl() {
 }
 
 # print a nice 256colors chart
-function colormap() { # {{{1
+function colormap() {
   for (( i = 0; i < 256; i++ )); do
     printf "\\e[48;5;${i}m%s" "$i"
     printf '\e[0m'
@@ -77,15 +77,16 @@ function truecolors() {
 function note() {
   local note
   local location="${1:-${HOME}/Documents/notes}"
-  pushd "${location}" &> /dev/null || return
-  note="$(find "${location}" -maxdepth 1 -type f -exec basename {} ';' \
-    | fzf --height=50% --sort --preview "cat ${location}/{}")"
-  if [[ $? -ne 0 ]]; then
+
+    pushd "${location}" &> /dev/null || return
+    note="$(find "${location}" -maxdepth 1 -type f -exec basename {} ';' \
+      | fzf --height=50% --sort --preview "cat ${location}/{}")"
+    if [[ $? -ne 0 ]]; then
+      popd &> /dev/null
+      return 1
+    fi
+    "${EDITOR}" "${location}/${note}"
     popd &> /dev/null
-    return 1
-  fi
-  "${EDITOR}" "${location}/${note}"
-  popd &> /dev/null
 }
 
 # terminfo test

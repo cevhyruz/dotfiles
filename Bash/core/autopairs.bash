@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2034
+# shellcheck shell=bash disable=SC2034,SC1003
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
-# shamelessly ripoffed from https://github.com/nkakouros-original/bash-autopairs
+# original version from https://github.com/nkakouros-original/bash-autopairs
+#
+# changes were the ff:
+# * smart spaces
+# * no pairing for literals
 
 __pairs=( "''" '""' '()' '[]' '{}')
+
 
 function __smart_space() {
   AT_PROMPT=1
@@ -30,15 +35,16 @@ function __smart_space() {
   (( READLINE_POINT++ ))
 }
 
-
 function __autopair() {
 
   # FIXME: Hack for hooks triggering on 'bind -x'
   AT_PROMPT=1
 
   local typed_char="$1"
+
   local opening_char="$2"
   local closing_char="$3"
+
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
   local cursor_char="${READLINE_LINE:READLINE_POINT:1}"
 
@@ -46,43 +52,42 @@ function __autopair() {
   local prev_two_char="${READLINE_LINE:READLINE_POINT-2:2}"
 
   local readline="${READLINE_LINE::READLINE_POINT}"
-  local literals=0
 
-  quotes_char="${READLINE_LINE//[^${typed_char}]/}"
+  local quotes_char="${READLINE_LINE//[^${typed_char}]/}"
+  local literal match
 
-  # TODO: add support for literals
+  if [[ "${opening_char}" == "${closing_char}" ]]; then
+    match="$(grep -oE "\\\\${typed_char}" <<< "${READLINE_LINE}" || true )"
+  else
+    match="$(grep -oE "\\${typed_char}" <<< "${READLINE_LINE}" || true )"
+  fi
+
+  match="$(tr -d '\\n' <<< "$match")"
+  literals="${match//[^${typed_char}]/}"
 
   # '' and ""
-  if [[ "${opening_char}" == "${closing_char}" ]]; then
-
-    # close pair
-    if [[ "$(( ${#quotes_char} % 2 ))" -eq 1 ]]; then
+  if [[ "${previous_char}" == "\\" ]]; then
+    readline+="${typed_char}"
+  elif [[ "${opening_char}" == "${closing_char}" ]]; then
+    if [[ "$(( (${#quotes_char} - ${#literals}) % 2 ))" -eq 1 ]]; then
       readline+="${typed_char}"
-    # already paired, auto close
     elif [[ "${cursor_char}" == "${closing_char}" ]]; then
       :
-    # pair
-    elif [[ "$(( ${#quotes_char} % 2 ))" -eq 0 ]]; then
+    elif [[ "$(( (${#quotes_char} - ${#literals}) % 2 ))" -eq 0 ]]; then
       readline+="${typed_char}${typed_char}"
     fi
-
-  # () and {} and []
-  # pair
+  # (), [], {}
   elif [[ "${typed_char}" == "${opening_char}" ]]; then
     readline+="${opening_char}${closing_char}"
-  # already paired, auto close
   elif [[ "${cursor_char}" == "${closing_char}" ]]; then
-    echo 'already paired, autoclose'
     :
-  # close pair
   else
-    echo 'close pair'
     readline+="${typed_char}"
   fi
 
   readline+="${READLINE_LINE:READLINE_POINT}"
   READLINE_LINE="${readline}"
-  ((READLINE_POINT++))
+  (( READLINE_POINT++ ))
 }
 
 function __depair() {
@@ -90,7 +95,7 @@ function __depair() {
   # FIXME: Hack for hooks triggering on 'bind -x'
   AT_PROMPT=1
 
-  if [[ "${#READLINE_LINE}" -eq 0 || "$READLINE_POINT" -eq 0 ]]; then
+  if [[ "${#READLINE_LINE}" -eq 0 || "${READLINE_POINT}" -eq 0 ]]; then
     return 1
   fi
 
@@ -105,7 +110,6 @@ function __depair() {
 
   local autopair_operated=false
   local spaced_pair=false
-
 
   # ()[]{}
   for pair in "${__pairs[@]:2}"; do
@@ -143,20 +147,21 @@ function __depair() {
   fi
 
   READLINE_LINE="${readline}"
-  ((READLINE_POINT--))
+  (( READLINE_POINT-- ))
 }
 
 function _pair() {
+  BASH_AUTOPAIR_BACKSPACE=1
+
   # Show where the matching open paren is when inserting a closing one. Disabling
   # as it hijacks the `)`, `]` and `}` characters to enable blinking.
   bind "set blink-matching-paren off"
 
-  BASH_AUTOPAIR_BACKSPACE=1
-
   for pair in "${__pairs[@]}"; do
+    # ", '
     bind -m vi-insert -x \
       "\"\\${pair:0:1}\": __autopair \\${pair:0:1} \\${pair:0:1} \\${pair:1:1}"
-
+    # (), {}, []
     if [[ "${pair:0:1}" != "${pair:1:1}" ]]; then
       bind -m vi-insert -x \
         "\"${pair:1:1}\": __autopair \\${pair:1:1} \\${pair:0:1} \\${pair:1:1}"
@@ -164,6 +169,7 @@ function _pair() {
   done
   unset pair
 
+  bind -m vi-insert -x '" ": __smart_space'
   bind -m vi-insert -x '"\C-h": __depair'
 
   if [[ -v BASH_AUTOPAIR_BACKSPACE ]]; then
@@ -171,10 +177,6 @@ function _pair() {
     bind 'set bind-tty-special-chars off'
     bind -m vi-insert -x '"\C-?": __depair'
   fi
-
-  # space
-  bind -m vi-insert -x '" ": __smart_space'
-
 }
 
 if [[ -z "${BATS_TEST_NAME:-}" ]]; then

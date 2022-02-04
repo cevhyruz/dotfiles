@@ -64,6 +64,32 @@ function local_setup() {
   done
 }
 
+@test "${TEST_FILE}: don't close open pair if escaped." {
+  for test_case in "${case[@]}"; do
+    READLINE_LINE="\\"
+    READLINE_POINT=1
+    __autopair "${test_case:0:1}" "${test_case:0:1}" "${test_case:1:1}"
+    assert_equal "${READLINE_LINE}" "\\${test_case:0:1}"
+    assert_equal "${READLINE_POINT}" 2
+  done
+}
+
+@test "${TEST_FILE}: don't treat escaped open pair as unclosed." {
+  for test_case in "${case[@]}"; do
+    READLINE_LINE="\\${test_case:0:1}"
+    READLINE_POINT=2
+    local closing_char="${test_case:1:1}"
+    # '', ""
+    if [[ "${test_case:0:1}" == "${test_case:1:1}" ]]; then
+      closing_char="${test_case:0:1}"
+    fi
+    __autopair "${test_case:0:1}" "${test_case:0:1}" "${test_case:1:1}"
+    assert_equal "${READLINE_LINE}" \
+      "\\${test_case:0:1}${test_case:0:1}${closing_char}"
+    assert_equal "${READLINE_POINT}" 3
+  done
+}
+
 @test "${TEST_FILE}: auto pair" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="foo "
@@ -100,7 +126,6 @@ function local_setup() {
     assert_equal "${READLINE_LINE}" "${test_case:0:1}foobar${closing_char}"
   done
 }
-
 
 @test "${TEST_FILE}: no backspace when readline is empty" {
   READLINE_LINE=''
