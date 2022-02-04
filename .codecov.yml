@@ -1,4 +1,0 @@
-codecov:
-  token: "f8600ac2-af99-4ded-81a1-05d110488d08"
-  ignore:
-    "test_lib"

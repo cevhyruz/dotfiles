@@ -59,9 +59,9 @@ function __set_PS1() {
     fi)'
     # current working directory
     '$( if [[ "${PWD:-}" == "${HOME}" ]]; then
-      printf "%b" "\[${fg_cyan}\]home"
+      printf "%b" "\[${fg_cyan}\]:home"
     else
-      printf "%b" "\[${fg_cyan}\]\w"
+      printf "%b" "\[${fg_cyan}\]:\w"
     fi)'
     # display git branch and status if current directory is a git repo.
     '$( ! git rev-parse &> /dev/null && exit
@@ -122,6 +122,5 @@ function __cleanup() {
     __readline_vi_mode \
     __cleanup
 }
-
 
 main && __cleanup

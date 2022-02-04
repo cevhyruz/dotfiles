@@ -14,7 +14,7 @@ PROMPT_COMMAND=('history -a;')
 
 # useful editors.
 VISUAL="$(command -v nvim || command -v vim || command -v )"
-EDITOR="$(command -v ed || echo "${VISUAL}")"
+EDITOR="${VISUAL}"
 export EDITOR
 
 # don't put duplicate lines or lines starting with space in the history.
