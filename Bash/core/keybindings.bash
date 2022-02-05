@@ -5,10 +5,6 @@
 # vi-editing-mode
 #bind -m vi-insert -x '"\C-n": vifm'
 
-foobar() {
-  echo "$READLINE_POINT"
-}
-
 bind -m vi-insert -x '"\C-n": foobar'
 
 # exit insert mode

@@ -103,9 +103,9 @@ function __set_PS1() {
     "\n"
     # [╰➤] return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "\[${fg_green}\]╰➤"
+        printf "%b" "\[${reset}${bold}${fg_green}\]╰➤"
       else
-      printf "%b" "\[${fg_red}\]╰➤"
+      printf "%b" "\[${reset}${bold}${fg_red}\]╰➤"
       fi )'
     "\[${reset}${dim}\] \$: \[${reset}\]"
     "\[\e[38;5;216m\]") # LightSalmon1
