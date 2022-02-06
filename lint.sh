@@ -7,10 +7,10 @@
 #
 # shellcheck disable=SC2002  # Prefer 'cat' for cleaner script
 mapfile -t FILES < <(
-  cat clean_files.txt |
+  cat .clean_files.txt |
     grep -v -E '^\s*$' |
     grep -v -E '^\s*#' |
-    xargs -n1 -I{} find "{}" -type f
+    xargs -I{} find "{}" -type f
 )
 
 pre-commit run --files "${FILES[@]}"
