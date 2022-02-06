@@ -17,12 +17,10 @@ VISUAL="$(command -v nvim || command -v vim || command -v )"
 EDITOR="${VISUAL}"
 export EDITOR
 
-# don't put duplicate lines or lines starting with space in the history.
-HISTCONTROL=ignoreboth
-
 # larger history (default: 500)
 HISTSIZE=20000
 HISTFILESIZE=20000
 
+# don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL='ignorespace:erasedups';
 HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';

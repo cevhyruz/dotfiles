@@ -11,10 +11,6 @@
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
 
-set -o privileged
-set -o nounset
-set -o errexit
-
 TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
 TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 export TEST_DEPS_DIR

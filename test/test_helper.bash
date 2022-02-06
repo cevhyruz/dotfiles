@@ -6,6 +6,8 @@
 #
 # Usage:
 #   load "${TEST_DIRECTORY}/test_helper.bash"
+set -o nounset
+set -o errexit
 
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
