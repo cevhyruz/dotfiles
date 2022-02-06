@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2034
+# shellcheck shell=bash disable=SC2034,SC2016
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Execute an array or commands delimited by ';'
@@ -29,22 +29,21 @@ function __post_command() {
 }
 
 function __init_hooks() {
-  declare -a POST_COMMAND=()
   declare -a PRE_COMMAND=()
+  declare -a POST_COMMAND=()
 
   # avoid __post_command pre-firing before the first prompt.
   FIRST_PROMPT=1
 
-  trap '__pre_command' DEBUG
+  # FIXME: For some reason, bash trap triggers an error
+  # when inside bats. We'll skip initializing for now.
+  if [[ -z "${TEST_DIRECTORY:-}" ]]; then
+    trap '__pre_command' DEBUG
+  fi
 
   # fireup __post_command after every prompt
   # and pass previous command return status.
   PROMPT_COMMAND+=('__post_command;')
 }
 
-# FIXME: For some reason, bash trap triggers an error
-# when inside bats. We'll skip initializing for now.
-if [[ -z "${TEST_DIRECTORY:-}" ]]; then
-  __init_hooks \
-    && unset -f __init_hooks
-fi
+__init_hooks && unset -f __init_hooks

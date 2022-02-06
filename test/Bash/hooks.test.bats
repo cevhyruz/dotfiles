@@ -4,6 +4,11 @@
 load "${TEST_DIRECTORY}/test_helper.bash"
 load "Bash/core/hooks.bash"
 
+@test "${TEST_FILE} environment variables should be ready and initialized." {
+   run test -v FIRST_PROMPT
+   assert_success
+}
+
 @test "${TEST_FILE} __pre_command will return if '\$AT_PROMPT' is unset." {
   unset AT_PROMPT
   run __pre_command
@@ -27,6 +32,7 @@ load "Bash/core/hooks.bash"
 }
 
 @test "${TEST_FILE} __post_command should run '\$POST_COMMAND in order or precedence'" {
+  unset FIRST_PROMPT
   POST_COMMAND='echo one;'
   POST_COMMAND+='echo two;'
   run __post_command
