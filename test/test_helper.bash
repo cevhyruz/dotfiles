@@ -3,9 +3,7 @@
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
 # Dotfiles test suite helper file.
-#
-# Usage:
-#   load "${TEST_DIRECTORY}/test_helper.bash"
+
 set -o nounset
 set -o errexit
 
