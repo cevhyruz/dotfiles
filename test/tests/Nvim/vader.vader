@@ -1,0 +1,12 @@
+###################
+# Typical comment #
+###################
+
+# Vader file
+
+Include: include/setup.vader
+
+~~ Features
+Include (Sample tests): feature/test.vader
+
+Include: include/teardown.vader

@@ -1,0 +1,8 @@
+Execute (Installing 'fzf.vim'):
+  Plug 'tomasiser/vim-code-dark'
+
+  PlugInstall
+
+
+Execute (test installtion):
+  AssertEqual 1, g:fzf_loaded

@@ -1,0 +1,24 @@
+Execute (Initialize):
+  function! PlugStatusSorted()
+    PlugStatus
+    %y
+    q
+    normal! P
+    %sort
+    g/^$/d
+  endfunction
+
+  if has('nvim')
+    let g:plug_dir = '/plugged'
+    call plug#begin(stdpath('data') . g:plug_dir)
+  else
+    let g:plug_dir = '~/.vim/plugged'
+    call plug#begin(g:plug_dir)
+  endif
+
+Include: plugins/nerdcommenter.vader
+
+
+Execute:
+  call plug#end()
+  source ~/Projects/dotfiles/nvim/init.vim
