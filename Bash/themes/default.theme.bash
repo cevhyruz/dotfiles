@@ -47,9 +47,9 @@ function __set_PS1() {
   local -a ps1=(
     # return arrow that colorize depending on command exit code.
     '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "\[${fg_green}\]╭─\u00a0"
+        printf "%b" "\[${fg_green}\]╭─ "
       else
-        printf "%b" "\[${fg_red}\]╭─\u00a0"
+        printf "%b" "\[${fg_red}\]╭─ "
       fi )'
     # user @ host string depending on if SSH_TTY is set.
     '$( if [[ -n "${SSH_TTY:-}" ]]; then
@@ -109,8 +109,7 @@ function __set_PS1() {
       fi )'
     "\[${reset}${dim}\] \$: \[${reset}\]"
     "\[\e[38;5;216m\]") # LightSalmon1
-
-  PS1+="$(printf "%b" "${ps1[@]}")"
+  PS1+="$(printf "%s" "${ps1[@]}")"
 }
 
 function __cleanup() {
