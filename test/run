@@ -27,7 +27,7 @@ git submodule init && git submodule update
 
 function main() {
   if [[ -z "${1:-}" ]]; then
-    readonly TEST_SUITE=($(find test/tests -type f -name "*.bats"))
+    readonly TEST_SUITE=($(find "${TEST_DIRECTORY}/tests" -type f -name "*.bats"))
   else
     TEST_SUITE=("${1:-}")
   fi
