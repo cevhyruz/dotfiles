@@ -11,21 +11,22 @@
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
 
-TEST_DIRECTORY="$(cd "$(dirname "$0")/tests" && pwd)"
+TEST_DEPS_DIR="$(pwd)/test_lib"
+TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
 export TEST_DIRECTORY
+export TEST_DEPS_DIR
 
-export BATS_EXECUTABLE="${TEST_DIRECTORY}/../../test_lib/bats-core/bin/bats"
+export BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
 
 git submodule init && git submodule update
 
 function main() {
   if [[ -z "${1:-}" ]]; then
-    readonly TEST_SUITE=("${TEST_DIRECTORY}"/{Bash,install})
+    readonly TEST_SUITE=("${TEST_DIRECTORY}/tests"/{Bash,install})
   else
     TEST_SUITE=("${1:-}")
   fi
 
-  #echo "${TEST_SUITE[@]}"
 
   eval "${BATS_EXECUTABLE}" ${CI:+--tap} "${TEST_SUITE[@]}"
 }
