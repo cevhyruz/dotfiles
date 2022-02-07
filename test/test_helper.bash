@@ -6,6 +6,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+export TEST_DEPS_DIR="${TEST_DIRECTORY}/../../test_lib"
+
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
