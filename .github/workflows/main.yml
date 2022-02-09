@@ -90,5 +90,11 @@ jobs:
     - name: Run script
       run: bashcov test/run
 
+    - name: Download latest Codecov uploader
+      run:
+
     - name: Upload reports to Codecov
-      run: bash <(curl -s https://codecov.io/bash) -Z
+      run: |
+        curl -sO https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov

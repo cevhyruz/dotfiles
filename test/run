@@ -16,8 +16,6 @@ TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 export TEST_DEPS_DIR
 export TEST_DIRECTORY
 
-BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
-
 if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
   DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
     export DOTFILES_BASH_DIR
@@ -33,7 +31,8 @@ function main() {
     TEST_DIRS=( "${1:-}" )
   fi
 
-  eval "${BATS_EXECUTABLE} ${CI:+--tap} --recursive" "${TEST_DIRS[@]}"
+  eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
+    ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 }
 
 main "$@"
