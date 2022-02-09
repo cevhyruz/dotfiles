@@ -6,7 +6,8 @@ SimpleCov.start do
     "test_lib/",
     ".git/",
     "Bash/template/",
-    "hooks/"
+    "hooks/",
+    "Bash/functions/"
   ]
   enable_coverage :branch
 end
