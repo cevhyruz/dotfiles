@@ -1,5 +1,10 @@
 # vim: ft=gitconfig
 
+[user]
+  name          = John Fred Fadrigalan
+  email         = johnfred.fadrigalan@hotmail.com
+  signingkey    = 4C23960F72FC911F # Kali Linux (Personal Laptop)
+
 [init]
   defaultBranch = master
 
