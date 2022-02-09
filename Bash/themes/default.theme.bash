@@ -42,6 +42,7 @@ function __readline_vi_mode() {
   fi
 }
 
+# nocov
 function __set_PS1() {
   PS1="\[${reset}${bold}${normal}\]\n"
   local -a ps1=(
@@ -112,6 +113,7 @@ function __set_PS1() {
 
   PS1+="$(printf "%b" "${ps1[@]}")"
 }
+# nocov
 
 function __cleanup() {
   unset -f \
