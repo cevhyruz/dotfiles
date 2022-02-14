@@ -18,8 +18,8 @@ function __smart_space() {
 
   local spaced=false
   for pair in "${__pairs[@]:2}"; do
-    if [[ "$previous_char" == "${pair:0:1}" ]] &&
-      [[ "$cursor_char" == "${pair:1:1}" ]]; then
+    if [[ "${previous_char}" == "${pair:0:1}" ]] &&
+      [[ "${cursor_char}" == "${pair:1:1}" ]]; then
       readline+="  " && spaced=true
       break
     fi
@@ -44,14 +44,12 @@ function __autopair() {
   local closing_char="$3"
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
   local cursor_char="${READLINE_LINE:READLINE_POINT:1}"
-
   local readline="${READLINE_LINE::READLINE_POINT}"
 
   local num_of_char
   num_of_char="${READLINE_LINE//\\${typed_char}}"
   num_of_char="${num_of_char//[^${typed_char}]/}"
 
-  # '' and ""
   if [[ "${previous_char}" == "\\" ]]; then
     readline+="${typed_char}"
   elif [[ "${opening_char}" == "${closing_char}" ]]; then
@@ -62,11 +60,10 @@ function __autopair() {
     elif [[ "$(( ${#num_of_char} % 2 ))" -eq 0 ]]; then
       readline+="${typed_char}${typed_char}"
     fi
-  # (), [], {}
   elif [[ "${typed_char}" == "${opening_char}" ]]; then
     readline+="${opening_char}${closing_char}"
   elif [[ "${cursor_char}" == "${closing_char}" ]]; then
-    :
+    : true
   else
     readline+="${typed_char}"
   fi
