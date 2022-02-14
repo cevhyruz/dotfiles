@@ -21,7 +21,7 @@ function __set_colorscheme() {
     bg_yellow="\e[48;5;221m" fg_yellow="\e[38;5;221m"
     bg_blue="\e[34m"         fg_blue="\e[34m"
     bg_magenta="\e[35m"      fg_magenta="\e[35m"
-    bg_cyan="\e[36m"         fg_cyan="\e[36m"
+    bg_cyan="\e[106m"        fg_cyan="\e[36m"
     bg_white="\e[37m"        fg_white="\e[37m"
   else
     __load_default_pallete
@@ -54,9 +54,9 @@ function __set_PS1() {
       fi )'
     # user @ host string depending on if SSH_TTY is set.
     '$( if [[ -n "${SSH_TTY:-}" ]]; then
-        printf "%b" "\[${reset}${fg_white}\]\u@\H"
+        printf "%b" "\[${reset}${fg_white}\]\\u@\H"
       else
-        printf "%b" "\[${reset}${fg_white}\]\u@\H"
+        printf "%b" "\[${reset}${fg_white}\]\\u@\H"
     fi)'
     # current working directory
     '$( if [[ "${PWD:-}" == "${HOME}" ]]; then
@@ -66,20 +66,20 @@ function __set_PS1() {
     fi)'
     # display git branch and status if current directory is a git repo.
     '$( ! git rev-parse &> /dev/null && exit
-        status="    "
+        status=
         if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
           git update-index --really-refresh -q &> /dev/null
           if ! git diff --quiet --ignore-submodules --cached; then
-            status="${status/ /+}"
+            status+="+"
           fi
           if ! git diff-files --quiet --ignore-submodules --; then
-            status="${status/ /!}"
+            status+="!"
           fi
-          if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-            status="${status/ /?}"
-          fi
+          #if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+            status+="?"
+          #fi
           if git rev-parse --verify refs/stash &> /dev/null; then
-            status="${status/ /*}"
+            status+="*"
           fi
         fi
         git_branch=(
