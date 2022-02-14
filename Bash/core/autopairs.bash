@@ -10,7 +10,6 @@
 
 __pairs=( "''" '""' '()' '[]' '{}')
 
-
 function __smart_space() {
   AT_PROMPT=1
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
@@ -41,39 +40,26 @@ function __autopair() {
   AT_PROMPT=1
 
   local typed_char="$1"
-
   local opening_char="$2"
   local closing_char="$3"
-
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
   local cursor_char="${READLINE_LINE:READLINE_POINT:1}"
 
-  local next_two_char="${READLINE_LINE:READLINE_POINT:2}"
-  local prev_two_char="${READLINE_LINE:READLINE_POINT-2:2}"
-
   local readline="${READLINE_LINE::READLINE_POINT}"
 
-  local quotes_char="${READLINE_LINE//[^${typed_char}]/}"
-  local literal match
-
-  if [[ "${opening_char}" == "${closing_char}" ]]; then
-    match="$(grep -oE "\\\\${typed_char}" <<< "${READLINE_LINE}" || true )"
-  else
-    match="$(grep -oE "\\${typed_char}" <<< "${READLINE_LINE}" || true )"
-  fi
-
-  match="$(tr -d '\\n' <<< "$match")"
-  literals="${match//[^${typed_char}]/}"
+  local num_of_char
+  num_of_char="${READLINE_LINE//\\$typed_char}"
+  num_of_char="${num_of_char//[^${typed_char}]/}"
 
   # '' and ""
   if [[ "${previous_char}" == "\\" ]]; then
     readline+="${typed_char}"
   elif [[ "${opening_char}" == "${closing_char}" ]]; then
-    if [[ "$(( (${#quotes_char} - ${#literals}) % 2 ))" -eq 1 ]]; then
+    if [[ "$(( ${#num_of_char} % 2 ))" -eq 1 ]]; then
       readline+="${typed_char}"
     elif [[ "${cursor_char}" == "${closing_char}" ]]; then
       :
-    elif [[ "$(( (${#quotes_char} - ${#literals}) % 2 ))" -eq 0 ]]; then
+    elif [[ "$(( ${#num_of_char} % 2 ))" -eq 0 ]]; then
       readline+="${typed_char}${typed_char}"
     fi
   # (), [], {}
