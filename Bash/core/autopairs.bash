@@ -48,7 +48,7 @@ function __autopair() {
   local readline="${READLINE_LINE::READLINE_POINT}"
 
   local num_of_char
-  num_of_char="${READLINE_LINE//\\$typed_char}"
+  num_of_char="${READLINE_LINE//\\${typed_char}}"
   num_of_char="${num_of_char//[^${typed_char}]/}"
 
   # '' and ""
