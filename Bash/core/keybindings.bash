@@ -1,289 +1,116 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2016
+# shellcheck shell=bash disable=SC2154
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-# vi-editing-mode
-#bind -m vi-insert -x '"\C-n": vifm'
+bind -m vi-command -x '"v": _visual_mode'
 
-bind -m vi-insert -x '"\C-n": foobar'
+function _visual_mode() {
+  local line="${READLINE_LINE}"
+  local pt="${READLINE_POINT}"
 
-# exit insert mode
-bind -m vi-insert '"kj": vi-movement-mode' # ESC
+  cursor_color="\e[106m\e[30m" # black fg, cyan bg
+  line_color="\e[38;5;216m"
+  sel_color="\e[48;5;237m${line_color}" # dimgrey bg
+  prompt="\e[1m\e[38;5;35m╰➤\e[0m \e[38;5;242m$: \e[0m"
+  resetbgfg="\e[39m\e[49m"
+  local linewise=false
 
-bind -m vi-command '"K": history-search-backward'
-bind -m vi-command '"J": history-search-forward'
+  local f=1
+  local b=1
 
-# terminate current session
-bind -m vi-command '";q": "dd\C-d"'
+  function main() {
+    __toggle_visual
+    while :; do
+      read -rn 1 key
+      case "${1:-${key}}" in
+        l )
+          if [[ "${linewise}" == "true" ]]; then
+            ((READLINE_POINT++))
+            continue
+          fi
 
-# macro
-bind -m vi-command '"qa": start-kbd-macro'
-bind -m vi-command '"q":  end-kbd-macro'
-bind -m vi-command '".": call-last-kbd-macro'
-bind -m vi-command '"z": print-last-kbd-macro'
+          if [[ $b -gt 1 ]]; then
+            (( b-- )) && _backward_char
+          else
+            ((f++)) && _forward_char
+          fi
+          continue
+          ;;
+        h )
+          if [[ "${linewise}" == "true" ]]; then
+            ((READLINE_POINT--))
+            continue
+          fi
+          if [[ $f -gt 1 ]]; then
+            (( f-- )) && _forward_char
+          else
+            (( b++ )) && _backward_char
+          fi
+          continue
+        ;;
+        y ) # yank
+          ( command xclip -selection clipboard <<< "${visual}" & ) &> /dev/null
+          READLINE_LINE="${line}"
+          command tput cvvis
+          return
+          ;;
+      V|v )
+        linewise=true
+        _linewise_visual
+          ;;
+        q ) # quit visual mode
+          break
+          ;;
+      esac
+    done
+    command tput cnorm
+  }
 
-# ----------------------------------------------------------------------------
-# Bash surround
-# ----------------------------------------------------------------------------
 
-# inner word-select
-bind -m vi-command '"diw": "lbde"'
-bind -m vi-command '"diW": "lBdE"'
-bind -m vi-command '"yiw": "mtlbgye`t"'
-bind -m vi-command '"yiW": "mtlBgyE`t"'
-bind -m vi-command '"ciw": "diwi"'
-bind -m vi-command '"ciW": "diWi"'
-# outer word-select
-bind -m vi-command '"daw": "diw"'
-bind -m vi-command '"daW": "diW"'
-bind -m vi-command '"yaw": "yiw"'
-bind -m vi-command '"yaW": "yiW"'
-bind -m vi-command '"caw": "ciw"'
-bind -m vi-command '"caW": "ciW"'
-# hardcoded outer and inner selects
-bind -m vi-command    '"da(": "lF(df)"'
-bind -m vi-command    '"da)": "lF(df)"'
-bind -m vi-command    '"di(": "lF(lmtf)d`t"'
-bind -m vi-command    '"di)": "lF(lmtf)d`t"'
-bind -m vi-command    '"ci(": "di(i"'
-bind -m vi-command    '"ci)": "di(i"'
-bind -m vi-command    '"ca(": "da(i"'
-bind -m vi-command    '"ca)": "da(i"'
-bind -m vi-command    '"yi(": "modi\C-v(hp`o"'
-bind -m vi-command    '"yi)": "modi\C-v)hp`o"'
-bind -m vi-command    '"ya(": "moda\C-v(hp`o"'
-bind -m vi-command    '"ya)": "moda\C-v)hp`o"'
-bind -m vi-command    '"da[": "lF[df]"'
-bind -m vi-command    '"da]": "lF[df]"'
-bind -m vi-command    '"di[": "lF[lmtf]d`t"'
-bind -m vi-command    '"di]": "lF[lmtf]d`t"'
-bind -m vi-command    '"ca[": "da[i"'
-bind -m vi-command    '"ca]": "da]i"'
-bind -m vi-command    '"ci[": "di[i"'
-bind -m vi-command    '"ci]": "di]i"'
-bind -m vi-command    '"yi[": "modi[hp`o"'
-bind -m vi-command    '"yi]": "modi]hp`o"'
-bind -m vi-command    '"ya[": "moda[hp`o"'
-bind -m vi-command    '"ya]": "moda]hp`o"'
-bind -m vi-command    '"da{": "lF{df}"'
-bind -m vi-command    '"da}": "lF{df}"'
-bind -m vi-command    '"di{": "lF{lmtf}d`t"'
-bind -m vi-command    '"di}": "lF{lmtf}d`t"'
-bind -m vi-command    '"ca{": "da{i"'
-bind -m vi-command    '"ca}": "da{i"'
-bind -m vi-command    '"ci{": "di{i"'
-bind -m vi-command    '"ci}": "di}i"'
-bind -m vi-command    '"yi{": "modi{hp`o"'
-bind -m vi-command    '"yi}": "modi}hp`o"'
-bind -m vi-command    '"ya{": "moda{hp`o"'
-bind -m vi-command    '"ya}": "moda}hp`o"'
-bind -m vi-command '"da'\''": "lF'\''df'\''"'
-bind -m vi-command '"di'\''": "lF'\''lmtf'\''d`t"'
-bind -m vi-command '"ci'\''": "di'\''i"'
-bind -m vi-command '"ca'\''": "da'\''i"'
-bind -m vi-command '"yi'\''": "modi'\''hp`o"'
-bind -m vi-command '"ya'\''": "moda'\''hp`o"'
-bind -m vi-command    '"da*": "lF*df*"'
-bind -m vi-command    '"di*": "lF*lmtf*d`t"'
-bind -m vi-command    '"ci*": "di\C-v*i"'
-bind -m vi-command    '"ca*": "da\C-v*i"'
-bind -m vi-command    '"yi*": "modi\C-v*hp`o"'
-bind -m vi-command    '"ya*": "moda\C-v*hp`o"'
-bind -m vi-command    '"da>": "lF<df>"'
-bind -m vi-command    '"da<": "lF<df>"'
-bind -m vi-command    '"di>": "lF<lmtf>d`t"'
-bind -m vi-command    '"di<": "lF<lmtf>d`t"'
-bind -m vi-command    '"ci>": "di\C-v>i"'
-bind -m vi-command    '"ci<": "di\C-v<i"'
-bind -m vi-command    '"ca>": "da\C-v>i"'
-bind -m vi-command    '"ca<": "da\C-v<i"'
-bind -m vi-command    '"yi<": "modi\C-v<hp`o"'
-bind -m vi-command    '"yi>": "modi\C-v>hp`o"'
-bind -m vi-command    '"ya<": "moda\C-v<hp`o"'
-bind -m vi-command    '"ya>": "moda\C-v>hp`o"'
-bind -m vi-command    '"da`": "lF`df\`"'
-bind -m vi-command    '"di`": "lF\`lmtf\`d`t"'
-bind -m vi-command    '"ci`": "di\C-v`i"'
-bind -m vi-command    '"ca`": "da\C-v`i"'
-bind -m vi-command    '"yi`": "modi\C-v`hp`o"'
-bind -m vi-command    '"ya`": "moda\C-v`hp`o"'
-bind -m vi-command   '"da\"": "lF\"df\""'
-bind -m vi-command   '"di\"": "lF\"lmtf\"d`t"'
-bind -m vi-command   '"ci\"": "di\C-v\"i"'
-bind -m vi-command   '"ca\"": "da\C-v\"i"'
-bind -m vi-command   '"yi\"": "modi\C-v\"hp`o"'
-bind -m vi-command   '"ya\"": "moda\C-v\"hp`o"'
-# hardcoded bash surround
-bind -m vi-command    '"ds)": "mtF(xf)x`th"'
-bind -m vi-command    '"ds(": "mtF(xf)x`th"'
-bind -m vi-command    '"ds]": "mtF[xf]x`th"'
-bind -m vi-command    '"ds[": "mtF[xf]x`th"'
-bind -m vi-command    '"ds}": "mtF{xf}x`th"'
-bind -m vi-command    '"ds{": "mtF{xf}x`th"'
-bind -m vi-command '"ds'\''": "mtF'\''xf'\''x`th"'
-bind -m vi-command    '"ds*": "mtF*xf*x`th"'
-bind -m vi-command    '"ds<": "mtF<xf<x`th"'
-bind -m vi-command    '"ds>": "mtF<xf>x`th"'
-bind -m vi-command    '"ds`": "mtF`xf`x`th"'
-bind -m vi-command   '"ds\"": "mtF\"xf\"x`th"'
-#cs)x
-bind -m vi-command    '"cs)]": "mtF(r[f)r]`t"'
-bind -m vi-command    '"cs)[": "mtF(xi\C-v[ \ef)xa \C-v]\e`tl"'
-bind -m vi-command    '"cs)}": "mtF(r{f)r}`t"'
-bind -m vi-command    '"cs){": "mtF(xi\C-v{ \ef)xa \C-v}\e`tl"'
-bind -m vi-command '"cs)'\''": "mtF(r'\''f)r'\''`t"'
-bind -m vi-command    '"cs)*": "mtF(r*f)r*`t"'
-bind -m vi-command    '"cs)>": "mtF(r<f)r>`t"'
-bind -m vi-command    '"cs)<": "mtF(xi\C-v< \ef)xa \C-v>\e`tl"'
-bind -m vi-command    '"cs)`": "mtF(r`f)r``t"'
-bind -m vi-command   '"cs)\"": "mtF(r\"f)r\"`t"'
-#cs(x
-bind -m vi-command    '"cs(]": "mtF(r[lxf)r]bx`t"'
-bind -m vi-command    '"cs([": "mtF(xi\C-v[ \ef)xa \C-v]\e`tl"'
-bind -m vi-command    '"cs(}": "mtF(r{f)r}`t"'
-bind -m vi-command    '"cs({": "mtF(xi\C-v{ \ef)xa \C-v}\e`tl"'
-bind -m vi-command '"cs('\''": "mtF(r'\''f)r'\''`t"'
-bind -m vi-command    '"cs(*": "mtF(r*f)r*`t"'
-bind -m vi-command    '"cs(>": "mtF(r<f)r>`t"'
-bind -m vi-command    '"cs(<": "mtF(xi\C-v< \ef)xa \C-v>\e`tl"'
-bind -m vi-command    '"cs(`": "mtF(r`f)r``t"'
-bind -m vi-command    '"cs(\"": "mtF(r\"f)r\"`t"'
-#cs]x
-bind -m vi-command    '"cs])": "mtF[r(f]r)`t"'
-bind -m vi-command    '"cs](": "mtF[xi\C-v( \ef]xa \C-v)\e`tl"'
-bind -m vi-command    '"cs]}": "mtF[r{f]r}`t"'
-bind -m vi-command    '"cs]{": "mtF[xi\C-v{ \ef]xa \C-v}\e`tl"'
-bind -m vi-command '"cs]'\''": "mtF[r'\''f]r'\''`t"'
-bind -m vi-command    '"cs]*": "mtF[r*f]r*`t"'
-bind -m vi-command    '"cs]>": "mtF[r<f]r>`t"'
-bind -m vi-command    '"cs]<": "mtF[xi\C-v< \ef]xa \C-v>\e`tl"'
-bind -m vi-command    '"cs]`": "mtF[r`f]\er``t"'
-bind -m vi-command   '"cs]\"": "mtF[r\"f]r\"`t"'
-#cs}x
-bind -m vi-command    '"cs})": "mtF{r(f}r)`t"'
-bind -m vi-command    '"cs}(": "mtF{xi\C-v( \ef}xa \C-v)\e`tl"'
-bind -m vi-command    '"cs}]": "mtF{r[f}r]`t"'
-bind -m vi-command    '"cs}[": "mtF{xi\C-v[ \ef}xa \C-v]\e`tl"'
-bind -m vi-command '"cs}'\''": "mtF{r'\''f}r'\''`t"'
-bind -m vi-command    '"cs}*": "mtF{r*f}r*`t"'
-bind -m vi-command    '"cs}>": "mtF{r<f}r>`t"'
-bind -m vi-command    '"cs}<": "mtF{xi\C-v< \ef}xa \C-v>\e`tl"'
-bind -m vi-command    '"cs}`": "mtF{r`f}r``t"'
-bind -m vi-command   '"cs}\"": "mtF{r\"f}r\"`t"'
-#cs'x
-bind -m vi-command  '"cs'\'')": "mtF'\''r(f'\''r)`t"'
-bind -m vi-command  '"cs'\''(": "mtF'\''xi\C-v( \ef'\''xa \C-v)\e`tl"'
-bind -m vi-command  '"cs'\''}": "mtF'\''r{f'\''r}`t"'
-bind -m vi-command  '"cs'\''{": "mtF'\''xi\C-v{ \ef'\''xa \C-v}\e`tl"'
-bind -m vi-command  '"cs'\'']": "mtF'\''r[f'\''r]`t"'
-bind -m vi-command  '"cs'\''[": "mtF'\''xi\C-v[ \ef'\''xa \C-v]\e`tl"'
-bind -m vi-command  '"cs'\''*": "mtF'\''r*f'\''r*`t"'
-bind -m vi-command  '"cs'\''>": "mtF'\''r<f'\''r>`t"'
-bind -m vi-command  '"cs'\''<": "mtF'\''xi\C-v< \ef'\''xa \C-v>\e`tl"'
-bind -m vi-command  '"cs'\''`": "mtF'\''r`f'\''r``t"'
-bind -m vi-command '"cs'\''\"": "mtF'\''r"f'\''r\"`t"'
-#cs*x
-bind -m vi-command    '"cs*)": "mtF*r(f*r)`t"'
-bind -m vi-command    '"cs*(": "mtF*xi\C-v( \ef*xa \C-v)\e`tl"'
-bind -m vi-command    '"cs*}": "mtF*r{f*r}`t"'
-bind -m vi-command    '"cs*{": "mtF*xi\C-v{ \ef*xa \C-v}\e`tl"'
-bind -m vi-command    '"cs*]": "mtF*r[f*r]`t"'
-bind -m vi-command    '"cs*[": "mtF*xi\Cv[ \ef*xa \C-v]\e`tl"'
-bind -m vi-command '"cs*'\''": "mtF*r'\''f*r'\''`t"'
-bind -m vi-command    '"cs*>": "mtF*r<f*r>`t"'
-bind -m vi-command    '"cs*<": "mtF*xi\C-v< \ef*xa \C-v>\e`tl"'
-bind -m vi-command    '"cs*`": "mtF*r`f*r``t"'
-bind -m vi-command   '"cs*\"": "mtF*r\"f*r\"`t"'
-#cs>x
-bind -m vi-command    '"cs>)": "mtF<r(f>r)`t"'
-bind -m vi-command    '"cs>(": "mtF<xi\C-v( \ef>xa \C-v)\e`tl"'
-bind -m vi-command    '"cs>]": "mtF<r[f>r]`t"'
-bind -m vi-command    '"cs>[": "mtF<xi\C-v[ \ef>xa \C-v]\e`tl"'
-bind -m vi-command    '"cs>}": "mtF<r{f>r}`t"'
-bind -m vi-command    '"cs>{": "mtF<xi\C-v{ \ef>xa \C-v}\e`tl"'
-bind -m vi-command '"cs>'\''": "mtF<r'\''f>r'\''`t"'
-bind -m vi-command    '"cs>*": "mtF<r*f>r*`t"'
-bind -m vi-command    '"cs>`": "mtF<r`f>r``t"'
-bind -m vi-command   '"cs>\"": "mtF<r\"f>r\"`t"'
-bind -m vi-command    '"cs`)": "mtF`r(f`r)`t"'
-bind -m vi-command    '"cs`(": "mtF`xi\C-v( \ef`xa \C-v)\e`tl"'
-bind -m vi-command    '"cs`}": "mtF`r{f`r}`t"'
-bind -m vi-command    '"cs`{": "mtF`xi\C-v{ \ef`xa \C-v}\e`tl"'
-bind -m vi-command    '"cs`]": "mtF`r[f`r]`t"'
-bind -m vi-command    '"cs`[": "mtF`xi\C-v[ \ef`xa \C-v]\e`tl"'
-bind -m vi-command '"cs`'\''": "mtF`r'\''f`r'\''`t"'
-bind -m vi-command    '"cs`>": "mtF`r<f`r>`t"'
-bind -m vi-command    '"cs`<": "mtF`xi\C-v< \ef`xa \C-v>\e`tl"'
-bind -m vi-command    '"cs`*": "mtF`r*f`r*`t"'
-bind -m vi-command   '"cs`\"": "mtF`r\"f`r\"`t"'
-#cs"x
-bind -m vi-command    '"cs\")": "mtF\"r(f\"r)`t"'
-bind -m vi-command    '"cs\"(": "mtF\"xi\C-v( \ef\"xa \C-v)\e`tl"'
-bind -m vi-command    '"cs\"}": "mtF\"r{f\"r}`t"'
-bind -m vi-command    '"cs\"{": "mtF\"xi\C-v{ \ef\"xa \C-v}\e`tl"'
-bind -m vi-command    '"cs\"]": "mtF\"r[f\"r]`t"'
-bind -m vi-command    '"cs\"[": "mtF\"xi\C-v[ \ef\"xa \C-v]\e`tl"'
-bind -m vi-command '"cs\"'\''": "mtF\"r'\''f\"r'\''`t"'
-bind -m vi-command    '"cs\"*": "mtF\"r*f\"r*`t"'
-bind -m vi-command    '"cs\">": "mtF\"r<f\"r>`t"'
-bind -m vi-command    '"cs\"<": "mtF\"xi\C-v< \ef\"xa \C-v>\e`tl"'
-bind -m vi-command    '"cs\"`": "mtF\"r`f\"r``t"'
-#"Specials"
-bind -m vi-command '"cs][": "mtF[a \ef]i \e`tl"'
-bind -m vi-command '"cs)(": "mtF(a \ef)i \e`tl"'
-bind -m vi-command '"cs}{": "mtF{a \ef}i \e`tl"'
-bind -m vi-command '"cs><": "mtF<a \ef>i \e`tl"'
-#ys(w/W)*
-bind -m vi-command     '"ysw)": "mti\C-v(\eea\C-v)\e`tl"'
-bind -m vi-command     '"ysw(": "mti\C-v( \eea \C-v)\e`t2l"'
-bind -m vi-command     '"ysW)": "mti\C-v(\eEa\C-v)\e`tl"'
-bind -m vi-command     '"ysW(": "mti\C-v( \eEa \C-v)\e`t2l"'
-bind -m vi-command     '"ysw]": "mti\C-v[\eea\C-v]\e`tl"'
-bind -m vi-command     '"ysw[": "mti\C-v[ \eea \C-v]\e`t2l"'
-bind -m vi-command     '"ysW]": "mti\C-v[\eEa\C-v]\e`tl"'
-bind -m vi-command     '"ysW[": "mti\C-v[ \eEa \C-v]\e`t2l"'
-bind -m vi-command     '"ysw}": "mti\C-v{\eea\C-v}\e`tl"'
-bind -m vi-command     '"ysw{": "mti\C-v{ \eea \C-}\e`t2l"'
-bind -m vi-command     '"ysW}": "mti\C-v{\eEa\Cv}\e`tl"'
-bind -m vi-command     '"ysW{": "mti\C-v{ \eEa \C-v}\e`t2l"'
-bind -m vi-command  '"ysw'\''": "mti\C-v'\''\eea\C-v'\''\e`tl"'
-bind -m vi-command  '"ysW'\''": "mti\C-v'\''\eEa\C-v'\''\e`tl"'
-bind -m vi-command     '"ysw*": "mti\C-v*\eea\C-v*\e`tl"'
-bind -m vi-command     '"ysW*": "mti\C-v*\eEa\C-v*\e`tl"'
-bind -m vi-command     '"ysw>": "mti\C-v<\eea\C-v>\e`tl"'
-bind -m vi-command     '"ysw<": "mti\C-v< \eea C-v>\e`t2l"'
-bind -m vi-command     '"ysW>": "mti\C-v<\eEa\C-v>\e`tl"'
-bind -m vi-command     '"ysW<": "mti\C-v< \eEa \C-v>\e`t2l"'
-bind -m vi-command     '"ysw`": "mti\C-v`\eea\C-v`\e`tl"'
-bind -m vi-command     '"ysW`": "mti\C-v`\eEa\C-v`\e\C-v`tl"'
-bind -m vi-command    '"ysw\"": "mti\C-v"\eea\C-v"\e`tl"'
-bind -m vi-command    '"ysW\"": "mti\C-v"\eEa\C-v"\e`tl"'
 
-#ysi(w/W)*
-bind -m vi-command    '"ysiw)": "lmtbi\C-v(\eea\C-v)\e`t"'
-bind -m vi-command    '"ysiw(": "lmtbi\C-v( \eea \C-v)\e`tl"'
-bind -m vi-command    '"ysiW)": "lmtBi\C-v(\eEa\C-v)\e`t"'
-bind -m vi-command    '"ysiW(": "lmtBi\C-v( \eEa \C-v)\e`tl"'
-bind -m vi-command    '"ysiw]": "lmtbi\C-v[\eea\C-v]\e`t"'
-bind -m vi-command    '"ysiw[": "lmtbi\C-v[ \eea \C-v]\e`tl"'
-bind -m vi-command    '"ysiW]": "lmtBi\C-v[\eEa\C-v\]\e`t"'
-bind -m vi-command    '"ysiW[": "lmtBi\C-v[ \eEa \C-v]\e`tl"'
-bind -m vi-command    '"ysiw}": "lmtbi\C-v{\eea\C-v}\e`t"'
-bind -m vi-command    '"ysiw{": "lmtbi\C-v{ \eea \C-v}\e`tl"'
-bind -m vi-command    '"ysiW}": "lmtBi\C-v{\eEa\C-v}\e`t"'
-bind -m vi-command    '"ysiW{": "lmtBi\C-v{ \eEa \C-v}\e`tl"'
-bind -m vi-command '"ysiw'\''": "lmtbi\C-v'\''\eea\C-v'\''\e`t"'
-bind -m vi-command '"ysiW'\''": "lmtBi\C-v'\''\eEa\C-v'\''\e`t"'
-bind -m vi-command    '"ysiw*": "lmtbi\C-v*\eea\C-v*\e`t"'
-bind -m vi-command    '"ysiW*": "lmtBi\C-v*\eEa\C-v*\e`t"'
-bind -m vi-command    '"ysiw>": "lmtbi\C-v<\eea\C-v>\e`t"'
-bind -m vi-command    '"ysiw<": "lmtbi\C-v< \eea \C-v>\e`tl"'
-bind -m vi-command    '"ysiW>": "lmtBi\C-v<\eEa\C-v>\e`t"'
-bind -m vi-command    '"ysiW<": "lmtBi\C-v< \eEa \C-v>\e`tl"'
-bind -m vi-command    '"ysiw`": "lmtbi\C-v`\eea\C-v`\e`t"'
-bind -m vi-command    '"ysiW`": "lmtBi\C-v`\eEa\C-v`\e`t"'
-bind -m vi-command   '"ysiw\"": "lmtbi\C-v"\eea\C-v"\e`t"'
-bind -m vi-command   '"ysiW\"": "lmtBi\C-v"\eEa\C-v"\e`t"'
+  function __toggle_visual() {
+    command tput civis
+    readline=(
+      "${line_color}"
+      "${line::pt}"
+      "${cursor_color}${line:READLINE_POINT:1}${resetbgfg}"
+      "${line_color}${line:(( pt + b ))}")
 
-# delete single spaces (trim one time)
-bind -m vi-command '"dss": "mtBhxElx`th"'
+      __print_line
+  }
+
+  function _forward_char() {
+      (( READLINE_POINT++ ))
+      readline=(
+        "${line_color}${line::pt}"
+        "${sel_color}${line:pt:f-1}${resetbgfg}"
+        "${cursor_color}${line:READLINE_POINT:1}${resetbgfg}" #cursor
+        "${line_color}${line:(( pt + f ))}" )
+
+    __print_line
+  }
+
+  function _backward_char() {
+    (( READLINE_POINT-- ))
+      readline=(
+        "${line_color}${line::(( ( pt - b ) + 1 ))}"
+        "${cursor_color}${line:READLINE_POINT:1}${resetbgfg}"
+        "${sel_color}${line:((( pt + 2 ) - b )):(( b - 1 ))}${resetbgfg}"
+        "${line_color}${line:(( pt + 1 ))}")
+      __print_line
+  }
+
+  function _linewise_visual() {
+    readline=(
+      "${sel_color}${line::pt}"
+      "${cursor_color}${line:pt:1}${resetbgfg}"
+      "${sel_color}${line:pt+1}")
+    __print_line
+  }
+
+  function __print_line() {
+     printf "%b" "${prompt}" "${readline[@]}" "\r"
+  }
+
+  main
+}

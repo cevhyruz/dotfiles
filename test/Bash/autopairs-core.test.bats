@@ -37,7 +37,6 @@ function local_setup() {
     READLINE_POINT=1
     __depair
     assert_equal "${READLINE_LINE}" ""
-    assert_equal "${READLINE_POINT}" 0
   done
 }
 
@@ -46,7 +45,6 @@ function local_setup() {
   READLINE_POINT=3
   __depair
   assert_equal "${READLINE_LINE}" 'fobar'
-  assert_equal "${READLINE_POINT}" 2
 }
 
 @test "${TEST_FILE}: backspace inside pairs with spaces" {
@@ -60,7 +58,6 @@ function local_setup() {
     fi
     __depair
     assert_equal "${READLINE_LINE}" "${test_case:0:1}${wspace}${test_case:1:1}"
-    assert_equal "${READLINE_POINT}" 1
   done
 }
 
