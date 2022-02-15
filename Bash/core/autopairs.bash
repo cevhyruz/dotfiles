@@ -49,15 +49,16 @@ function __autopair() {
   local num_of_char
   num_of_char="${READLINE_LINE//\\${typed_char}}"
   num_of_char="${num_of_char//[^${typed_char}]/}"
+  num_of_char="${#num_of_char}"
 
   if [[ "${previous_char}" == "\\" ]]; then
     readline+="${typed_char}"
   elif [[ "${opening_char}" == "${closing_char}" ]]; then
-    if [[ "$(( ${#num_of_char} % 2 ))" -eq 1 ]]; then
+    if [[ "$((num_of_char % 2))" -eq 1 ]]; then
       readline+="${typed_char}"
     elif [[ "${cursor_char}" == "${closing_char}" ]]; then
       :
-    elif [[ "$(( ${#num_of_char} % 2 ))" -eq 0 ]]; then
+    elif [[ "$((num_of_char % 2))" -eq 0 ]]; then
       readline+="${typed_char}${typed_char}"
     fi
   elif [[ "${typed_char}" == "${opening_char}" ]]; then
