@@ -60,7 +60,7 @@ set-window-option -g window-status-separator ""
 set-window-option -g window-status-current-format \
 "#[bg="${WINDOW_STATUS_CURRENT_BG}", fg="${STATUS_BG}"] "\
 "#[fg="${COMPLIMENT}"]#I"\
-"#[fg="${WINDOW_STATUS_CURRENT_FG}", bg="${WINDOW_STATUS_CURRENT_BG}"]   \uf15b #W "\
+"#[fg="${WINDOW_STATUS_CURRENT_FG}", bg="${WINDOW_STATUS_CURRENT_BG}"]   #W "\
 "#[fg="${PRIMARY}"]#F "\
 "#[bg="${STATUS_BG}", fg="${WINDOW_STATUS_CURRENT_BG}"]"
 
@@ -68,7 +68,7 @@ set-window-option -g window-status-format \
 "#[bg="${WINDOW_STATUS_BG}", fg="${STATUS_BG}"]"\
 "#[bg="${WINDOW_STATUS_BG}", fg="${COMPLIMENT}"] #I "\
 "#[fg="${TINT2}"]  #W "\
-"#[fg="red"]#F "\
+"#[fg="red"]#{?#{==:#F,}, ,#F} "\
 "#[fg="${WINDOW_STATUS_BG}", bg="${STATUS_BG}"]"
 
 # [!] status-format is not available until 2.9
