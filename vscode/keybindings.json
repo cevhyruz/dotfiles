@@ -51,18 +51,11 @@
   "command": "explorer.newFile",
   "when": "filesExplorerFocus"
 }, {
-  "key": "ctrl+n",
-  "command": "explorer.newFolder",
-  "when": "filesExplorerFocus"
-}, {
   "key": "ctrl+k s",
   "command": "git.stage"
 }, {
   "key": "ctrl+shift+w",
   "command": "workbench.action.closeActiveEditor"
-}, {
-  "key": "ctrl+w",
-  "command": "-workbench.action.closeActiveEditor"
 }, {
   "key": "ctrl+k u",
   "command": "git.unstage"
