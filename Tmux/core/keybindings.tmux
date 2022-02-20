@@ -6,7 +6,7 @@ bind-key 'c' command-prompt -p "[#{b:pane_current_path}]:"
 bind-key -T prefix 'o' "menubar"
 
 bind-key ':' {
-  command-prompt -p ":"
+  command-prompt -p "#[fg=colour240]:"
   refresh-client -S
 }
 
