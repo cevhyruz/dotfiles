@@ -115,7 +115,7 @@
 
 [pretty]
   little = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
-  detail = "%C(blue)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
+  detail = "%C(white)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
 
 [alias]
 
