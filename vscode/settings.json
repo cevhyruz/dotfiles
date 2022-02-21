@@ -8,5 +8,9 @@
             "after": ["<Esc>"]
         }
     ],
-    "typescript.updateImportsOnFileMove.enabled": "always"
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.wordWrap": "on",
+	"terminal.integrated.gpuAcceleration": "off",
+	"terminal.explorerKind": "integrated",
+	"terminal.external.linuxExec": "gnome-terminal-emulator",
 }
