@@ -47,70 +47,89 @@ function __set_PS1() {
   PS1="\[${reset}${bold}${normal}\]\n"
   local -a ps1=(
     # return arrow that colorize depending on command exit code.
-    '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
+    '$(
+      if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
         printf "%b" "\[${fg_green}\]╭─\u00a0"
       else
         printf "%b" "\[${fg_red}\]╭─\u00a0"
-      fi )'
+      fi
+    )'
     # user @ host string depending on if SSH_TTY is set.
-    '$( if [[ -n "${SSH_TTY:-}" ]]; then
+    '$(
+      if [[ -n "${SSH_TTY:-}" ]]; then
         printf "%b" "\[${reset}${fg_white}\]\\u@\H"
       else
         printf "%b" "\[${reset}${fg_white}\]\\u@\H"
-    fi)'
+      fi
+    )'
     # current working directory
-    '$( if [[ "${PWD:-}" == "${HOME}" ]]; then
-      printf "%b" "\[${fg_cyan}\]:home"
-    else
-      printf "%b" "\[${fg_cyan}\]:\w"
-    fi)'
+    '$(
+      if [[ "${PWD:-}" == "${HOME}" ]]; then
+        printf "%b" "\[${fg_cyan}\]:home"
+      else
+        printf "%b" "\[${fg_cyan}\]:\w"
+      fi
+    )'
     # display git branch and status if current directory is a git repo.
-    '$( ! git rev-parse &> /dev/null && exit
-        status=
-        if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
-          git update-index --really-refresh -q &> /dev/null
-          if ! git diff --quiet --ignore-submodules --cached; then
-            status+="+"
-          fi
-          if ! git diff-files --quiet --ignore-submodules --; then
-            status+="!"
-          fi
-          if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-            status+="?"
-          fi
-          if git rev-parse --verify refs/stash &> /dev/null; then
-            status+="*"
-          fi
+    '$(
+      ! git rev-parse &> /dev/null && exit
+      status=
+
+      if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
+        git update-index --really-refresh -q &> /dev/null
+
+        if ! git diff --quiet --ignore-submodules --cached; then
+          status+="+"
         fi
-        git_branch=(
-        "$( git symbolic-ref --quiet --short HEAD 2> /dev/null ||
-            git rev-parse --short HEAD 2> /dev/null ||
-            echo "unknown" )")
-        git_prompt=(
-          "${bold}${fg_yellow}"
-          "("
-          "${fg_red}"
-          "${git_branch}"
-          "${fg_yellow}"
-          ")"
-          " "
-          "${status}" )
-        printf "%b" "\[${git_prompt[@]}\]" )'
+        if ! git diff-files --quiet --ignore-submodules --; then
+          status+="!"
+        fi
+        if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+          status+="?"
+        fi
+        if git rev-parse --verify refs/stash &> /dev/null; then
+          status+="*"
+        fi
+      fi
+
+      git_branch="$( git symbolic-ref --quiet --short HEAD 2> /dev/null ||
+        git rev-parse --short HEAD 2> /dev/null ||
+        echo "unknown" )"
+
+      git_prompt=(
+        "${bold}${fg_yellow}"
+        "("
+        "${fg_red}"
+        "${git_branch}"
+        "${fg_yellow}"
+        ")"
+        "\u00a0"
+        "${status}" )
+
+      printf "\[%b\]" "${git_prompt[@]}"
+    )'
     # return arrow that colorize depending on command exit code.
-    '$( return_string="    [ exited ${EXIT_CODE:-} ]"
-    if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
+    '$(
+      return_string="    [ exited ${EXIT_CODE:-} ]"
+      if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
         printf "%b" "\[${resetall}${dim}${return_string}\]"
-    fi )'
+      fi
+    )'
+    # newline.
     "\n"
     # [╰➤] return arrow that colorize depending on command exit code.
-    '$( if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
+    '$(
+      if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
         printf "%b" "\[${reset}${bold}${fg_green}\]╰➤"
       else
-      printf "%b" "\[${reset}${bold}${fg_red}\]╰➤"
-      fi )'
+        printf "%b" "\[${reset}${bold}${fg_red}\]╰➤"
+      fi
+    )'
+    # prompt symbol.
     "\[${reset}${dim}\] \$: \[${reset}\]"
-    "\[\e[38;5;216m\]") # LightSalmon1
-
+    # command text color (LightSalmon)
+    "\[\e[38;5;216m\]"
+  )
   PS1+="$(printf "%b" "${ps1[@]}")"
 }
 # :nocov:
