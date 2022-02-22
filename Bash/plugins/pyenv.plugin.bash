@@ -8,8 +8,6 @@ export PYENV_ROOT="${HOME}/.pyenv"
 
 if _::add_to_path "${PYENV_ROOT}/bin"; then
   if command -v pyenv 1>/dev/null 2>&1; then
-    echo 'test'
-    # basically: eval "$(pyenv init --path)"
     _::add_to_path "${PYENV_ROOT}/shims"
   fi
   # Build with dynamic python library enabled.
