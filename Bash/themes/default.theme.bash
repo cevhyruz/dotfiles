@@ -75,9 +75,9 @@ function __set_PS1() {
           if ! git diff-files --quiet --ignore-submodules --; then
             status+="!"
           fi
-          #if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+          if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
             status+="?"
-          #fi
+          fi
           if git rev-parse --verify refs/stash &> /dev/null; then
             status+="*"
           fi
