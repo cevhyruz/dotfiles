@@ -44,100 +44,79 @@ function __readline_vi_mode() {
 
 # :nocov:
 function __set_PS1() {
-  PS1="\[${reset}${bold}${normal}\]\n"
-  local -a ps1=(
-    # return arrow that colorize depending on command exit code.
-    '$(
+  PS1='$(
       if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "\[${fg_green}\]╭─\u00a0"
+        arrow_color="\[${fg_green}\]"
+        return_str=
       else
-        printf "%b" "\[${fg_red}\]╭─\u00a0"
+        arrow_color="\[${fg_red}\]"
+        return_str="\[${resetall}${dim}\]    [ exited ${EXIT_CODE} ]"
       fi
 
-      # user @ host string depending on if SSH_TTY is set.
+      declare -ar arrow=(
+        "${arrow_color}╭─${reset}"
+        "${arrow_color}├─${reset}"
+        "${arrow_color}╰─➤${reset}"
+      )
 
       if [[ -n "${SSH_TTY:-}" ]]; then
-        printf "%b" "\[${reset}${fg_white}\]\\u@\H"
+        userhost_color="\[${fg_red}\]"
       else
-        printf "%b" "\[${reset}${fg_white}\]\\u@\H"
+        userhost_color="\[${fg_white}\]"
       fi
 
-    )'
-    # current working directory
-    '$(
-      if [[ "${PWD:-}" == "${HOME}" ]]; then
-        printf "%b" "\[${fg_cyan}\]:home"
-      else
-        printf "%b" "\[${fg_cyan}\]:\w"
-      fi
-    )'
-    # display git branch and status if current directory is a git repo.
-    '$(
-      ! git rev-parse &> /dev/null && exit
-      status=
+      declare workdir="\[${fg_cyan}\]:${PWD//${HOME}/\~}"
 
-      if [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
-        git update-index --really-refresh -q &> /dev/null
-
-        if ! git diff --quiet --ignore-submodules --cached; then
-          status+="+"
-        fi
-        if ! git diff-files --quiet --ignore-submodules --; then
-          status+="!"
-        fi
-        if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-          status+="?"
-        fi
-        if git rev-parse --verify refs/stash &> /dev/null; then
-          status+="*"
-        fi
-      fi
-
-      git_branch="$( git symbolic-ref --quiet --short HEAD 2> /dev/null ||
-        git rev-parse --short HEAD 2> /dev/null ||
-        echo "unknown" )"
-
-      git_prompt=(
-        "${bold}${fg_yellow}"
-        "("
-        "${fg_red}"
-        "${git_branch}"
-        "${fg_yellow}"
-        ")"
-        "\u00a0"
-        "${status}" )
-
-      printf "\[%b\]" "${git_prompt[@]}"
-    )'
-    # return arrow that colorize depending on command exit code.
-    '$(
-      return_string="    [ exited ${EXIT_CODE:-} ]"
-      if [[ "${EXIT_CODE:-}" -ne 0 ]]; then
-        printf "%b" "\[${resetall}${dim}${return_string}\]"
-      fi
-    )'
-    '$(
       if [[ -n "${VIRTUAL_ENV:-}" ]]; then
         VIRTUAL_ENV="${VIRTUAL_ENV//${PYENV_ROOT}/PYENV_ROOT}"
-        printf "\n%b" "├─ ${normal}${reset_bold}${VIRTUAL_ENV:-}"
+        VIRTUAL_ENV="\[${normal}${dim}\]${VIRTUAL_ENV}"
+        VIRTUAL_ENV="${arrow[1]} ${VIRTUAL_ENV:-}\n"
       fi
-    )'
-    # newline.
-    "\n"
-    # [╰➤] return arrow that colorize depending on command exit code.
-    '$(
-      if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-        printf "%b" "\[${reset}${bold}${fg_green}\]╰➤"
-      else
-        printf "%b" "\[${reset}${bold}${fg_red}\]╰➤"
+
+      if git rev-parse &> /dev/null &&
+        [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
+          git update-index --really-refresh -q &> /dev/null
+
+          if ! git diff --quiet --ignore-submodules --cached; then
+            status+="+"
+          fi
+          if ! git diff-files --quiet --ignore-submodules --; then
+            status+="!"
+          fi
+          if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+            status+="?"
+          fi
+          if git rev-parse --verify refs/stash &> /dev/null; then
+            status+="*"
+          fi
+
+          declare -ra git_prompt=(
+            "\[${bold}${fg_yellow}\]"
+            "("
+            "\[${fg_red}\]"
+            "$( git symbolic-ref --quiet --short HEAD 2> /dev/null ||
+                git rev-parse --short HEAD 2> /dev/null ||
+                echo "unknown" )"
+            "\[${fg_yellow}\]"
+            ") "
+            "${status}" )
       fi
+
+      declare -ra prompt=(
+        "\[${reset}${bold}${normal}\]\n"
+        "${arrow[0]}"
+        "${userhost_color} \u@\H"
+        "${workdir}"
+        "${git_prompt[@]}"
+        "${return_str}\n"
+        "${VIRTUAL_ENV:-}"
+        "${arrow[2]}"
+        "\[${reset}${dim}\] \$: ${reset}"
+        "\[\e[38;5;216m\]"
+      )
+
+      printf "%b" "${prompt[@]}"
     )'
-    # prompt symbol.
-    "\[${reset}${dim}\] \$: \[${reset}\]"
-    # command text color (LightSalmon)
-    "\[\e[38;5;216m\]"
-  )
-  PS1+="$(printf "%b" "${ps1[@]}")"
 }
 # :nocov:
 
