@@ -36,40 +36,24 @@ function __load_default_pallete () {
 }
 
 function __make_dircolors_pallete () {
-  local -ar __lscolors=(
-    '__reset'         '__bg_black'   '__fg_black'
-    '__bold'          '__bg_red'     '__fg_red'
-    '__italic'        '__bg_green'   '__fg_green'
-    '__reverse'       '__bg_yellow'  '__fg_yellow'
-    '__defaultfg'     '__bg_blue'    '__fg_blue'
-    '__defaultbg'     '__bg_magenta' '__fg_magenta'
-    '__underline'     '__bg_cyan'    '__fg_cyan'
-    '__strikethrough' '__bg_white'   '__fg_white'
-    '__dim'
-    '__normal' )
-
-  for color in ${__lscolors[*]}; do
-    eval "local ${color}=$(echo -E \"\$\{${color:2}:3:-1\}\")"
-  done
-
   local -ar dircolors=(
-    "no=${__normal}:"              # NORMAL, NORM
-    "fi=${__normal}:"              # FILE
-    "di=${__dim};${__normal};${__fg_cyan}:" # DIR
-    "ln=${__italic};${__fg_blue}:" # SYMLINK, LINK, LNK
-    "or=${__italic};${__fg_red}:"  # ORPHAN
-    "mi=${__fg_red}:"              # MISSING
-    "bd=${__fg_blue}:"             # BLOCK, BLK
-    "cd=${__fg_red}:"              # CHAR, CHR
-    "ex=${__fg_green}:"            # EXEC
-    "do=${__normal}:"              # DOOR
-    "so=${__normal}:"              # SOCK
-    "pi=${__normal}:"              # FIFO, PIPE
-    "sg=${__normal}:"              # SETGID
-    "su=${__normal}:"              # SETUID
-    "st=${__normal}:"              # STICKY
-    "tw=${__normal}:"              # STICKY_OTHER_WRITABLE
-    "ow=${__fg_magenta}:" )        # OTHER_WRITABLE
+    "no=${normal:3:-1}:"              # NORMAL, NORM
+    "fi=${normal:3:-1}:"              # FILE
+    "di=${dim:3:-1};${normal:3:-1};${fg_cyan:3:-1}:" # DIR
+    "ln=${italic:3:-1};${fg_blue:3:-1}:" # SYMLINK, LINK, LNK
+    "or=${italic:3:-1};${fg_red:3:-1}:"  # ORPHAN
+    "mi=${fg_red:3:-1}:"              # MISSING
+    "bd=${fg_blue:3:-1}:"             # BLOCK, BLK
+    "cd=${fg_red:3:-1}:"              # CHAR, CHR
+    "ex=${fg_green:3:-1}:"            # EXEC
+    "do=${normal:3:-1}:"              # DOOR
+    "so=${normal:3:-1}:"              # SOCK
+    "pi=${normal:3:-1}:"              # FIFO, PIPE
+    "sg=${normal:3:-1}:"              # SETGID
+    "su=${normal:3:-1}:"              # SETUID
+    "st=${normal:3:-1}:"              # STICKY
+    "tw=${normal:3:-1}:"              # STICKY_OTHER_WRITABLE
+    "ow=${fg_magenta:3:-1}:" )        # OTHER_WRITABLE
 
   LS_COLORS=''
   for entry in ${dircolors[*]}; do

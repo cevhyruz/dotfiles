@@ -4,4 +4,4 @@
 
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
-_::Util:add_to_path "${GOBIN}"
+_::add_to_path "${GOBIN}"

@@ -2,20 +2,19 @@
 # shellcheck shell=bash
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-# Apidoc functions from composure.sh by erichs.
+# modified Apidoc functions from composure.sh by erichs.
 # https://github.com/erichs/composure
 
 function main() {
   local foobar=(
-    'about' 'author' 'version' 'example'
-    'group' 'param' 'about-alias' 'about-plugin'
-    'about-completion'
-  )
+    'about' 'example' 'group' 'param'
+    'about-alias' 'about-plugin' 'about-completion'
+    '_about' '_env' '_group' '_return' '_param' )
+
   for func in ${foobar[*]}; do
     eval "$func() { :; }"
   done
 }
-
 
 function _typeset_functions_about() {
   local func func_list
@@ -159,4 +158,4 @@ function glossary() {
   unset func
 }
 
-main "$@"
+main "$@" unset -f main

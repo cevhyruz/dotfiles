@@ -53,14 +53,15 @@ function __set_PS1() {
       else
         printf "%b" "\[${fg_red}\]╭─\u00a0"
       fi
-    )'
-    # user @ host string depending on if SSH_TTY is set.
-    '$(
+
+      # user @ host string depending on if SSH_TTY is set.
+
       if [[ -n "${SSH_TTY:-}" ]]; then
         printf "%b" "\[${reset}${fg_white}\]\\u@\H"
       else
         printf "%b" "\[${reset}${fg_white}\]\\u@\H"
       fi
+
     )'
     # current working directory
     '$(

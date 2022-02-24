@@ -58,8 +58,7 @@ function _::is_file() {
 function _::add_to_path() {
   local -r DIR_PATH="$1"
 
-  if _::is_dir "${DIR_PATH}" \
-    && ! grep --quiet "${DIR_PATH}" <<< "${PATH//:/\\n}"; then
+  if [[ -d "${1:-}" && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
     if [[ "${2:-before}" == "after" ]]; then
       export PATH="$1:${PATH}"
     else

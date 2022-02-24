@@ -18,7 +18,7 @@ function cd() {
   if [[ $# -gt 0 ]]; then
     builtin cd "$@" || return 1
   fi
-  tmux refresh-client -S
+  tmux refresh-client -S &> /dev/null || true
 }
 
 # Determine size of a file or total size of a directory
