@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Core utility functions for managing Dotfiles.
 # Entry file to load all library file for bash.
@@ -58,9 +58,12 @@ function _::is_file() {
 function _::add_to_path() {
   local -r DIR_PATH="$1"
 
-  if _::is_dir "${DIR_PATH}"; then
-    if ! echo "${PATH//:/\\n}" | grep --quiet "${DIR_PATH}"; then
+  if _::is_dir "${DIR_PATH}" \
+    && ! grep --quiet "${DIR_PATH}" <<< "${PATH//:/\\n}"; then
+    if [[ "${2:-before}" == "after" ]]; then
       export PATH="$1:${PATH}"
+    else
+      export PATH="${PATH}:$1"
     fi
   fi
 }

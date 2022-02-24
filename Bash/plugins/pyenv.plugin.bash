@@ -6,11 +6,20 @@
 
 export PYENV_ROOT="${HOME}/.pyenv"
 
-if _::add_to_path "${PYENV_ROOT}/bin"; then
-  if command -v pyenv 1>/dev/null 2>&1; then
-    _::add_to_path "${PYENV_ROOT}/shims"
-  fi
-  # Build with dynamic python library enabled.
-  # some program needed this (eg: YouCompleteMe)
-  export PYTHON_CONFIGURE_OPTS="--enable-shared"
+if [[ ! -d "${PYENV_ROOT}" ]] \
+  && [[ ! -x "${PYENV_ROOT}/bin/pyenv" ]]; then
+  unset -v PYENV_ROOT
+  return 0
 fi
+
+_::add_to_path "${PYENV_ROOT}/bin"
+_::add_to_path "${PYENV_ROOT}/shims"
+
+# Enable dynamic python library.
+# some program needed this (eg: YouCompleteMe)
+export PYTHON_CONFIGURE_OPTS="--enable-shared"
+
+# disable prompt
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+eval "$(pyenv init - bash)"

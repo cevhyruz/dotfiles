@@ -11,7 +11,7 @@ set-option command-alias[99] menubar=\
   "  #[fg=cyan]\uf044#[default]  Quick edit a dotfile               " 'c' {
     display-popup -d${DOTFILES} "nvim $(fzf)"
   }\
-  "  #[fg=cyan]\uf1eb#[default]  Wi-Fi #[align=right,dim]${wifi}" 'c' {
+  "  #[fg=cyan]\uf1eb#[default]  Wi-Fi #[align=right,fg=cyan]${wifi}" 'c' {
     display-popup -d${DOTFILES} "nvim $(fzf)"
   }\
   "-" "" ""\

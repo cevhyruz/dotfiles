@@ -115,6 +115,12 @@ function __set_PS1() {
         printf "%b" "\[${resetall}${dim}${return_string}\]"
       fi
     )'
+    '$(
+      if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+        VIRTUAL_ENV="${VIRTUAL_ENV//${PYENV_ROOT}/PYENV_ROOT}"
+        printf "\n%b" "├─ ${normal}${reset_bold}${VIRTUAL_ENV:-}"
+      fi
+    )'
     # newline.
     "\n"
     # [╰➤] return arrow that colorize depending on command exit code.
