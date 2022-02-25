@@ -73,19 +73,19 @@ jobs:
       run: ./lint.sh
 
   benchmark:
+    runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
-      rust: [stable, nightly]
-    runs-on: ubuntu-latest
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        rust: [stable, nightly]
 
-    setps:
+    steps:
     - uses: hecrj/setup-rust-action@v1
-       with:
-         rust-version: ${{ matrix.rust }}
-    - uses: actions/checkout@v2
-
-    - name: install hyperfine
-       run: cargo install hyperfine
+      with:
+        rust-version: ${{ matrix.rust }}
+    - uses: actions/checkout@master
+    - name: Run tests
+      run: cargo test --verbose
 
   coverage:
     runs-on: ubuntu-latest
