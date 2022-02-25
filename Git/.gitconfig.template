@@ -1,5 +1,10 @@
 # vim: ft=gitconfig
 
+[user]
+  name          = John Fred Fadrigalan
+  email         = johnfred.fadrigalan@hotmail.com
+  signingkey    = 4C23960F72FC911F # Kali Linux (Personal Laptop)
+
 [init]
   defaultBranch = master
 
@@ -110,7 +115,7 @@
 
 [pretty]
   little = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
-  detail = "%C(blue)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
+  detail = "%C(white)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
 
 [alias]
 

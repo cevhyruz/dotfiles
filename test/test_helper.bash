@@ -14,6 +14,7 @@ load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
 load "${TEST_DEPS_DIR}/../Bash/lib/util.bash"
+load "${TEST_DEPS_DIR}/../Bash/lib/apidoc.bash"
 
 TEST_FILE="$( printf "\e[1m[%s]\e[0m\n" "$(basename "${BATS_TEST_FILENAME}")")"
 if [[ -n "${CI:-}" ]]; then

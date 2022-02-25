@@ -8,21 +8,29 @@
 # shellcheck source=/dev/null
 for file in "${DOT_BASH}/lib"/*; do
   source "${file}"
-  unset file
 done
 
-cite _about _env _group _return _param
-
 # initliaze configurations.
-_::source_files_from "${DOT_BASH}/core"
+for file in "${DOT_BASH}/core"/*; do
+  source "${file}"
+done
 
 # ordered
-_::source_files_from "${DOT_BASH}/plugins"
-_::source_files_from "${DOT_BASH}/aliases"
+for file in "${DOT_BASH}/plugins"/*; do
+  source "${file}"
+done
 
-_::source_files_from "${DOT_BASH}/functions"
+#_::source_files_from "${DOT_BASH}/aliases"
+for file in "${DOT_BASH}/aliases"/*; do
+  source "${file}"
+done
 
-_::source_file "${DOT_BASH}/themes/${BASH_THEME:-default}.theme.bash"
+for file in ${file} "${DOT_BASH}/functions"/*; do
+  source "$file"
+done
+
+source "${DOT_BASH}/themes/default.theme.bash"
 
 # local config file.
-_::source_file "${DOT_BASH}/.bashrc.local"
+source "${DOT_BASH}/.bashrc.local"
+unset file

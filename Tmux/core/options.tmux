@@ -7,16 +7,19 @@
 
 # server options
 
+
+
+set-option -g @theme powerline
+
 set-option -as terminal-overrides \
 ',*:RGB:Smulx=\E[4::%p1%dm:Smol=\E[53m:smxx=\E[9m'\
 ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
 
-set-option -g default-terminal "tmux-256color"
+set-option -g default-terminal "screen-256color"
 
 set-option -s buffer-limit 25
 set-option -s escape-time   0
 set-option -s exit-unattached off
-set-option -s quiet off
 set-option -s set-clipboard on
 set-option -s focus-event on
 
@@ -27,9 +30,7 @@ set-window-option -g xterm-keys on
 set-option -g assume-paste-time 1
 set-option -g base-index 1
 set-option -g bell-action none
-set-option -g bell-on-alert off
 set-option -g default-command "${SHELL}"
-set-option -g default-path ""
 set-option -g default-shell "${SHELL}"
 set-option -g display-time  5000
 set-option -g history-limit 20000
@@ -55,11 +56,10 @@ if-shell '[ "$(echo "$TMUX_VERSION < 2.2" | bc)" = 1 ]' \
    set-option        -g mouse-utf8  "on"; \
 "
 
-set-option -g prefix '`'
+set-option -g prefix "`"
 set-option -g prefix2 C-b
 
 set-option -g repeat-time 4000
-set-option -g set-remain-on-exit off
 set-option -g set-titles on
 set-option -g set-titles-string "#S(#W:#P)"
 set-option -g status on
@@ -73,6 +73,5 @@ set-option -g status-position bottom
 
 set-option -g visual-activity off
 set-option -g visual-bell off
-set-option -g visual-content off
 set-option -g visual-silence off
 set-option -g word-separators '-_@'

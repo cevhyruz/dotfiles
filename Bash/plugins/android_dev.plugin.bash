@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 
 function _set_android_dev_plugin() {
   if [[ -d '/usr/lib/Android' ]]; then
@@ -18,9 +18,7 @@ function _set_android_dev_plugin() {
       "${GRADLE_HOME}")
 
     for path in "${_ANDROID_PATH[@]}"; do
-      if [[ -d "${path}" ]]; then
-        _::add_to_path "${path}"
-      fi
+      _::add_to_path "${path}"
     done
 
     unset path

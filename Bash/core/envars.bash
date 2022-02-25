@@ -5,9 +5,7 @@
 # Set up shell variables for Bash
 
 # disable mailcheck.
-if [[ $( shopt mailwarn | awk '{ print $2 }' ) == 'off' ]]; then
-  unset MAILCHECK
-fi
+unset MAILCHECK
 
 # append current sessions history to the history file.
 PROMPT_COMMAND=('history -a;')

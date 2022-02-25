@@ -12,6 +12,15 @@ function md() {
   mkdir -p "${directory}" && cd "$_" || return 1
 }
 
+# force refresh tmux client when cd'ing,
+# otherwise just change cd normally.
+function cd() {
+  if [[ $# -gt 0 ]]; then
+    builtin cd "$@" || return 1
+  fi
+  tmux refresh-client -S &> /dev/null || true
+}
+
 # Determine size of a file or total size of a directory
 function fs() {
   if [[ -n "$*" ]]; then

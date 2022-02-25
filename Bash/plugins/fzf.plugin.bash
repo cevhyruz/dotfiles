@@ -11,17 +11,6 @@
 _::command_exists "fzf" || return 0
 
 function __bootstrap_fzf() {
-  local -ar __FZF_BINDKEYS=(
-    "ctrl-e:preview-down+preview-down,"
-    "ctrl-y:preview-up+preview-up,"
-    "ctrl-space:accept,"
-    "ctrl-s:toggle-sort,"
-    "ctrl-o:clear-selection,"
-    "^:beginning-of-line,"
-    "$:end-of-line,"
-    "ctrl-/:toggle-preview,"
-    "?:jump-accept")
-
   local -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
@@ -31,7 +20,14 @@ function __bootstrap_fzf() {
 
   local -ar __FZF_OPTS=(
     "--ansi"
-    "--bind='$(printf "%s" "${__FZF_BINDKEYS[@]}")'"
+    "--bind='ctrl-e:preview-down+preview-down'"
+    "--bind='ctrl-y:preview-up+preview-up'"
+    "--bind='ctrl-space:accept'"
+    "--bind='ctrl-s:toggle-sort'"
+    "--bind='ctrl-o:clear-selection'"
+    "--bind='^:beginning-of-line'"
+    "--bind='ctrl-/:toggle-preview'"
+    "--bind='?:jump-accept'"
     "--margin=0,1,0" # T, RL, B
     "--multi"
     "--tac"
@@ -66,13 +62,7 @@ function __bootstrap_fzf() {
     "--color=spinner:196"
     "--color=header:-1")
 
-  __set_fzf "$( basename "$(
-      command -v ag \
-      || command -v rg \
-      || command -v fdfind
-    )"
-  )"
-
+  __set_fzf "ag"
   __set_fzf_aliases
   __cleanup
 }
@@ -82,7 +72,7 @@ function __set_fzf() {
   local ignored_dirs
   local fzf_command
 
-  case "${DOT_FZF_DEFAULT_CMD:-${available_command}}" in
+  case "${available_command:-ag}" in
     fd) __set_fzf_as_fdfind;;
     ag) __set_fzf_as_ag ;;
     rg) __set_fzf_as_rg ;;

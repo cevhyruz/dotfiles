@@ -3,6 +3,12 @@
 # and `info rluserman' for more information.
 # ----------------------------------------------------------------------
 
+set editing-mode vi
+
+$if bash
+  $include /home/devs/Projects/dotfiles/readline/surround
+$endif
+
 # allow UTF-8 input and output instead of showing
 # an ugly stuff like $'\0123\0456'.
 set input-meta   on

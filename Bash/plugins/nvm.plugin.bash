@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
-# shellcheck source=/dev/null
+# shellcheck shell=bash source=/dev/null
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 
 # Lazyload nvm (Node Version Manager) if it is present.
 
@@ -40,21 +39,23 @@ function __load_script_files() {
 }
 
 function __lazy_load_nvm() {
-  for func in nvm node npm npx; do
-    eval "function ${func}() {
-       unset -f ${func};
-       $(declare -f __load_script_files | tail +3 | head)
-      ${func} \"\$@\"
+ for func in nvm node npm npx; do
+     eval "function ${func}() {
+       unset -f ${func}
+       __load_script_files
+      \\${func} \"\$@\"
     }"
   done
   unset func
+  #function nvm() {
+    #unset -f nvm
+  #}
 }
 
 function __cleanup() {
   unset -f \
     __set_nvm \
     __lazy_load_nvm \
-    __load_script_files \
     __cleanup
 }
 
