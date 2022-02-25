@@ -1,5 +1,4 @@
 name: 'build'
-
 on:
   push:
     branches: [ master ]
@@ -72,6 +71,19 @@ jobs:
 
     - name: Run lint
       run: ./lint.sh
+
+  benchmark:
+    runs-on: ubuntu-latest
+
+    - uses: hecrj/setup-rust-action@v1
+       with:
+         rust-version: stable
+
+    - name: install hyperfine
+       run: cargo install hyperfine
+
+    - name: run profiler
+      run: hyperfine --prepare './Bash/bash_init.sh' ./Bash/bash_init.sh
 
   coverage:
     runs-on: ubuntu-latest
