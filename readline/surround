@@ -1,0 +1,389 @@
+#########################################
+# VIM MOVEMENTS FOR (i/a) ()[]{}'*<>`"  #
+#########################################
+# Work with ciw, daw, ds),cs'",ysiw[,cs][,yi* ...
+# bind -f ~/.inputrc-surround to test changes
+
+#VI Insert Mode functions
+#"C-D"  vi-eof-maybe
+#"C-H"  backward-delete-char
+#"C-I"  complete
+#"C-J"  accept-line
+#"C-M"  accept-line
+#"C-R"  reverse-search-history
+#"C-S"  forward-search-history
+#"C-T"  transpose-chars
+#"C-U"  unix-line-discard
+#"C-V"  quoted-insert
+#"C-W"  unix-word-rubout
+#"C-Y"  yank
+#"C-["  vi-movement-mode
+#"C-_"  undo
+#" " to "~"  self-insert
+#"C-?"  backward-delete-char
+#
+#VI Command Mode functions
+#
+#"C-D"  vi-eof-maybe
+#"C-E"  emacs-editing-mode
+#"C-G"  abort
+#"C-H"  backward-char
+#"C-J"  accept-line
+#"C-K"  kill-line
+#"C-L"  clear-screen
+#"C-M"  accept-line
+#"C-N"  next-history
+#"C-P"  previous-history
+#"C-Q"  quoted-insert
+#"C-R"  reverse-search-history
+#"C-S"  forward-search-history
+#"C-T"  transpose-chars
+#"C-U"  unix-line-discard
+#"C-V"  quoted-insert
+#"C-W"  unix-word-rubout
+#"C-Y"  yank
+#"C-_"  vi-undo
+#" "  forward-char
+#"#"  insert-comment
+#"$"  end-of-line
+#"%"  vi-match
+#"&"  vi-tilde-expand
+#"*"  vi-complete
+#"+"  next-history
+#","  vi-char-search
+#"-"  previous-history
+#"."  vi-redo
+#"/"  vi-search
+#"0"  beginning-of-line
+#"1" to "9"  vi-arg-digit
+#";"  vi-char-search
+#"="  vi-complete
+#"?"  vi-search
+#"A"  vi-append-eol
+#"B"  vi-prev-word
+#"C"  vi-change-to
+#"D"  vi-delete-to
+#"E"  vi-end-word
+#"F"  vi-char-search
+#"G"  vi-fetch-history
+#"I"  vi-insert-beg
+#"N"  vi-search-again
+#"P"  vi-put
+#"R"  vi-replace
+#"S"  vi-subst
+#"T"  vi-char-search
+#"U"  revert-line
+#"W"  vi-next-word
+#"X"  backward-delete-char
+#"Y"  vi-yank-to
+#"\"  vi-complete
+#"^"  vi-first-print
+#"_"  vi-yank-arg
+#"`"  vi-goto-mark
+#"a"  vi-append-mode
+#"b"  vi-prev-word
+#"c"  vi-change-to
+#"d"  vi-delete-to
+#"e"  vi-end-word
+#"f"  vi-char-search
+#"h"  backward-char
+#"i"  vi-insertion-mode
+#"j"  next-history
+#"k"  prev-history
+#"l"  forward-char
+#"m"  vi-set-mark
+#"n"  vi-search-again
+#"p"  vi-put
+#"r"  vi-change-char
+#"s"  vi-subst
+#"t"  vi-char-search
+#"u"  vi-undo
+#"w"  vi-next-word
+#"x"  vi-delete
+#"y"  vi-yank-to
+#"|"  vi-column
+#"~"  vi-change-case
+
+$if mode=vi
+
+#####################
+#  ON COMMAND MODE  #
+#####################
+set keymap vi-command
+
+# To work with yiw/W
+"gy": vi-yank-to
+
+###########################
+#  VIM i/a OBJECT-SELECT  #
+###########################
+#Try to imitate *inner* word-select  (iW/iw) with b/B->e/E movements
+#It needs to move l cause b movement doesn't get the first letter
+#Doesn't work exactly the same for some corner cases like:
+# (44)* 55
+# or
+# 33-*44 55
+# but mostly alike
+
+"diw": "lbde"
+"diW": "lBdE"
+"yiw": "mtlbgye`t"
+"yiW": "mtlBgyE`t"
+"ciw": "diwi"
+"ciW": "diWi"
+#*Outer* word-select (aw/aW) is the same than *inner* for word-select
+"daw": "diw"
+"daW": "diW"
+"yaw": "yiw"
+"yaW": "yiW"
+"caw": "ciw"
+"caW": "ciW"
+
+#Implement outer(a) and inner(i) for everything else... Nice!
+#Mean the order
+"da(": "lF(df)"
+"da)": "lF(df)"
+"di(": "lF(lmtf)d`t"
+"di)": "lF(lmtf)d`t"
+"ci(": "di(i"
+"ci)": "di(i"
+"ca(": "da(i"
+"ca)": "da(i"
+"yi(": "modi(hp`o"
+"yi)": "modi)hp`o"
+"ya(": "moda(hp`o"
+"ya)": "moda)hp`o"
+"da[": "lF[df]"
+"da]": "lF[df]"
+"di[": "lF[lmtf]d`t"
+"di]": "lF[lmtf]d`t"
+"ca[": "da[i"
+"ca]": "da]i"
+"ci[": "di[i"
+"ci]": "di]i"
+"yi[": "modi[hp`o"
+"yi]": "modi]hp`o"
+"ya[": "moda[hp`o"
+"ya]": "moda]hp`o"
+"da{": "lF{df}"
+"da}": "lF{df}"
+"di{": "lF{lmtf}d`t"
+"di}": "lF{lmtf}d`t"
+"ca{": "da{i"
+"ca}": "da{i"
+"ci{": "di{i"
+"ci}": "di}i"
+"yi{": "modi{hp`o"
+"yi}": "modi}hp`o"
+"ya{": "moda{hp`o"
+"ya}": "moda}hp`o"
+"da'": "lF'df'"
+"di'": "lF'lmtf'd`t"
+"ci'": "di'i"
+"ca'": "da'i"
+"yi'": "modi'hp`o"
+"ya'": "moda'hp`o"
+"da*": "lF*df*"
+"di*": "lF*lmtf*d`t"
+"ci*": "di*i"
+"ca*": "da*i"
+"yi*": "modi*hp`o"
+"ya*": "moda*hp`o"
+"da>": "lF<df>"
+"da<": "lF<df>"
+"di>": "lF<lmtf>d`t"
+"di<": "lF<lmtf>d`t"
+"ci>": "di>i"
+"ci<": "di<i"
+"ca>": "da>i"
+"ca<": "da<i"
+"yi<": "modi<hp`o"
+"yi>": "modi>hp`o"
+"ya<": "moda<hp`o"
+"ya>": "moda>hp`o"
+"da`": "lF\`df\`"
+"di`": "lF\`lmtf\`d`t"
+"ci`": "di`i"
+"ca`": "da`i"
+"yi`": "modi`hp`o"
+"ya`": "moda`hp`o"
+"da\"": "lF\"df\""
+"di\"": "lF\"lmtf\"d`t"
+"ci\"": "di\"i"
+"ca\"": "da\"i"
+"yi\"": "modi\"hp`o"
+"ya\"": "moda\"hp`o"
+
+
+##############################
+#  BASH SURROUND POWAAA      #
+##############################
+#ds
+"ds)": "mtF(xf)x`th"
+"ds(": "mtF(xf)x`th"
+"ds]": "mtF[xf]x`th"
+"ds[": "mtF[xf]x`th"
+"ds}": "mtF{xf}x`th"
+"ds{": "mtF{xf}x`th"
+"ds'": "mtF'xf'x`th"
+"ds*": "mtF*xf*x`th"
+"ds<": "mtF<xf<x`th"
+"ds>": "mtF<xf>x`th"
+"ds`": "mtF`xf`x`th"
+"ds\"": "mtF\"xf\"x`th"
+#cs)x
+"cs)]": "mtF(r[f)r]`t"
+"cs)[": "mtF(xi[ \ef)xi \]\e`tl"
+"cs)}": "mtF(r{f)r}`t"
+"cs){": "mtF(xi{ \ef)xi }\e`tl"
+"cs)'": "mtF(r'f)r'`t"
+"cs)*": "mtF(r*f)r*`t"
+"cs)>": "mtF(r<f)r>`t"
+"cs)<": "mtF(xi< \ef)xi >\e`tl"
+"cs)`": "mtF(r`f)r``t"
+"cs)\"": "mtF(r\"f)r\"`t"
+#cs]x
+"cs])": "mtF[r(f]r)`t"
+"cs](": "mtF[xi( \ef]xi )\e`tl"
+"cs]}": "mtF[r{f]r}`t"
+"cs]{": "mtF[xi{ \ef]xi }\e`tl"
+"cs]'": "mtF[r'f]r'`t"
+"cs]*": "mtF[r*f]r*`t"
+"cs]>": "mtF[r<f]r>`t"
+"cs]<": "mtF[xi< \ef]xi >\e`tl"
+"cs]`": "mtF[r`f]\er``t"
+"cs]\"": "mtF[r\"f]r\"`t"
+#cs}x
+"cs})": "mtF{r(f}r)`t"
+"cs}(": "mtF{xi( \ef}xi )\e`tl"
+"cs}]": "mtF{r[f}r]`t"
+"cs}[": "mtF{xi[ \ef}xi \]\e`tl"
+"cs}'": "mtF{r'f}r'`t"
+"cs}*": "mtF{r*f}r*`t"
+"cs}>": "mtF{r<f}r>`t"
+"cs}<": "mtF{xi< \ef}xi >\e`tl"
+"cs}`": "mtF{r`f}r``t"
+"cs}\"": "mtF{r\"f}r\"`t"
+#cs'x
+"cs')": "mtF'r(f'r)`t"
+"cs'(": "mtF'xi( \ef'xi )\e`tl"
+"cs'}": "mtF'r{f'r}`t"
+"cs'{": "mtF'xi{ \ef'xi }\e`tl"
+"cs']": "mtF'r[f'r]`t"
+"cs'[": "mtF'xi[ \ef'xi \]\e`tl"
+"cs'*": "mtF'r*f'r*`t"
+"cs'>": "mtF'r<f'r>`t"
+"cs'<": "mtF'xi< \ef'xi >\e`tl"
+"cs'`": "mtF'r`f'r``t"
+"cs'\"": "mtF'r\"f'r\"`t"
+#cs*x
+"cs*)": "mtF*r(f*r)`t"
+"cs*(": "mtF*xi( \ef*xi )\e`tl"
+"cs*}": "mtF*r{f*r}`t"
+"cs*{": "mtF*xi{ \ef*xi }\e`tl"
+"cs*]": "mtF*r[f*r]`t"
+"cs*[": "mtF*xi[ \ef*xi \]\e`tl"
+"cs*'": "mtF*r'f*r'`t"
+"cs*>": "mtF*r<f*r>`t"
+"cs*<": "mtF*xi< \ef*xi >\e`tl"
+"cs*`": "mtF*r`f*r``t"
+"cs*\"": "mtF*r\"f*r\"`t"
+#cs>x
+"cs>)": "mtF<r(f>r)`t"
+"cs>(": "mtF<xi( \ef>xi )\e`tl"
+"cs>]": "mtF<r[f>r]`t"
+"cs>[": "mtF<xi[ \ef>xi \]\e`tl"
+"cs>}": "mtF<r{f>r}`t"
+"cs>{": "mtF<xi{ \ef>xi }\e`tl"
+"cs>'": "mtF<r'f>r'`t"
+"cs>*": "mtF<r*f>r*`t"
+"cs>`": "mtF<r`f>r``t"
+"cs>\"": "mtF<r\"f>r\"`t"
+"cs`)": "mtF`r(f`r)`t"
+"cs`(": "mtF`xi( \ef`xi )\e`tl"
+"cs`}": "mtF`r{f`r}`t"
+"cs`{": "mtF`xi{ \ef`xi }\e`tl"
+"cs`]": "mtF`r[f`r]`t"
+"cs`[": "mtF`xi[ \ef`xi \]\e`tl"
+"cs`'": "mtF`r'f`r'`t"
+"cs`>": "mtF`r<f`r>`t"
+"cs`<": "mtF`xi< \ef`xi >\e`tl"
+"cs`*": "mtF`r*f`r*`t"
+"cs`\"": "mtF`r\"f`r\"`t"
+#cs\"x
+"cs\")": "mtF\"r(f\"r)`t"
+"cs\"(": "mtF\"xi( \ef\"xi )\e`tl"
+"cs\"}": "mtF\"r{f\"r}`t"
+"cs\"{": "mtF\"xi{ \ef\"xi }\e`tl"
+"cs\"]": "mtF\"r[f\"r]`t"
+"cs\"[": "mtF\"xi[ \ef\"xi \]\e`tl"
+"cs\"'": "mtF\"r'f\"r'`t"
+"cs\"*": "mtF\"r*f\"r*`t"
+"cs\">": "mtF\"r<f\"r>`t"
+"cs\"<": "mtF\"xi< \ef\"xi >\e`tl"
+"cs\"`": "mtF\"r`f\"r``t"
+#"Specials"
+"cs][": "mtF[a \ef]i \e`tl"
+"cs)(": "mtF(a \ef)i \e`tl"
+"cs}{": "mtF{a \ef}i \e`tl"
+"cs><": "mtF<a \ef>i \e`tl"
+
+#ys(w/W)*
+"ysw)": "mti(\eea)\e`tl"
+"ysw(": "mti( \eea )\e`t2l"
+"ysW)": "mti(\eEa)\e`tl"
+"ysW(": "mti( \eEa )\e`t2l"
+"ysw]": "mti[\eea\]\e`tl"
+"ysw[": "mti[ \eea \]\e`t2l"
+"ysW]": "mti[\eEa\]\e`tl"
+"ysW[": "mti[ \eEa \]\e`t2l"
+"ysw}": "mti{\eea}\e`tl"
+"ysw{": "mti{ \eea }\e`t2l"
+"ysW}": "mti{\eEa}\e`tl"
+"ysW{": "mti{ \eEa }\e`t2l"
+"ysw'": "mti'\eea'\e`tl"
+"ysW'": "mti'\eEa'\e`tl"
+"ysw*": "mti*\eea*\e`tl"
+"ysW*": "mti*\eEa*\e`tl"
+"ysw>": "mti<\eea>\e`tl"
+"ysw<": "mti< \eea >\e`t2l"
+"ysW>": "mti<\eEa>\e`tl"
+"ysW<": "mti< \eEa >\e`t2l"
+"ysw`": "mti`\eea`\e`tl"
+"ysW`": "mti`\eEa`\e`tl"
+"ysw\"": "mti\"\eea"\e`tl"
+"ysW\"": "mti\"\eEa"\e`tl"
+
+#ysi(w/W)*
+"ysiw)": "lmtbi(\eea)\e`t"
+"ysiw(": "lmtbi( \eea )\e`tl"
+"ysiW)": "lmtBi(\eEa)\e`t"
+"ysiW(": "lmtBi( \eEa )\e`tl"
+"ysiw]": "lmtbi[\eea\]\e`t"
+"ysiw[": "lmtbi[ \eea \]\e`tl"
+"ysiW]": "lmtBi[\eEa\]\e`t"
+"ysiW[": "lmtBi[ \eEa \]\e`tl"
+"ysiw}": "lmtbi{\eea}\e`t"
+"ysiw{": "lmtbi{ \eea }\e`tl"
+"ysiW}": "lmtBi{\eEa}\e`t"
+"ysiW{": "lmtBi{ \eEa }\e`tl"
+"ysiw'": "lmtbi'\eea'\e`t"
+"ysiW'": "lmtBi'\eEa'\e`t"
+"ysiw*": "lmtbi*\eea*\e`t"
+"ysiW*": "lmtBi*\eEa*\e`t"
+"ysiw>": "lmtbi<\eea>\e`t"
+"ysiw<": "lmtbi< \eea >\e`tl"
+"ysiW>": "lmtBi<\eEa>\e`t"
+"ysiW<": "lmtBi< \eEa >\e`tl"
+"ysiw`": "lmtbi`\eea`\e`t"
+"ysiW`": "lmtBi`\eEa`\e`t"
+"ysiw\"": "lmtbi\"\eea"\e`t"
+"ysiW\"": "lmtBi\"\eEa"\e`t"
+#delete single spaces (trim one time)
+"dss": "mtBhxElx`th"
+#"dss": delete-horizontal-space
+
+$endif
+
+
+# vi:filetype=readline
