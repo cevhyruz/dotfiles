@@ -73,6 +73,7 @@ jobs:
       run: ./lint.sh
 
   benchmark:
+    strategy:
     matrix:
       rust: [stable, nightly]
     runs-on: ubuntu-latest
@@ -81,6 +82,7 @@ jobs:
     - uses: hecrj/setup-rust-action@v1
        with:
          rust-version: ${{ matrix.rust }}
+    - uses: actions/checkout@v2
 
     - name: install hyperfine
        run: cargo install hyperfine
