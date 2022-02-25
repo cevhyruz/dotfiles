@@ -72,17 +72,6 @@ jobs:
     - name: Run lint
       run: ./lint.sh
 
-  benchmark:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: hecrj/setup-rust-action@v1
-      with:
-        rust-version: stable
-    - uses: actions/checkout@master
-    - name: Run tests
-      run: cargo test --verbose
-
   coverage:
     runs-on: ubuntu-latest
 
