@@ -12,9 +12,7 @@ done
 
 # initliaze configurations.
 for file in "${DOT_BASH}/core"/*; do
-  if [[ "$file" != '/home/devs/Projects/dotfiles/Bash/core/autopairs.bash' ]]; then
-    source "${file}"
-  fi
+  source "${file}"
 done
 
 # ordered
