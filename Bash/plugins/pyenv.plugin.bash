@@ -2,16 +2,38 @@
 # shellcheck shell=bash
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-# Pyenv plugin for Bash
+about-plugin 'Load pyenv, if it is installed.'
+plugin-group 'wrappers'
 
-function _load_pyenv() {
-  export PYENV_ROOT="${HOME}/.pyenv"
+export PYENV_ROOT="${HOME}/.pyenv"
 
-  if [[ ! -d "${PYENV_ROOT}" ]] \
-    && [[ ! -x "${PYENV_ROOT}/bin/pyenv" ]]; then
-    unset -v PYENV_ROOT
-    return 0
+if [[ ! -d "${PYENV_ROOT}" ]] \
+  || [[ ! -x "${PYENV_ROOT}/bin/pyenv" ]]; then
+  unset -v PYENV_ROOT
+  return 0
+fi
+
+function pyenv() {
+  local command
+  command="${1:-}"
+
+  if [[ "$#" -gt 0 ]]; then
+    shift
   fi
+
+  case "${command}" in
+    activate|deactivate|rehash|shell)
+      eval "$(pyenv "sh-${command}" "$@")"
+      ;;
+    *)
+      command pyenv "${command}" "$@"
+      ;;
+  esac
+}
+
+function main() {
+  export PYENV_SHELL='bash'
+  source "${PYENV_ROOT}/completions/pyenv.bash"
 
   _::add_to_path "${PYENV_ROOT}/bin"
   _::add_to_path "${PYENV_ROOT}/shims"
@@ -22,29 +44,6 @@ function _load_pyenv() {
 
   # disable prompt
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-
- #eval "$(pyenv init - --no-rehash bash)"
-export PYENV_SHELL='bash'
-source '/home/devs/.pyenv/libexec/../completions/pyenv.bash'
-
-  function pyenv() {
-    local command
-    command="${1:-}"
-
-    if [[ "$#" -gt 0 ]]; then
-      shift
-    fi
-
-    case "$command" in
-      activate|deactivate|rehash|shell)
-        eval "$(pyenv "sh-$command" "$@")"
-        ;;
-      *)
-        command pyenv "$command" "$@"
-        ;;
-    esac
-  }
-
 }
 
-_load_pyenv && unset -f _load_pyenv
+main && unset -f main

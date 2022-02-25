@@ -6,12 +6,12 @@
 # https://github.com/erichs/composure
 
 function main() {
-  local foobar=(
+  local functions=(
     'about' 'example' 'group' 'param'
-    'about-alias' 'about-plugin' 'about-completion'
+    'about-alias' 'about-plugin' 'plugin-group' 'about-completion'
     '_about' '_env' '_group' '_return' '_param' )
 
-  for func in ${foobar[*]}; do
+  for func in ${functions[*]}; do
     eval "$func() { :; }"
   done
 }
@@ -36,7 +36,7 @@ function _letterpress() {
     return
   fi
 
-  printf "%-*s%s\n" "$leftwidth" "$leftcol" "$rightcol"
+  printf "%-*s%s\n" "${leftwidth}" "${leftcol}" "${rightcol}"
 }
 
 function reference() {
@@ -101,20 +101,6 @@ function metafor() {
   sed -n "/$keyword / s/['\";]*\$//;s/^[ 	]*$keyword ['\"]*\([^([].*\)*\$/\1/p"
 }
 
-function cite() {
-  about 'creates one or more meta keywords for use in your functions'
-  param 'one or more keywords'
-  example '$ cite url username'
-  example '$ url http://somewhere.com'
-  example '$ username alice'
-  group 'composure'
-
-  local keyword
-  for keyword in "$@"; do
-    eval "$keyword() { :; }"
-  done
-}
-
 function glossary() {
   about 'displays help summary for all functions, or for a group of functions'
   param '1: optional, group name'
@@ -138,24 +124,24 @@ function glossary() {
     | awk '{ print $1 + 5 }'
   )"
 
-  for func in $functionlist; do
-    group="$(declare -f -- "$func" | metafor group)"
+  for func in ${functionlist}; do
+    group="$(declare -f -- "${func}" | metafor group)"
     if [[ "X${targetgroup}X" != "XX" ]]; then
       if [[ "$group" != "$targetgroup" ]]; then
         continue  # skip non-matching groups, if specified
       fi
-    elif [[ "$group" == 'composure' ]]; then
-      continue # skip composure group, unless specified
+    #elif [[ "${group}" == 'composure' ]]; then
+      #continue # skip composure group, unless specified
     fi
     about="$(declare -f -- "$func" | metafor about)"
     echo "$about" \
       | fmt \
       | while read -r aboutline; do
-        _letterpress "$aboutline" "$func" "$maxwidth"
+        _letterpress "${aboutline}" "${func}" "${maxwidth}"
       func=' ' # only display function name once
     done
   done
   unset func
 }
 
-main "$@" unset -f main
+main unset -f main

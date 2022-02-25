@@ -99,7 +99,7 @@ function __set_PS1() {
                 echo "unknown" )"
             "\[${fg_yellow}\]"
             ") "
-            "${status}" )
+            "${status:-}" )
       fi
 
       declare -ra prompt=(
