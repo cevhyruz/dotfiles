@@ -75,15 +75,13 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
 
+    setps:
     - uses: hecrj/setup-rust-action@v1
        with:
          rust-version: stable
 
     - name: install hyperfine
        run: cargo install hyperfine
-
-    - name: run profiler
-      run: hyperfine --prepare './Bash/bash_init.sh' ./Bash/bash_init.sh
 
   coverage:
     runs-on: ubuntu-latest
