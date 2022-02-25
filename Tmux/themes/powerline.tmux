@@ -68,7 +68,7 @@ set-option -g status-left-length  70
 set-option -g status-left \
 "#[bg="${PRIMARY}",fg="${TINT}"] #{b:socket_path}:#S "\
 "#[fg="${PRIMARY}",bg="colour237"]#[fg=cyan]\ue0b1"\
-"#[fg="${PRIMARY}",bg=colour237] #{pane_current_path} "\
+"#[fg="${PRIMARY}",bg=colour237] #{s/#{HOME}/~:#{pane_current_path}} "\
 "#[fg=colour237,bg="${STATUS_BG}"]#[fg=cyan]\ue0b1"
 
 
