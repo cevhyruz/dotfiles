@@ -74,14 +74,11 @@ jobs:
 
   benchmark:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust: [stable, nightly]
 
     steps:
     - uses: hecrj/setup-rust-action@v1
       with:
-        rust-version: ${{ matrix.rust }}
+        rust-version: stable
     - uses: actions/checkout@master
     - name: Run tests
       run: cargo test --verbose
