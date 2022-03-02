@@ -111,11 +111,11 @@ function __set_PS1() {
         "${return_str}\n"
         "${VIRTUAL_ENV:-}"
         "${arrow[2]}"
-        "\[${reset}${dim}\] \$: ${reset}"
+        "\[${reset}${dim}\] \$: \[${reset}\]"
         "\[\e[38;5;216m\]"
       )
 
-      printf "%b" "${prompt[@]}"
+      printf "%b" "\[${prompt[@]}\]"
     )'
 }
 # :nocov:
