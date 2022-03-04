@@ -5,7 +5,6 @@
 "   \  $$$/ | $$| $$ | $$ | $$ $$  \__/ $$$$$$$$
 "    \___/  |__/|__/ |__/ |__/__/      \_______/
 "
-
 let g:ycm_key_list_select_completion   = ['J', '<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['K', '<C-p>', '<Up>']
 
@@ -16,30 +15,28 @@ else
   let g:which_vim = 'vim'
   call plug#begin('~/.vim/plugged')
 endif
-  Plug 'aliou/bats.vim'
+  Plug 'aliou/bats.vim',               { 'for': 'bats' }
   Plug 'yuki-ycino/fzf-preview.vim'
-  Plug 'digitaltoad/vim-pug'
+  Plug 'digitaltoad/vim-pug',          { 'for': 'pug' }
   Plug 'tomasiser/vim-code-dark'
   Plug 'dense-analysis/ale'
-  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
+  Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
   Plug 'preservim/nerdcommenter'
   Plug 'ryanoasis/vim-devicons'
-  " TODO: Add catch here for YCM breaking change commit.
-  " https://github.com/ycm-core/YouCompleteMe/issues/3764
   Plug 'ycm-core/YouCompleteMe'
+  Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-endwise'
-  Plug 'jiangmiao/auto-pairs'
   Plug 'SirVer/ultisnips'
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'junegunn/vader.vim'
+  Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
+  Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'airblade/vim-gitgutter'
-  Plug 'Yggdroot/indentLine' " hides startup message
-  Plug 'majutsushi/tagbar'
+  Plug 'Yggdroot/indentLine'
+  Plug 'majutsushi/tagbar',            { 'on': 'TagbarToggle' }
   Plug 'godlygeek/tabular'
   Plug 'benmills/vimux'
   Plug 'easymotion/vim-easymotion'
