@@ -7,15 +7,13 @@
 
 # server options
 
-
-
-set-option -g @theme powerline
+set-option -g @theme default
 
 set-option -as terminal-overrides \
 ',*:RGB:Smulx=\E[4::%p1%dm:Smol=\E[53m:smxx=\E[9m'\
 ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'
 
-set-option -g default-terminal "screen-256color"
+set-option -g default-terminal "tmux-256color"
 
 set-option -s buffer-limit 25
 set-option -s escape-time   0
@@ -44,7 +42,7 @@ if-shell '[ $(echo "$TMUX_VERSION < 2.1" | bc) = 1 ]' \
    set-option        -g mouse-select-pane   "on"; \
 "
 
-## In version 2.1 "mouse" replaced the previous 4 options
+# In version 2.1 "mouse" replaced the previous 4 options
 if-shell '[ "$(echo "$TMUX_VERSION >= 2.1" | bc)" = 1 ]' \
 "set-option -g mouse "on""
 
@@ -62,10 +60,8 @@ set-option -g prefix2 C-b
 set-option -g repeat-time 4000
 set-option -g set-titles on
 set-option -g set-titles-string "#S(#W:#P)"
-set-option -g status on
 
 set-option -g status-interval 10
-set-option -g status-justify left
 set-option -g status-keys vi
 set-window-option -g mode-keys vi
 

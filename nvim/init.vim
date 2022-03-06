@@ -23,7 +23,7 @@ endif
   Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
   Plug 'preservim/nerdcommenter'
   Plug 'ryanoasis/vim-devicons'
-  Plug 'ycm-core/YouCompleteMe'
+  Plug 'ycm-core/YouCompleteMe',       { 'do': 'python3 install.py' }
   Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
