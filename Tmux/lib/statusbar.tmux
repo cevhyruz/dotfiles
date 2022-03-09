@@ -22,8 +22,8 @@
 "#( cd #{pane_current_path}"\
 "&& git rev-parse --short HEAD )"
 
-%hidden _pane_title=\
-"#{=20:pane_title} "\
+%hidden _host=\
+"#{=20:host} "\
 
 # time format should always sync with clock-mode-style.
 %hidden _time=\

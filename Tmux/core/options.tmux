@@ -21,6 +21,8 @@ set-option -s exit-unattached off
 set-option -s set-clipboard on
 set-option -s focus-event on
 
+set-option -g renumber-windows on
+
 # session options
 
 set-window-option -g xterm-keys on

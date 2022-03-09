@@ -49,6 +49,8 @@ source-file ${DOT_TMUX}"/lib/*"
 "#{@normal-status-comp-c-style}}}"\
 "}"
 
+# theme starts here..
+
 set-option -g clock-mode-style   12
 set-option -g status 2
 
@@ -57,6 +59,8 @@ set -g @prefix-mode-fill           "colour24"
 set -g @copy-mode-fill             "colour94"
 set -g @normal-mode-fill           "colour236"
 set -g @readonly-mode-fill         "colour124"
+
+set-option -g @glyph-style "bold,fg=colour250"
 
 set-option -gF status-style "bg=#{@normal-mode-fill},fg=colour247"
 
@@ -114,23 +118,26 @@ set-option -g window-status-current-format \
 
 set-option -g  status-left-length  70
 set-option -gF status-left \
-"#[#{_status_comp_a_style}] #{_session_name} "\
-"#[#{_status_comp_b_style}]  #{_pwd}  "\
-"#[#{_status_comp_c_style}]  #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit}  #{@pl-thin-separator-right} "
+"#[#{_status_comp_a_style}] #{_session_name} #[reverse]#{@pl-separator-right}"\
+"#[#{_status_comp_b_style}] #{_pwd} "\
+"#[#{_status_comp_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
 
 set-option -g  status-right-length 100
 set-option -gF status-right \
-"#[#{_status_comp_c_style}] #{@pl-thin-separator-left}  #{@fa-wifi}  #{_wifi_ssid} "\
-"#[#{_status_comp_c_style}] #{@pl-thin-separator-left}  #{@fa-calendar-alt}  #{_day} #{_date}  "\
-"#[#{_status_comp_b_style}]  #{@fa-clock}  #{_time}  "\
-"#[#{_status_comp_a_style}]  #{@fa-desktop}  #{_user}@#{_pane_title} "\
+"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid} "\
+"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
+"#[#{_status_comp_b_style}] #{@fa-clock} #{_time}  "\
+"#[#{_status_comp_a_style}]  #{_user}@#{_pane_title}"\
 
 # status format
-set-option -gF status-format[0] \
-"#{_status_left_format}"\
-"#[fill=#{_status_client_mode_fill}]"\
-"#{_status_right_format}"
-
+set-option -g status-format[0] \
+"#{?client_readonly,"\
+"#[fg=colour203]#{@fa-lock} client is in readonly mode. Press #{prefix} + R to toggle."\
+","\
+"#{E:_status_left_format}"\
+"#[fill=#{E:_status_client_mode_fill}]"\
+"#{E:_status_right_format}"\
+"}"
 set-option -gF status-format[1] \
 "#{_window_list}"\
 "#[fill=colour234]"
