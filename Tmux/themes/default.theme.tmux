@@ -81,9 +81,10 @@ set-option -g  @copy-status-comp-b-style   "default,bg=colour136,fg=colour231"
 set-option -gF @copy-status-comp-c-style   "bg=#{@copy-mode-fill},fg=colour180"
 
 # modal command prompt styles
-set-option -g message-style         "bg=colour234"
+set-option -g message-style         "bg=colour234,fg=cyan"
 set-option -g message-command-style "bg=colour234"
 
+set-option -g pane-mode-changed[42] 'set -g message-style fg=orange'
 # component styles
 set-option -g @day-mode-style    "long"
 set-option -g @month-mode-style  "long"
@@ -92,8 +93,8 @@ set-option -g @day-weekday-style "default"
 
 # _window_list styles
 set-option -g status-justify "centre"
-set-option -gF window-status-current-style "bg=colour236"  #"#{_status_comp_b_style}"
-set-option -g window-status-style "bg=colour235,fg=colour240"
+set-option -gF window-status-current-style "bg=colour237,fg=colour250"  #"#{_status_comp_b_style}"
+set-option -g window-status-style "bg=colour235,fg=colour245"
 #"#{?client_readonly,"\
 #"#{@readonly-status-comp-c-style},"\
 #"#{?client_prefix,"\
@@ -124,7 +125,7 @@ set-option -gF status-left \
 
 set-option -g  status-right-length 100
 set-option -gF status-right \
-"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid} "\
+"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
 "#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
 "#[#{_status_comp_b_style}] #{@fa-clock} #{_time}  "\
 "#[#{_status_comp_a_style}]  #{_user}@#{_pane_title}"\
@@ -139,5 +140,8 @@ set-option -g status-format[0] \
 "#{E:_status_right_format}"\
 "}"
 set-option -gF status-format[1] \
-"#{_window_list}"\
-"#[fill=colour234]"
+"#{@fa-th-large} #{_window_list}"\
+"#[fill=colour234]"\
+"#[nolist align=right]"\
+"#[bg=colour234]"\
+"#{?#{!=:#{_yt_current_playing_song},},#{@fa-headphones}#[fg=colour241] #{=40:#{E:_yt_current_playing_song}},}"

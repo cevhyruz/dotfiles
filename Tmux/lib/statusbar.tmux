@@ -4,6 +4,9 @@
 # ---------------------------------------------------------------------
 # vi:ft=tmux
 
+%hidden _yt_current_playing_song=\
+"#{?#{!=:#(playerctl status),Stopped},#(playerctl metadata title),}"
+
 %hidden _user="#(whoami)"
 
 %hidden _session_name=\
@@ -45,7 +48,7 @@
 
 # Wifi connection indicator, empty if not connected.
 %hidden _wifi_ssid=\
-"#( iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
+"#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
 # portable default window list.
 %hidden _window_list=\

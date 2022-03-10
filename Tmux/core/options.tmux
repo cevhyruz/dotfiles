@@ -63,7 +63,7 @@ set-option -g repeat-time 4000
 set-option -g set-titles on
 set-option -g set-titles-string "#S(#W:#P)"
 
-set-option -g status-interval 10
+set-option -g status-interval 1
 set-option -g status-keys vi
 set-window-option -g mode-keys vi
 

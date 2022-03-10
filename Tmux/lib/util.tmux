@@ -32,7 +32,7 @@ set-option -g @fa-toggle-on      "#[push-default #{@glyph-style}] \uf205 #[pop-d
 set-option -g @fa-toggle-off     "#[push-default #{@glyph-style}] \uf204 #[pop-default default]"  # 
 set-option -g @fa-check-square   "#[push-default #{@glyph-style}] \uf14a #[pop-default default]"  # 
 set-option -g @fa-mouse-pointer  "#[push-default #{@glyph-style}] \uf245 #[pop-default default]"  # 
-
+set-option -g @fa-th-large       "#[push-default #{@glyph-style}] \uf009 #[pop-default default]"  # 
 
 # required powerline-extra-symbols
 set-option -g @pl-thin-separator-left  "#[push-default #{@glyph-style}] \ue0b3 #[pop-default default]" # 
