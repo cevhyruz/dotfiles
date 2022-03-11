@@ -53,6 +53,7 @@ source-file ${DOT_TMUX}"/lib/*"
 
 set-option -g clock-mode-style   12
 set-option -g status 2
+set-option -g status-justify left
 
 # modal styles
 set -g @prefix-mode-fill           "colour24"
