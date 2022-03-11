@@ -14,6 +14,9 @@
 "#{session_name}"\
 "#[pop-default default]"
 
+%hidden _socket_path=\
+"#{b:socket_path}"
+
 %hidden _pwd="#{s/#{HOME}/~:#{pane_current_path}}"
 
 %hidden _git_branch=\

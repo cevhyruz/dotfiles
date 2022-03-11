@@ -2,8 +2,6 @@
 #
 # description: modal statusbar theme
 
-source-file ${DOT_TMUX}"/lib/*"
-
 # Modal statusbar fill (normal|copy|prefix).
 # user options:
 #   @prefix-mode-fill [colour]
@@ -28,6 +26,7 @@ source-file ${DOT_TMUX}"/lib/*"
 "#{@copy-status-comp-a-style},"\
 "#{@normal-status-comp-a-style}}}"\
 "}"
+
 # component B style
 %hidden _status_comp_b_style=\
 "#{?client_readonly,"\
@@ -38,6 +37,7 @@ source-file ${DOT_TMUX}"/lib/*"
 "#{@copy-status-comp-b-style},"\
 "#{@normal-status-comp-b-style}}}"\
 "}"
+
 # component C style
 %hidden _status_comp_c_style=\
 "#{?client_readonly,"\
@@ -61,7 +61,7 @@ set -g @copy-mode-fill             "colour94"
 set -g @normal-mode-fill           "colour236"
 set -g @readonly-mode-fill         "colour124"
 
-set-option -g @glyph-style "bold,fg=colour250"
+set-option -g @glyph-style "bold,fg=colour203"
 
 set-option -gF status-style "bg=#{@normal-mode-fill},fg=colour247"
 
@@ -120,7 +120,7 @@ set-option -g window-status-current-format \
 
 set-option -g  status-left-length  70
 set-option -gF status-left \
-"#[#{_status_comp_a_style}] #{_session_name} #[reverse]#{@pl-separator-right}"\
+"#[#{_status_comp_a_style}]  #{b:socket_path}:#{_session_name}  #[reverse]#{@pl-separator-right}"\
 "#[#{_status_comp_b_style}] #{_pwd} "\
 "#[#{_status_comp_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
 
@@ -129,7 +129,7 @@ set-option -gF status-right \
 "#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
 "#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
 "#[#{_status_comp_b_style}] #{@fa-clock} #{_time}  "\
-"#[#{_status_comp_a_style}]  #{_user}@#{_pane_title}"\
+"#[#{_status_comp_a_style}] #{@fa-desktop} #{_user}@#{host}  "\
 
 # status format
 set-option -g status-format[0] \
@@ -141,8 +141,10 @@ set-option -g status-format[0] \
 "#{E:_status_right_format}"\
 "}"
 set-option -gF status-format[1] \
-"#{@fa-th-large} #{_window_list}"\
 "#[fill=colour234]"\
 "#[nolist align=right]"\
 "#[bg=colour234]"\
 "#{?#{!=:#{_yt_current_playing_song},},#{@fa-headphones}#[fg=colour241] #{=40:#{E:_yt_current_playing_song}},}"
+
+set-option -gF status-format[2] \
+" #{@fa-th-large} #{_window_list}"\
