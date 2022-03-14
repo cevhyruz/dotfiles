@@ -29,7 +29,9 @@ endif
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-endwise'
+  Plug 'mattn/emmet-vim'
   Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
   Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
   Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
   Plug 'junegunn/fzf.vim'
@@ -90,7 +92,7 @@ set clipboard+=unnamedplus
 set updatetime=100
 set undofile
 set laststatus=2
-set showtabline=2
+set showtabline=1
 set showcmd
 set ttimeout
 set ttimeoutlen=50

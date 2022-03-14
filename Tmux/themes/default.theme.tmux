@@ -51,10 +51,6 @@
 
 # theme starts here..
 
-set-option -g clock-mode-style   12
-set-option -g status 2
-set-option -g status-justify left
-
 # modal styles
 set -g @prefix-mode-fill           "colour24"
 set -g @copy-mode-fill             "colour94"
@@ -140,6 +136,7 @@ set-option -g status-format[0] \
 "#[fill=#{E:_status_client_mode_fill}]"\
 "#{E:_status_right_format}"\
 "}"
+
 set-option -gF status-format[1] \
 "#[fill=colour234]"\
 "#[nolist align=right]"\
@@ -148,3 +145,7 @@ set-option -gF status-format[1] \
 
 set-option -gF status-format[2] \
 " #{@fa-th-large} #{_window_list}"\
+
+set-option -g clock-mode-style   12
+set-option -g status 3
+set-option -g status-justify left
