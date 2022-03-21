@@ -1,8 +1,17 @@
 vim.g.scriptencoding = 'utf8'
 vim.g.mapleader = ','
 vim.cmd [[ colorscheme codedark ]]
+vim.cmd [[ filetype plugin indent on ]]
 
-vim.o.clipboard = "unnamed,unnamedplus"
+vim.bo.expandtab = true
+vim.bo.tabstop = 2
+vim.bo.softtabstop = 2
+vim.bo.shiftwidth = 2
+
+vim.wo.cursorline = true
+vim.wo.colorcolumn = '80'
+
+vim.o.clipboard = 'unnamed,unnamedplus'
 vim.o.updatetime = 100
 vim.o.ttimeout = 50
 vim.wo.number = true
@@ -28,11 +37,6 @@ vim.o.ignorecase = true
 
 vim.bo.smartindent = true
 vim.bo.cindent = true
-
-vim.bo.expandtab = true
-vim.bo.tabstop = 2
-vim.bo.softtabstop = 2
-vim.bo.shiftwidth = 2
 
 vim.o.mouse = 'a'
 
