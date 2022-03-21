@@ -1,9 +1,9 @@
 scriptencoding utf-8
 
-" if exists('g:loaded_prettify')
-"   finish
-" endif
-" let g:loaded_prettify = 1
+ if exists('g:loaded_prettify')
+   finish
+ endif
+ let g:loaded_prettify = 1
 
 " Idea from zeorin's dotfiles
 " https://github.com/zeorin/dotfiles/blob/e01cebf/.vimrc#L864-L900
@@ -31,10 +31,9 @@ let g:palette   = {
 augroup hide_project_root
   autocmd!
   autocmd! FileType nerdtree syntax match NERDTreeHideCWD /\/\c[a-z]*/ containedin=NERDTreeCWD conceal
-" augroup efor r in {200..255..5}; do fb=4;g=1;b=1;printf '\e[0;%s8;2;%s;%s;%sm   ' "$fb" "$r" "$g" "$b"; done; echond
 augroup END
 
-augroup hide_nerdtree_dir_slash
+augroup s:hide_nerdtree_dir_slash
   autocmd!
   autocmd! FileType nerdtree syntax match NERDTreeDirSlash /\/$/ containedin=NERDTreeDir conceal
 augroup END
