@@ -7,6 +7,9 @@
 # allow sudo'ing aliases.
 alias sudo="sudo "
 
+# prompt whether to remove destinations.
+alias ln="ln --interactive "
+
 # going home.
 alias home='cd ${HOME}'
 

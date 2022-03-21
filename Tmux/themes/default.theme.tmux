@@ -2,11 +2,13 @@
 #
 # description: modal statusbar theme
 
-# Modal statusbar fill (normal|copy|prefix).
+# Modal statusbar fill (readonly|normal|copy|prefix). {{{1
 # user options:
-#   @prefix-mode-fill [colour]
-#   @copy-mode-fill   [colour]
-#   @normal-mode-fill [colour]
+#   @prefix-mode-fill   [colour]
+#   @copy-mode-fill     [colour]
+#   @normal-mode-fill   [colour]
+#   @readonly-mode-fill [colour]
+#
 %hidden _status_client_mode_fill=\
 "#{?client_readonly,"\
 "#{@readonly-mode-fill},"\
@@ -15,7 +17,6 @@
 "#{?pane_in_mode,"\
 "#{@copy-mode-fill},"\
 "#{@normal-mode-fill}}}}"
-
 # component A style
 %hidden _status_comp_a_style=\
 "#{?client_readonly,"\
@@ -127,7 +128,7 @@ set-option -gF status-right \
 "#[#{_status_comp_b_style}] #{@fa-clock} #{_time}  "\
 "#[#{_status_comp_a_style}] #{@fa-desktop} #{_user}@#{host}  "\
 
-# status format
+# status format {{{1
 set-option -g status-format[0] \
 "#{?client_readonly,"\
 "#[fg=colour203]#{@fa-lock} client is in readonly mode. Press #{prefix} + R to toggle."\

@@ -26,6 +26,7 @@ endfunction
 
 function! vimrc#tmux_navigate(direction) abort "{{{1
   let l:curwin = winnr()
+
   if a:direction !=# 'p'
     call vimrc#navigate(a:direction)
   endif
@@ -53,6 +54,13 @@ function! s:foldline_percentage() abort
 endfunction
 
 function! vimrc#foldtext(delim) abort " {{{1
+
+  if exists('+termguicolors')
+    highlight Folded gui=none guifg=#d7d7d7 guibg=#efefef
+  else
+    highlight Folded cterm=none ctermbg=234 ctermfg=203
+  endif
+
   let l:line = substitute(getline(v:foldstart), split(&commentstring, '%s')[0] . '\|{{{\d\=', '', 'g')
   " indent foldtext corresponding to foldlevel
   let l:indent = repeat(' ', shiftwidth())

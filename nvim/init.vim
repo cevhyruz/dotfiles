@@ -15,40 +15,43 @@ else
   let g:which_vim = 'vim'
   call plug#begin('~/.vim/plugged')
 endif
-  Plug 'aliou/bats.vim',               { 'for': 'bats' }
+  "Plug 'aliou/bats.vim',               { 'for': 'bats' }
   Plug 'yuki-ycino/fzf-preview.vim'
   Plug 'digitaltoad/vim-pug',          { 'for': 'pug' }
-  Plug 'tomasiser/vim-code-dark'
-  Plug 'dense-analysis/ale'
-  Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
-  Plug 'preservim/nerdcommenter'
-  Plug 'ryanoasis/vim-devicons'
+  "Plug 'tomasiser/vim-code-dark'
+  "Plug 'dense-analysis/ale'
+"  Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
+  "Plug 'preservim/nerdcommenter'
+  "Plug 'ryanoasis/vim-devicons'
   Plug 'ycm-core/YouCompleteMe',       { 'do': 'python3 install.py' }
-  Plug 'jiangmiao/auto-pairs'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-fugitive'
+  "Plug 'jiangmiao/auto-pairs'
+  "Plug 'tpope/vim-surround'
+  "Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-endwise'
+  "Plug 'tpope/vim-endwise'
   Plug 'mattn/emmet-vim'
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
-  Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
-  Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
-  Plug 'junegunn/fzf.vim'
+  "Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
+  "Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
+  "Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'Yggdroot/indentLine'
-  Plug 'majutsushi/tagbar',            { 'on': 'TagbarToggle' }
+  "Plug 'airblade/vim-gitgutter'
+  "Plug 'Yggdroot/indentLine'
+  "Plug 'majutsushi/tagbar',            { 'on': 'TagbarToggle' }
   Plug 'godlygeek/tabular'
-  Plug 'benmills/vimux'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'blueyed/vim-diminactive'
-  Plug 'itchyny/lightline.vim'
-  Plug 'christoomey/vim-tmux-navigator'
+  "Plug 'benmills/vimux'
+  "Plug 'easymotion/vim-easymotion'
+  "Plug 'blueyed/vim-diminactive'
+  "Plug 'itchyny/lightline.vim'
+  "Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 " section: fzf
-let g:fzf_layout = {'down': '~23%'}
+"let g:fzf_layout = {'down': '~23%'}
+
+" - Popup window (center of the screen)
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 let g:fzf_action = {
 \ 'ctrl-h': 'topleft vsplit',
@@ -61,78 +64,12 @@ let g:fzf_action = {
 \ 'alt-l':  'rightbelow vsplit',
 \ 'alt-t':  'tab split' }
 
-" FIXME: Please stop using autocommands for everything,
-" specially for *Leave, *Enter events.
-augroup hide_fzf_statusline
-  autocmd!
-  autocmd FileType fzf setlocal ls=0 noshowmode noruler nonu nornu fdc=0 scl=no
-    \| autocmd BufLeave <buffer> set ls=2 showmode ruler
-augroup END
-
-augroup change_cursor_shape
-  au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"'
-  au InsertEnter,InsertChange *
-    \ if v:insertmode == 'i' |
-    \   silent execute '!echo -ne "\e[5 q"' |
-    \ elseif v:insertmode == 'r' |
-    \   silent execute '!echo -ne "\e[3 q"' |
-    \ endif
-  au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
-augroup END
-
 scriptencoding utf8
 colorscheme    codedark
 syntax         on
 filetype       plugin indent on
 
 " SECTION: Options
-
-set history=10000
-set clipboard+=unnamedplus
-set updatetime=100
-set undofile
-set laststatus=2
-set showtabline=1
-set showcmd
-set ttimeout
-set ttimeoutlen=50
-
-
- "Enable true color 启用终端24位色
-"if exists('+termguicolors')
-  "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  "set termguicolors
-"endif
-
-set noswapfile
-set foldcolumn=1
-set textwidth=120
-set number relativenumber
-set spelllang=en_us
-set foldtext=vimrc#foldtext('-')
-set showbreak=↳
-set listchars=trail:~,tab:\▸\ ,extends:❯,precedes:❮,nbsp:␣
-set guicursor=cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor
-set list
-set splitbelow
-set splitright
-set noshowmode
-set nowrap
-set ignorecase
-set signcolumn=yes
-set smartcase
-set expandtab
-set tabstop=2
-set softtabstop=2
-set smartindent
-set cindent
-set shiftwidth=2
-set mouse=a
-set backupdir=/tmp//,.
-set directory=/tmp//,.
-set undodir=/tmp//,.
-
 " SECTION: Commands
 
 if empty($TMUX)
@@ -151,32 +88,14 @@ endif
 
 " SECTION: AutoCommands
 
-"augroup strip_whitespace
-"  autocmd!
-"  autocmd BufWrite,BufWritePre * call vimrc#strip_whitespaces()
-"augroup END
-
-
-augroup push_tab
-  autocmd!
-  autocmd TabLeave * let g:prev_tab = tabpagenr()
-augroup END
-
-augroup close_if_only_nerdtree
-  autocmd!
-  autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-augroup END
-
 " SECTION: Abbreviations
 
-" completions
-cnoreabbrev <silent>f FZF<cr>
 
 " SECTION: Mappings
 
 let mapleader = ','
 
-nnoremap <silent> <leader>t :call vimrc#jumpto_prev_tab()<cr>
+"nnoremap <silent> <leader>t :call vimrc#jumpto_prev_tab()<cr>
 
 " Toggles
 nnoremap <expr> <space>          (&hls   == 0 ? ":set hls"   : ":set nohls")."<cr>"
@@ -205,30 +124,30 @@ nnoremap vv V
 " cnoremap kjj <cr>
 
 " kj | Escaping!
-inoremap kj <esc>
-xnoremap kj <esc>
-cnoremap kj <c-c>
-vnoremap kj <esc>
+"inoremap kj <esc>
+"xnoremap kj <esc>
+"cnoremap kj <c-c>
+"vnoremap kj <esc>
 
 " wrapped-lines traversal
-nnoremap j gj
-nnoremap k gk
+"nnoremap j gj
+"nnoremap k gk
 
 " skimming (increments by 2).
-nnoremap <c-e> 2<c-e>
-nnoremap <c-y> 2<c-y>
+"nnoremap <c-e> 2<c-e>
+"nnoremap <c-y> 2<c-y>
 
 " commandline navigation
-cnoremap <c-h> <left>
-cnoremap <c-l> <right>
+"cnoremap <c-h> <left>
+"cnoremap <c-l> <right>
 
 " additonal history navigation
 " not recommended but too good to ignore.
 " cnoremap kjK <up>
 
 " command history navigation
-cnoremap J <down>
-cnoremap K <up>
+"cnoremap J <down>
+"cnoremap K <up>
 
 " Run the last entered command.
 nnoremap <leader><space> :<up><cr>
@@ -258,16 +177,19 @@ nnoremap <c-s> :mksession! /tmp/mysession.vim<cr>
 " reload vimrc
 nnoremap <silent><leader>r :call <SID>reload_vimrc() <cr>
 
-function! s:reload_vimrc()
-  let s:vimrc = expand($MYVIMRC)
-  let s:prettify_nerdtree = expand('~/.config/nvim/nerdtree_plugin/prettify.vim')
-  if filereadable(expand(s:vimrc))
-    execute ':source' s:vimrc
-    call webdevicons#hardRefresh()
-    execute ':source' s:prettify_nerdtree
-    echom '[vimrc] config reloaded..'
-  endif
-endfunction
+if !exists('g:reload')
+  function s:reload_vimrc()
+    let g:reload=1
+    let s:prettify_nerdtree = expand('~/.config/nvim/nerdtree_plugin/prettify.vim')
+    let s:vimrc = expand($MYVIMRC)
+    if filereadable(expand(s:vimrc))
+      execute ':source' s:vimrc
+      call webdevicons#hardRefresh()
+      execute ':source' s:prettify_nerdtree
+      echom '[vimrc] config reloaded..'
+    endif
+  endfunction
+endif
 
 " split navigation (tmux aware)
 nnoremap <silent><c-l> :NavRight<cr>
