@@ -4,8 +4,7 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   packer_bootstrap = vim.fn.system({
     'git', 'clone', '--depth', '1',
     'https://github.com/wbthomason/packer.nvim',
-    install_path
-  })
+    install_path })
 end
 
 return require('packer').startup(function(use)
@@ -13,131 +12,64 @@ return require('packer').startup(function(use)
   use 'tomasiser/vim-code-dark'
   use 'tpope/vim-surround'
   use 'tpope/vim-endwise'
-  use {
-    'ycm-core/YouCompleteMe',
-    run = { 'python3 install.py' },
-    config = function()
-      vim.g.ycm_key_list_select_completion = {
-        [1] = 'J',
-        [2] = '<C-n>',
-        [3] = '<Down>'
-      }
-      vim.g.ycm_key_list_previous_completion = {
-        [1] = 'K',
-        [2] = '<C-p>',
-        [3] = '<Up>'
-      }
-    end
+  use { 'airblade/vim-gitgutter',
+    config = function() require('package_config/git-gutter') end
   }
-  use {
-    'airblade/vim-gitgutter',
-    config = function()
-      vim.g.gitgutter_map_keys = 0
-      vim.g.gitgutter_sign_added = ' ┃'
-      vim.g.gitgutter_sign_modified = ' ┃'
-      vim.g.gitgutter_sign_removed = ' ┃'
-      vim.g.gitgutter_sign_removed_first_line = ' ┃'
-      vim.g.gitgutter_sign_modified_removed = ' ┃'
-    end
-  }
-  use {
-    'Yggdroot/indentLine',
-    config = function()
-      vim.g.indentLine_char = '┆'
-      vim.g.indentLine_first_char = '|'
-      vim.g.indentLine_color_term = 237
-      vim.g.indentLine_indentLevel = 14
-      vim.g.indentLine_showFirstIndentLevel = 1
-      vim.g.indentLine_fileTypeExclude = {
-        [1] = 'txt'
-      }
-      vim.g.indentLine_bufTypeExclude = {
-        [1] = 'help',
-        [2] = 'terminal'
-      }
-      vim.g.indentLine_bufNameExclude = {
-        [1] = '_.*',
-        [2] = 'NERD_Tree.*'
-      }
-    end
+  use { 'lukas-reineke/indent-blankline.nvim',
+    config = function() require('package_config/indent-blankline') end
   }
   use 'easymotion/vim-easymotion'
   use 'blueyed/vim-diminactive'
   use 'itchyny/lightline.vim'
   use 'christoomey/vim-tmux-navigator'
   use 'tpope/vim-fugitive'
-  use 'ryanoasis/vim-devicons'
-  use 'dense-analysis/ale'
-  use {
-    'SirVer/ultisnips',
-    config = {
-      -- location of the snippet files.
-      vim.cmd [[
-        let g:UltiSnipsSnippetDirectories = [
-        \ '/home/devs/Projects/dotfiles/nvim/UltiSnips',
-        \ 'UltiSnips' ]
-      ]]
-    }
+  use { 'kyazdani42/nvim-tree.lua',
+    opt = true,
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    cmd = { 'NvimTreeOpen', 'NvimTreeToggle' },
+    config = function() require('package_config/nvim-tree') end
   }
   use {
     'aliou/bats.vim',
+    opt = true,
     ft = { 'bats' }
   }
   use {
     'majutsushi/tagbar',
     opt = true,
-    cmd = {
-      'Tagbar',
-      'TagbarToggle'
-    }
-  }
-  use {
-    'junegunn/vader.vim',
-    cmd = { 'Vader' },
-    ft = { 'vader' }
+    cmd = { 'Tagbar', 'TagbarToggle' }
   }
   use {
     'junegunn/fzf',
     run = ':call fzf#install()',
     requires = {{ 'junegunn/fzf.vim' }},
-    config = function()
-      vim.g.fzf_action = {
-        ['ctrl-h'] = 'topleft vsplit',
-        ['ctrl-n'] = 'botright split',
-        ['ctrl-p'] = 'topleft split',
-        ['ctrl-l'] = 'botright vsplit',
-        ['alt-h'] = 'leftabove vsplit',
-        ['alt-j'] = 'belowright split',
-        ['alt-k'] = 'aboveleft split',
-        ['alt-t'] = 'tab split',
-      }
-    end
+    config = function() require('package_config/fzf') end
   }
   use 'jiangmiao/auto-pairs'
   use 'preservim/nerdcommenter'
-  use {
-    'preservim/nerdtree',
-    opt = true,
-    cmd = {
-      'NERDTree',
-      'NERDTreeToggle'
-    },
-    setup = function()
-      vim.api.nvim_set_keymap( 'n', '<C-n>', ':NERDTreeToggle<CR>',
-      { noremap = true, silent = true } )
-
-      vim.g.NERDTreeMapActivateNode = '<space>'
-      vim.g.NERDTreeCascadeSingleChildDir = 1
-      vim.g.NERDTreeQuitOnOpen = 1
-      vim.g.NERDTreeMinimalUI = 1
-      vim.g.NERDTreeShowHidden = 1
-      vim.g.NERDTreeIgnore = {
-        [1] = '\\.git$',
-        [2] = '\\~$',
-        [3] = 'node_modules'
-      }
-      vim.g.NERDTreeWinSize = 35
-    end
+  -- treesitter
+  use 'nvim-treesitter/nvim-treesitter'
+  -- lsp
+  use 'neovim/nvim-lspconfig'
+  use 'williamboman/nvim-lsp-installer'
+  -- completion
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  use { 'hrsh7th/nvim-cmp',
+    requires = {
+      { 'SirVer/Ultisnips',
+        config = function()
+          vim.cmd [[
+            let g:UltiSnipsSnippetDirectories = [
+            \ '/home/devs/Projects/dotfiles/nvim/UltiSnips',
+            \ 'UltiSnips' ]
+          ]]
+        end
+      },
+      { 'quangnguyen30192/cmp-nvim-ultisnips' }
+    }
   }
 
   -- Automatically set up configuration after cloning packer.nvim
