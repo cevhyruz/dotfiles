@@ -7,7 +7,7 @@ vim.o.shiftwidth = 2
 
 vim.g.scriptencoding = 'utf8'
 vim.g.mapleader = ','
-vim.cmd [[ colorscheme codedark ]]
+--vim.cmd [[ colorscheme codedark ]]
 vim.cmd [[ filetype plugin indent on ]]
 
 vim.wo.cursorline = true

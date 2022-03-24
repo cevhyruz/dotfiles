@@ -1,4 +1,5 @@
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = vim.fn.stdpath('data')
+  .. '/site/pack/packer/start/packer.nvim'
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   packer_bootstrap = vim.fn.system({
@@ -9,7 +10,13 @@ end
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
-  use 'tomasiser/vim-code-dark'
+  --use 'tomasiser/vim-code-dark'
+  use {
+    'Mofiqul/vscode.nvim',
+    config = function()
+      require('package_config/vscode')
+    end
+  }
   use 'tpope/vim-surround'
   use 'tpope/vim-endwise'
   use { 'airblade/vim-gitgutter',

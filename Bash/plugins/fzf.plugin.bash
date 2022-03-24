@@ -28,7 +28,6 @@ function __bootstrap_fzf() {
     "--bind='^:beginning-of-line'"
     "--bind='ctrl-/:toggle-preview'"
     "--bind='?:jump-accept'"
-    "--margin=0,1,0" # T, RL, B
     "--multi"
     "--tac"
     "--pointer='❱'"
