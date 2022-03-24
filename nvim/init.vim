@@ -15,36 +15,36 @@ else
   let g:which_vim = 'vim'
   call plug#begin('~/.vim/plugged')
 endif
-  "Plug 'aliou/bats.vim',               { 'for': 'bats' }
+  Plug 'aliou/bats.vim',               { 'for': 'bats' }
   Plug 'yuki-ycino/fzf-preview.vim'
   Plug 'digitaltoad/vim-pug',          { 'for': 'pug' }
-  "Plug 'tomasiser/vim-code-dark'
-  "Plug 'dense-analysis/ale'
-"  Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
-  "Plug 'preservim/nerdcommenter'
-  "Plug 'ryanoasis/vim-devicons'
+  Plug 'tomasiser/vim-code-dark'
+  Plug 'dense-analysis/ale'
+  Plug 'preservim/nerdtree',           { 'on':  'NERDTreeToggle' }
+  Plug 'preservim/nerdcommenter'
+  Plug 'ryanoasis/vim-devicons'
   Plug 'ycm-core/YouCompleteMe',       { 'do': 'python3 install.py' }
-  "Plug 'jiangmiao/auto-pairs'
-  "Plug 'tpope/vim-surround'
-  "Plug 'tpope/vim-fugitive'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
-  "Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-endwise'
   Plug 'mattn/emmet-vim'
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
-  "Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
-  "Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
-  "Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf',                 { 'do': { -> fzf#install() } }
+  Plug 'junegunn/vader.vim',           { 'on': 'Vader', 'for': 'vader' }
+  Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
-  "Plug 'airblade/vim-gitgutter'
-  "Plug 'Yggdroot/indentLine'
-  "Plug 'majutsushi/tagbar',            { 'on': 'TagbarToggle' }
+  Plug 'airblade/vim-gitgutter'
+  Plug 'Yggdroot/indentLine'
+  Plug 'majutsushi/tagbar',            { 'on': 'TagbarToggle' }
   Plug 'godlygeek/tabular'
-  "Plug 'benmills/vimux'
-  "Plug 'easymotion/vim-easymotion'
-  "Plug 'blueyed/vim-diminactive'
-  "Plug 'itchyny/lightline.vim'
-  "Plug 'christoomey/vim-tmux-navigator'
+  Plug 'benmills/vimux'
+  Plug 'easymotion/vim-easymotion'
+  Plug 'blueyed/vim-diminactive'
+  Plug 'itchyny/lightline.vim'
+  Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 " section: fzf

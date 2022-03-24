@@ -1,12 +1,14 @@
+vim.o.termguicolors = true
+
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+
 vim.g.scriptencoding = 'utf8'
 vim.g.mapleader = ','
-vim.cmd [[ colorscheme codedark ]]
+--vim.cmd [[ colorscheme codedark ]]
 vim.cmd [[ filetype plugin indent on ]]
-
-vim.bo.expandtab = true
-vim.bo.tabstop = 2
-vim.bo.softtabstop = 2
-vim.bo.shiftwidth = 2
 
 vim.wo.cursorline = true
 vim.wo.colorcolumn = '80'
