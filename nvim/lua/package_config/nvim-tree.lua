@@ -1,4 +1,5 @@
-require'nvim-tree'.setup {
+require('nvim-tree').setup {
+  auto_close = true,
   hijack_cursor = false,
   auto_reload_on_write = true,
   view = {
@@ -12,12 +13,27 @@ require'nvim-tree'.setup {
     }
   },
   filters = {
-    exclude = { '.git', 'node_modules' }
+    custom = { '.git', 'node_modules' },
+  },
+  diagnostics = {
+    enable = true,
+    show_on_dirs = true,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    },
   },
   open_file = {
-    quit_on_open = true
+    quit_on_open = true,
+    window_picker = {
+      enable = false
+    }
   },
   git = {
-    enable = false
+    enable = false,
+    ignore = true,
+    timeout = 500
   }
 }
