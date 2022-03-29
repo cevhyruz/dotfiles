@@ -1,6 +1,47 @@
-local map_util = require('modules.map_utils')
+local function_keys = {
 
-map_util.setup {
+  -- reload config
+  { 'n', '<Leader>r',
+    function()
+      for name in pairs(package.loaded) do
+        if name:match('^cevhyruz') then
+          package.loaded[name] = nil
+        end
+      end
+      print('config reloaded')
+      dofile(vim.env.MYVIMRC)
+    end
+  },
+
+  -- toggle hlsearch
+  { 'n', '<Space>',
+    function()
+      if vim.go.hls then
+        print('disabled hlsearch')
+        vim.go.hls = false
+      else
+        print('enabled hlsearch')
+        vim.go.hls = true
+      end
+    end
+  },
+
+  -- toggle spell
+  { 'n', '<Leader>s<Space>',
+    function()
+      if vim.wo.spell then
+        vim.wo.spell = false
+          print('disabled spell')
+      else
+        vim.wo.spell = true
+        print('enabled spell')
+      end
+    end
+  }
+}
+
+local mapping_keys =  {
+
   -- easy mode switching
   { 'i', 'kj', '<Esc>' },
   { 'x', 'kj', '<Esc>' },
@@ -35,44 +76,9 @@ map_util.setup {
   { 'n', 'k', 'gk' },
 
   -- toggle nvimtree
-  { 'n', '<C-n>', ':NvimTreeToggle<CR>' },
-
-  -- reload config
-  { 'n', '<Leader>r',
-    function()
-      for name in pairs(package.loaded) do
-        if name:match('^cevhyruz') then
-          package.loaded[name] = nil
-        end
-      end
-      print('config reloaded')
-      dofile(vim.env.MYVIMRC)
-    end
-  },
-
-  -- toggle hlsearch
-  { 'n', '<Space>',
-    function()
-      if vim.go.hls then
-        print('disabled hlsearch')
-        vim.go.hls = false
-      else
-        print('enabled hlsearch')
-        vim.go.hls = true
-      end
-    end
-  },
-
-  -- toggle spell
-  { 'n', '<Leader>s<Space>',
-    function()
-    if vim.wo.spell then
-      vim.wo.spell = false
-        print('disabled spell')
-    else
-      vim.wo.spell = true
-      print('enabled spell')
-    end
-    end
-  }
+  { 'n', '<C-n>', ':NvimTreeToggle<CR>' }
 }
+
+require('modules.map_utils').setup(
+  vim.tbl_deep_extend( 'keep', mapping_keys, function_keys )
+)
