@@ -43,11 +43,11 @@ return require('packer').startup(function(use)
   use 'tpope/vim-endwise'
 
   use { 'airblade/vim-gitgutter',
-    config = function() require('package_config/git-gutter') end
+    config = function() require('plugins.config.git-gutter') end
   }
 
   use { 'lukas-reineke/indent-blankline.nvim',
-    config = function() require('package_config/indent-blankline') end
+    config = function() require('plugins.config.indent-blankline') end
   }
 
   use 'easymotion/vim-easymotion'
@@ -63,9 +63,9 @@ return require('packer').startup(function(use)
   use { 'kyazdani42/nvim-tree.lua',
     requires = {
       'kyazdani42/nvim-web-devicons',
-      config = { function() require('package_config.nvim-web-devicons') end }
+      config = { function() require('plugins.config.nvim-web-devicons') end }
     },
-    config = function() require('package_config.nvim-tree') end
+    config = function() require('plugins.config.nvim-tree') end
   }
 
   use {
@@ -84,7 +84,7 @@ return require('packer').startup(function(use)
     'junegunn/fzf',
     run = ':call fzf#install()',
     requires = {{ 'junegunn/fzf.vim' }},
-    config = function() require('package_config/fzf') end
+    config = function() require('plugins.config.fzf') end
   }
 
   use 'jiangmiao/auto-pairs'
@@ -93,7 +93,7 @@ return require('packer').startup(function(use)
 
   use {
     'nvim-treesitter/nvim-treesitter',
-    config = function() require('package_config.treesitter') end
+    config = function() require('plugins.config.treesitter') end
   }
 
   -- lsp
@@ -123,7 +123,7 @@ return require('packer').startup(function(use)
       },
       { 'quangnguyen30192/cmp-nvim-ultisnips' }
     },
-    config = function() require('package_config.nvim-cmp') end
+    config = function() require('plugins.config.nvim-cmp') end
   }
 
   if Packer_bootstrap then

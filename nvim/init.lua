@@ -1,7 +1,8 @@
-require('cevhyruz.options')
-require('cevhyruz.packages')
-require('cevhyruz.keybindings')
-require('cevhyruz.abbrev')
+require('user.options')
+require('user.keybindings')
+require('user.abbrev')
+
+require('plugins/init')
 
 require('lsp')
 
