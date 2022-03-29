@@ -11,14 +11,6 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd [[ packadd packer.nvim ]]
 end
 
--- reload nvim whenever the this file is saved.
---vim.cmd [[
-  --augroup packer_user_config
-    --autocmd!
-    --autocmd BufWritePost packages.lua source <afile> | PackerSync
-  --augroup end
---]]
-
 -- use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, 'packer')
 if not status_ok then
