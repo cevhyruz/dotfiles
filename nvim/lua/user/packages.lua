@@ -63,7 +63,7 @@ return require('packer').startup(function(use)
     requires = {{ 'junegunn/fzf.vim' }},
     config = function() require('plugins.fzf') end }
   use 'jiangmiao/auto-pairs'
-  use 'preservim/nerdcommenter'
+  use 'tomtom/tcomment_vim'
   use {
     'nvim-treesitter/nvim-treesitter',
     config = function() require('plugins.treesitter') end }

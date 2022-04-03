@@ -1,6 +1,6 @@
 local M = {}
 
-function M.setup()
+M.setup = function()
   local signs = {
     { name = 'DiagnosticSignError', text = "", hl = 'DiagnosticLineNrError' },
     { name = 'DiagnosticSignWarn',  text = "", hl = 'DiagnosticLineNrWarn'  },
@@ -42,7 +42,7 @@ function M.setup()
   })
 end
 
-function M.on_attach(client, bufnr)
+M.on_attach = function(client, bufnr)
   if client.name == 'tsserver' then
     client.resolved_capabilities.document_formatting = true
   end
