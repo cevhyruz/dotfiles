@@ -4,6 +4,7 @@
 load "${TEST_DIRECTORY}/test_helper.bash"
 
 @test "${TEST_FILE}: Make sure lazyloading works as expected." {
+  LAZYLOAD_NVM=1
   load "Bash/plugins/nvm.plugin.bash"
 
   run declare -F node
