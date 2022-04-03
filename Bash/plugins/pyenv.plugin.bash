@@ -7,7 +7,7 @@ plugin-group 'wrappers'
 
 export PYENV_ROOT="${HOME}/.pyenv"
 
-if [[ ! -d "${PYENV_ROOT}" ]] \
+if [[ ! -d ${PYENV_ROOT} ]] \
   || [[ ! -x "${PYENV_ROOT}/bin/pyenv" ]]; then
   unset -v PYENV_ROOT
   return 0
@@ -22,9 +22,9 @@ function pyenv() {
   fi
 
   case "${command}" in
-    activate|deactivate|rehash|shell)
-    eval "$(pyenv "sh-${command}" "$@")"
-    ;;
+    activate | deactivate | rehash | shell)
+      eval "$(pyenv "sh-${command}" "$@")"
+      ;;
     *)
       command pyenv "${command}" "$@"
       ;;
