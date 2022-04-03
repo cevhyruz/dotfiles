@@ -1,6 +1,6 @@
 local M = {}
 
-function M.setup()
+M.setup = function()
   local signs = {
     { name = 'DiagnosticSignError', text = "", hl = 'DiagnosticLineNrError' },
     { name = 'DiagnosticSignWarn',  text = "", hl = 'DiagnosticLineNrWarn'  },
@@ -42,7 +42,7 @@ function M.setup()
   })
 end
 
-function M.on_attach(client, bufnr)
+M.on_attach = function(client, bufnr)
   if client.name == 'tsserver' then
     client.resolved_capabilities.document_formatting = true
   end
@@ -65,7 +65,7 @@ function M.on_attach(client, bufnr)
     hi DiagnosticLineNrError guifg=#ff5f5f gui=bold " red
   ]]
 
-  require('modules.map_utils').setup_lsp_keys(bufnr)
+  require('user.keybindings').on_lsp_attach(bufnr)
 
   -- lsp highlighted document
   -- Set autocommands conditional on server_capabilities
@@ -76,21 +76,18 @@ function M.on_attach(client, bufnr)
           autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
           autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         augroup end
+
+        augroup code_action_hint
+        autocmd! * <buffer>
+        autocmd CursorHold,CursorHoldI <buffer> lua require('nvim-lightbulb').update_lightbulb()
+        augroup end
       ]],
       false
     )
   end
-
-  require('nvim-lightbulb').update_lightbulb()
-
-  vim.cmd [[
-    autocmd CursorHold,CursorHoldI <buffer> lua require'nvim-lightbulb'.update_lightbulb()
-  ]]
-
 end
 
 M.capabilities = require('cmp_nvim_lsp').update_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
+  vim.lsp.protocol.make_client_capabilities())
 
 return M

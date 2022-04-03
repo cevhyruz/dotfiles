@@ -4,7 +4,7 @@ require('user.keybindings').init()
 
 require('user.abbrev')
 
-require('plugins/init')
+require('user.packages')
 
 require('lsp')
 

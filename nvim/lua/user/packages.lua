@@ -2,29 +2,24 @@ local status_ok, packer = pcall(require, 'packer')
 if not status_ok then
   return
 end
-
 local packpath = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 
-if vim.fn.empty( vim.fn.glob( packpath ) ) > 0 then
-  Packer_bootstrap = vim.fn.system({
-    'git', 'clone', '--depth', '1',
-    'git@github.com:wbthomason/packer.nvim.git',
-    packpath
-  })
-print('Installing packer close and reopen Neovim...')
-  vim.cmd [[ packadd packer.nvim ]]
-end
-
--- display as popup
 packer.init {
   display = {
     open_fn = function()
-      return require('packer.util').float {
-        border = 'rounded'
-      }
+      return require('packer.util').float { border = 'rounded' }
     end
   }
 }
+
+if vim.fn.empty( vim.fn.glob( packpath ) ) > 0 then
+  Packer_bootstrap = vim.fn.system({ 'git', 'clone', '--depth', '1',
+    'git@github.com:wbthomason/packer.nvim.git', packpath })
+
+  print('Installing packer close and reopen Neovim...')
+  vim.cmd [[ packadd packer.nvim ]]
+end
+
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use {
@@ -36,10 +31,10 @@ return require('packer').startup(function(use)
   use 'tpope/vim-surround'
   use 'tpope/vim-endwise'
   use { 'airblade/vim-gitgutter',
-    config = function() require('plugins.config.git-gutter') end
+    config = function() require('plugins.git-gutter') end
   }
   use { 'lukas-reineke/indent-blankline.nvim',
-    config = function() require('plugins.config.indent-blankline') end
+    config = function() require('plugins.indent-blankline') end
   }
   use 'easymotion/vim-easymotion'
   use 'blueyed/vim-diminactive'
@@ -49,9 +44,9 @@ return require('packer').startup(function(use)
   use { 'kyazdani42/nvim-tree.lua',
     requires = {
       'kyazdani42/nvim-web-devicons',
-      config = { function() require('plugins.config.nvim-web-devicons') end }
+      config = { function() require('plugins.nvim-web-devicons') end }
     },
-    config = function() require('plugins.config.nvim-tree') end
+    config = function() require('plugins.nvim-tree') end
   }
   use {
     'aliou/bats.vim',
@@ -66,12 +61,12 @@ return require('packer').startup(function(use)
     'junegunn/fzf',
     run = ':call fzf#install()',
     requires = {{ 'junegunn/fzf.vim' }},
-    config = function() require('plugins.config.fzf') end }
+    config = function() require('plugins.fzf') end }
   use 'jiangmiao/auto-pairs'
-  use 'preservim/nerdcommenter'
+  use 'tomtom/tcomment_vim'
   use {
     'nvim-treesitter/nvim-treesitter',
-    config = function() require('plugins.config.treesitter') end }
+    config = function() require('plugins.treesitter') end }
   -- lsp
   use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
@@ -93,7 +88,7 @@ return require('packer').startup(function(use)
       },
       { 'quangnguyen30192/cmp-nvim-ultisnips' }
     },
-    config = function() require('plugins.config.nvim-cmp') end
+    config = function() require('plugins.nvim-cmp') end
   }
 
   -- init

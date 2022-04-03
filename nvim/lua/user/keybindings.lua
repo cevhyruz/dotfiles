@@ -1,6 +1,6 @@
 local M = {}
 
-M.lspconfig_keys = {
+local lsp_keys = {
   diagnostic = {
     -- Diagnostic. See ':help vim.diagnostic.*'
     { '<leader>f', 'open_float()' },
@@ -11,7 +11,6 @@ M.lspconfig_keys = {
   -- LSP. see ':help vim.lsp.*'
   lsp = {
     { 'gd',         'buf.definition()'     },
-    { 'gd',         'buf.definition()'     },
     { 'gD',         'buf.declaration()'    },
     { 'gi',         'buf.implementation()' },
     { 'K',          'buf.hover()'          },
@@ -21,6 +20,22 @@ M.lspconfig_keys = {
     { '<leader>ca', 'buf.code_action()'    },
   }
 }
+
+M.cmp_mapping = function(cmp)
+  local map = cmp.mapping
+  return  {
+    -- See ':help cmp.mapping.*' for details
+    ['K']     = map.select_prev_item(),
+    ['J']     = map.select_next_item(),
+    ['<C-p>']     = map.select_prev_item(),
+    ['<C-n>']     = map.select_next_item(),
+    ['<C-y>']     = map(cmp.mapping.scroll_docs(-2), { 'i', 'c' }),
+    ['<C-e>']     = map(cmp.mapping.scroll_docs(2), { 'i', 'c' }),
+    ['<C-Space>'] = map(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-c>']     = map({i = cmp.mapping.abort(), c = cmp.mapping.close()}),
+    ['<CR>']      = map.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+  }
+end
 
 local mapping_keys =  {
   -- easy mode switching
@@ -96,29 +111,49 @@ local mapping_keys =  {
   }
 }
 
-M.cmp_keys = {
-  -- See ':help cmp-mapping.*' details
-  { '<C-e>', 'scroll_docs(2)'  },
-  { '<C-y>', 'scroll_docs(-2)' },
-  { '<C-Space>', 'complete()'      },
-  --{ '<C-c>', { i = 'abort()', c = 'close()' } },
-}
+local fn_table = {}
 
---local cmp_mappings = {
-    ---- See ':help cmp-mapping.*' details
-    --['<C-y>'] = cmp.mapping(cmp.mapping.scroll_docs(-2), { 'i', 'c' }),
-    --['<C-e>'] = cmp.mapping(cmp.mapping.scroll_docs(2), { 'i', 'c' }),
-    --['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-    --['<C-c>'] = cmp.mapping({
-      --i = cmp.mapping.abort(),
-      --c = cmp.mapping.close(),
-    --}),
-    --['<CR>'] = cmp.mapping.confirm({ select = true }),
---}
+local function _register_fn(fn)
+  table.insert(fn_table, fn)
+  return #fn_table
+end
 
-function M.init()
-  -- core keys
-  require('modules.map_utils').setup(mapping_keys)
+local function lua_fn(fn)
+  return string.format( ':lua require("%s").apply_function(%s)<CR>',
+    'user.keybindings', _register_fn(fn))
+end
+
+-- call stored function keys
+M.apply_function = function(id)
+  fn_table[id]()
+end
+
+-- my custom keybindings
+M.init = function()
+  local opts = { noremap = true } for _,value in pairs(mapping_keys) do
+    if type(value[3]) == 'function' then
+      vim.api.nvim_set_keymap( value[1], value[2], lua_fn(value[3]), opts )
+    else
+      vim.api.nvim_set_keymap( value[1], value[2], value[3], opts)
+    end
+  end
+end
+
+-- Setup lsp keybindings
+M.on_lsp_attach = function(bufnr)
+  local opts = { noremap = true }
+  -- diagnostic
+  for _,value in pairs(lsp_keys.diagnostic) do
+    vim.api.nvim_buf_set_keymap(
+      bufnr, 'n', value[1], ':lua vim.diagnostic.' .. value[2] .. '<CR>', opts
+    )
+  end
+  -- lsp
+  for _,value in pairs(lsp_keys.lsp) do
+    vim.api.nvim_buf_set_keymap(
+      bufnr, 'n', value[1], ':lua vim.lsp.'.. value[2] ..'<CR>', opts
+    )
+  end
 end
 
 return M
