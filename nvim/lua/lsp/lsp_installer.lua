@@ -9,10 +9,11 @@ require('nvim-lsp-installer').on_server_ready(function(server)
     }
   }
 
-  local ok, lsp_config = pcall( require, 'lsp.config' .. '.' .. server.name)
+  local ok, lsp_config = pcall( require, 'lsp.config' .. '.' .. server.name )
   if not ok then
     lsp_config = {}
+    print(server.name .. ' not found in lsp/config. Setting up defaults.')
   end
 
-  server:setup(vim.tbl_deep_extend( 'force', lsp_config, opts ))
+  server:setup( vim.tbl_deep_extend( 'force', lsp_config, opts ) )
 end)

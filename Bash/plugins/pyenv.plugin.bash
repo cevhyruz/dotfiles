@@ -17,14 +17,14 @@ function pyenv() {
   local command
   command="${1:-}"
 
-  if [[ "$#" -gt 0 ]]; then
+  if [[ $# -gt 0 ]]; then
     shift
   fi
 
   case "${command}" in
     activate|deactivate|rehash|shell)
-      eval "$(pyenv "sh-${command}" "$@")"
-      ;;
+    eval "$(pyenv "sh-${command}" "$@")"
+    ;;
     *)
       command pyenv "${command}" "$@"
       ;;

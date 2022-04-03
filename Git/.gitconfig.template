@@ -11,6 +11,9 @@
 [user]
   useConfigOnly = true
 
+[http]
+	postBuffer = 157286400
+
 [core]
   excludesfile   = "{{DOTFILES}}/Git/.gitignore"
   attributesfile = "{{DOTFILES}}/Git/.gitattributes"

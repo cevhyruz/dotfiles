@@ -1,5 +1,12 @@
 vim.o.termguicolors = true
 
+vim.o.showcmd = false
+vim.o.showmode = false
+
+vim.wo.foldlevel = 99
+
+vim.o.laststatus = 3
+
 vim.o.expandtab = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2

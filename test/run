@@ -17,20 +17,21 @@ export TEST_DEPS_DIR
 export TEST_DIRECTORY
 
 if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
-    export DOTFILES_BASH_DIR
+  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") \
+    && export DOTFILES_BASH_DIR
 fi
 
 git submodule init && git submodule update
 
 function main() {
-  if [[ -z "${1:-}" ]]; then
+  if [[ -z ${1:-} ]]; then
     # shellcheck disable=2206
     TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
   else
-    TEST_DIRS=( "${1:-}" )
+    TEST_DIRS=("${1:-}")
   fi
 
+  # shellcheck disable=SC2294
   eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
     ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 }

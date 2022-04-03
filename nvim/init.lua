@@ -1,5 +1,7 @@
 require('user.options')
-require('user.keybindings')
+
+require('user.keybindings').init()
+
 require('user.abbrev')
 
 require('plugins/init')
