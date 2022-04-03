@@ -1,5 +1,12 @@
 vim.o.termguicolors = true
 
+vim.o.showcmd = false
+vim.o.showmode = false
+
+vim.wo.foldlevel = 99
+
+vim.o.laststatus = 3
+
 vim.o.expandtab = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
@@ -7,7 +14,6 @@ vim.o.shiftwidth = 2
 
 vim.g.scriptencoding = 'utf8'
 vim.g.mapleader = ','
---vim.cmd [[ colorscheme codedark ]]
 vim.cmd [[ filetype plugin indent on ]]
 
 vim.wo.cursorline = true
@@ -18,15 +24,16 @@ vim.o.updatetime = 100
 vim.o.ttimeout = 50
 vim.wo.number = true
 vim.wo.relativenumber = true
-vim.o.showbreak = "\\u21b3" -- ↳
+vim.o.showbreak = '↳'
 
 vim.opt.listchars = {
-  trail = "~",
-  tab = "\\u25b8\\ ",   -- \▸\ 
-  extends = "\\u276f",  -- ❯
-  precedes = "\\u276e", -- ❮
-  nbsp = "\\u2423"      -- ␣
+  trail = '~',
+  tab = '▸ ',
+  extends = '❯',
+  precedes = '❮',
+  nbsp = '␣'
 }
+
 vim.bo.undofile = true
 
 vim.o.splitbelow = true

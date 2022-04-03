@@ -2,12 +2,6 @@
 # shellcheck shell=bash disable=SC2016
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-# vi-editing-mode
-#bind -m vi-insert -x '"\C-n": vifm'
-
-bind -m vi-insert -x '"\C-n": foobar'
-
-# exit insert mode
 bind -m vi-insert '"kj": vi-movement-mode' # ESC
 
 bind -m vi-command '"K": history-search-backward'
