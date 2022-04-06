@@ -1,5 +1,13 @@
 local M = {}
 
+-- - go-to-definition
+-- - find-references
+-- - hover
+-- - completion
+-- - rename
+-- - format
+-- - refactor
+
 M.setup = function()
   local signs = {
     { name = 'DiagnosticSignError', text = "", hl = 'DiagnosticLineNrError' },
@@ -43,10 +51,6 @@ M.setup = function()
 end
 
 M.on_attach = function(client, bufnr)
-  if client.name == 'tsserver' then
-    client.resolved_capabilities.document_formatting = true
-  end
-
   print(client.name .. ' attached on buffer')
 
   vim.cmd [[

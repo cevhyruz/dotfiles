@@ -70,6 +70,7 @@ return require('packer').startup(function(use)
   -- lsp
   use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
+  use 'jose-elias-alvarez/null-ls.nvim'
   use 'kosayoda/nvim-lightbulb'
   -- completion
   use 'hrsh7th/cmp-nvim-lsp'
