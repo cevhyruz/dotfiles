@@ -4,54 +4,33 @@
 # ---------------------------------------------------------------------
 # vi:ft=tmux
 
-%hidden _yt_current_playing_song=\
+# current playing song from an MPRIS supported player.
+%hidden _current_playing_song=\
 "#{?#{!=:#(playerctl status),Stopped},#(playerctl metadata title),}"
 
-%hidden _user="#(whoami)"
+# current path display.
+%hidden _pwd_tilde="#{s/#{HOME}/~:#{pane_current_path}}"
+%hidden _pwd_home="#{s/#{HOME}/home:#{pane_current_path}}"
 
-%hidden _session_name=\
-"#[push-default]"\
-"#{session_name}"\
-"#[pop-default default]"
+# Wifi connection indicator, empty if not connected.
+%hidden _wifi_ssid=\
+"#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
-%hidden _socket_path=\
-"#{b:socket_path}"
-
-%hidden _pwd="#{s/#{HOME}/~:#{pane_current_path}}"
-
-%hidden _git_branch=\
-"#( cd #{pane_current_path}"\
-" && git symbolic-ref --quiet --short HEAD "\
-"|| git rev-parse --short HEAD )"
-
-%hidden _git_latest_commit=\
-"#( cd #{pane_current_path}"\
-"&& git rev-parse --short HEAD )"
-
-%hidden _host=\
-"#{=20:host} "\
-
-# time format should always sync with clock-mode-style.
-%hidden _time=\
-"#{?#{==:#{clock-mode-style},24},%H,%I}:%M %p"
+# time format that syncs with clock-mode-style.
+%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M %p"
 
 # Day format that changes styles on weekdays/weekends.
 # user options:
 #   @day-mode-style    (short|long)
 #   @day-weekend-style [style]
 #   @day-weekday-style [style]
-%hidden _day=\
-"#{?#{==:#{@day-mode-style},short},%%a,%%A}"
+%hidden _day="#{?#{==:#{@day-mode-style},short},%%a,%%A}"
 
 # Month format that changes styles.
 # user options:
 #   @month-mode-style (short|long)
 %hidden _date=\
 "#{?#{==:#{@month-mode-style},short},%b,%B}-%d"\
-
-# Wifi connection indicator, empty if not connected.
-%hidden _wifi_ssid=\
-"#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
 # portable default window list.
 %hidden _window_list=\
@@ -111,7 +90,11 @@
 "#{?window_end_flag,,#{window-status-separator}}"\
 "}"
 
-# portable status left format.
+# ------------------
+# portable defaults
+# ------------------
+
+# status left format.
 # uses:
 #   status-right-style [styles]
 #   status-right       [string]
@@ -122,7 +105,7 @@
 "#[pop-default]"\
 "#[norange default]"
 
-# portable status left format.
+# status left format.
 # uses:
 #   status-left-style [styles]
 #   status-left       [string]
@@ -131,3 +114,40 @@
 "#[push-default]"\
 "#{T;=/#{status-left-length}:status-left}"\
 "#[pop-default]"
+
+# window tree format
+# uses:
+#   @tree-window-style            [styles]
+#   @tree-window-flag-style       [styles]
+#   @tree-pane-title-style        [styles]
+#   @tree-session-attached-style  [styles]
+#   @tree-session-attached-format [string]
+#   @tree-session-format          [string]
+#   @tree-session-style           [styles]
+#   @tree-pane-active-flag        [char]
+#   @tree-pane-active-flag-style  [styles]
+%hidden _window_tree_format=\
+"#{?pane_format,"\
+"#{?pane_marked,#[reverse],}"\
+"#{pane_current_command}"\
+"#{?pane_active,"\
+"#[#{@tree-pane-active-flag-style}] #{@tree-pane-active-flag},}"\
+"#{?pane_marked,M,}"\
+"#{?#{&&:#{pane_title},"\
+"#{!=:#{pane_title},#{host_short}}},:\"#{pane_title}\",}"\
+","\
+"#[#{@tree-window-style}]"\
+"#{?window_format,#{window_name}"\
+"#[push-default #{@tree-window-flag-style}] #{window_flags}"\
+"#{?#{&&:#{==:#{window_panes},1}"\
+",#{&&:#{pane_title},#{!=:#{pane_title},#{host_short}}}}, "\
+"#[pop-default default]: #[#{@tree-pane-title-style}]\"#{pane_title}\",}"\
+","\
+"#{?session_attached,"\
+"#[#{@tree-session-attached-style}]#{@tree-session-attached-format},"\
+"#[#{@tree-session-style}]#{@tree-session-format}}"\
+"#{?session_grouped,"\
+"(group #{session_group}: #{session_group_list}),"\
+"}"\
+"}"\
+"}"

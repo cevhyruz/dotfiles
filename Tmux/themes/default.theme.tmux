@@ -17,6 +17,7 @@
 "#{?pane_in_mode,"\
 "#{@copy-mode-fill},"\
 "#{@normal-mode-fill}}}}"
+
 # component A style
 %hidden _status_comp_a_style=\
 "#{?client_readonly,"\
@@ -50,18 +51,43 @@
 "#{@normal-status-comp-c-style}}}"\
 "}"
 
-# theme starts here..
+# choose-tree
+set-option -g @tree-window-style 'fg=orange'
+set-option -g @tree-window-flag-style 'fg=colour35'
+
+set-option -g @tree-pane-title-style 'fg=white'
+
+set-option -g @tree-session-attached-format '(attached)'
+set-option -g @tree-session-attached-style 'fg=colour35'
+
+set-option -g @tree-session-format '(unattached)'
+set-option -g @tree-session-style 'fg=colour203'
+
+set-option -g @tree-pane-active-flag '*'
+set-option -g @tree-pane-active-flag-style 'fg=colour35'
+
+# menubars - - - - - - - - - - - - - - - - - - - -
+
+set-option -g @menu-title-style        ""
+set-option -g @menu-title-active-style "bold,fg=cyan"
+
+# @note: setting bold here causes icon alignment issues.
+set-option -g @menu-icon-style "fg=cyan"
+set-option -g @menu-icon-prefix " "
+set-option -g @menu-icon-suffix "  "
 
 # modal styles
-set -g @prefix-mode-fill           "colour24"
-set -g @copy-mode-fill             "colour94"
-set -g @normal-mode-fill           "colour236"
-set -g @readonly-mode-fill         "colour124"
+set -g @prefix-mode-fill   "colour24"
+set -g @copy-mode-fill     "colour94"
+set -g @normal-mode-fill   "colour236"
+set -g @readonly-mode-fill "colour124"
 
-set-option -g @glyph-style "bold,fg=colour203"
+set-option -g @glyph-style "bold,fg=colour202"
+set-option -g @separator-style "bold,fg=colour234"
 
 set-option -gF status-style "bg=#{@normal-mode-fill},fg=colour247"
 
+# segments style
 set-option -g  @readonly-status-comp-a-style "bold,bg=colour210,fg=colour124"
 set-option -g  @readonly-status-comp-b-style "default,bg=colour196,fg=colour253"
 set-option -gF @readonly-status-comp-c-style "default,bg=#{@readonly-mode-fill},fg=colour203"
@@ -83,6 +109,7 @@ set-option -g message-style         "bg=colour234,fg=cyan"
 set-option -g message-command-style "bg=colour234"
 
 set-option -g pane-mode-changed[42] 'set -g message-style fg=orange'
+
 # component styles
 set-option -g @day-mode-style    "long"
 set-option -g @month-mode-style  "long"
@@ -91,16 +118,8 @@ set-option -g @day-weekday-style "default"
 
 # _window_list styles
 set-option -g status-justify "centre"
-set-option -gF window-status-current-style "bg=colour237,fg=colour250"  #"#{_status_comp_b_style}"
+set-option -gF window-status-current-style "bg=colour237,fg=colour250"
 set-option -g window-status-style "bg=colour235,fg=colour245"
-#"#{?client_readonly,"\
-#"#{@readonly-status-comp-c-style},"\
-#"#{?client_prefix,"\
-#"#{@prefix-status-comp-c-style},"\
-#"#{W:#{?window_active,"\
-#"#{?pane_in_mode,"\
-#"#{@copy-status-comp-c-style}"\
-#",#{@normal-status-comp-c-style}},}}}}"
 
 # window status format
 set-option -gF window-status-separator ''
@@ -117,7 +136,7 @@ set-option -g window-status-current-format \
 
 set-option -g  status-left-length  70
 set-option -gF status-left \
-"#[#{_status_comp_a_style}]  #{b:socket_path}:#{_session_name}  #[reverse]#{@pl-separator-right}"\
+"#[#{_status_comp_a_style}] #{b:socket_path}:#{_session_name}  #[reverse]#{@pl-separator-right}"\
 "#[#{_status_comp_b_style}] #{_pwd} "\
 "#[#{_status_comp_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
 
@@ -131,22 +150,27 @@ set-option -gF status-right \
 # status format {{{1
 set-option -g status-format[0] \
 "#{?client_readonly,"\
-"#[fg=colour203]#{@fa-lock} client is in readonly mode. Press #{prefix} + R to toggle."\
+"#[fg=colour203]#{@fa-lock} client is in readonly mode. Press <#{prefix}> + R to toggle."\
 ","\
 "#{E:_status_left_format}"\
 "#[fill=#{E:_status_client_mode_fill}]"\
 "#{E:_status_right_format}"\
 "}"
 
-set-option -gF status-format[1] \
-"#[fill=colour234]"\
-"#[nolist align=right]"\
-"#[bg=colour234]"\
-"#{?#{!=:#{_yt_current_playing_song},},#{@fa-headphones}#[fg=colour241] #{=40:#{E:_yt_current_playing_song}},}"
+# set-option -g status-format[1] \
+# "#[fill=colour234]"\
+# "#{?pane_in_mode,#{pane_mode},normal}"\
+# "#[nolist align=right]"\
+# "#[bg=colour234]"\
+# "#{?#{!=:#{_yt_current_playing_song},},#{@fa-headphones}#[fg=colour241] #{=40:#{E:_yt_current_playing_song}},}"
 
-set-option -gF status-format[2] \
-" #{@fa-th-large} #{_window_list}"\
+set-option -g status-format[1] \
+"#[align=left] #{E:@fa-th-large} #{E:_window_list}"\
+"#[nolist push-default align=right]"\
+" #{?pane_in_mode,#{=6:pane_mode},#{?client_prefix,prefix,--root}}"\
 
 set-option -g clock-mode-style   12
 set-option -g status 3
 set-option -g status-justify left
+
+set-option -g mode-style 'bg=colour237'

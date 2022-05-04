@@ -39,9 +39,9 @@ set-option -g message-limit 10000
 # Mouse Support
 if-shell '[ $(echo "$TMUX_VERSION < 2.1" | bc) = 1 ]' \
 "  set-window-option -g mode-mouse          "on"; \
-   set-option        -g mouse-resize-pane   "on"; \
-   set-option        -g mouse-select-window "on"; \
-   set-option        -g mouse-select-pane   "on"; \
+  set-option        -g mouse-resize-pane   "on"; \
+  set-option        -g mouse-select-window "on"; \
+  set-option        -g mouse-select-pane   "on"; \
 "
 
 # In version 2.1 "mouse" replaced the previous 4 options

@@ -1,9 +1,19 @@
 # vi:ft=tmux
 
+bind-key -T prefix -N "Choose a window from list" 'w' {
+  choose-window -Z
+}
+
+bind-key -T prefix -N "Choose a session from list" 's' {
+  choose-session -Z
+}
+
 # create window interactively
 bind-key 'c' command-prompt -p "[#{b:pane_current_path}]:"
 
-bind-key -T prefix 'o' "menubar"
+bind-key -T prefix 'o' {
+  menubar
+}
 
 bind-key -T prefix 'R' { switch-client -r }
 

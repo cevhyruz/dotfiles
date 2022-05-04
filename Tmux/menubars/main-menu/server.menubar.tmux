@@ -2,7 +2,7 @@
 
 
 set-option command-alias[98] serverbar=\
-'display-menu -T" Menu  #[bold,fg=cyan]Server#[default]  Session  Music " -x0 -y0 \
+'display-menu -T" Menu  #[#{@menu-title-active-style}]Server#[default]  Session  Music " -x0 -y0 \
   "-" "" ""\
   "  #[fg=cyan]#[default]  Reload tmux session " 'C-l' {
     source-file ${DOT_TMUX}/tmux.conf

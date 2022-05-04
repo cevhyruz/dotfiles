@@ -1,7 +1,7 @@
 # vi:ft=tmux
 
 set-option command-alias[96] musicbar=\
-'display-menu -T" Menu  Server  Session  #[bold,fg=cyan]Music#[default] " -x0 -y0 \
+'display-menu -T" Menu  Server  Session  #[#{@menu-title-active-style}]Music#[default] " -x0 -y0 \
   "-" "" ""\
   "-#[fg=cyan]song:   #[default]#(playerctl metadata title)" "" ""\
   "-#[fg=cyan]artist: #[default]#(playerctl metadata artist)" "" ""\
