@@ -5,11 +5,11 @@ set-option -ag command-alias splitp="split-window"
 set-option -ag command-alias server-info="show-messages -JT"
 set-option -ag command-alias info="show-messages -JT"
 
-# choose-window and choose-session should use a format.
-set-option -ag command-alias choose-tree="choose-tree -F'#{E:_window_tree_format}'"
-set-option -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -w"
-set-option -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -s"
-set-option -ag command-alias choose-buffer="choose-buffer -F'#{E:_window_buffer_format}'"
+# custom format for choose-* commands.
+set-option -ag command-alias   choose-tree="choose-tree -F'#{E:_window_tree_format}'"
+set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -w"
+set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -s"
+set-option -ag command-alias   choose-buffer="choose-buffer -F'#{E:_window_buffer_format}'"
 
 # everything should spawn from current working directory.
 set-option -ag command-alias vsplit="split-window -hc '#{pane_current_path}'"
