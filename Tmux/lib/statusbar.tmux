@@ -17,7 +17,7 @@
 "#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
 # time format that syncs with clock-mode-style.
-%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M %p"
+%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S %p"
 
 # Day format that changes styles on weekdays/weekends.
 # user options:
