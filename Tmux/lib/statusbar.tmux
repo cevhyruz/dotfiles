@@ -24,7 +24,7 @@
 #   @day-mode-style    (short|long)
 #   @day-weekend-style [style]
 #   @day-weekday-style [style]
-%hidden _day="#{?#{==:#{@day-mode-style},short},%%a,%%A}"
+%hidden _day="#{?#{==:#{@day-mode-style},short},%a,%A}"
 
 # Month format that changes styles.
 # user options:
