@@ -1,23 +1,18 @@
 # vi:ft=tmux
 
-set-option -ag command-alias split-pane="split-window"
-set-option -ag command-alias splitp="split-window"
-set-option -ag command-alias server-info="show-messages -JT"
-set-option -ag command-alias info="show-messages -JT"
-
 # custom format for choose-* commands.
-set-option -ag command-alias   choose-tree="choose-tree -F'#{E:_window_tree_format}'"
 set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -w"
 set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -s"
-set-option -ag command-alias   choose-buffer="choose-buffer -F'#{E:_window_buffer_format}'"
+set-option -g command-alias[6] choose-tree="choose-tree -F'#{E:_window_tree_format}'"
+set-option -g command-alias[7] choose-buffer="choose-buffer -F'#{E:_window_buffer_format}'"
 
 # everything should spawn from current working directory.
-set-option -ag command-alias vsplit="split-window -hc '#{pane_current_path}'"
-set-option -ag command-alias split="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias popup="display-popup -EE -d '#{pane_current_path}'"
-set-option -ag command-alias neww="new-window -c '#{pane_current_path}'"
+set-option -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"
+set-option -g command-alias[9] split="split-window -vc '#{pane_current_path}'"
+set-option -g command-alias[10] popup="display-popup -EE -d '#{pane_current_path}'"
+set-option -g command-alias[11] neww="new-window -c '#{pane_current_path}'"
 
-set-option -ag command-alias reload="source-file ${DOT_TMUX}/tmux.conf"
-set-option -ag command-alias alias='display-message "#{version}"'
-set-option -ag command-alias version='display-message "#{version}"'
-set-option -ag command-alias checkhealth='display-message "#{version}"'
+set-option -g command-alias[12] reload="source-file ${DOT_TMUX}/tmux.conf"
+set-option -g command-alias[13] alias='display-message "#{version}"'
+set-option -g command-alias[14] version='display-message "#{version}"'
+set-option -g command-alias[15] checkhealth='display-message "#{version}"'
