@@ -1,10 +1,10 @@
 # vi:ft=tmux
 
 # custom format for choose-* commands.
-set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -w"
-set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -s"
-set-option -g command-alias[6] choose-tree="choose-tree -F'#{E:_window_tree_format}'"
-set-option -g command-alias[7] choose-buffer="choose-buffer -F'#{E:_window_buffer_format}'"
+set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
+set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
+set-option -g command-alias[6] choose-tree="choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
+set-option -g command-alias[7] choose-buffer="choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
 
 # everything should spawn from current working directory.
 set-option -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"

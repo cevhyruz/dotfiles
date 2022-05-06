@@ -1,11 +1,15 @@
 # vi:ft=tmux
 
 bind-key -T prefix -N "Choose a window from list" 'w' {
-  choose-window -Z
+  choose-window
 }
 
 bind-key -T prefix -N "Choose a session from list" 's' {
-  choose-session -Z
+  choose-session
+}
+
+bind-key -T prefix -N "Choose a paste buffer from a list" '=' {
+  choose-buffer
 }
 
 # create window interactively
