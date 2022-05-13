@@ -33,6 +33,7 @@ set-option -g bell-action none
 set-option -g default-command "${SHELL}"
 set-option -g default-shell "${SHELL}"
 set-option -g display-time  5000
+set-option -g display-panes-time 20000
 set-option -g history-limit 20000
 set-option -g message-limit 10000
 
