@@ -17,14 +17,16 @@
 "#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
 # time format that syncs with clock-mode-style.
-%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S %p"
+%hidden _time=\
+"#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S %p"
 
 # Day format that changes styles on weekdays/weekends.
 # user options:
 #   @day-mode-style    (short|long)
 #   @day-weekend-style [style]
 #   @day-weekday-style [style]
-%hidden _day="#{?#{==:#{@day-mode-style},short},%a,%A}"
+%hidden _day=\
+"#{?#{==:#{@day-mode-style},short},%a,%A}"
 
 # Month format that changes styles.
 # user options:
@@ -151,3 +153,31 @@
 "}"\
 "}"\
 "}"
+
+# copy-mode selection-x,
+# display selected character count.
+%hidden __x=\
+"#{e|+:#{?#{e|<:#{selection_end_x},#{selection_start_x}}"\
+",#{e|-:#{selection_start_x},#{selection_end_x}}"\
+",#{e|-:#{selection_end_x},#{selection_start_x}}"\
+"}"\
+",#{selection_active}}"
+
+# copy-mode selection-y,
+# display selected line count.
+%hidden __y=\
+"#{e|+:#{?#{e|<:#{selection_end_y},#{selection_start_y}}"\
+",#{e|-:#{selection_start_y},#{selection_end_y}}"\
+",#{e|-:#{selection_end_y},#{selection_start_y}}"\
+"}"\
+",#{selection_active}}"
+
+# copy-mode vim-style selection,
+# display selected characters/lines count.
+%hidden _selection=\
+"#{?#{selection_active},"\
+"#{?#{e|>:#{E:__y},1}"\
+",#{E:__y}"\
+",#{E:__x}"\
+"}"\
+",}"

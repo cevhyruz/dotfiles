@@ -18,8 +18,8 @@
 "#{@copy-mode-fill},"\
 "#{@normal-mode-fill}}}}"
 
-# component A style
-%hidden _status_comp_a_style=\
+# segment A style
+%hidden _segment_a_style=\
 "#{?client_readonly,"\
 "#{@readonly-status-comp-a-style},"\
 "#{?client_prefix,"\
@@ -29,8 +29,8 @@
 "#{@normal-status-comp-a-style}}}"\
 "}"
 
-# component B style
-%hidden _status_comp_b_style=\
+# segment B style
+%hidden _segment_b_style=\
 "#{?client_readonly,"\
 "#{@readonly-status-comp-b-style},"\
 "#{?client_prefix,"\
@@ -40,8 +40,8 @@
 "#{@normal-status-comp-b-style}}}"\
 "}"
 
-# component C style
-%hidden _status_comp_c_style=\
+# segment C style
+%hidden _segment_c_style=\
 "#{?client_readonly,"\
 "#{@readonly-status-comp-c-style},"\
 "#{?client_prefix,"\
@@ -66,6 +66,17 @@ set-option -g @tree-session-style 'fg=colour203'
 set-option -g @tree-pane-active-flag '*'
 set-option -g @tree-pane-active-flag-style 'fg=colour35'
 
+# buffers
+set-option -g @buffer-sample-style 'fg=colour35'
+
+
+set-option -g @buffer-space-alignment 1
+
+# there is no way to know the size of a glyph
+set-option -g @buffer-glyph-count 2
+set-option -g @buffer-format ""
+# set-option -g @buffer-format "#{_day} #{_date} #{_time}"
+
 # menubars - - - - - - - - - - - - - - - - - - - -
 
 set-option -g @menu-title-style        ""
@@ -85,7 +96,8 @@ set -g @readonly-mode-fill "colour124"
 set-option -g @glyph-style "bold,fg=colour202"
 set-option -g @separator-style "bold,fg=colour234"
 
-set-option -gF status-style "bg=#{@normal-mode-fill},fg=colour247"
+set-option -gF status-style   "bg=#{@normal-mode-fill},fg=colour247"
+set-option -g  @status1-bg "colour234"
 
 # segments style
 set-option -g  @readonly-status-comp-a-style "bold,bg=colour210,fg=colour124"
@@ -111,7 +123,7 @@ set-option -g message-command-style "bg=colour234"
 set-option -g pane-mode-changed[42] 'set -g message-style fg=orange'
 
 # component styles
-set-option -g @day-mode-style    "long"
+set-option -g @day-mode-style    "short"
 set-option -g @month-mode-style  "long"
 set-option -g @day-weekend-style "bold,fg=colour203"
 set-option -g @day-weekday-style "default"
@@ -136,16 +148,16 @@ set-option -g window-status-current-format \
 
 set-option -g  status-left-length  70
 set-option -gF status-left \
-"#[#{_status_comp_a_style}] #{b:socket_path}:#{_session_name}  #[reverse]#{@pl-separator-right}"\
-"#[#{_status_comp_b_style}] #{_pwd} "\
-"#[#{_status_comp_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
+"#[#{_segment_a_style}] #{_pane_mode} #[reverse]#{@pl-separator-right}"\
+"#[#{_segment_b_style}] #{_pwd_tilde} "\
+"#[#{_segment_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
 
 set-option -g  status-right-length 100
 set-option -gF status-right \
-"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
-"#[#{_status_comp_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
-"#[#{_status_comp_b_style}] #{@fa-clock} #{_time}  "\
-"#[#{_status_comp_a_style}] #{@fa-desktop} #{_user}@#{host}  "\
+"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
+"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
+"#[#{_segment_b_style}] #{@fa-clock} #{_time}  "\
+"#[#{_segment_a_style}] #{@fa-desktop} #{_user}@#{host}  "\
 
 # status format {{{1
 set-option -g status-format[0] \
@@ -157,17 +169,14 @@ set-option -g status-format[0] \
 "#{E:_status_right_format}"\
 "}"
 
-# set-option -g status-format[1] \
-# "#[fill=colour234]"\
-# "#{?pane_in_mode,#{pane_mode},normal}"\
-# "#[nolist align=right]"\
-# "#[bg=colour234]"\
-# "#{?#{!=:#{_yt_current_playing_song},},#{@fa-headphones}#[fg=colour241] #{=40:#{E:_yt_current_playing_song}},}"
-
 set-option -g status-format[1] \
-"#[align=left] #{E:@fa-th-large} #{E:_window_list}"\
+"#[fill=#{@status1-bg} align=left] #{E:@fa-th-large} #{E:_window_list}"\
 "#[nolist push-default align=right]"\
-" #{?pane_in_mode,#{=6:pane_mode},#{?client_prefix,prefix,--root}}"\
+"#{T;=/#{@status-right-1-length}:"\
+"#{_selection}"\
+"}"
+
+# "#{?pane_in_mode,#{_selection_x},}"\
 
 set-option -g clock-mode-style   12
 set-option -g status 3
