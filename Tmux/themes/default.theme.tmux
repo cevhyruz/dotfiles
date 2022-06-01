@@ -154,6 +154,7 @@ set-option -gF status-left \
 
 set-option -g  status-right-length 100
 set-option -gF status-right \
+"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{?#{==:#{E:_has_headset},connected},#{@fa-headphones} headphones,#{@fa-volume} speaker}"\
 "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
 "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
 "#[#{_segment_b_style}] #{@fa-clock} #{_time}  "\
@@ -175,8 +176,6 @@ set-option -g status-format[1] \
 "#{T;=/#{@status-right-1-length}:"\
 "#{_selection}"\
 "}"
-
-# "#{?pane_in_mode,#{_selection_x},}"\
 
 set-option -g clock-mode-style   12
 set-option -g status 3

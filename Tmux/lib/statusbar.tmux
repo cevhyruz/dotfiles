@@ -16,6 +16,11 @@
 %hidden _wifi_ssid=\
 "#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"\
 
+# check whether the headphones is plugged in.
+%hidden _has_headset=\
+"#(grep -A4 -ri 'Headphone Playback Switch' /proc/asound/card*/* |"\
+" grep \"Amp-Out vals.*0x00 0x0\" && echo 'connected' || echo 'disconected')"
+
 # time format that syncs with clock-mode-style.
 %hidden _time=\
 "#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S %p"
