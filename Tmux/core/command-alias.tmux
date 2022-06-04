@@ -11,8 +11,13 @@ set-option -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"
 set-option -g command-alias[9] split="split-window -vc '#{pane_current_path}'"
 set-option -g command-alias[10] popup="display-popup -EE -d '#{pane_current_path}'"
 set-option -g command-alias[11] neww="new-window -c '#{pane_current_path}'"
-
 set-option -g command-alias[12] reload="source-file ${DOT_TMUX}/tmux.conf"
 set-option -g command-alias[13] alias='display-message "#{version}"'
 set-option -g command-alias[14] version='display-message "#{version}"'
 set-option -g command-alias[15] checkhealth='display-message "#{version}"'
+
+set-option -g command-alias[16] set-theme=\
+'command-prompt -p "(theme):" { '\
+'  set-option -s @theme "%%";'\
+'  source-file ${DOT_TMUX}/tmux.conf;'\
+'}'
