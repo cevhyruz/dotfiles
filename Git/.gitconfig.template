@@ -1,0 +1,209 @@
+# vim: ft=gitconfig
+
+[user]
+  name          = John Fred Fadrigalan
+  email         = johnfred.fadrigalan@hotmail.com
+  signingkey    = 4C23960F72FC911F # Kali Linux (Personal Laptop)
+
+[init]
+  defaultBranch = master
+
+[user]
+  useConfigOnly = true
+
+[http]
+	postBuffer = 157286400
+
+[core]
+  excludesfile   = "{{DOTFILES}}/Git/.gitignore"
+  attributesfile = "{{DOTFILES}}/Git/.gitattributes"
+  editor         = "nvim"
+  pager          = "nvim -R"
+  untrackedCache = true
+
+[commit]
+  gpgsign  = true
+  template = "{{DOTFILES}}/Git/.gitmessage"
+
+[color]
+  status    = always
+  ui        = always
+  transport = always
+
+[color "transport"]
+  rejected = red
+
+[color "branch"]
+  current = 35  # green
+  local   = 248 # dimgrey
+  remote  = 203 # red
+
+[color "diff"]
+  meta   = 241
+  frag   = 142      # line info
+  commit = 214 bold # (yellow)
+  old    = 203      # deletions (red)
+  new    = 35       # additions (green)
+  whitespace = 203  # (red)
+
+[color "diff-highlight"]
+  oldNormal    = red bold
+  oldHighlight = red bold 52
+  newNormal    = green bold
+  newHighlight = green bold 22
+
+[color "status"]
+  added     = 35
+  changed   = 214 # yellow
+  untracked = 203 # true
+
+[init]
+  defaultBranch = master
+
+[push]
+  followTags = true
+
+[advice]
+  statusHints      = false
+  statusUoption    = false
+  addEmptyPathspec = false
+  detachedHead     = false
+
+[url "git@github.com:"]
+  insteadOf     = "gh:"
+  pushInsteadOf = "github:"
+  pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+  insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+  insteadOf     = "gst:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+  insteadOf = "gist:"
+
+[pager]
+  branch = false
+  log    = false
+
+  # aliases pager
+  contrib = false
+  alias = false
+
+[difftool]
+  prompt = false
+
+[diff]
+  tool = nvimdiff
+
+[merge]
+  stat = true
+  tool = nvimdiff
+
+[difftool "nvimdiff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
+[stash]
+  showPatch = true
+  showStat = true
+
+[log]
+  abbrevCommit = true
+
+[format]
+  pretty = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
+
+[pretty]
+  little = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
+  detail = "%C(white)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
+
+[alias]
+
+  done = "!f() { \
+    git push origin HEAD; \
+    git lg; \
+  }; f"
+
+  dif = difftool -t nvimdiff
+  s = status --short --branch --show-stash --ahead-behind --renames
+  br = branch --all
+  lg = log --decorate --graph --all -10
+  lga = log --decorate --graph --all --format=detail
+  contrib = shortlog --summary --numbered
+
+  amend = "!f() { \
+    git commit --amend --no-edit; \
+    git s; \
+  }; f"
+
+  typo = "!f() { \
+    git commit --amend; \
+    git s; \
+  }; f"
+
+  a = "!f() { \
+    git add "$@" && git s; \
+  }; f"
+
+  unstage = "!f() { \
+    git reset HEAD --quiet -- "$@"; \
+    git s; \
+  }; f"
+
+  c = "!f() { \
+    git commit; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  undo = "!f() { \
+    git reset HEAD~1 --quiet --mixed; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  alias = "!f() { \
+    git config --get-regexp "alias.*" \
+    | awk '{ $1=$1; print }' \
+    | sed 's/^alias.//'; \
+  }; f"
+
+  mb = "!f() { \
+    git checkout --quiet -b "$1" 2> /dev/null \
+      || git checkout --quiet "$1"; \
+    git br;\
+  }; f"
+
+  delb = "!f() { \
+    git branch --delete --force "$1"; \
+    git br; \
+    git s; \
+  }; f"
+
+  cob = "!f() { \
+    [$# -gt 0] && exec git switch --quiet "$1"; \
+    branch=$( git br 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) \
+      && git switch --quiet "${branch}"; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+  discard = "!f() { \
+    git checkout --quiet "$@" \
+      && git s; \
+  }; f"
+
+  screwthis = "!f() { \
+    git stash push --keep-index --message 'screwthis reset backup' \
+      && git reset --hard; \
+    git s; \
+    git lg -4; \
+  }; f"
+
+[include]
+  # Local git configuration. Include all your personal credentials
+  # and overrides here.
+  path = "{{DOTFILES}}/Git/.gitconfig.local"

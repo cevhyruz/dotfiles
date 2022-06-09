@@ -3,7 +3,7 @@
 
 load "${TEST_DIRECTORY}/test_helper.bash"
 
-load ../../Bash/core/options
+load 'Bash/core/options.bash'
 
 function _show_bash_opts() {
   shopt "$1" | awk '{print $2}'

@@ -10,138 +10,30 @@
 # Description:
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
-#
-#   Test files is any of *.bats and/or *.vader files.
-
-set -o privileged
-set -o nounset
-set -o errexit
 
 TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
 TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
 export TEST_DEPS_DIR
 export TEST_DIRECTORY
 
-BATS_EXECUTABLE="${TEST_DIRECTORY}/../test_lib/bats-core/bin/bats"
-
 if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
-    export DOTFILES_BASH_DIR
+  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") \
+    && export DOTFILES_BASH_DIR
 fi
 
 git submodule init && git submodule update
 
 function main() {
-  if [[ $# -eq 0 ]]; then
+  if [[ -z ${1:-} ]]; then
     # shellcheck disable=2206
     TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
+  else
+    TEST_DIRS=("${1:-}")
   fi
 
-  _get_opts "$@"
-
-  _run_bats_tests
-  _run_vim_tests
-}
-
-function _usage() {
-  echo "  Usage:"
-  echo "    ${BASH_SOURCE[0]} [arguments]"
-  echo ""
-  echo "  Arguments:"
-  echo "    -h, --help       Display this help message"
-  echo "    -v, --vim-only   Run vimscript test suite only"
-  echo "    -b, --bats-only  Run bats test suite only"
-  echo "    --suite=SUITE    Provide space-delimited tests file paths"
-}
-
-function _get_opts() {
-  for param in "$@"; do
-    shift
-    case "${param}" in
-    "--help") set -- "$@" "-h" ;;
-    "--vim-only") set -- "$@" "-v" ;;
-    "--bats-only") set -- "$@" "-b" ;;
-    "--suite") set -- "$@" "-s" ;;
-    *) set -- "$@" "${param}" ;;
-    esac
-  done
-
-  OPTIND=1
-  while getopts ":hvbs:" opt; do
-    case "${opt}" in
-    "h")
-      _usage
-      exit 0
-      ;;
-    "v")
-      export VIM_ONLY=1
-      _run_vim_tests
-      exit $?
-      ;;
-    "b")
-      export BATS_ONLY=1
-      _run_bats_tests
-      exit $?
-      ;;
-    "s")
-      declare -ag BATS_SPEC=()
-      declare -ag VADER_SPEC=()
-
-      for spec in ${OPTARG}; do
-        case "${spec: -5}" in
-        '.bats') BATS_SPEC+=("${spec}") ;;
-        'vader') VADER_SPEC+=("${spec}") ;;
-        esac
-      done
-      ;;
-    \?)
-      echo "Invalid option: -${OPTARG} requires an argument"
-      echo ""
-      _usage 1>&2
-      exit 1
-      ;;
-    esac
-  done
-
-  shift $((OPTIND - 1))
-}
-
-function _prepare() {
-  if [[ "${CI_VIM_EXEC}" == 'vim' ]]; then
-    # for Unix
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    mkdir -p "/tmp/.vim"
-    cp "${TEST_DIRECTORY}/../nvim/init.vim" "${HOME}/.vim/vimrc"
-  fi
-}
-
-function _run_vim_tests() {
-  if [[ -n "${VADER_SPEC[*]:-}" ]] || [[ -n "${VIM_ONLY:-}" ]]; then
-
-    #if [[ -n "${CI_VIM_EXEC}" ]] && [[ "${CI_VIM_EXEC}" == "vim" ]]; then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    #fi
-
-    ${CI_VIM_EXEC:-vim} -Nu "${TEST_DIRECTORY}/vimrc" \
-      -c "PlugInstall"
-    #-c "'Vader! ${VADER_SPEC[*]:-${VADER_TEST_DIRS:-${TEST_DIRECTORY}/Nvim/*}}'"
-  fi
-}
-
-function _run_bats_tests() {
-  if [[ -n "${BATS_SPEC[*]:-}" ]] || [[ -n "${TEST_DIRS[*]:-}" ]] ||
-    [[ -n "${BATS_ONLY:-}" ]]; then
-
-    if [[ -n "${BATS_ONLY:-}" ]]; then
-      # shellcheck disable=2206
-      TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
-    fi
-
-    eval "${BATS_EXECUTABLE} ${CI:+--tap} --recursive" \
-      "${BATS_SPEC[@]:-${TEST_DIRS[@]:-}}"
-  fi
+  # shellcheck disable=SC2294
+  eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
+    ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
 }
 
 main "$@"

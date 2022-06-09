@@ -1,0 +1,10 @@
+#!/bin/bash
+# shellcheck shell=bash
+# vi:ft=bats fdm=marker ts=2 sw=2 et
+
+while :
+do
+    clear
+    git --no-pager log --graph --pretty=oneline --abbrev-commit --decorate --all "$@"
+    sleep 1
+done

@@ -3,13 +3,17 @@
 # and `info rluserman' for more information.
 # ----------------------------------------------------------------------
 
+set editing-mode vi
+
+$if bash
+  $include /home/devs/Projects/dotfiles/readline/surround
+$endif
+
 # allow UTF-8 input and output instead of showing
 # an ugly stuff like $'\0123\0456'.
 set input-meta   on
 set output-meta  on
 set convert-meta off
-
-#set editing-mode vi
 
 set colored-stats on
 set colored-completion-prefix on
@@ -48,8 +52,3 @@ set  menu-complete-display-prefix on
 
 # duration for ambiguous characters (default: 500)
 set keyseq-timeout 3000
-
-# readline components
-$include ~/Projects/dotfiles/readline/prompt
-$include ~/Projects/dotfiles/readline/vi-insert.readline
-# $include ~/Projects/dotfiles/bash/readline/vi-command.readline

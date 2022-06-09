@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vi:ft=sh fdm=marker ts=2 sw=2 et
+# vim: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Core utility functions for managing Dotfiles.
 # Entry file to load all library file for bash.
@@ -8,20 +8,24 @@
 # prevent sourcing this script multiple times.
 [[ -n ${UTIL_LOADED:-} ]] && return || UTIL_LOADED=true
 
-#  _::die() Exit gracefully. {{{1
-# Args [message] (optional)
-# Returns: 1
 function _::die() {
+  about "Exit gracefully."
+  param "[message] (optional)"
+  _return "1"
+
+  group "helpers"
+
   echo >&2 "$1"
   return 1
 }
 
-# _::is_dir() Test if given path is a directory. {{{1
-# Args [directory path]
-# Returns:
-#   0 if path is dir with contents,
-#   1 if it's empty, non-existent, glob or points to a file.
 function _::is_dir() {
+  _about "Test if given path is a directory."
+  _param "[directory path]"
+  _return "0 if path is a directory with contents."
+  _return "1 if it is empty, non-existent, glob or points to a file."
+
+  _group "helpers"
   local -r DIR_PATH="${1-}"
 
   [[ -z "$(ls --almost-all "${DIR_PATH}" 2>/dev/null)" ]] && return 1
@@ -33,12 +37,13 @@ function _::is_dir() {
   return 1
 }
 
-# _::is_file() Test if given path is a file. {{{1
-# Args [directory path]
-# Returns:
-#   0 if path is file,
-#   1 if it's non-existent, glob or points to a directory.
 function _::is_file() {
+  _about "Test if given path is a file."
+  _param "[path]"
+  _return "0 if [path] is a file"
+  _return "1 if it's not-existent, glob or points to a directory."
+
+  _group "helpers"
   local -r FILE_PATH="$1"
 
   if [[ -f "${FILE_PATH}" ]] ||
@@ -49,39 +54,42 @@ function _::is_file() {
   return 1
 }
 
-# _::add_to_path() Add/Prepend [path] into environment path. {{{1
-# Arguments: [path]
-# Globals:
-#   PATH
-# Returns:
-#   0 if [path] was added, 1 if path doesnt exist.
 function _::add_to_path() {
-  local -r DIR_PATH="$1"
+  _about "Add/Prepent [path] into the global environment path."
+  _env "PATH"
+  _return "0 if the [path] was succesfully added, 1 otherwise."
 
-  if _::is_dir "${DIR_PATH}"; then
-    if ! echo "${PATH//:/\\n}" | grep --quiet "${DIR_PATH}"; then
+  _group "helpers"
+
+  if [[ -d "${1:-}" && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
+    if [[ "${2:-before}" == "after" ]]; then
       export PATH="$1:${PATH}"
+    else
+      export PATH="${PATH}:$1"
     fi
   fi
 }
 
-# _::source_file() Source a file. {{{1
-# Args [script file]
-# Returns:
-#   0 if the file was successfully sourced, 1 otherwise.
-# shellcheck source=/dev/null
 function _::source_file() {
+  _about "Source a file."
+  _param "[script file]"
+  _return "0 if the file was successfully sourced, 1 otherwise."
+
+  _group "helpers"
+
   source "$1" 2>/dev/null ||
     _::die "can't source '$1'"
 
   return $?
 }
 
-# _::source_files_from() Source all files in a given directory path {{{1
-# Args [directory path]
-# Returns:
-#   0 if the file was successfully sourced, 1 otherwise.
 function _::source_files_from() {
+  _about "Source all files in a given directory path."
+  _param "[directory path]"
+  _return "0 if the file was successfully sourced, 1 otherwise."
+
+  _group "helpers"
+
   local -r DIR_PATH="$1"
 
   if _::is_dir "${DIR_PATH}"; then
@@ -97,12 +105,13 @@ function _::source_files_from() {
   return 1
 }
 
-# _::source_all_from() Source files in [path] {{{1
-# including first level sub-directories.
-# Args [directory path]
-# Returns:
-#   0 if the file was successfully sourced, 1 otherwise.
 function _::source_all_from() {
+  _about "Simply all files from [path]."
+  _param "[directory path]"
+  _return "0 if the file was successfully sourced, 1 otherwise."
+
+  _group "helpers"
+
   local -r DIR_PATH="$1"
 
   if _::is_dir "${DIR_PATH}"; then
@@ -126,6 +135,12 @@ function _::source_all_from() {
 # Returns:
 #  0 if command exists on path, 1 otherwise
 function _::command_exists() {
+  _about "Check if a given command is installed."
+  _param "[command]"
+  _return "0 if command exists on path, 1 otherwise."
+
+  _group "helpers"
+
   local cmd="$1"
   if command -v "${cmd}" &>/dev/null; then
     return 0

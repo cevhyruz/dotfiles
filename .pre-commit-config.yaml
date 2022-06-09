@@ -3,7 +3,7 @@
 minimum_pre_commit_version: 1.18.1
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.1.0
     hooks:
       - id: trailing-whitespace
       - id: double-quote-string-fixer
@@ -13,14 +13,11 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.4
+    rev: 2.1.6
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
         exclude: ".bats$"
-      - id: shfmt
-        exclude: ".bats$"
-      - id: markdownlint
 
   - repo: local
     hooks:
