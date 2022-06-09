@@ -29,10 +29,10 @@ M.cmp_mapping = function(cmp)
     ['J']     = map.select_next_item(),
     ['<C-p>']     = map.select_prev_item(),
     ['<C-n>']     = map.select_next_item(),
-    ['<C-y>']     = map(cmp.mapping.scroll_docs(-2), { 'i', 'c' }),
-    ['<C-e>']     = map(cmp.mapping.scroll_docs(2), { 'i', 'c' }),
-    ['<C-Space>'] = map(cmp.mapping.complete(), { 'i', 'c' }),
-    ['<C-c>']     = map({i = cmp.mapping.abort(), c = cmp.mapping.close()}),
+    ['<C-y>']     = map(map.scroll_docs(-2), { 'i', 'c' }),
+    ['<C-e>']     = map(map.scroll_docs(2), { 'i', 'c' }),
+    ['<C-Space>'] = map(map.complete(), { 'i', 'c' }),
+    ['<C-c>']     = map({i = map.abort(), c = map.close()}),
     ['<CR>']      = map.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   }
 end

@@ -33,15 +33,16 @@ set-option -g bell-action none
 set-option -g default-command "${SHELL}"
 set-option -g default-shell "${SHELL}"
 set-option -g display-time  5000
+set-option -g display-panes-time 20000
 set-option -g history-limit 20000
 set-option -g message-limit 10000
 
 # Mouse Support
 if-shell '[ $(echo "$TMUX_VERSION < 2.1" | bc) = 1 ]' \
 "  set-window-option -g mode-mouse          "on"; \
-   set-option        -g mouse-resize-pane   "on"; \
-   set-option        -g mouse-select-window "on"; \
-   set-option        -g mouse-select-pane   "on"; \
+  set-option        -g mouse-resize-pane   "on"; \
+  set-option        -g mouse-select-window "on"; \
+  set-option        -g mouse-select-pane   "on"; \
 "
 
 # In version 2.1 "mouse" replaced the previous 4 options
