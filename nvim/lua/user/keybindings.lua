@@ -26,9 +26,9 @@ M.cmp_mapping = function(cmp)
   return  {
     -- See ':help cmp.mapping.*' for details
     ['K']     = map.select_prev_item(),
+    ['<C-p>'] = map(map.select_prev_item(), { 'i', 'c' }),
     ['J']     = map.select_next_item(),
-    ['<C-p>']     = map.select_prev_item(),
-    ['<C-n>']     = map.select_next_item(),
+    ['<C-n>']  = map(map.select_next_item(), { 'i', 'c' }),
     ['<C-y>']     = map(map.scroll_docs(-2), { 'i', 'c' }),
     ['<C-e>']     = map(map.scroll_docs(2), { 'i', 'c' }),
     ['<C-Space>'] = map(map.complete(), { 'i', 'c' }),
