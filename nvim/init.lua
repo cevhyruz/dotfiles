@@ -1,6 +1,6 @@
 require('user.options')
 
-require('user.keybindings').init()
+require('user.maputils').init()
 
 require('user.abbrev')
 

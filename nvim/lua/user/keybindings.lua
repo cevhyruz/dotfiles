@@ -1,43 +1,71 @@
 local M = {}
 
-local lsp_keys = {
-  diagnostic = {
-    -- Diagnostic. See ':help vim.diagnostic.*'
-    { '<leader>f', 'open_float()' },
-    { '[d',        'goto_prev()'  },
-    { ']d',        'goto_next()'  },
-    { '<leader>q', 'setloclist()' },
-  },
-  -- LSP. see ':help vim.lsp.*'
-  lsp = {
-    { 'gd',         'buf.definition()'     },
-    { 'gD',         'buf.declaration()'    },
-    { 'gi',         'buf.implementation()' },
-    { 'K',          'buf.hover()'          },
-    { '<C-k>',      'buf.signature_help()' },
-    { '<leader>rn', 'buf.rename()'         },
-    { 'gr',         'buf.references()'     },
-    { '<leader>ca', 'buf.code_action()'    },
-  }
+M.LSP_KEY =  {
+    diagnostic = {
+      -- Diagnostic. See ':help vim.diagnostic.*'
+      { '<leader>f', 'open_float()', { noremap = true } },
+      { '[d',        'goto_prev()',  { noremap = true } },
+      { ']d',        'goto_next()',  { noremap = true } },
+      { '<leader>q', 'setloclist()', { noremap = true } },
+    },
+
+    -- LSP. see ':help vim.lsp.*'
+    lsp = {
+      { 'gd',         'buf.definition()',     { noremap = true } },
+      { 'gD',         'buf.declaration()',    { noremap = true } },
+      { 'gi',         'buf.implementation()', {} },
+      { 'K',          'buf.hover()',          {} },
+      { '<C-k>',      'buf.signature_help()', {} },
+      { '<leader>rn', 'buf.rename()',         {} },
+      { 'gr',         'buf.references()',     {} },
+      { '<leader>ca', 'buf.code_action()',    {} },
+    },
 }
 
 M.cmp_mapping = function(cmp)
-  local map = cmp.mapping
-  return  {
-    -- See ':help cmp.mapping.*' for details
-    ['K']     = map.select_prev_item(),
-    ['<C-p>'] = map(map.select_prev_item(), { 'i', 'c' }),
-    ['J']     = map.select_next_item(),
-    ['<C-n>']  = map(map.select_next_item(), { 'i', 'c' }),
-    ['<C-y>']     = map(map.scroll_docs(-2), { 'i', 'c' }),
-    ['<C-e>']     = map(map.scroll_docs(2), { 'i', 'c' }),
-    ['<C-Space>'] = map(map.complete(), { 'i', 'c' }),
-    ['<C-c>']     = map({i = map.abort(), c = map.close()}),
-    ['<CR>']      = map.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+  return {
+    ['K'] = cmp.mapping.select_prev_item(),
+    ['J'] = cmp.mapping.select_next_item(),
+
+    ['<C-p>'] = cmp.mapping(
+        cmp.mapping.select_prev_item(),
+        { "i", "c" }
+    ),
+
+    ['<C-n>'] = cmp.mapping(
+        cmp.mapping.select_next_item(),
+        { "i", "c" }
+    ),
+
+    ['<C-y>'] = cmp.mapping(
+        cmp.mapping.scroll_docs(-2),
+        { "i", "c" }
+    ),
+
+    ['<C-e>'] = cmp.mapping(
+        cmp.mapping.scroll_docs(2),
+        { "i", "c" }
+    ),
+
+    ['<C-Space>'] = cmp.mapping(
+        cmp.mapping.complete(),
+        { "i", "c" }
+    ),
+
+    ['<C-c>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+    }),
+
+    ['<CR>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+    }),
+
   }
 end
 
-local mapping_keys =  {
+M.LOCAL_KEYS =  {
   -- easy mode switching
   { 'i', 'kj', '<Esc>' },
   { 'x', 'kj', '<Esc>' },
@@ -111,49 +139,5 @@ local mapping_keys =  {
   }
 }
 
-local fn_table = {}
-
-local function _register_fn(fn)
-  table.insert(fn_table, fn)
-  return #fn_table
-end
-
-local function lua_fn(fn)
-  return string.format( ':lua require("%s").apply_function(%s)<CR>',
-    'user.keybindings', _register_fn(fn))
-end
-
--- call stored function keys
-M.apply_function = function(id)
-  fn_table[id]()
-end
-
--- my custom keybindings
-M.init = function()
-  local opts = { noremap = true } for _,value in pairs(mapping_keys) do
-    if type(value[3]) == 'function' then
-      vim.api.nvim_set_keymap( value[1], value[2], lua_fn(value[3]), opts )
-    else
-      vim.api.nvim_set_keymap( value[1], value[2], value[3], opts)
-    end
-  end
-end
-
--- Setup lsp keybindings
-M.on_lsp_attach = function(bufnr)
-  local opts = { noremap = true }
-  -- diagnostic
-  for _,value in pairs(lsp_keys.diagnostic) do
-    vim.api.nvim_buf_set_keymap(
-      bufnr, 'n', value[1], ':lua vim.diagnostic.' .. value[2] .. '<CR>', opts
-    )
-  end
-  -- lsp
-  for _,value in pairs(lsp_keys.lsp) do
-    vim.api.nvim_buf_set_keymap(
-      bufnr, 'n', value[1], ':lua vim.lsp.'.. value[2] ..'<CR>', opts
-    )
-  end
-end
 
 return M

@@ -69,7 +69,7 @@ M.on_attach = function(client, bufnr)
     hi DiagnosticLineNrError guifg=#ff5f5f gui=bold " red
   ]]
 
-  require('user.keybindings').on_lsp_attach(bufnr)
+  require('user.maputils').on_lsp_attach(bufnr)
 
   -- lsp highlighted document
   -- Set autocommands conditional on server_capabilities
