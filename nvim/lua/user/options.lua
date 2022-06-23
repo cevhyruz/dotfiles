@@ -5,7 +5,7 @@ vim.o.showmode = false
 
 vim.wo.foldlevel = 99
 
-vim.o.laststatus = 3
+vim.o.laststatus = 2
 
 vim.o.expandtab = true
 vim.o.tabstop = 2

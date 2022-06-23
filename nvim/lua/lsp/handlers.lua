@@ -1,13 +1,5 @@
 local M = {}
 
--- - go-to-definition
--- - find-references
--- - hover
--- - completion
--- - rename
--- - format
--- - refactor
-
 M.setup = function()
   local signs = {
     { name = 'DiagnosticSignError', text = "", hl = 'DiagnosticLineNrError' },
@@ -69,7 +61,8 @@ M.on_attach = function(client, bufnr)
     hi DiagnosticLineNrError guifg=#ff5f5f gui=bold " red
   ]]
 
-  require('user.maputils').on_lsp_attach(bufnr)
+  -- lsp keys
+  require('user.maputils').setup_lsp_keys(bufnr)
 
   -- lsp highlighted document
   -- Set autocommands conditional on server_capabilities

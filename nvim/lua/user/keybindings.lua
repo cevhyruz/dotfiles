@@ -22,46 +22,38 @@ M.LSP_KEY =  {
     },
 }
 
-M.cmp_mapping = function(cmp)
+M.set_cmp_mapping = function(cmp)
   return {
     ['K'] = cmp.mapping.select_prev_item(),
     ['J'] = cmp.mapping.select_next_item(),
-
     ['<C-p>'] = cmp.mapping(
         cmp.mapping.select_prev_item(),
         { "i", "c" }
     ),
-
     ['<C-n>'] = cmp.mapping(
         cmp.mapping.select_next_item(),
         { "i", "c" }
     ),
-
     ['<C-y>'] = cmp.mapping(
         cmp.mapping.scroll_docs(-2),
         { "i", "c" }
     ),
-
     ['<C-e>'] = cmp.mapping(
         cmp.mapping.scroll_docs(2),
         { "i", "c" }
     ),
-
     ['<C-Space>'] = cmp.mapping(
         cmp.mapping.complete(),
         { "i", "c" }
     ),
-
     ['<C-c>'] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
     }),
-
     ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Replace,
         select = true,
     }),
-
   }
 end
 
@@ -138,6 +130,5 @@ M.LOCAL_KEYS =  {
     end
   }
 }
-
 
 return M

@@ -38,7 +38,7 @@ cmp.setup {
     end,
   },
 
-  mapping = require('user.keybindings').cmp_mapping(cmp),
+  mapping = require('user.keybindings').set_cmp_mapping(cmp),
 
   formatting = {
     fields = { 'kind', 'abbr', 'menu' },
