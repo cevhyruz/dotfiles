@@ -5,6 +5,7 @@
 declare -a extensions=(
   'vscodevim.vim'
   'malmaud.tmux'
+  'shan.code-settings-sync'
 )
 
 for extension in "${extensions[@]}"; do
