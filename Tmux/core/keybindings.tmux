@@ -1,5 +1,7 @@
 # vi:ft=tmux
 
+bind-key ` send-prefix
+
 bind-key -T prefix -N 'Search for URLs in current pane' 'u' {
   copy-mode
   send-keys -X start-of-line
