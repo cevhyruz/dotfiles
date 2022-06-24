@@ -20,7 +20,7 @@ end
 
 -- Setup my custom local keys on startup.
 M.init = function()
-  local opts = { noremap = true, silent = true }
+  local opts = { noremap = true }
   for _,value in pairs(local_map.LOCAL_KEYS) do
     if type(value[3]) == 'function' then
       vim.api.nvim_set_keymap( value[1], value[2], _lua_fn(value[3]), opts)
