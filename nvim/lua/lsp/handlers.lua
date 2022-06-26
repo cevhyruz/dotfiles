@@ -1,24 +1,36 @@
 local M = {}
 
-M.setup = function()
-  local signs = {
-    { name = 'DiagnosticSignError', text = "", hl = 'DiagnosticLineNrError' },
-    { name = 'DiagnosticSignWarn',  text = "", hl = 'DiagnosticLineNrWarn'  },
-    { name = 'DiagnosticSignHint',  text = "", hl = 'DiagnosticLineNrHint'  },
-    { name = 'DiagnosticSignInfo',  text = "", hl = 'DiagnosticLineNrInfo'  }
-  }
+local api = vim.api
 
-  for _, sign in ipairs(signs) do
-    vim.fn.sign_define( sign.name, { texthl = sign.name, numhl = sign.hl })
-  end
+M.setup = function()
+
+  vim.fn.sign_define( { {
+      name = 'DiagnosticSignError',
+      text = '',
+      texthl = 'DiagnosticSignError',
+      numhl = 'DiagnosticLineNrError'
+    }, {
+      name = 'DiagnosticSignWarn',
+      text = '',
+      texthl = 'DiagnosticSignWarn',
+      numhl = 'DiagnosticLineNrWarn'
+    }, {
+      name = 'DiagnosticSignHint',
+      text = '',
+      texthl = 'DiagnosticSignHint',
+      numhl = 'DiagnosticLineNrHint'
+    }, {
+      name = 'DiagnosticSignInfo',
+      text = '',
+      texthl = 'DiagnosticSignInfo',
+      numhl = 'DiagnosticLineNrInfo'
+    }
+  } )
 
   local style = { border = 'rounded' }
 
-  vim.diagnostic.config({
+  vim.diagnostic.config( {
     virtual_text = true,
-    signs = {
-      active = signs
-    },
     update_in_insert = false,
     underline = true,
     severity_sort = true,
@@ -28,26 +40,26 @@ M.setup = function()
       border = style.border,
       source = 'always',
       header = '',
-      prefix = '' }
-  })
+      prefix = ''
+    }
+  } )
 
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover, {
-      border = style.border
-  })
+  vim.lsp.handlers['textDocument/hover'] =
+      vim.lsp.with( vim.lsp.handlers.hover, { border = style.border } )
 
   vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help, {
-      border = style.border
-  })
+                                                       vim.lsp.handlers
+                                                           .signature_help, {
+        border = style.border
+      } )
 end
 
 M.on_attach = function(client, bufnr)
-  print(client.name .. ' attached on buffer')
+  print( client.name .. ' attached on buffer' )
 
-  vim.cmd [[
-    command! Format execute 'lua vim.lsp.buf.formatting()'
-  ]]
+  api.nvim_create_user_command( 'Format', function()
+    vim.lsp.buf.format { async = true }
+  end, {} )
 
   vim.cmd [[
     hi link DiagnosticVirtualTextError LineNr
@@ -62,29 +74,30 @@ M.on_attach = function(client, bufnr)
   ]]
 
   -- lsp keys
-  require('user.maputils').setup_lsp_keys(bufnr)
+  require( 'user.maputils' ).setup_lsp_keys( bufnr )
 
-  -- lsp highlighted document
-  -- Set autocommands conditional on server_capabilities
   if client.server_capabilities.documentHighlightProvider then
-    vim.api.nvim_exec([[
-        augroup lsp_document_highlight
-          autocmd! * <buffer>
-          autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-          autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        augroup end
+    api.nvim_create_autocmd("CursorHold", {
+      group = api.nvim_create_augroup('lsp_document_highlight', { clear = true }),
+      pattern = "*",
+      callback = vim.lsp.buf.document_highlight,
+    })
 
-        augroup code_action_hint
-        autocmd! * <buffer>
-        autocmd CursorHold,CursorHoldI <buffer> lua require('nvim-lightbulb').update_lightbulb()
-        augroup end
-      ]],
-      false
-    )
+    api.nvim_create_autocmd("CursorMoved", {
+      group = api.nvim_create_augroup('lsp_document_highlight', { clear = true }),
+      pattern = "*",
+      callback = vim.lsp.buf.clear_references
+    })
+
+    api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+      group = api.nvim_create_augroup('code_action_hint', { clear = true }),
+      pattern = "*",
+      callback = require('nvim-lightbulb').update_lightbulb
+    })
   end
 end
 
-M.capabilities = require('cmp_nvim_lsp').update_capabilities(
-  vim.lsp.protocol.make_client_capabilities())
+M.capabilities = require( 'cmp_nvim_lsp' ).update_capabilities( vim.lsp.protocol
+                                                                    .make_client_capabilities() )
 
 return M
