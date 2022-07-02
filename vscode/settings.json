@@ -1,16 +1,115 @@
 {
-    "window.zoomLevel": -1,
-    "keyboard.dispatch": "keyCode",
-    "workbench.sideBar.location": "left",
-    "vim.insertModeKeyBindings": [
+  "vscode-neovim": {
+    "logOutputToConsole": true,
+    "mouseSelectionStartVisualMode": true,
+    "neovimExecutablePaths": {
+      "linux": "/usr/local/bin/nvim",
+    },
+    "logLevel": "error",
+    "neovimInitVimPaths": "~/Projects/dotfiles/vscode/init.lua"
+  },
+
+  "breadcrumbs": false,
+
+  "terminal": {
+    "external": {
+      "linuxExec": "gnome-terminal-emulator",
+    },
+    "integrated": {
+        "fontFamily": "'DejaVu Sans Mono for Powerline', 'PowerlineSymbols','Font Awesome', monospace",
+        "allowChords": false,
+    }
+  },
+
+  "window": {
+    "zoomLevel": -1.2
+  },
+
+  "editor": {
+	  "cursorSurroundingLines": 5,
+    "lineNumbers": "relative",
+    "scrollbar": {
+      "vertical": "hidden",
+    },
+    "rulers": [
+      {
+        "column": 80,
+        "color": "#121212"
+      }
+    ],
+    "wordWrap": "on",
+    "fontFamily": "'DejaVu Sans Mono for Powerline'",
+    "minimap": {
+      "enabled": true
+    },
+    "renderFinalNewline": false,
+    "renderWhitespace": "all",
+    "occurrencesHighlight": false,
+    "selectionHighlight": false,
+  },
+ 
+  "vim": {
+    "easymotion": true,
+    "incsearch": true,
+    "useSystemClipboard": true,
+    "useCtrlKeys": true,
+    "hlsearch": true,
+    "leader": ",",
+    "insertModeKeyBindings": [
         {
-            "before": ["k", "j"],
-            "after": ["<Esc>"]
+          "before": ["k", "j"],
+          "after": ["<Esc>"]
         }
     ],
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "editor.wordWrap": "on",
-	"terminal.integrated.gpuAcceleration": "off",
-	"terminal.explorerKind": "integrated",
-	"terminal.external.linuxExec": "gnome-terminal-emulator",
+
+    "normalModeKeyBindingsNonRecursive": [
+      /* disable highlighted search */
+      /* TODO: Make this toggable */
+      {
+        "before": ["<Space>"],
+        "commands": [":nohl"]
+      },
+    ],
+  },
+
+  "keyboard": {
+    "dispatch": "keyCode"
+  },
+
+  "typescript": {
+    "updateImportsOnFileMove": {
+      "enabled": "always"
+    }
+  },
+
+  "workbench": {
+    "statusBar": {
+      "visible": true
+    },
+    "colorCustomizations": {
+      "statusBar.background" : "#303030",
+      "statusBar.foreground" : "#BCBCBC",
+      "statusBar.noFolderBackground" : "#212121",
+      "editor.lineHighlightBackground": "#262626",
+      "editor.lineHighlightBorder": "#303030",
+      "sideBar.background": "#1C1C1C",
+      "editorLineNumber.foreground": "#444444",
+      "editorLineNumber.activeForeground": "#A8A8A8",
+      "list.focusBackground": "#262626",
+      "list.focusOutline": "#262626",
+      "list.focusHighlightForeground": "#BCBCBC",
+      "list.highlightForeground": "#BCBCBC",
+      "list.activeSelectionBackground": "#262626",
+      "list.inactiveSelectionBackground": "#262626",
+      "quickInput.background": "#262626",
+      "quickInput.foreground": "#BCBCBC",
+      "quickInputList.focusBackground": "#303030"
+    },
+    "iconTheme": "vscode-simpler-icons",
+    "sideBar": {
+      "location": "left"
+    }
+  },
+  "workbench.activityBar.visible": false,
+  "editor.minimap.enabled": false,
 }
