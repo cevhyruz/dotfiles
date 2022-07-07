@@ -1,157 +1,140 @@
+// VsCode keybinding to provide vim-like experience.
+// vim: ft=jsonc
 [
-// window navigation
-{ "key": "ctrl+h",
-  "command": "vim.remap",
-  "when": "vim.mode == 'Normal'",
-  "args": { "after": ["<C-w>", "h"], }
-},
-{ "key": "ctrl+j",
-  "command": "vim.remap",
-  "when": "vim.mode == 'Normal'",
-  "args": { "after": ["<C-w>", "j"], } 
-},
-{ "key": "ctrl+k",
-  "command": "vim.remap",
-  "when": "vim.mode == 'Normal'",
-  "args": { "after": ["<C-w>", "k"], }
-},
-{ "key": "ctrl+l",
-  "command": "vim.remap",
-  "when": "vim.mode == 'Normal'",
-  "args": { "after": ["<C-w>", "l"], }
-},
-{ "key": "ctrl+l",
-  "command": "workbench.action.focusActiveEditorGroup",
-  "when": "explorerViewletFocus && !editorTextFocus"
-}, 
-// quick command
-{ "key": ";",
-  "command": "vim.remap",
-  "when": "vim.mode == 'Normal'",
-  "args": { "after": [":"], }
-},
+// navigate windows left
+{ "key": "ctrl+h",                "command": "vim.remap",
+                                  "when": "vim.mode == 'Normal'",
+                                  "args": { "after": ["<C-w>", "h"] } },
+// navigate window down.
+{ "key": "ctrl+j",                "command": "vim.remap",
+                                  "when": "vim.mode == 'Normal'",
+                                  "args": { "after": ["<C-w>", "j"] } },
+// navigate window up.
+{ "key": "ctrl+k",                "command": "vim.remap",
+                                  "when": "vim.mode == 'Normal'",
+                                  "args": { "after": ["<C-w>", "k"] } },
+// navigate window right.
+{ "key": "ctrl+l",                "command": "vim.remap",
+                                  "when": "vim.mode == 'Normal'",
+                                  "args": { "after": ["<C-w>", "l"] } },
+// linebreak
+{ "key": "ctrl+j",                "command": "vim.remap",
+                                  "when": "vim.mode == 'Insert'",
+                                  "args": { "after": ["<C-m>"] } },
+// focus right-side editor
+{ "key": "ctrl+l",                "command": "workbench.action.focusActiveEditorGroup",
+                                  "when": "explorerViewletFocus && !editorTextFocus" }, 
 // toggle file explorer
-{ "key": "ctrl+n",
-  "command": "workbench.action.toggleSidebarVisibility",
-  "when": "explorerViewletFocus || editorTextFocus && !inQuickOpen"
-},
-{ "key": "ctrl+n",
-  "command": "workbench.view.explorer",
-  "when": "editorTextFocus && !explorerViewletVisible && !inQuickOpen"
-},
+{ "key": "ctrl+n",                "command": "workbench.action.toggleSidebarVisibility",
+                                  "when": "explorerViewletFocus || editorTextFocus && !inQuickOpen" },
+{ "key": "ctrl+n",                "command": "workbench.view.explorer",
+                                  "when": "editorTextFocus && !explorerViewletVisible && !inQuickOpen" },
+// open selected file in editor then hide fileExplorer.
+{ "key": "ctrl+m",                "command": "extension.multiCommand.execute",
+                                  "args": { "sequence": [ "list.select", "workbench.action.toggleSidebarVisibility" ] },
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+// renaming
+{ "key": "r",                     "command": "renameFile", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+// deleting.
+{ "key": "d",                     "command": "deleteFile",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" }, 
+// cutting
+{ "key": "x",                     "command": "filesExplorer.cut",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+// yanking.
+{ "key": "y",                     "command": "filesExplorer.copy",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+// create new file.
+{ "key": "a",                     "command": "explorer.newFile",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+// create new folder.
+{ "key": "shift+a",               "command": "explorer.newFolder",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+// toggle visual-select mode.
+{ "key": "v",                     "command": "list.toggleSelection",
+                                  "when": "explorerViewletFocus" }, 
+// pasting.
+{ "key": "p",                     "command": "filesExplorer.paste",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+// collapse all folder in fileExlorer.
+{ "key": "shift+h",               "command": "list.collapseAll",
+                                  "when": "listFocus && !inputFocus" },
+// scroll down fileExplorer.
+{ "key": "ctrl+e",                "command": "extension.multiCommand.execute",
+                                  "args": { "sequence": [ "list.scrollDown", "list.scrollDown", "list.scrollDown", "list.scrollDown", "list.scrollDown" ] },
+                                  "when": "explorerViewletFocus && !editorTextFocus" },
+// scroll up fileExplorer.
+{ "key": "ctrl+y",                "command": "extension.multiCommand.execute",
+                                  "args": { "sequence": [ "list.scrollUp", "list.scrollUp", "list.scrollUp", "list.scrollUp", "list.scrollUp" ] },
+                                  "when": "explorerViewletFocus && !editorTextFocus" },
 // editor scroll down
-{ "key": "ctrl+e",
-  "command": "extension.multiCommand.execute",
-  "args": { "sequence": [ "scrollLineDown", "scrollLineDown", "scrollLineDown", ] },
-  "when": "editorTextFocus && !explorerViewletFocus"
-},
-// editor scroll Up
-{ "key": "ctrl+y",
-  "command": "extension.multiCommand.execute",
-  "args": { "sequence": [ "scrollLineUp", "scrollLineUp", "scrollLineUp", ] },
-  "when": "editorTextFocus && !explorerViewletFocus"
-},
-// accept current selected in quickOpen.
-{ "key": "ctrl+m",
-  "command":  "workbench.action.acceptSelectedQuickOpenItem",
-  "when": "inQuickOpen"
-},
-// open selected file from quickOpen in split.
-{ "key": "ctrl+l",
-  "command": "workbench.action.alternativeAcceptSelectedQuickOpenItem",
-  "when": "inQuickOpen"
-},
-// Snippet placeholder navigation.
-{ "key": "ctrl+j",
-  "command": "jumpToNextSnippetPlaceholder",
-  "when": "editorTextFocus && hasNextTabstop && inSnippetMode"
-},
-{ "key": "ctrl+k",
-  "command": "jumpToPrevSnippetPlaceholder",
-  "when": "editorTextFocus && hasPrevTabstop && inSnippetMode"
-},
-// quickOpen navigation.
-{ "key": "ctrl+n",
-  "command": "workbench.action.quickOpenSelectNext",
-  "when": "inQuickOpen"
-},
-{ "key": "ctrl+j",
-  "command": "workbench.action.quickOpenSelectNext",
-  "when": "inQuickOpen"
-},
-{ "key": "tab",
-  "command": "workbench.action.quickOpenSelectNext",
-  "when": "inQuickOpen"
-},
-{ "key": "ctrl+p",
-  "command": "workbench.action.quickOpenSelectPrevious",
-  "when": "inQuickOpen"
-},
-{ "key": "ctrl+k",
-  "command": "workbench.action.quickOpenSelectPrevious",
-  "when": "inQuickOpen"
-},
-// File Explorer
-{ "key": "r",
-  "command": "renameFile",
-  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
-},
-{ "key": "d",
-  "command": "deleteFile",
-  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
-}, 
-{ "key": "a",
-  "command": "explorer.newFile",
-  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
-}, 
-{ "key": "v",
-  "command": "list.toggleSelection",
-  "when": "explorerViewletFocus"
-}, 
-// toggle minimap. (only works if workbench.minimap.enabled is true)
-{ "key": "ctrl+8",
-  "command": "editor.action.toggleMinimap"
-},
-// create and edit new untitled file.
-{ "key": "ctrl+w n",
-  "command": "workbenchj.action.files.newUntitledFile",
-  "when": "editorTextFokkus && !filesExplorerFocus"
-}, 
+{ "key": "ctrl+e",                "command": "editorScroll",
+                                  "when": "editorTextFocus",
+                                  "args": { "to": "down", "by": "line", "value": 2, "revealCursor": true } },
+// editor scroll up
+{ "key": "ctrl+y",                "command": "editorScroll",
+                                  "when": "editorTextFocus",
+                                  "args": { "to": "up", "by": "line", "value": 2, "revealCursor": true } },
+// close quickOpen.
+{ "key": "ctrl+c",                "command": "workbench.action.closeQuickOpen",
+                                  "when": "inQuickOpen" },
+
+// accept selected in quickOpen.
+{ "key": "ctrl+m",                "command": "workbench.action.acceptSelectedQuickOpenItem",
+                                  "when": "inQuickOpen" },
+// open file from quickOpen in split.
+{ "key": "ctrl+l",                "command": "workbench.action.alternativeAcceptSelectedQuickOpenItem",
+                                  "when": "inQuickOpen" },
+// snippet placeholder next.
+{ "key": "ctrl+j",                "command": "jumpToNextSnippetPlaceholder",
+                                  "when": "editorTextFocus && hasNextTabstop && inSnippetMode" },
+// snippet placeholder previous.
+{ "key": "ctrl+k",                "command": "jumpToPrevSnippetPlaceholder",
+                                  "when": "editorTextFocus && hasPrevTabstop && inSnippetMode" },
+// quickOpen navigation next.
+{ "key": "ctrl+n",                "command": "workbench.action.quickOpenSelectNext",
+                                  "when": "inQuickOpen" },
+{ "key": "ctrl+j",                "command": "workbench.action.quickOpenSelectNext",
+                                  "when": "inQuickOpen" },
+{ "key": "tab",                   "command": "workbench.action.quickOpenSelectNext",
+                                  "when": "inQuickOpen" },
+// quickOpen navigation previous.
+{ "key": "ctrl+p",                "command": "workbench.action.quickOpenSelectPrevious",
+                                  "when": "inQuickOpen" },
+{ "key": "ctrl+k",                "command": "workbench.action.quickOpenSelectPrevious",
+                                  "when": "inQuickOpen" },
+// toggle minimap.
+{ "key": "ctrl+8",                "command": "editor.action.toggleMinimap" },
+// create edit new untitled file.
+{ "key": "ctrl+w n",              "command": "workbenchj.action.files.newUntitledFile",
+                                  "when": "editorTextFokkus && !filesExplorerFocus" }, 
 // move current/selected lines up.
-{ "key": "alt+k",
-  "command": "editor.action.moveLinesUpAction",
-  "when": "editorTextFocus && !editorReadonly"
-},
+{ "key": "alt+k",                 "command": "editor.action.moveLinesUpAction",
+                                  "when": "editorTextFocus && !editorReadonly" },
 // move current/selected lines down.
-{ "key": "alt+j",
-  "command": "editor.action.moveLinesDownAction",
-  "when": "editorTextFocus && !editorReadonly"
-},
+{ "key": "alt+j",                 "command": "editor.action.moveLinesDownAction",
+                                  "when": "editorTextFocus && !editorReadonly" },
 // accept suggestion
-{ "key": "ctrl+i",
-  "command": "acceptSelectedSuggestion",
-  "when": "suggestWidgetVisible && textInputFocus"
-},
-{ "key": "ctrl+m",
-  "command": "acceptSelectedSuggestion",
-  "when": "suggestWidgetVisible && textInputFocus"
-},
-// suggestion widget navigation. 
-{ "key": "ctrl+j",
-  "command": "selectNextSuggestion",
-  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-},
-{ "key": "ctrl+k",
-  "command": "selectPrevSuggestion",
-  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-},
-{ "key": "ctrl+n",
-  "command": "selectNextSuggestion",
-  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-},
+{ "key": "ctrl+i",                "command": "acceptSelectedSuggestion",
+                                  "when": "suggestWidgetVisible && textInputFocus" },
+{ "key": "ctrl+m",                "command": "acceptSelectedSuggestion",
+                                  "when": "suggestWidgetVisible && textInputFocus" },
+// suggestion widget navigation.
+{ "key": "ctrl+j",                "command": "selectNextSuggestion",
+                                  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+{ "key": "ctrl+k",                "command": "selectPrevSuggestion",
+                                  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+{ "key": "ctrl+n",                "command": "selectNextSuggestion",
+                                  "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
 // hide notifications
-{ "key": "shift+escape",
-  "command": "notifications.hideToasts",
-  "when": "notificationToastsVisible || editorTextFocus || globalMessageVisible"
-},
+{ "key": "shift+escape",          "command": "notifications.hideToasts" },
+// toggle panel.
+{ "key": "ctrl+shift+j",          "command": "workbench.action.terminal.toggleTerminal",
+                                  "when": "terminal.active" },
+// toggle output
+{ "key": "ctrl+shift+l",          "command": "workbench.action.output.toggleOutput",
+                                  "when": "workbench.panel.output.active" },
+// Disable Keymap to work for terminal.
+{ "key": "ctrl+m",                "command": "-editor.action.toggleTabFocusMode" }
+
 ]

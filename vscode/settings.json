@@ -1,115 +1,103 @@
+// vim: ft=jsonc
 {
-  "vscode-neovim": {
-    "logOutputToConsole": true,
-    "mouseSelectionStartVisualMode": true,
-    "neovimExecutablePaths": {
-      "linux": "/usr/local/bin/nvim",
-    },
-    "logLevel": "error",
-    "neovimInitVimPaths": "~/Projects/dotfiles/vscode/init.lua"
-  },
-
-  "breadcrumbs": false,
-
-  "terminal": {
-    "external": {
-      "linuxExec": "gnome-terminal-emulator",
-    },
-    "integrated": {
-        "fontFamily": "'DejaVu Sans Mono for Powerline', 'PowerlineSymbols','Font Awesome', monospace",
-        "allowChords": false,
-    }
-  },
-
-  "window": {
-    "zoomLevel": -1.2
-  },
-
-  "editor": {
-	  "cursorSurroundingLines": 5,
-    "lineNumbers": "relative",
-    "scrollbar": {
-      "vertical": "hidden",
-    },
-    "rulers": [
-      {
-        "column": 80,
-        "color": "#121212"
-      }
-    ],
-    "wordWrap": "on",
-    "fontFamily": "'DejaVu Sans Mono for Powerline'",
-    "minimap": {
-      "enabled": true
-    },
-    "renderFinalNewline": false,
-    "renderWhitespace": "all",
-    "occurrencesHighlight": false,
-    "selectionHighlight": false,
-  },
- 
-  "vim": {
-    "easymotion": true,
-    "incsearch": true,
-    "useSystemClipboard": true,
-    "useCtrlKeys": true,
-    "hlsearch": true,
-    "leader": ",",
-    "insertModeKeyBindings": [
-        {
-          "before": ["k", "j"],
-          "after": ["<Esc>"]
-        }
-    ],
-
-    "normalModeKeyBindingsNonRecursive": [
-      /* disable highlighted search */
-      /* TODO: Make this toggable */
-      {
-        "before": ["<Space>"],
-        "commands": [":nohl"]
-      },
-    ],
-  },
-
-  "keyboard": {
-    "dispatch": "keyCode"
-  },
-
-  "typescript": {
-    "updateImportsOnFileMove": {
-      "enabled": "always"
-    }
-  },
-
-  "workbench": {
-    "statusBar": {
-      "visible": true
-    },
-    "colorCustomizations": {
-      "statusBar.background" : "#303030",
-      "statusBar.foreground" : "#BCBCBC",
-      "statusBar.noFolderBackground" : "#212121",
-      "editor.lineHighlightBackground": "#262626",
-      "editor.lineHighlightBorder": "#303030",
-      "sideBar.background": "#1C1C1C",
-      "editorLineNumber.foreground": "#444444",
-      "editorLineNumber.activeForeground": "#A8A8A8",
-      "list.focusBackground": "#262626",
-      "list.focusOutline": "#262626",
-      "list.focusHighlightForeground": "#BCBCBC",
-      "list.highlightForeground": "#BCBCBC",
-      "list.activeSelectionBackground": "#262626",
-      "list.inactiveSelectionBackground": "#262626",
-      "quickInput.background": "#262626",
-      "quickInput.foreground": "#BCBCBC",
-      "quickInputList.focusBackground": "#303030"
-    },
-    "iconTheme": "vscode-simpler-icons",
-    "sideBar": {
-      "location": "left"
-    }
-  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "Lua.telemetry.enable": true,
+  "breadcrumbs.enabled": false,
+  "keyboard.dispatch": "keyCode",
+  "window.zoomLevel": -1.2,
+  "editor.lineNumbers": "relative",
+  "editor.scrollbar.vertical": "hidden", "editor.guides.indentation": true,
+  "editor.overviewRulerBorder": false,
+  "editor.rulers": [
+     { "column": 80, "color": "#3A3A3A" },
+     { "column": 34, "color": "#3A3A3A" }
+  ],
+  "editor.matchBrackets": "never",
+  "editor.minimap.scale": 1,
+  "editor.wordWrap": "on",
+  "editor.fontFamily": "'Dejavu Sans Mono for Powerline', 'monospace', monospace",
+  "editor.renderFinalNewline": true,
+  "editor.renderWhitespace": "all",
+  "editor.occurrencesHighlight": false,
+  "editor.selectionHighlight": false,
   "workbench.activityBar.visible": false,
+  "workbench.tree.indent": 20,
+  "workbench.tree.renderIndentGuides": "always",
+  "workbench.iconTheme": "vscode-great-icons",
+  "workbench.colorCustomizations": {
+    "statusBar.background" : "#303030",
+    "statusBar.foreground" : "#BCBCBC",
+    "statusBar.noFolderBackground" : "#212121",
+    "sideBar.background": "#1C1C1C",
+    "sideBar.border": "#262626",
+    "sideBarTitle.foreground": "#262626",
+    "editor.lineHighlightBackground": "#262626",
+    "editor.lineHighlightBorder": "#303030",
+    "editorLineNumber.foreground": "#444444",
+    "editorLineNumber.activeForeground": "#A8A8A8",
+    "list.focusBackground": "#262626",
+    "list.focusOutline": "#262626",
+    "list.focusHighlightForeground": "#BCBCBC",
+    "list.highlightForeground": "#BCBCBC",
+    "list.activeSelectionBackground": "#262626",
+    "list.inactiveSelectionBackground": "#262626",
+    "quickInput.background": "#262626",
+    "quickInput.foreground": "#BCBCBC",
+    "quickInputList.focusBackground": "#303030",
+    "tree.indentGuidesStroke": "#444444",
+    "scrollbar.shadow": "#1C1C1C",
+    "editorIndentGuide.activeBackground": "#626262",
+    "editorIndentGuide.background": "#3A3A3A"
+  },
+  // "terminal.integrated.commandsToSkipShell": [
+  //   "workbench.debug.action.focusRepl",
+  //   "vim.remap",
+  //   "workbench.actions.view.problems",
+  // ],
+  "terminal.external.linuxExec": "gnome-terminal-emulator",
+  "terminal.integrated.fontFamily": "'DejaVu Sans Mono for Powerline', 'PowerlineSymbols','Font Awesome', monospace",
+  "terminal.integrated.allowChords": false,
+  "vscode-neovim.logOutputToConsole": true,
+  "vscode-neovim.mouseSelectionStartVisualMode": true,
+  "vscode-neovim.neovimExecutablePaths": {
+    "linux": "/usr/local/bin/nvim"
+  },
+  "vscode-neovim.logLevel": "error",
+  "vscode-neovim.neovimInitVimPath": "~/Projects/dotfiles/vscode/init.lua",
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.leader": ",",
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["k", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    { "before": ["<Space>"],
+      "commands": [":nohl"],
+      "silent": true
+    },
+    { "before": [";", "f", "<Space>"],
+      "commands":[ "workbench.action.quickOpen" ]
+    },
+    { "before": [";"],
+      "after": ["<shift>", ":"]
+    },
+  ],
+  "vim.commandLineModeKeyBindingsNonRecursive": [
+    {
+      "before": ["k", "j"],
+      "after": ["<Esc>"]
+    },
+    {
+      "before": ["K"],
+      "after": ["<arrowUp>"]
+    },
+  ],
   "editor.minimap.enabled": false,
+  "git.suggestSmartCommit": false,
 }
