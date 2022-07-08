@@ -41,11 +41,11 @@ cmp.setup {
   mapping = require('user.keybindings').set_cmp_mapping(cmp),
 
   formatting = {
-    fields = { 'kind', 'abbr', 'menu' },
+    fields = { 'abbr', 'kind', 'menu' },
     format = function(entry, vim_item)
 
-      vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
-      vim_item.abbr = ' ' .. vim_item.abbr
+      vim_item.kind = string.format('%s', kind_icons[vim_item.kind]) .. ' - '.. vim_item.kind
+      vim_item.abbr = vim_item.abbr
       vim_item.menu = (vim_item.menu or '') .. ' '
 
       vim_item.menu = ({

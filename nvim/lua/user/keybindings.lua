@@ -8,7 +8,6 @@ M.LSP_KEY =  {
       { ']d',        'goto_next()',  { noremap = true } },
       { '<leader>q', 'setloclist()', { noremap = true } },
     },
-
     -- LSP. see ':help vim.lsp.*'
     lsp = {
       { 'gd',         'buf.definition()',     { noremap = true } },
@@ -128,7 +127,21 @@ M.LOCAL_KEYS =  {
         print('enabled spell')
       end
     end
-  }
+  },
+
+  -- close floating window
+  -- { 'n', 'q',
+  --   function()
+  --     local window_id = vim.api.nvim_get_current_win()
+  --     if vim.api.nvim_win_get_config(window_id).relative ~= '' then
+  --       -- window with this window_id is floating
+  --       print('hellow')
+  --       vim.api.nvim_win_close(window_id, {})
+  --     else
+  --       print('not a floating shit')
+  --     end
+  --   end
+  -- },
 }
 
 return M

@@ -33,14 +33,16 @@ return require('packer').startup(function(use)
   use { 'airblade/vim-gitgutter',
     config = function() require('plugins.git-gutter') end
   }
+
+  use 'p00f/nvim-ts-rainbow'
   use { 'lukas-reineke/indent-blankline.nvim',
-    config = function() require('plugins.indent-blankline') end
+    config = require('plugins.indent-blankline')
   }
   use 'easymotion/vim-easymotion'
   use 'blueyed/vim-diminactive'
-  use 'itchyny/lightline.vim'
   use 'christoomey/vim-tmux-navigator'
   use 'tpope/vim-fugitive'
+  use 'preservim/vim-markdown'
   use { 'kyazdani42/nvim-tree.lua',
     requires = {
       'kyazdani42/nvim-web-devicons',
@@ -54,7 +56,7 @@ return require('packer').startup(function(use)
     ft = { 'bats' }
   }
   use {
-    'majutsushi/tagbar',
+    'preservim/tagbar',
     opt = true,
     cmd = { 'Tagbar', 'TagbarToggle' } }
   use {

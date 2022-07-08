@@ -15,7 +15,7 @@ return {
     languages = {
       sh = { shellcheck },
       lua = { lua },
-      javascript = { javascript }
+      javascript = { javascript,  }
     }
   }
 }

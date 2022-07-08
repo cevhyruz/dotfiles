@@ -24,11 +24,16 @@ nvim_tree.setup {
     }
   },
   renderer = {
+    indent_markers = {
+      enable = false
+    },
+    group_empty = false,
+    add_trailing = true,
     root_folder_modifier = ":t",
     highlight_git = true,
     icons = {
       show = {
-        git = true,
+        git = false,
         folder = true,
         file = true,
         folder_arrow = true,
@@ -52,7 +57,8 @@ nvim_tree.setup {
           empty_open = "",
           symlink = "",
         }
-      }
+      },
+      git_placement = "after"
     }
   },
 

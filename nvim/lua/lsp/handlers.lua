@@ -4,6 +4,8 @@ local api = vim.api
 
 M.setup = function()
 
+  local style = { border = 'rounded' }
+
   vim.fn.sign_define( { {
       name = 'DiagnosticSignError',
       text = '',
@@ -27,8 +29,6 @@ M.setup = function()
     }
   } )
 
-  local style = { border = 'rounded' }
-
   vim.diagnostic.config( {
     virtual_text = true,
     update_in_insert = false,
@@ -47,10 +47,9 @@ M.setup = function()
   vim.lsp.handlers['textDocument/hover'] =
       vim.lsp.with( vim.lsp.handlers.hover, { border = style.border } )
 
-  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-                                                       vim.lsp.handlers
-                                                           .signature_help, {
-        border = style.border
+  vim.lsp.handlers['textDocument/signatureHelp'] =
+      vim.lsp.with( vim.lsp.handlers.signature_help, {
+          border = style.border
       } )
 end
 
