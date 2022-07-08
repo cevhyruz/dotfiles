@@ -1,16 +1,17 @@
 // vim: ft=jsonc
 {
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "Lua.telemetry.enable": true,
+  "explorer.openEditors.visible": 0,
+  "explorer.autoReveal": false,
   "breadcrumbs.enabled": false,
   "keyboard.dispatch": "keyCode",
-  "window.zoomLevel": -1.2,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "Lua.telemetry.enable": true,
+  "Lua.diagnostics.globals": ["vim"],
   "editor.lineNumbers": "relative",
   "editor.scrollbar.vertical": "hidden", "editor.guides.indentation": true,
   "editor.overviewRulerBorder": false,
   "editor.rulers": [
      { "column": 80, "color": "#3A3A3A" },
-     { "column": 34, "color": "#3A3A3A" }
   ],
   "editor.matchBrackets": "never",
   "editor.minimap.scale": 1,
@@ -20,26 +21,33 @@
   "editor.renderWhitespace": "all",
   "editor.occurrencesHighlight": false,
   "editor.selectionHighlight": false,
-  "workbench.activityBar.visible": false,
+  "editor.links": false,
+  "workbench.editor.labelFormat": "medium",
+  "workbench.editor.enablePreview": false,
+  "workbench.activityBar.visible": true,
+  "workbench.editor.showTabs": false,
   "workbench.tree.indent": 20,
   "workbench.tree.renderIndentGuides": "always",
   "workbench.iconTheme": "vscode-great-icons",
   "workbench.colorCustomizations": {
+    "scrollbarSlider.activeBackground": "#1C1C1C",
+    "scrollbarSlider.background": "#1C1C1C",
+    "scrollbarSlider.hoverBackground": "#1C1C1C",
     "statusBar.background" : "#303030",
     "statusBar.foreground" : "#BCBCBC",
     "statusBar.noFolderBackground" : "#212121",
-    "sideBar.background": "#1C1C1C",
+    "sideBar.background": "#262626",
     "sideBar.border": "#262626",
     "sideBarTitle.foreground": "#262626",
     "editor.lineHighlightBackground": "#262626",
     "editor.lineHighlightBorder": "#303030",
     "editorLineNumber.foreground": "#444444",
     "editorLineNumber.activeForeground": "#A8A8A8",
-    "list.focusBackground": "#262626",
+    "list.focusBackground": "#303030",
     "list.focusOutline": "#262626",
     "list.focusHighlightForeground": "#BCBCBC",
     "list.highlightForeground": "#BCBCBC",
-    "list.activeSelectionBackground": "#262626",
+    "list.activeSelectionBackground": "#005F87",
     "list.inactiveSelectionBackground": "#262626",
     "quickInput.background": "#262626",
     "quickInput.foreground": "#BCBCBC",
@@ -49,11 +57,9 @@
     "editorIndentGuide.activeBackground": "#626262",
     "editorIndentGuide.background": "#3A3A3A"
   },
-  // "terminal.integrated.commandsToSkipShell": [
-  //   "workbench.debug.action.focusRepl",
-  //   "vim.remap",
-  //   "workbench.actions.view.problems",
-  // ],
+  "terminal.integrated.commandsToSkipShell": [
+    "vim.remap",
+  ],
   "terminal.external.linuxExec": "gnome-terminal-emulator",
   "terminal.integrated.fontFamily": "'DejaVu Sans Mono for Powerline', 'PowerlineSymbols','Font Awesome', monospace",
   "terminal.integrated.allowChords": false,
@@ -71,14 +77,12 @@
   "vim.hlsearch": true,
   "vim.leader": ",",
   "vim.insertModeKeyBindings": [
-    {
-      "before": ["k", "j"],
+    { "before": ["k", "j"],
       "after": ["<Esc>"]
     }
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
-    { "before": ["<Space>"],
-      "commands": [":nohl"],
+    { "before": ["<Space>"], "commands": [":nohl"],
       "silent": true
     },
     { "before": [";", "f", "<Space>"],
@@ -89,15 +93,17 @@
     },
   ],
   "vim.commandLineModeKeyBindingsNonRecursive": [
-    {
-      "before": ["k", "j"],
+    { "before": ["k", "j"],
       "after": ["<Esc>"]
     },
-    {
-      "before": ["K"],
+    { "before": ["K"],
+      "after": ["<arrowUp>"]
+    },
+    { "before": ["<leader>", "t"],
       "after": ["<arrowUp>"]
     },
   ],
-  "editor.minimap.enabled": false,
   "git.suggestSmartCommit": false,
+  "editor.minimap.enabled": false,
+  "window.zoomLevel": -1,
 }

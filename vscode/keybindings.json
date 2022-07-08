@@ -16,8 +16,8 @@
 // navigate window right.
 { "key": "ctrl+l",                "command": "vim.remap",
                                   "when": "vim.mode == 'Normal'",
+                                  // linebreak
                                   "args": { "after": ["<C-w>", "l"] } },
-// linebreak
 { "key": "ctrl+j",                "command": "vim.remap",
                                   "when": "vim.mode == 'Insert'",
                                   "args": { "after": ["<C-m>"] } },
@@ -135,6 +135,14 @@
 { "key": "ctrl+shift+l",          "command": "workbench.action.output.toggleOutput",
                                   "when": "workbench.panel.output.active" },
 // Disable Keymap to work for terminal.
-{ "key": "ctrl+m",                "command": "-editor.action.toggleTabFocusMode" }
+{ "key": "ctrl+m",                "command": "-editor.action.toggleTabFocusMode" },
+
+{
+    "key": "ctrl+l",
+    "command": "haha",
+    "when": "workbench.view.extensions.enabled"
+}
+
+// viewContainer.workbench.view.extensions.enabled
 
 ]

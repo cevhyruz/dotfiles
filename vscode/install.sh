@@ -9,12 +9,13 @@ declare -a failed=()
 declare -a extensions=(
   # syntax highlighting
   'malmaud.tmux'
+  'duniul.dircolors'
+  'evgeniypeshkov.syntax-highlighter'
 
   # utilities
   'vscodevim.vim'
   'Shan.code-settings-sync'
   'ryuta46.multi-command'
-  'stlr.scroll-with-stationary-cursor'
 
   # visual aesthetics
   'emmanuelbeziat.vscode-great-icons'
