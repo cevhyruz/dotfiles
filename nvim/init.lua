@@ -12,5 +12,5 @@ require( 'user.note' )
 
 require( 'user.utils' )
 
--- @TODO: require localrc
-vim.g.rainbow_active = 1
+package.path = package.path .. ';' .. vim.fn.getenv('DOTFILES') .. '/localrc/'
+require( 'localrc.localrc' )
