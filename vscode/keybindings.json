@@ -34,7 +34,8 @@
                                   "args": { "sequence": [ "list.select", "workbench.action.toggleSidebarVisibility" ] },
                                   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 // renaming
-{ "key": "r",                     "command": "renameFile", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+{ "key": "r",                     "command": "renameFile",
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 // deleting.
 { "key": "d",                     "command": "deleteFile",
                                   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
@@ -136,13 +137,4 @@
                                   "when": "workbench.panel.output.active" },
 // Disable Keymap to work for terminal.
 { "key": "ctrl+m",                "command": "-editor.action.toggleTabFocusMode" },
-
-{
-    "key": "ctrl+l",
-    "command": "haha",
-    "when": "workbench.view.extensions.enabled"
-}
-
-// viewContainer.workbench.view.extensions.enabled
-
 ]
