@@ -23,7 +23,7 @@
                                   "args": { "after": ["<C-m>"] } },
 // focus right-side editor
 { "key": "ctrl+l",                "command": "workbench.action.focusActiveEditorGroup",
-                                  "when": "explorerViewletFocus && !editorTextFocus" }, 
+                                  "when": "explorerViewletFocus && !editorTextFocus" },
 // toggle file explorer
 { "key": "ctrl+n",                "command": "workbench.action.toggleSidebarVisibility",
                                   "when": "explorerViewletFocus || editorTextFocus && !inQuickOpen" },
@@ -37,25 +37,25 @@
 { "key": "r",                     "command": "renameFile", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 // deleting.
 { "key": "d",                     "command": "deleteFile",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 // cutting
 { "key": "x",                     "command": "filesExplorer.cut",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" },
 // yanking.
 { "key": "y",                     "command": "filesExplorer.copy",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" },
 // create new file.
 { "key": "a",                     "command": "explorer.newFile",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" },
 // create new folder.
 { "key": "shift+a",               "command": "explorer.newFolder",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" },
 // toggle visual-select mode.
 { "key": "v",                     "command": "list.toggleSelection",
-                                  "when": "explorerViewletFocus" }, 
+                                  "when": "explorerViewletFocus" },
 // pasting.
 { "key": "p",                     "command": "filesExplorer.paste",
-                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" }, 
+                                  "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus" },
 // collapse all folder in fileExlorer.
 { "key": "shift+h",               "command": "list.collapseAll",
                                   "when": "listFocus && !inputFocus" },
@@ -107,7 +107,7 @@
 { "key": "ctrl+8",                "command": "editor.action.toggleMinimap" },
 // create edit new untitled file.
 { "key": "ctrl+w n",              "command": "workbenchj.action.files.newUntitledFile",
-                                  "when": "editorTextFokkus && !filesExplorerFocus" }, 
+                                  "when": "editorTextFokkus && !filesExplorerFocus" },
 // move current/selected lines up.
 { "key": "alt+k",                 "command": "editor.action.moveLinesUpAction",
                                   "when": "editorTextFocus && !editorReadonly" },
