@@ -3,6 +3,7 @@
 
 local status_ok, nvim_tree = pcall(require, 'nvim-tree')
 if not status_ok then
+  print('nvim-tree is not ok')
   return
 end
 
@@ -25,15 +26,21 @@ nvim_tree.setup {
   },
   renderer = {
     indent_markers = {
-      enable = false
+      enable = true,
+        icons = {
+              edge = "  │  ",
+              item = "  ├─ ",
+            corner = "  ╰─ ",
+              none = "     ",
+          },
     },
     group_empty = false,
-    add_trailing = true,
+    add_trailing = false,
     root_folder_modifier = ":t",
     highlight_git = true,
     icons = {
       show = {
-        git = false,
+        git = true,
         folder = true,
         file = true,
         folder_arrow = true,
@@ -50,13 +57,6 @@ nvim_tree.setup {
           untracked = "U",
           ignored = "◌",
         },
-        folder = {
-          default = "",
-          open = "",
-          empty = "",
-          empty_open = "",
-          symlink = "",
-        }
       },
       git_placement = "after"
     }
@@ -98,7 +98,7 @@ nvim_tree.setup {
     timeout = 500,
   },
   view = {
-    width = 30,
+    width = 35,
     height = 30,
     hide_root_folder = false,
     side = "left",

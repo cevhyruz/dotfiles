@@ -12,5 +12,4 @@ require( 'user.note' )
 
 require( 'user.utils' )
 
-package.path = package.path .. ';' .. vim.fn.getenv('DOTFILES') .. '/localrc/'
-require( 'localrc.localrc' )
+dofile(vim.fn.getenv('DOTFILES').. '/localrc/localrc.lua')

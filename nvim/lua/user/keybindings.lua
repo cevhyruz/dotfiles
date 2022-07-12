@@ -128,20 +128,15 @@ M.LOCAL_KEYS =  {
       end
     end
   },
-
-  -- close floating window
-  -- { 'n', 'q',
-  --   function()
-  --     local window_id = vim.api.nvim_get_current_win()
-  --     if vim.api.nvim_win_get_config(window_id).relative ~= '' then
-  --       -- window with this window_id is floating
-  --       print('hellow')
-  --       vim.api.nvim_win_close(window_id, {})
-  --     else
-  --       print('not a floating shit')
-  --     end
-  --   end
-  -- },
+  -- quick execute.
+  { 'n', '<F5>',
+    function()
+      local shebang = vim.inspect( vim.api.nvim_buf_get_lines(0, 0, 1, false))
+      if vim.fn.expand('%:e') or shebang  ~= '(bash|sh)' then
+        vim.api.nvim_command(string.format('!./%s', vim.fn.expand('%')))
+      end
+    end
+  }
 }
 
 return M

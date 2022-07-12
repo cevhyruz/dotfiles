@@ -1,4 +1,4 @@
-localrc/
+localrc/*
 
 # Code coverage reports
 coverage/

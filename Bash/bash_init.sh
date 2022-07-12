@@ -32,5 +32,5 @@ done
 source "${DOT_BASH}/themes/default.theme.bash"
 
 # local config file.
-source "${DOT_BASH}/.bashrc.local"
+# source "${DOT_BASH}/.bashrc.local"
 unset file

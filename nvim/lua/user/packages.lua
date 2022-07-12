@@ -21,7 +21,9 @@ if vim.fn.empty( vim.fn.glob( packpath ) ) > 0 then
 end
 
 return require('packer').startup(function(use)
+  use 'edluffy/hologram.nvim'
   use 'wbthomason/packer.nvim'
+  use 'tpope/vim-scriptease'
   use {
     'tomasiser/vim-code-dark',
     config = function()
@@ -30,6 +32,7 @@ return require('packer').startup(function(use)
   }
   use 'tpope/vim-surround'
   use 'tpope/vim-endwise'
+  use 'lewis6991/gitsigns.nvim'
   use { 'airblade/vim-gitgutter',
     config = function() require('plugins.git-gutter') end
   }
@@ -39,7 +42,7 @@ return require('packer').startup(function(use)
     config = require('plugins.indent-blankline')
   }
   use 'easymotion/vim-easymotion'
-  use 'blueyed/vim-diminactive'
+  -- use 'blueyed/vim-diminactive'
   use 'christoomey/vim-tmux-navigator'
   use 'tpope/vim-fugitive'
   use 'preservim/vim-markdown'

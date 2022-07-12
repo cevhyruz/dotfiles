@@ -60,6 +60,7 @@ M.on_attach = function(client, bufnr)
     vim.lsp.buf.format { async = true }
   end, {} )
 
+
   vim.cmd [[
     hi link DiagnosticVirtualTextError LineNr
     hi link DiagnosticVirtualTextWarn  LineNr
