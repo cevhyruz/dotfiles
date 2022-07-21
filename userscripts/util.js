@@ -19,6 +19,8 @@
 (function(window) {
   'use strict'
 
+  alert('does update works?')
+
   let Util = {
 
     create: function(tag, props) {
