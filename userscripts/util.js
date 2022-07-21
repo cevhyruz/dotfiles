@@ -6,9 +6,6 @@
 // @author       cevhyruz <johnfred.fadrigalan@hotmail.com>
 // @namespace    dotfiles.userscripts
 //
-// @updateURL    https://raw.githubusercontent.com/cevhyruz/dotfiles/master/userscripts/util.js
-// @downloadURL  https://raw.githubusercontent.com/cevhyruz/dotfiles/master/userscripts/util.js
-//
 // @match        *://*/*
 // @require      file:///home/devs/Projects/dotfiles/userscripts/util.js
 //
@@ -18,8 +15,6 @@
 
 (function(window) {
   'use strict'
-
-  alert('does update works?')
 
   let Util = {
 
