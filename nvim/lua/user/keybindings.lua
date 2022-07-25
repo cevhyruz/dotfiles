@@ -57,9 +57,16 @@ M.set_cmp_mapping = function(cmp)
 end
 
 M.LOCAL_KEYS =  {
+  -- select pasted text
+  { 'n', 'gp', '`[v`]' },
+
+  -- adjust indentation of pasted text
+  { 'n', '<Leader>H', '`[V`]<' },
+  { 'n', '<Leader>L', '`[V`]>' },
+
   -- easy mode switching
-  { 'i', 'kj', '<Esc>' },
   { 'x', 'kj', '<Esc>' },
+  { 'i', 'kj', '<Esc>' },
   { 'c', 'kj', '<C-c>' },
   { 'v', 'kj', '<Esc>' },
 
@@ -76,9 +83,9 @@ M.LOCAL_KEYS =  {
   -- quick commandline
   { 'n', ';', ':' },
 
-  -- quick relocate (current line)
-  { 'n', '<m-j>', 'mz:m+<cr>`z'                },
-  { 'n', '<M-k>', 'mz:m-2<CR>`z'               },
+  -- quick text-repostition
+  { 'n', '<m-j>', 'Vmz:m+<cr>`zV'                },
+  { 'n', '<M-k>', 'Vmz:m-2<CR>`zV'               },
   { 'v', '<M-j>', ':m\'>+<CR>`<my`>mzgv`yo`z'  },
   { 'v', '<M-k>', ':m\'<-2<CR>`>my`<mzgv`yo`z' },
 
