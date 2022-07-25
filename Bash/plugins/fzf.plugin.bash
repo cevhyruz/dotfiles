@@ -29,7 +29,6 @@ function __bootstrap_fzf() {
     "--bind='ctrl-/:toggle-preview'"
     "--bind='?:jump-accept'"
     "--multi"
-    "--tac"
     "--pointer='❱'"
     "--prompt='➤ '"
     "--height=25"
