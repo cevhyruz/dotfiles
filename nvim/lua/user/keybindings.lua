@@ -53,6 +53,10 @@ M.set_cmp_mapping = function(cmp)
         behavior = cmp.ConfirmBehavior.Replace,
         select = true,
     }),
+    ['<Tab>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+    }),
   }
 end
 

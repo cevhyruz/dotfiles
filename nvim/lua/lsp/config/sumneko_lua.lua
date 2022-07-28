@@ -4,6 +4,9 @@ return {
       diagnostics = {
         globals = { 'vim' }
       },
+      completion = {
+        keywordSnippet = "Disable"
+      },
       workspace = {
         library = {
           [ vim.fn.expand('$VIMRUNTIME/lua') ] = true,

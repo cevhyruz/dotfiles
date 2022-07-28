@@ -39,7 +39,7 @@ return require('packer').startup(function(use)
 
   use 'p00f/nvim-ts-rainbow'
   use { 'lukas-reineke/indent-blankline.nvim',
-    config = require('plugins.indent-blankline')
+    config = function() require('plugins.indent-blankline') end
   }
   use 'easymotion/vim-easymotion'
   -- use 'blueyed/vim-diminactive'
@@ -65,37 +65,34 @@ return require('packer').startup(function(use)
   use {
     'junegunn/fzf',
     run = ':call fzf#install()',
-    requires = {{ 'junegunn/fzf.vim' }},
+    requires = { 'junegunn/fzf.vim' },
     config = function() require('plugins.fzf') end }
   use 'jiangmiao/auto-pairs'
   use 'tomtom/tcomment_vim'
   use {
     'nvim-treesitter/nvim-treesitter',
     config = function() require('plugins.treesitter') end }
-  -- lsp
+  -- lsp and completion
   use 'neovim/nvim-lspconfig'
-  use 'williamboman/nvim-lsp-installer'
-  use 'jose-elias-alvarez/null-ls.nvim'
-  use 'kosayoda/nvim-lightbulb'
-  -- completion
+  use { 'williamboman/nvim-lsp-installer' }
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-nvim-lsp-signature-help'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
-  use 'f3fora/cmp-spell'
+  use '~/Projects/dotfiles/nvim/cmp-spell'
+  -- use 'f3fora/cmp-spell'
+  use {
+    'SirVer/ultisnips',
+    config = function() require('plugins.ultisnips') end
+  }
   use { 'hrsh7th/nvim-cmp',
     requires = {
-      { 'SirVer/Ultisnips',
-        config = function()
-          vim.cmd [[
-            let g:UltiSnipsSnippetDirectories = [ 'UltiSnips', '/home/devs/Projects/dotfiles/nvim/UltiSnips' ]
-          ]]
-        end
-      },
-      { 'quangnguyen30192/cmp-nvim-ultisnips' }
+    "quangnguyen30192/cmp-nvim-ultisnips",
     },
     config = function() require('plugins.nvim-cmp') end
   }
+  use 'kosayoda/nvim-lightbulb'
 
   -- init
   if Packer_bootstrap then

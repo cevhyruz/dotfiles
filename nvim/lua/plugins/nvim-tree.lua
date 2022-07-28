@@ -14,7 +14,6 @@ end
 
 local tree_cb = nvim_tree_config.nvim_tree_callback
 
-
 nvim_tree.setup {
   actions = {
     open_file = {
@@ -28,10 +27,10 @@ nvim_tree.setup {
     indent_markers = {
       enable = true,
         icons = {
-              edge = "  │  ",
-              item = "  ├─ ",
-            corner = "  ╰─ ",
-              none = "     ",
+              edge = "│",
+              item = "│",
+            corner = "╰",
+              none = " ",
           },
     },
     group_empty = false,
@@ -43,7 +42,7 @@ nvim_tree.setup {
         git = true,
         folder = true,
         file = true,
-        folder_arrow = true,
+        folder_arrow = false,
       },
       glyphs = {
         default = "",

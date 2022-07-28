@@ -32,6 +32,7 @@ end
 
 -- Setup lsp keybindings
 M.setup_lsp_keys = function(bufnr)
+  print('setup lsp keys')
   -- diagnostic
   for _,value in pairs(local_map.LSP_KEY.diagnostic) do
     vim.api.nvim_buf_set_keymap(

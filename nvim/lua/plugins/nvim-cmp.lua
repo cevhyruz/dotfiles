@@ -49,12 +49,12 @@ cmp.setup {
       vim_item.menu = (vim_item.menu or '') .. ' '
 
       vim_item.menu = ({
-        nvim_lsp = '[Lsp]',
-        ultisnips = '[Snp]',
-        buffer = '[Buf]',
+        nvim_lsp = '[LSP]',
+        ultisnips = '[UltiSnips]',
+        buffer = '[Buffer]',
         nvim_lua = '[Lua]',
-        path = '[Pth]',
-        spell = '[Spl]'
+        path = '[Path]',
+        myspell = '[spell from myspell]'
       })[entry.source.name]
 
       return vim_item
@@ -63,11 +63,11 @@ cmp.setup {
 
   sources = {
     { name = 'ultisnips' },
-    { name = 'nvim_lsp'  },
-    { name = 'path'      },
-    { name = 'buffer'    },
-    { name = 'cmdline'   },
-    { name = 'spell'   },
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'buffer' },
+    { name = 'cmdline' },
+    { name = 'myspell' },
   },
 
   confirm_opts = {

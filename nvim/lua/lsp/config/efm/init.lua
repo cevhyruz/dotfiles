@@ -1,6 +1,6 @@
-local shellcheck = require('lsp.config.efm.shellcheck')
-local lua = require('lsp.config.efm.lua-format')
-local javascript = require('lsp.config.efm.javascript')
+local shellcheck = require "lsp.config.efm.shellcheck"
+local javascript = require "lsp.config.efm.javascript"
+local lua = require "lsp.config.efm.lua-format"
 
 return {
   init_options = {
