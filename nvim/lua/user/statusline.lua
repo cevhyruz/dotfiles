@@ -1,3 +1,5 @@
+Statusline = {}
+ 
 local modes = {
   ["n"] = "NORMAL",
   ["no"] = "NORMAL",
@@ -19,6 +21,7 @@ local modes = {
   ["r?"] = "CONFIRM",
   ["!"] = "SHELL",
   ["t"] = "TERMINAL",
+  ["nt"] = "TERMINAL"
 }
 
 local function mode()
@@ -107,8 +110,6 @@ local function lineinfo()
   return " %P %l:%c "
 end
 
-Statusline = {}
-
 Statusline.active = function()
   return table.concat {
     "%#Statusline#",
@@ -141,3 +142,4 @@ vim.api.nvim_exec([[
   au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.short()
   augroup END
 ]], false)
+ 

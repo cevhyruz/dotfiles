@@ -1,6 +1,5 @@
 // vim: ft=jsonc
 {
-  "window.zoomLevel": -1.13,
   "explorer.openEditors.visible": 0,
   "explorer.autoReveal": false,
   "breadcrumbs.enabled": false,
@@ -106,5 +105,6 @@
       "after": ["<arrowUp>"]
     },
   ],
+  "window.zoomLevel": -1,
   "editor.minimap.enabled": false,
 }

@@ -1,15 +1,18 @@
-require( 'user.options' )
+require('user.options')
 
-require( 'user.maputils' ).init()
+require('user.maputils').init()
 
-require( 'user.abbrev' )
+require('user.abbrev')
+require('user.scroll')
 
-require( 'user.packages' )
+require('user.statusline')
 
-require( 'lsp' )
+require('user.packages')
 
-require( 'user.note' )
+require('lsp')
 
-require( 'user.utils' )
+-- require('user.note')
 
-dofile(vim.fn.getenv('DOTFILES').. '/localrc/localrc.lua')
+require('user.utils')
+
+dofile(vim.fn.getenv('DOTFILES') .. '/localrc/localrc.lua')

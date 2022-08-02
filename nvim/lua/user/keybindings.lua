@@ -119,9 +119,11 @@ M.LOCAL_KEYS =  {
       if vim.go.hls then
         print('disabled hlsearch')
         vim.go.hls = false
+        -- vim.cmd [[ HlSearchLensDisable ]]
       else
         print('enabled hlsearch')
         vim.go.hls = true
+        -- vim.cmd [[ HlSearchLensEnable ]]
       end
     end
   },
