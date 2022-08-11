@@ -54,7 +54,7 @@ function __bootstrap_fzf() {
     "--color=pointer:221:bold"
     "--color=gutter:235"
     "--color=info:221"
-    "--color=border:237"
+    "--color=border:#333333"
     "--color=prompt:36:bold"
     "--color=marker:36"
     "--color=spinner:196"

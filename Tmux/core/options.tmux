@@ -57,8 +57,6 @@ if-shell '[ "$(echo "$TMUX_VERSION < 2.2" | bc)" = 1 ]' \
    set-option        -g mouse-utf8  "on"; \
 "
 
-set-option -g prefix "`"
-set-option -g prefix2 C-b
 
 set-option -g repeat-time 4000
 set-option -g set-titles on

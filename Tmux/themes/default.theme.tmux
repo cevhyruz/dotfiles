@@ -134,7 +134,7 @@ set-option -gF window-status-current-style "bg=colour237,fg=colour250"
 set-option -g window-status-style "bg=colour235,fg=colour245"
 
 # window status format
-set-option -gF window-status-separator ''
+set-option -gF window-status-separator '#[fg=colour238, bold]│'
 
 set-option -g window-status-format \
 "#[push-default bold,fg=cyan] #I#[pop-default default]: "\
@@ -147,18 +147,30 @@ set-option -g window-status-current-format \
 "#{?#{==:#F,}, ,#F} "
 
 set-option -g  status-left-length  70
+# set-option -gF status-left \
+# "#[#{_segment_a_style}] #{_pane_mode} #[reverse]#{@pl-separator-right}"\
+# "#[#{_segment_b_style}] #{_pwd_tilde} "\
+# "#[#{_segment_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
+
 set-option -gF status-left \
-"#[#{_segment_a_style}] #{_pane_mode} #[reverse]#{@pl-separator-right}"\
-"#[#{_segment_b_style}] #{_pwd_tilde} "\
-"#[#{_segment_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
+"#[#{_segment_a_style}] #{b:socket_path} "\
+"#[#{_segment_b_style}] #S:#{session_windows} #[reverse]"\
+"#[#{_segment_c_style}]    #{_permission}"\
+"#[#{_segment_c_style}] #{@pl-thin-separator-right} #{_pwd_tilde} "\
 
 set-option -g  status-right-length 100
+# set-option -gF status-right \
+# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{?#{==:#{E:_has_headset},connected},#{@fa-headphones} headphones,#{@fa-volume} speaker}"\
+# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{@fa-no-wifi} #{_wifi_ssid}"\
+# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{_user}@#{host} "\
+# "#[#{_segment_b_style}] #{_day} #{_date} "\
+# "#[#{_segment_a_style}] #{_time} "\
+
 set-option -gF status-right \
-"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{?#{==:#{E:_has_headset},connected},#{@fa-headphones} headphones,#{@fa-volume} speaker}"\
-"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{_wifi_ssid}"\
-"#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-calendar-alt} #{_day} #{_date}  "\
-"#[#{_segment_b_style}] #{@fa-clock} #{_time}  "\
-"#[#{_segment_a_style}] #{@fa-desktop} #{_user}@#{host}  "\
+"#[#{_segment_c_style},bold] #{@fa-wifi} #{@fa-headphones}        "\
+"#[#{_segment_c_style}] #{@pl-thin-separator-left}#{client_user}@#{host} "\
+"#[#{_segment_b_style}] #{_day} #{_date} "\
+"#[#{_segment_a_style}] #{_time} "\
 
 # status format {{{1
 set-option -g status-format[0] \
@@ -172,13 +184,26 @@ set-option -g status-format[0] \
 
 set-option -g status-format[1] \
 "#[fill=#{@status1-bg} align=left] #{E:@fa-th-large} #{E:_window_list}"\
-"#[nolist push-default align=right]"\
+"#[nolist push-default align=right fg=colour242]"\
 "#{T;=/#{@status-right-1-length}:"\
 "#{_selection}"\
 "}"
 
+set-option -g pane-border-status "off"
+
+#[fg=white] [#{pane_index}]#[default fg=red] #{pane_title}
+
+set-option -g pane-border-format ""
+
+set-option -g pane-border-lines "heavy"
+set-option -g pane-border-style "fg=#333333,bg=#222222"  # terminalbg
+set-option -g pane-active-border-style "fg=#333333,bg=#1E1E1E"
+
+set-option -g window-style        "bg=#222222"
+set-option -g window-active-style "bg=#1E1E1E"
+
 set-option -g clock-mode-style   12
-set-option -g status 3
-set-option -g status-justify left
+set-option -g status 2
+set-option -g status-justify centre
 
 set-option -g mode-style 'bg=colour237'

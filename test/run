@@ -11,28 +11,36 @@
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
 
-TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
-TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
-export TEST_DEPS_DIR
-export TEST_DIRECTORY
+function update_modules() {
+  git submodule init && git submodule update
+}
 
-if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-  DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
-    export DOTFILES_BASH_DIR
-fi
+function run_test() {
+  # shellcheck disable=SC2294
+  eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
+    ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+}
 
-git submodule init && git submodule update
+function init() {
+  TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
+  TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
+  export TEST_DEPS_DIR
+  export TEST_DIRECTORY
 
-function main() {
+  if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
+    DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
+      export DOTFILES_BASH_DIR
+  fi
+
+  update_modules
+
   if [[ -z ${1:-} ]]; then # shellcheck disable=2206
     TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
   else
     TEST_DIRS=("${1:-}")
   fi
 
-  # shellcheck disable=SC2294
-  eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
-    ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+  run_test
 }
 
-main "$@"
+init "$@"

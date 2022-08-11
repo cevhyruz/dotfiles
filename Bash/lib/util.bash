@@ -10,7 +10,7 @@
 
 function _::die() {
   about "Exit gracefully."
-  param "[message] (optional)"
+  param "1. [message] (optional)"
   _return "1"
 
   group "helpers"
@@ -143,6 +143,17 @@ function _::command_exists() {
 
   local cmd="$1"
   if command -v "${cmd}" &>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
+# _::is_func() Check if a given command is a declared function {{{1
+# Args [command]
+# Returns:
+#  0 if command is a function, 1 otherwise
+function _::is_func() {
+  if declare -F "${1:-}" &> /dev/null; then
     return 0
   fi
   return 1

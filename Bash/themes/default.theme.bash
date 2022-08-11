@@ -62,30 +62,30 @@ function __set_PS1() {
 
     declare workdir="\[${fg_cyan}\]:${PWD//${HOME}/\~}"
 
-    if git rev-parse &> /dev/null &&
-      [[ $(git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
-        git update-index --really-refresh -q &> /dev/null
+    if command git rev-parse &> /dev/null &&
+      [[ $(command git rev-parse --is-inside-git-dir 2> /dev/null) == false ]]; then
+        command git update-index --really-refresh -q &> /dev/null
 
-        if ! git diff --quiet --ignore-submodules --cached; then
+        if ! command git diff --quiet --ignore-submodules --cached; then
           status+="+"
         fi
-        if ! git diff-files --quiet --ignore-submodules --; then
+        if ! command git diff-files --quiet --ignore-submodules --; then
           status+="!"
         fi
-        if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+        if [[ -n "$(command git ls-files --others --exclude-standard)" ]]; then
           status+="?"
         fi
-        if git rev-parse --verify refs/stash &> /dev/null; then
+        if command git rev-parse --verify refs/stash &> /dev/null; then
           status+="*"
         fi
 
-        declare -ra git_prompt=(
+        declare -ra command git_prompt=(
           "\[${bold}\]"
           "\[${fg_yellow}\]"
           "("
           "\[${fg_red}\]"
-          "$( git symbolic-ref --quiet --short HEAD 2> /dev/null ||
-              git rev-parse --short HEAD 2> /dev/null ||
+          "$( command git symbolic-ref --quiet --short HEAD 2> /dev/null ||
+              command git rev-parse --short HEAD 2> /dev/null ||
               echo "unknown" )"
           "\[${fg_yellow}\]"
           ") "

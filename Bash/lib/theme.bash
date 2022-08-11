@@ -56,6 +56,7 @@ function __make_dircolors_pallete () {
     "ow=${fg_magenta:3:-1}:" )        # OTHER_WRITABLE
 
   LS_COLORS=''
+  # shellcheck disable=SC2048
   for entry in ${dircolors[*]}; do
     LS_COLORS+="$entry"
   done

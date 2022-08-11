@@ -26,11 +26,13 @@ return require('packer').startup(function(use)
   use { 'stevearc/aerial.nvim',
     config = function() require('aerial').setup() end
   }
-  -- use { 'petertriho/nvim-scrollbar',
-  --   requires = "kevinhwang91/nvim-hlslens",
-    -- config = function() require("plugins.scrollbar") end
-  -- }
+  -- use { 'blueyed/vim-diminactive' }
+  use { 'petertriho/nvim-scrollbar',
+    requires = "kevinhwang91/nvim-hlslens",
+    config = function() require("plugins.scrollbar") end
+  }
   use 'tpope/vim-scriptease'
+  use { 'morhetz/gruvbox' }
   use {
     'tomasiser/vim-code-dark',
     config = function()

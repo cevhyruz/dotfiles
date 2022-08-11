@@ -10,12 +10,22 @@ vim.g.fzf_action = {
   ['alt-t']  = 'tab split'
 }
 
+vim.g.fzf_layout = {
+  window = {
+    yoffset = 1,
+    width = 1,
+    height = 0.3,
+    border = "rounded",
+ },
+}
+
 
 vim.g.fzf_colors = {
-  ["fg"] =  {"fg", "Normal"},
-  ["bg"] = {"IncSearch"}
+  ["fg"] =  { "fg", "Normal" },
+  ["bg"] = { "IncSearch" },
+  ["border"] = { "Error" }
 }
---
+
 -- let g:fzf_colors = {
 -- \ 'fg':      ['fg', 'Normal'],
 -- \ 'hl':      ['fg', 'Comment'],

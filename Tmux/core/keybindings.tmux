@@ -1,6 +1,9 @@
 # vi:ft=tmux
 
-bind-key ` send-prefix
+%if "#{!=:#{b:socket_path},foobar}"
+  set-option -g prefix "`"
+  set-option -g prefix2 C-b
+%endif
 
 bind-key -T prefix -N 'Search for URLs in current pane' 'u' {
   copy-mode
@@ -30,7 +33,7 @@ bind-key -T prefix -N "Choose a paste buffer from a list" '=' {
 }
 
 # create window interactively
-bind-key 'c' command-prompt -p "[#{b:pane_current_path}]:"
+# bind-key 'c' command-prompt -p "[#{b:pane_current_path}]:"
 
 bind-key -T prefix 'o' {
   menubar
@@ -42,11 +45,13 @@ bind-key -T prefix 'R' { switch-client -r }
 bind-key -T prefix 'y' { set-window-option synchronize-panes }
 
 # resize pane (left, down, up, right)
-bind-key  -r '<' resize-pane -L
-bind-key  -r 'J' resize-pane -D
-bind-key  -r 'K' resize-pane -U
-bind-key  -r '>' resize-pane -R
+bind-key -T prefix -r '<' resize-pane -L
+bind-key -T prefix -r 'J' resize-pane -D
+bind-key -T prefix -r 'K' resize-pane -U
+bind-key -T prefix -r '>' resize-pane -R
 
+
+# bind-key -r '>' { display-message 'move to right daw' }
 
 # copy-mode navigation.
 bind-key -T copy-mode-vi 'C-h'  select-pane -L;
@@ -58,27 +63,67 @@ bind-key -T copy-mode-vi 'C-\'  select-pane -l;
 # navigator
 bind-key -n C-h {
   refresh-client -S
-  if-shell ${IS_VIM} { send-keys C-h } { select-pane -L }
+  %if "#{==:#{b:socket_path},foobar}"
+    send-keys 'C-h'
+  %else
+    if-shell ${IS_VIM} {
+      send-keys C-h
+    } {
+      select-pane -L
+    }
+  %endif
 }
 
 bind-key -n C-j {
   refresh-client -S
-  if-shell "${IS_VIM} || ${IS_FZF}"  { send-keys C-j } { select-pane -D }
+  %if "#{==:#{b:socket_path},foobar}"
+    send-keys 'C-j'
+  %else
+    if-shell "${IS_VIM} || ${IS_FZF}" {
+      send-keys C-j
+    } {
+      select-pane -D
+    }
+  %endif
 }
 
 bind-key -n C-k {
   refresh-client -S
-  if-shell "${IS_VIM} || ${IS_FZF}" { send-keys C-k } { select-pane -U }
+  %if "#{==:#{b:socket_path},foobar}"
+    send-keys 'C-k'
+  %else
+    if-shell "${IS_VIM} || ${IS_FZF}" {
+      send-keys C-k 
+    } {
+      select-pane -U
+    }
+  %endif
 }
 
 bind-key -n C-l {
   refresh-client -S
-  if-shell ${IS_VIM} { send-keys C-l } { select-pane -R }
+  %if "#{==:#{b:socket_path},foobar}"
+    send-keys 'C-l'
+  %else
+    if-shell ${IS_VIM} {
+      send-keys C-l
+    } {
+      select-pane -R
+    }
+  %endif
 }
 
 bind-key -n C-\\ {
   refresh-client -S
-  if-shell ${IS_VIM} { send-keys C-\\ } { select-pane -l }
+  %if "#{==:#{b:socket_path},foobar}"
+    send-keys C-\\
+  %else
+    if-shell ${IS_VIM} {
+      send-keys C-\\
+    } {
+      select-pane -l
+    }
+  %endif
 }
 
 # reloading

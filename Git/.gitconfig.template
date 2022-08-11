@@ -122,27 +122,27 @@
 
 [alias]
 
-  done = "!f() { \
-    git push origin HEAD; \
-    git lg; \
-  }; f"
+  # done = "!f() { \
+  #   git push origin HEAD; \
+  #   git lg; \
+  # }; f"
 
   dif = difftool -t nvimdiff
-  s = status --short --branch --show-stash --ahead-behind --renames
+  # s = status --short --branch --show-stash --ahead-behind --renames
   br = branch --all
   lg = log --decorate --graph --all -10
   lga = log --decorate --graph --all --format=detail
   contrib = shortlog --summary --numbered
 
-  amend = "!f() { \
-    git commit --amend --no-edit; \
-    git s; \
-  }; f"
+  # amend = "!f() { \
+  #   git commit --amend --no-edit; \
+  #   git s; \
+  # }; f"
 
-  typo = "!f() { \
-    git commit --amend; \
-    git s; \
-  }; f"
+  # typo = "!f() { \
+  #   git commit --amend; \
+  #   git s; \
+  # }; f"
 
   a = "!f() { \
     git add "$@" && git s; \

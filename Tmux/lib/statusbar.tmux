@@ -4,6 +4,11 @@
 # ---------------------------------------------------------------------
 # vi:ft=tmux
 
+%hidden _dirs="#(dirs)"
+
+%hidden _permission="#(ls -ld #{pane_current_path} | awk '{printf \"%%s:%%s:%%s\", $3,$4,$1}')"
+# %hidden _last_modified="#(ls -lhd #{pane_current_path} | awk '{printf \"%%s %%s\", $6,$7}')"
+
 # current playing song from an MPRIS supported player.
 %hidden _current_playing_song=\
 "#{?#{!=:#(playerctl status),Stopped},#(playerctl metadata title),}"
@@ -41,10 +46,10 @@
 
 # portable default window list.
 %hidden _window_list=\
-"#[norange default]"\
+"#[norange default bold]"\
 "#[list=on align=#{status-justify}]"\
 "#[list=left-marker]<#[list=right-marker]>#[list=on]"\
-"#{W:"\
+"#{W:"\
 "#[range=window|#{window_index} "\
 "#{E:window-status-style}"\
 "#{?#{&&:#{window_last_flag},"\
@@ -95,7 +100,7 @@
 "#[pop-default]"\
 "#[norange list=on default]"\
 "#{?window_end_flag,,#{window-status-separator}}"\
-"}"
+"}#[bg=colour234, fg=colour235]"
 
 # ------------------
 # portable defaults

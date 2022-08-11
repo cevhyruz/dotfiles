@@ -38,7 +38,7 @@ local function set_diagnostic_keymaps(bufnr, conf)
              ['gi'] = { mode = 'n', rhs = 'implementation()',     key_opts },
       ['<leader>3'] = { mode = 'n', rhs = 'document_highlight()', key_opts },
               ['K'] = { mode = 'n', rhs = 'hover()',              key_opts },
-          ['<C-k>'] = { mode = 'n', rhs = 'signature_help()',     key_opts },
+  ['<leader><C-h>'] = { mode = 'n', rhs = 'signature_help()',     key_opts },
      ['<leader>rn'] = { mode = 'n', rhs = 'rename()',             key_opts },
              ['gr'] = { mode = 'n', rhs = 'references()',         key_opts },
      ['<leader>ca'] = { mode = 'n', rhs = 'code_action()',        key_opts }
@@ -95,13 +95,12 @@ local function on_attach(client, bufnr)
   end
 end
 
-local function update_handler()
-   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+local function update_handler() vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
       vim.lsp.handlers.signature_help,
       { border = style.border })
    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
       vim.lsp.handlers.hover,
-      { border = style.border })
+       { border = style.border })
 end
  
 local function setup()

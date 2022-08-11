@@ -36,7 +36,11 @@ function _letterpress() {
     return
   fi
 
-  printf "%-*s%s\n" "${leftwidth}" "${leftcol}" "${rightcol}"
+  printf \
+    "${fg_yellow=\e[38;5;221m}%-*s${reset=\e[0m}%s\n" \
+    "${leftwidth}" \
+    "${leftcol}" \
+    "${rightcol}"
 }
 
 function reference() {
@@ -130,8 +134,8 @@ function glossary() {
       if [[ "$group" != "$targetgroup" ]]; then
         continue  # skip non-matching groups, if specified
       fi
-    #elif [[ "${group}" == 'composure' ]]; then
-      #continue # skip composure group, unless specified
+    elif [[ "${group}" == 'composure' ]]; then
+      continue # skip composure group, unless specified
     fi
     about="$(declare -f -- "$func" | metafor about)"
     echo "$about" \
