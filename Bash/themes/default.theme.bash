@@ -69,7 +69,7 @@ function __set_PS1() {
         if ! command git diff --quiet --ignore-submodules --cached; then
           status+="+"
         fi
-        if ! command git diff-files --quiet --ignore-submodules --; then
+        if ! command git diff-files --quiet --; then
           status+="!"
         fi
         if [[ -n "$(command git ls-files --others --exclude-standard)" ]]; then
