@@ -1,5 +1,7 @@
 vim.o.termguicolors = true
 
+vim.o.shortmess = string.format('%sW', vim.o.shortmess)
+
 vim.o.showcmd = false
 vim.o.showmode = false
 

@@ -21,3 +21,8 @@ set-option -g command-alias[16] set-theme=\
 '  set-option -s @theme "%%";'\
 '  source-file ${DOT_TMUX}/tmux.conf;'\
 '}'
+
+
+# change background-color of the current-window
+set-option -g command-alias[16] color=\
+'display "#{window_index}"'

@@ -5,7 +5,7 @@ require("scrollbar").setup({
   folds = 1000, -- handle folds, set to number to disable folds if no. of lines in buffer exceeds this
   max_lines = false, -- disables if no. of lines in buffer exceeds this
   handle = {
-    text = "  ",
+    text = " ",
     color = nil,
     cterm = nil,
     highlight = "Statusline",
@@ -13,42 +13,42 @@ require("scrollbar").setup({
   },
   marks = {
     Search = {
-      text = { "- ", "= " },
+      text = { "-", "=" },
       priority = 0,
       color = nil,
       cterm = nil,
       highlight = "Statusline",
     },
     Error = {
-      text = { " -", " =" },
+      text = { "-", "=" },
       priority = 1,
       color = nil,
       cterm = nil,
       highlight = "DiagnosticVirtualTextError",
     },
     Warn = {
-      text = { " -", " =" },
+      text = { "-", "=" },
       priority = 2,
       color = nil,
       cterm = nil,
       highlight = "DiagnosticVirtualTextWarn",
     },
     Info = {
-      text = { " -", " =" },
+      text = { "-", "=" },
       priority = 3,
       color = nil,
       cterm = nil,
       highlight = "DiagnosticVirtualTextInfo",
     },
     Hint = {
-      text = { " -", " =" },
+      text = { "-", "=" },
       priority = 4,
       color = nil,
       cterm = nil,
       highlight = "DiagnosticVirtualTextHint",
     },
     Misc = {
-      text = { " -", " =" },
+      text = { "-", "=" },
       priority = 5,
       color = nil,
       cterm = nil,

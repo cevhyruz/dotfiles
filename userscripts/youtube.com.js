@@ -13,8 +13,6 @@
 // @grant        none
 // ==/UserScript==
 
-alert('document should be idle')
-
 (function(window, util) {
   'use strict'
 

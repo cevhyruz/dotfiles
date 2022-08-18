@@ -118,3 +118,4 @@ function terminfo() {
   echo
   echo -e "\e[4:3mcurvy underline"
 }
+

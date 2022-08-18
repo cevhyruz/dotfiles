@@ -26,6 +26,10 @@ return require('packer').startup(function(use)
   use { 'stevearc/aerial.nvim',
     config = function() require('aerial').setup() end
   }
+  use { 'szw/vim-maximizer' }
+  -- use { '~/Projects/cloned-repo/lualine.nvim',
+  --   config = function() require('plugins.lualine') end
+  -- }
   -- use { 'blueyed/vim-diminactive' }
   use { 'petertriho/nvim-scrollbar',
     requires = "kevinhwang91/nvim-hlslens",

@@ -100,6 +100,9 @@ M.LOCAL_KEYS =  {
   -- toggle nvimtree
   { 'n', '<C-n>', ':NvimTreeToggle<CR>' },
 
+  -- zoom window
+  { 'n', '<leader>z',':MaximizerToggle!<CR>' },
+
   -- reload config
   { 'n', '<Leader>r',
     function()
@@ -149,7 +152,7 @@ M.LOCAL_KEYS =  {
         vim.api.nvim_command(string.format('!./%s', vim.fn.expand('%')))
       end
     end
-  }
+  },
 }
 
 return M

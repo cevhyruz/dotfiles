@@ -1,6 +1,3 @@
--- following options are the default
--- each of these are documented in `:help nvim-tree.OPTION_NAME`
-
 local status_ok, nvim_tree = pcall(require, 'nvim-tree')
 if not status_ok then
   print('nvim-tree is not ok')
@@ -14,7 +11,7 @@ end
 
 local tree_cb = nvim_tree_config.nvim_tree_callback
 
-nvim_tree.setup {
+nvim_tree.setup({
   actions = {
     open_file = {
       quit_on_open = true,
@@ -48,19 +45,17 @@ nvim_tree.setup {
         default = "",
         symlink = "",
         git = {
-          unstaged = "",
-          staged = "S",
-          unmerged = "",
+          unstaged = "M",
+          staged = "A", unmerged = "",
           renamed = "➜",
           deleted = "",
-          untracked = "U",
+          untracked = "?",
           ignored = "◌",
         },
       },
       git_placement = "after"
     }
   },
-
   hijack_netrw = false,
   open_on_setup = false,
   ignore_ft_on_setup = {
@@ -105,10 +100,21 @@ nvim_tree.setup {
     mappings = {
       custom_only = false,
       list = {
-        { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
+        { key = { "l", "<CR>", "o" }, cb = tree_cb("edit") },
         { key = "h", cb = tree_cb "close_node" },
         { key = "v", cb = tree_cb "vsplit" },
         { key = '<Space>', action = 'edit' }
+      },
+    },
+    float = {
+      enable = false,
+      open_win_config = {
+        relative = "editor",
+        border = "none",
+        width = 30,
+        height = 30,
+        row = 1,
+        col = 1,
       },
     },
     number = false,
@@ -118,4 +124,4 @@ nvim_tree.setup {
     cmd = "trash",
     require_confirm = true,
   }
-}
+})

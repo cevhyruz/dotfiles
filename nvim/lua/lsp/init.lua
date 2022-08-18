@@ -14,11 +14,18 @@ lspinstaller.setup {}
 require("lsp.config.null-ls")
 
 local function set_LspReference_highlight()
-  vim.cmd [[
-    hi LspReferenceText  guibg=red    guifg=yellow gui=underline
-    hi LspReferenceRead  guibg=green  guifg=red    gui=underline
-    hi LspReferenceWrite guibg=yellow guifg=black  gui=underline
-  ]]
+  local hi_group = {
+    LspReferenceText = { guibg = "red",   guifg = "yellow", gui = "undercurl" },
+    LspReferenceRead = { guibg = "green", guifg = "red",    gui = "undercurl" },
+    LspReferenceWrite = { guibg = "yellow", guifg = "black", gui = "undercurl" }
+  }
+
+  for name, color in pairs(hi_group) do
+    vim.api.nvim_set_hl(0, name, {
+      bg = color.guibg,
+      fg = color.guifg,
+    })
+  end
 end
 
 local function set_diagnostic_keymaps(bufnr, conf)
