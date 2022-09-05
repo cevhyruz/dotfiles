@@ -13,31 +13,41 @@ set -o pipefail
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
-load "${TEST_DEPS_DIR}/../Bash/lib/util.bash"
-load "${TEST_DEPS_DIR}/../Bash/lib/apidoc.bash"
+load "${DOT_BASH}/lib/util.bash"
+load "${DOT_BASH}/lib/apidoc.bash"
 
-TEST_FILE="$( printf "\e[1m[%s]\e[0m\n" "$(basename "${BATS_TEST_FILENAME}")")"
-if [[ -n "${CI:-}" ]]; then
-  TEST_FILE="[$(basename "${BATS_TEST_FILENAME}")]"
+if [[ -t 0 ]]; then
+  TEST_FILE="$(printf "\e[1m[%s]\e[0m\n" "${BATS_TEST_FILENAME}")"
 fi
-export TEST_FILE
 
-function local_setup()    { true; }
-function local_teardown() { true; }
+function local_setup() { :; }
+function local_teardown() { :; }
 
-function _local_dependency() {
-  # Usage: export LOCAL_DEP="fzf"
-  if [[ -n "${LOCAL_DEP:-}" ]] &&
-    ! _::command_exists "${LOCAL_DEP}"; then
-    skip "Missing Dependency: ${LOCAL_DEP}"
-  fi
+function fixtures() {
+  test_home="${DOTFILES}/tmp_home"
+  mkdir -p "${test_home}"
+  cp "${TEST_DIRECTORY}/fixtures/bash_script_file_1.bash" \
+    "${test_home}/bash_script_file_1.bash"
 }
 
 function setup() {
-  _local_dependency
+  # usage: LOCAL_DEP="fzf"
+  if ! _::command_exists "${LOCAL_DEP:-}" && [[ -n ${LOCAL_DEP:-} ]]; then
+    skip "Missing Dependency: ${LOCAL_DEP:-}"
+  fi
+
+  if ! [[ -t 0 ]]; then
+    TEST_FILE="[$(basename "${BATS_TEST_FILENAME}")]"
+    if [[ "${BATS_TEST_NUMBER}" -eq 1 ]];then
+      echo "# ${TEST_FILE}" >&3
+    fi
+  fi
+
   local_setup
+  fixtures
 }
 
 function teardown() {
+  rm -rf "${test_home}"
   local_teardown
 }

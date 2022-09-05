@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2294,SC2206
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
 # Test runner for dotfiles.
@@ -16,31 +16,22 @@ function update_modules() {
 }
 
 function run_test() {
-  # shellcheck disable=SC2294
-  eval "${TEST_DEPS_DIR}"/bats-core/bin/bats \
-    ${CI:+--tap} --recursive "${TEST_DIRS[@]}"
+  exec "${TEST_DEPS_DIR}/bats-core/bin/bats" \
+    ${CI:+--tap} "${TEST_DIRS}"
 }
 
 function init() {
-  TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)"
-  TEST_DEPS_DIR="${TEST_DIRECTORY}/../test_lib"
-  export TEST_DEPS_DIR
-  export TEST_DIRECTORY
-
-  if [[ -z "${DOTFILES_BASH_DIR:-}" ]]; then
-    DOTFILES_BASH_DIR=$(cd "${TEST_DIRECTORY}" && dirname "$(pwd)") &&
-      export DOTFILES_BASH_DIR
-  fi
+  # TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" \
+  TEST_DIRECTORY="${DOTFILES}/test" \
+    && export TEST_DIRECTORY
+  TEST_DEPS_DIR="${DOT_BASH}/../test_lib" \
+    && export TEST_DEPS_DIR
 
   update_modules
 
-  if [[ -z ${1:-} ]]; then # shellcheck disable=2206
-    TEST_DIRS=(${TEST_DIRECTORY}/{install,Bash})
-  else
-    TEST_DIRS=("${1:-}")
-  fi
+  TEST_DIRS=(${TEST_DIRECTORY}/Bash${1:+/})
 
-  run_test
+  run_test "$@"
 }
 
 init "$@"

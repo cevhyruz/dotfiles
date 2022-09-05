@@ -44,8 +44,7 @@ function __readline_vi_mode() {
 
 # :nocov:
 function __set_PS1() {
-  PS1='$(
-
+  PS1=' $(
     if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
       arrow_color="\[${bold}\]\[${fg_green}\]"
       return_str=

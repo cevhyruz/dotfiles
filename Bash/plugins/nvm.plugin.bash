@@ -8,6 +8,7 @@
 #   LAZYLOAD_NVM (default: 1         )
 #   NVM_DIR      (default: $HOME/.nvm)
 
+export LAZYLOAD_NVM=1
 
 function __set_nvm() {
   export NVM_DIR="${HOME}/.nvm"

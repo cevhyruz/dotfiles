@@ -1,9 +1,8 @@
 # vi:ft=tmux
 
-%if "#{!=:#{b:socket_path},foobar}"
-  set-option -g prefix "`"
-  set-option -g prefix2 C-b
-%endif
+set-option -g prefix "`"
+bind-key -T prefix "`" send-prefix
+set-option -g prefix2 C-b
 
 bind-key -T prefix -N 'Search for URLs in current pane' 'u' {
   copy-mode

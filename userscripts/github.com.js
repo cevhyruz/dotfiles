@@ -13,36 +13,40 @@
 // ==/UserScript==
 //
 
-
-(function(window, util) {
+(function(window, util, gh) {
   'use strict'
 
+
   let Github = {
-
-    metadata: {
-      author: document.getElementsByClassName('url')[0].textContent,
-      projectName: document.getElementsByClassName('flex-self-stretch')[4].childNodes[1].textContent
+    _get_author: function() {
+      return document.getElementsByClassName('url')[0].textContent
+    },
+    _get_repoName: function() {
+      return document.getElementsByClassName('flex-self-stretch')[4]
+        .childNodes[1].textContent
     },
 
-    init: function() {
+    ssh: function() {
+      return `git@github.com:${Github._get_author()}/${Github._get_repoName()}.git`
     },
 
-    yankClonePath: function(string) {
-      let path = this.metadata.author + '/' + this.metadata.projectName,
-          head = string ? 'git@github.com:' : 'https://github.com/',
-          tail = '.git';
-      let completePath = head + path + tail
+    https: function() {
+      return `https://github.com/${Github._get_author()}/${Github._get_repoName()}.git`
+    },
+
+    packer: function() {
+      return `${Github._get_author()}/${Github._get_repoName()}`
+    },
+
+    clone: function(format) {
       try {
-        util.yank(completePath)
-        util.popUp("yanked: " + completePath)
-      } catch(err) {
-        util.popUp('Something went wrong while yanking', err)
+        util.popUp( util.yank(this[format].apply()) )
+      } catch(error) {
+        util.popUp(error)
       }
     },
   }
 
-  Github.init()
   window.Github = Github;
 
-
-}(window, window.Util));
+}(window, window.Util, window.Github));

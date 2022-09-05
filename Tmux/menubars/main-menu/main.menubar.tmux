@@ -20,7 +20,6 @@ set-option command-alias[99] menubar=\
   "#{E:_reload}" "r" {
     source-file ${DOT_TMUX}/tmux.conf
     display-message 'reloaded'
-    display-popup "git lg"
   }\
   "#{E:_reload} show list-windows status" "r" {
     source-file ${DOT_TMUX}/tmux.conf

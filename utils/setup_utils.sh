@@ -9,6 +9,7 @@ function _print() {
     "$(tput sgr0 2> /dev/null)"
 }
 
+
 function _print::green()  { _print "$1" 2; }
 function _print::purple() { _print "$1" 5; }
 function _print::red()    { _print "$1" 1; }

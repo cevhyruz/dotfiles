@@ -12,6 +12,6 @@ null_ls.setup({
 	debug = false,
 	sources = {
     formatting.shfmt,
-    diagnostics.shellcheck,
+    -- diagnostics.shellcheck,
 	},
 })

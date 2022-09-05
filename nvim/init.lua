@@ -1,74 +1,71 @@
+local maputils = require "utils.maputils"
+local mappings = require "user.keybindings"
+
 require('user.options')
 
-require('user.maputils').init()
+local function init()
+  maputils.set_keymap(mappings.dotfiles_builtin)
+end
 
 require('user.abbrev')
 require('user.scroll')
-
-require('user.statusline')
-
-require('user.maputils')
-
+require('core.statusline')
 require('user.packages')
-
 require('lsp')
 
--- require('user.note')
+require('utils.utils')
 
-require('user.utils')
+dofile("/home/devs/Projects/dotfiles/localrc/localrc.lua")
 
-dofile(vim.fn.getenv('DOTFILES') .. '/localrc/localrc.lua')
 
-vim.g.diminactive_enable_focus = 1
+-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - 
+Set = {}
 
-local group = vim.api.nvim_create_augroup('dimWindow', {clear = true})
+Set.mt = {}
 
-vim.api.nvim_create_autocmd({"FocusGained", "WinEnter"}, {
-  group = group,
-  callback = function()
-    vim.api.nvim_command("highlight Normal guibg=#1E1E1E")
-    vim.api.nvim_command("highlight SignColumn guibg=#1E1E1E")
-    vim.api.nvim_command("highlight LineNr guibg=#1E1E1E")
-  end
-})
-
-vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave" }, {
-  group = group,
-  callback = function()
-    vim.api.nvim_command("highlight Normal guibg=#222222")
-    vim.api.nvim_command("highlight SignColumn guibg=#222222")
-    vim.api.nvim_command("highlight LineNr guibg=#222222")
-  end
-})
-
-local function open_win()
-    buf = vim.api.nvim_create_buf(false, true)
-
-    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-
-    local width = vim.api.nvim_get_option("columns")
-    local height = vim.api.nvim_get_option("lines")
-
-    local win_height = math.ceil(height * 0.8 - 4)
-    local win_width = math.ceil(width * 0.8)
-
-    local row = math.ceil((height - win_height) / 2 - 1)
-    local col = math.ceil((width - win_width) / 2)
-
-    local opts = {
-        style = "minimal",
-        relative = "editor",
-        width = win_width,
-        height = win_height,
-        row = row,
-        col = col,
-        border = "rounded",
-    }
-
-    win = vim.api.nvim_open_win(buf, true, opts)
-    vim.api.nvim_win_set_option(win, "cursorline", true)
+function Set.new(t)
+  local set = {}
+  setmetatable(set, Set.mt)
+  for _,l in ipairs(t) do set[l] = true end
+  return set
 end
 
-vim.api.nvim_create_user_command('Note', function()
-  open_win()
-end, {})
+function Set.union(a,b)
+  local res = Set.new{}
+  for k in pairs(a) do res[k] = true end
+  for k in pairs(b) do res[k] = true end
+  return res
+end
+
+Set.mt.__add = Set.union
+
+function Set.intersection (a,b)
+  local res = Set.new{}
+  for k in pairs(a) do
+    res[k] = b[k]
+  end
+  return res
+end
+
+function Set.tostring (set)
+  local s = "{"
+  local sep = ""
+  for e in pairs(set) do
+    s = s .. sep .. e
+    sep = ","
+  end
+  return s .. "}"
+end
+
+function Set.print (s)
+  print(Set.tostring(s))
+end
+
+local s1 = Set.new{10, 20, 30, 50}
+local s2 = Set.new{30, 1}
+
+Set.mt.__add = Set.union
+
+
+-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - 
+return init()

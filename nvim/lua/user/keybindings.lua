@@ -1,50 +1,77 @@
 local M = {}
 
-M.LSP_KEY =  {
-    diagnostic = {
-      -- Diagnostic. See ':help vim.diagnostic.*'
-      { '<leader>f', 'open_float()', { noremap = true } },
-      { '[d',        'goto_prev()',  { noremap = true } },
-      { ']d',        'goto_next()',  { noremap = true } },
-      { '<leader>q', 'setloclist()', { noremap = true } },
-    },
-    -- LSP. see ':help vim.lsp.*'
-    lsp = {
-      { 'gd',         'buf.definition()',     { noremap = true } },
-      { 'gD',         'buf.declaration()',    { noremap = true } },
-      { 'gi',         'buf.implementation()', {} },
-      { 'K',          'buf.hover()',          {} },
-      { '<C-k>',      'buf.signature_help()', {} },
-      { '<leader>rn', 'buf.rename()',         {} },
-      { 'gr',         'buf.references()',     {} },
-      { '<leader>ca', 'buf.code_action()',    {} },
-    },
+local hlsearch = require "components.hlsearch"
+local spell = require "components.spell"
+local runtest = require "components.runtest"
+
+local lspbuf = vim.lsp.buf
+local diags = vim.diagnostic
+
+M.dotfiles_builtin = {
+  -- see ':help diags.*'
+  { 'n',   '<leader>f',      diags.open_float,          { desc = "on_attach" } },
+  { 'n',   '[d',             diags.goto_prev,           { desc = "on_attach" } },
+  { 'n',   ']d',             diags.goto_next,           { desc = "on_attach" } },
+  { 'n',   '<leader>q',      diags.setloclist,          { desc = "on_attach" } },
+  -- see   ':help vim.lsp.*'
+  { 'n',   'gd',             lspbuf.definition,         { desc = "on_attach" } },
+  { 'n',   'gD',             lspbuf.declaration,        { desc = "on_attach" } },
+  { 'n',   'gi',             lspbuf.implementation,     { desc = "on_attach" } },
+  { 'n',   '<Leader>3',      lspbuf.document_highlight, { desc = "on_attach" } },
+  { 'n',   'K',              lspbuf.hover,              { desc = "on_attach" } },
+  { 'n',   '<Leader><C-k>',  lspbuf.signature_help,     { desc = "on_attach" } },
+  { 'n',   '<Leader>rn',     lspbuf.rename,             { desc = "on_attach" } },
+  { 'n',   'gr',             lspbuf.references,         { desc = "on_attach" } },
+  { 'n',   '<Leader>ca',     lspbuf.code_action,        { desc = "on_attach" } },
+
+  -- visual-select recently pasted text
+  { 'n',   'gp',             '`[v`]' },
+  -- adjust indentation of  selected text
+  { 'n',   '<Leader>H',      '`[V`]<' },
+  { 'n',   '<Leader>L',      '`[V`]>' },
+  -- easy mode switching
+  { 'x',   'kj',             '<Esc>' },
+  { 'i',   'kj',             '<Esc>' },
+  { 'v',   'kj',             '<Esc>' },
+  { 'c',   'kj',             '<C-c>' },
+  -- command line navigation (history)
+  { 'c',   'K',              '<Up>' },
+  { 'c',   'J',              '<Down>' },
+  { 'c',   '<C-h>',          '<Left>' },
+  { 'c',   '<C-l>',          '<Right>' },
+  -- scrolling (increment by 3)
+  { 'n',   '<C-e>',          '3<C-e>' },
+  { 'n',   '<C-y>',          '3<C-y>' },
+  -- quick commandline
+  { 'n',   ';',              ':' },
+  -- quick text-reposition
+  { 'n',   '<m-j>',          'Vmz:m+<cr>`zV'              },
+  { 'n',   '<M-k>',          'Vmz:m-2<CR>`zV'             },
+  { 'v',   '<M-j>',          ':m\'>+<CR>`<my`>mzgv`yo`z'  },
+  { 'v',   '<M-k>',          ':m\'<-2<CR>`>my`<mzgv`yo`z' },
+  -- easy navigation for wraped lines
+  { 'n',   'j',              'gj' },
+  { 'n',   'k',              'gk' },
+  -- toggle nvimtree
+  { 'n',   '<C-n>',          ':NvimTreeToggle<CR>' },
+  -- toggle hlsearch
+  { 'n', '<Space>',          hlsearch },
+  -- toggle spell
+  { 'n', '<Leader>s<Space>', spell },
+  -- quick execute.
+  { 'n', '<F5>',             runtest }
+
 }
 
-M.set_cmp_mapping = function(cmp)
-  return {
+function M.set_cmp_keys(cmp)
+  return  {
     ['K'] = cmp.mapping.select_prev_item(),
     ['J'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping(
-        cmp.mapping.select_prev_item(),
-        { "i", "c" }
-    ),
-    ['<C-n>'] = cmp.mapping(
-        cmp.mapping.select_next_item(),
-        { "i", "c" }
-    ),
-    ['<C-y>'] = cmp.mapping(
-        cmp.mapping.scroll_docs(-2),
-        { "i", "c" }
-    ),
-    ['<C-e>'] = cmp.mapping(
-        cmp.mapping.scroll_docs(2),
-        { "i", "c" }
-    ),
-    ['<C-Space>'] = cmp.mapping(
-        cmp.mapping.complete(),
-        { "i", "c" }
-    ),
+    ['<C-p>'] = cmp.mapping( cmp.mapping.select_prev_item(), { "i", "c" } ),
+    ['<C-n>'] = cmp.mapping( cmp.mapping.select_next_item(), { "i", "c" } ),
+    ['<C-y>'] = cmp.mapping( cmp.mapping.scroll_docs(-2),    { "i", "c" } ),
+    ['<C-e>'] = cmp.mapping( cmp.mapping.scroll_docs(2),     { "i", "c" } ),
+    ['<C-Space>'] = cmp.mapping( cmp.mapping.complete(),     { "i", "c" } ),
     ['<C-c>'] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
@@ -59,100 +86,5 @@ M.set_cmp_mapping = function(cmp)
     }),
   }
 end
-
-M.LOCAL_KEYS =  {
-  -- select pasted text
-  { 'n', 'gp', '`[v`]' },
-
-  -- adjust indentation of pasted text
-  { 'n', '<Leader>H', '`[V`]<' },
-  { 'n', '<Leader>L', '`[V`]>' },
-
-  -- easy mode switching
-  { 'x', 'kj', '<Esc>' },
-  { 'i', 'kj', '<Esc>' },
-  { 'c', 'kj', '<C-c>' },
-  { 'v', 'kj', '<Esc>' },
-
-  -- command line navigation (history)
-  { 'c', 'K',     '<Up>'    },
-  { 'c', 'J',     '<Down>'  },
-  { 'c', '<C-h>', '<Left>'  },
-  { 'c', '<C-l>', '<Right>' },
-
-  -- scrolling (increment by 3)
-  { 'n', '<C-e>', '3<C-e>' },
-  { 'n', '<C-y>', '3<C-y>' },
-
-  -- quick commandline
-  { 'n', ';', ':' },
-
-  -- quick text-repostition
-  { 'n', '<m-j>', 'Vmz:m+<cr>`zV'                },
-  { 'n', '<M-k>', 'Vmz:m-2<CR>`zV'               },
-  { 'v', '<M-j>', ':m\'>+<CR>`<my`>mzgv`yo`z'  },
-  { 'v', '<M-k>', ':m\'<-2<CR>`>my`<mzgv`yo`z' },
-
-  -- easy navigation for wrapped lines
-  { 'n', 'j', 'gj' },
-  { 'n', 'k', 'gk' },
-
-  -- toggle nvimtree
-  { 'n', '<C-n>', ':NvimTreeToggle<CR>' },
-
-  -- zoom window
-  { 'n', '<leader>z',':MaximizerToggle!<CR>' },
-
-  -- reload config
-  { 'n', '<Leader>r',
-    function()
-      for name in pairs(package.loaded) do
-        if name:match('^cevhyruz') then
-          package.loaded[name] = nil
-        end
-      end
-      print('config reloaded')
-      dofile(vim.env.MYVIMRC)
-    end
-  },
-
-  -- toggle hlsearch
-  { 'n', '<Space>',
-    function()
-      if vim.go.hls then
-        print('disabled hlsearch')
-        vim.go.hls = false
-        -- vim.cmd [[ HlSearchLensDisable ]]
-      else
-        print('enabled hlsearch')
-        vim.go.hls = true
-        -- vim.cmd [[ HlSearchLensEnable ]]
-      end
-    end
-  },
-
-  -- toggle spell
-  { 'n', '<Leader>s<Space>',
-    function()
-      if vim.wo.spell then
-        vim.opt.spell = false
-          print('disabled spell')
-      else
-        vim.opt.spell = true
-        vim.opt.spelllang = { 'en_us' }
-        print('enabled spell')
-      end
-    end
-  },
-  -- quick execute.
-  { 'n', '<F5>',
-    function()
-      local shebang = vim.inspect( vim.api.nvim_buf_get_lines(0, 0, 1, false))
-      if vim.fn.expand('%:e') or shebang  ~= '(bash|sh)' then
-        vim.api.nvim_command(string.format('!./%s', vim.fn.expand('%')))
-      end
-    end
-  },
-}
 
 return M

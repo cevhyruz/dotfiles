@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
-# custom git aliases, too complicated to write inside gitconfig.
-# usage: git [function] [...]
-# see Bash/core/git.bash for details.
+# Custom git aliases, too complicated to write inside gitconfig.
+# usage:    git [function] [...]
+# requires: git.bash
+# see: Bash/core/git.bash for details
 
 if [[ -z "${git_core_loaded:-}" ]]; then
   return

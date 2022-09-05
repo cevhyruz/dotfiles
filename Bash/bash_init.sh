@@ -6,8 +6,15 @@
 
 # load utility helper file.
 # shellcheck source=/dev/null
+
+# shellcheck disable=SC2034
+source "${DOT_BASH}/lib/util.bash" && {
+  declare -ag LOADER_STACK=("_home_devs_Projects_dotfiles_Bash_lib_util_bash")
+}
+
 for file in "${DOT_BASH}/lib"/*; do
-  source "${file}"
+ source "${file}"
+# echo "$file"
 done
 
 # initliaze configurations.

@@ -91,6 +91,7 @@
         console.log('something went wrong')
       }
       register.remove();
+      return string
     },
 
   }

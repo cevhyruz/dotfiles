@@ -49,7 +49,7 @@
 "#[norange default bold]"\
 "#[list=on align=#{status-justify}]"\
 "#[list=left-marker]<#[list=right-marker]>#[list=on]"\
-"#{W:"\
+"#{W:"\
 "#[range=window|#{window_index} "\
 "#{E:window-status-style}"\
 "#{?#{&&:#{window_last_flag},"\

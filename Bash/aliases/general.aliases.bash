@@ -24,6 +24,7 @@ alias which="which -a"
 
 # pretty print path names.
 alias path='echo "${PATH//:/\\n}"'
+alias rtp='printf "%s\n" "$(echo ${LOADER_PATH[*]})"'
 
 # list enabled bash options.
 if ! declare -F bashopts &>/dev/null; then

@@ -1,3 +1,4 @@
+-- https://github.com/sumneko/lua-language-server/wiki/Settings
 return {
   settings = {
     Lua = {

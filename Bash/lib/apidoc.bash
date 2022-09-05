@@ -5,6 +5,9 @@
 # modified Apidoc functions from composure.sh by erichs.
 # https://github.com/erichs/composure
 
+# print paragraph where pattern reside.
+# awk -v RS= '/_::add_to_path()/' ~/Projects/dotfiles/Bash/lib/util.bash
+
 function main() {
   local functions=(
     'about' 'example' 'group' 'param'

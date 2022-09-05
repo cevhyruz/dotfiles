@@ -15,7 +15,6 @@ packer.init {
 if vim.fn.empty( vim.fn.glob( packpath ) ) > 0 then
   Packer_bootstrap = vim.fn.system({ 'git', 'clone', '--depth', '1',
     'git@github.com:wbthomason/packer.nvim.git', packpath })
-
   print('Installing packer close and reopen Neovim...')
   vim.cmd [[ packadd packer.nvim ]]
 end
@@ -26,11 +25,6 @@ return require('packer').startup(function(use)
   use { 'stevearc/aerial.nvim',
     config = function() require('aerial').setup() end
   }
-  use { 'szw/vim-maximizer' }
-  -- use { '~/Projects/cloned-repo/lualine.nvim',
-  --   config = function() require('plugins.lualine') end
-  -- }
-  -- use { 'blueyed/vim-diminactive' }
   use { 'petertriho/nvim-scrollbar',
     requires = "kevinhwang91/nvim-hlslens",
     config = function() require("plugins.scrollbar") end
@@ -85,23 +79,21 @@ return require('packer').startup(function(use)
   use { 'jose-elias-alvarez/null-ls.nvim',
     requires = 'nvim-lua/plenary.nvim'
   }
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-nvim-lsp-signature-help'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use '~/Projects/dotfiles/nvim/cmp-spell'
-  -- use 'f3fora/cmp-spell'
+  use { 'hrsh7th/nvim-cmp',
+    requires = {
+      "quangnguyen30192/cmp-nvim-ultisnips",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "~/Projects/dotfiles/nvim/cmp-spell"
+    },
+    config = function() require('plugins.nvim-cmp') end
+  }
   use {
     'SirVer/ultisnips',
     config = function() require('plugins.ultisnips') end
-  }
-  use { 'chrisbra/unicode.vim' }
-  use { 'hrsh7th/nvim-cmp',
-    requires = {
-    "quangnguyen30192/cmp-nvim-ultisnips",
-    },
-    config = function() require('plugins.nvim-cmp') end
   }
   use 'kosayoda/nvim-lightbulb'
   use { 'lewis6991/gitsigns.nvim',

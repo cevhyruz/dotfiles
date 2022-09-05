@@ -44,6 +44,16 @@ nvim_tree.setup({
       glyphs = {
         default = "",
         symlink = "",
+        folder = {
+          arrow_closed = "",
+          arrow_open = "",
+          default = "",
+          open = "",
+          empty = "",
+          empty_open = "",
+          symlink = "",
+          symlink_open = "",
+        },
         git = {
           unstaged = "M",
           staged = "A", unmerged = "",
