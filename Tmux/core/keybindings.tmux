@@ -129,7 +129,7 @@ bind-key -n C-\\ {
 # reloading
 bind-key 'r' {
   refresh-client -S
-  source-file ${DOT_TMUX}/tmux.conf
+  source-file "${DOT_TMUX}/tmux.conf"
 }
 
 # split panes should start from CWD.
