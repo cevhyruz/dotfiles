@@ -7,8 +7,13 @@
 # allow sudo'ing aliases.
 alias sudo="sudo "
 
+# show all function definitions in a script.
+alias scriptinfo="grep -Eow 'function[[:space:]]+[[:alnum:]_]+'"
+
 # prompt whether to remove destinations.
 alias ln="ln --interactive "
+
+#  time scriptinfo "${DOT_BASH}/plugins/fzf.plugin.bash" | awk '{print $2}'
 
 # going home.
 alias home='cd ${HOME}'
@@ -57,3 +62,7 @@ alias -- -="cd -"
 # sensible file listing.
 alias ls="ls --color=always --almost-all --group-directories-first"
 alias dir="dir --color=always --almost-all --group-directories-first --dereference"
+
+# engine sounds (useful for testing).
+alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'
+alias engage2='play -n -c1 synth whitenoise lowpass -1 120 lowpass -1 120 lowpass -1 120 gain +16'
