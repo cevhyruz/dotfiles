@@ -30,6 +30,7 @@ function __set_colorscheme() {
 
 function __prompt_stdout_color() {
   PRE_COMMAND+=('printf "%b" "${normal}";')
+  POST_COMMAND+=('echo')
 }
 
 function __readline_vi_mode() {
@@ -44,7 +45,7 @@ function __readline_vi_mode() {
 
 # :nocov:
 function __set_PS1() {
-  PS1=' $(
+  PS1='$(
     if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
       arrow_color="\[${bold}\]\[${fg_green}\]"
       return_str=
@@ -108,7 +109,6 @@ function __set_PS1() {
     fi
 
     declare -a prompt=(
-      "\n"
       "\[${reset}\]"
       "\[${bold}\]"
       "\[${normal}\]"
