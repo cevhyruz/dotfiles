@@ -8,11 +8,30 @@
 # @about Add/prepend [path] into the global environment path. {{{1
 # @param [path]
 # @return 0 if the [path] was successfully added, 1 otherwise.
-function _::load() {
-  local namespace="${1//[\/\.]/\_}"
-  local old_func_def new_func_def
-  if ! test -v LOADER_STACK; then
-    declare -ag LOADER_STACK=()
+function _::add_to_path() {
+  if [[ -d ${1:-} && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
+    if [[ ${2:-before} == "after" ]]; then
+      export PATH="${PATH}:$1"
+    else
+      export PATH="$1:${PATH}"
+    fi
+    return
+  fi
+}
+
+function _::is_dir() {
+  _about "Test if given path is a directory."
+  _param "[directory path]"
+  _return "0 if path is a directory with contents."
+  _return "1 if it is empty, non-existent, glob or points to a file."
+
+  _group "helpers"
+  local -r DIR_PATH="${1-}"
+
+  [[ -z "$(ls --almost-all "${DIR_PATH}" 2>/dev/null)" ]] && return 1
+
+  if [[ -d "${DIR_PATH}" ]]; then
+    return 0
   fi
   for entry in "${LOADER_STACK[@]}"; do
     if [[ ${entry} == "${namespace}" ]]; then

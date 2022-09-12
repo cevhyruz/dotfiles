@@ -9,21 +9,21 @@ local diags = vim.diagnostic
 
 M.dotfiles_builtin = {
   -- see ':help diags.*'
-  { 'n',   '<leader>f',      diags.open_float,          { desc = "on_attach" } },
-  { 'n',   '[d',             diags.goto_prev,           { desc = "on_attach" } },
-  { 'n',   ']d',             diags.goto_next,           { desc = "on_attach" } },
-  { 'n',   '<leader>q',      diags.setloclist,          { desc = "on_attach" } },
+  { 'n',   '<leader>f',      diags.open_float,           },
+  { 'n',   '[d',             diags.goto_prev,            },
+  { 'n',   ']d',             diags.goto_next,            },
+  { 'n',   '<leader>q',      diags.setloclist,           },
   -- see   ':help vim.lsp.*'
-  { 'n',   'gd',             lspbuf.definition,         { desc = "on_attach" } },
-  { 'n',   'gD',             lspbuf.declaration,        { desc = "on_attach" } },
-  { 'n',   'gi',             lspbuf.implementation,     { desc = "on_attach" } },
-  { 'n',   '<Leader>3',      lspbuf.document_highlight, { desc = "on_attach" } },
-  { 'n',   'K',              lspbuf.hover,              { desc = "on_attach" } },
-  { 'n',   '<Leader><C-k>',  lspbuf.signature_help,     { desc = "on_attach" } },
-  { 'n',   '<Leader>rn',     lspbuf.rename,             { desc = "on_attach" } },
-  { 'n',   'gr',             lspbuf.references,         { desc = "on_attach" } },
-  { 'n',   '<Leader>ca',     lspbuf.code_action,        { desc = "on_attach" } },
-
+  { 'n',   'gd',             lspbuf.definition,          },
+  { 'n',   'gD',             lspbuf.declaration,         },
+  { 'n',   'gi',             lspbuf.implementation,      },
+  { 'n',   '<Leader>3',      lspbuf.document_highlight,  },
+  { 'n',   'K',              lspbuf.hover,               },
+  { 'n',   '<Leader><C-k>',  lspbuf.signature_help,      },
+  { 'n',   '<Leader>rn',     lspbuf.rename,              },
+  { 'n',   'gr',             lspbuf.references,          },
+  { 'n',   '<Leader>ca',     lspbuf.code_action,         },
+  { 'n', '<Tab>',   '<Cmd>AerialToggle<CR><C-w>w' },
   -- visual-select recently pasted text
   { 'n',   'gp',             '`[v`]' },
   -- adjust indentation of  selected text

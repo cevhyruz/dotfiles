@@ -3,8 +3,8 @@ let g:fzf_layout = {'down': '~25%'}
 let g:fzf_action = {
 \ 'ctrl-h': 'topleft vsplit',
 \ 'ctrl-n': 'botright split',
-\ 'ctrl-p': 'topleft split',
 \ 'ctrl-l': 'botright vsplit',
+\ 'ctrl-p': 'topleft split',
 \ 'alt-h':  'leftabove vsplit',
 \ 'alt-j':  'belowright split',
 \ 'alt-k':  'aboveleft split',

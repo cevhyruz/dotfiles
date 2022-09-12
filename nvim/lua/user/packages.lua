@@ -95,7 +95,10 @@ return require('packer').startup(function(use)
     'SirVer/ultisnips',
     config = function() require('plugins.ultisnips') end
   }
-  use 'kosayoda/nvim-lightbulb'
+  use {
+    'kosayoda/nvim-lightbulb',
+    requires = 'antoinemadec/FixCursorHold.nvim'
+  }
   use { 'lewis6991/gitsigns.nvim',
     config = function() require('plugins.gitsigns') end }
 

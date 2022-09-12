@@ -7,6 +7,9 @@
 
 # server options
 
+# set-option -g lock-after-time 300
+# set-option -g lock-command "another time" "tty-clock -Scd 100000000 -C 4"
+
 set-option -g @theme default
 
 set-option -as terminal-overrides \
@@ -36,6 +39,8 @@ set-option -g display-time  5000
 set-option -g display-panes-time 20000
 set-option -g history-limit 20000
 set-option -g message-limit 10000
+
+set-option -g mouse on
 
 # Mouse Support
 if-shell '[ $(echo "$TMUX_VERSION < 2.1" | bc) = 1 ]' \

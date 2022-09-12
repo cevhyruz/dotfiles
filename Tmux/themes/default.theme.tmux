@@ -190,14 +190,11 @@ set-option -g status-format[1] \
 "}"
 
 set-option -g pane-border-status "off"
-
-#[fg=white] [#{pane_index}]#[default fg=red] #{pane_title}
-
 set-option -g pane-border-format ""
 
 set-option -g pane-border-lines "heavy"
 set-option -g pane-border-style "fg=#333333,bg=#222222"  # terminalbg
-set-option -g pane-active-border-style "fg=#333333,bg=#1E1E1E"
+set-option -g pane-active-border-style "fg=#333333,bg=#222222"
 
 set-option -g window-style        "bg=#222222"
 set-option -g window-active-style "bg=#1E1E1E"

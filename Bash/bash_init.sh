@@ -8,9 +8,6 @@
 # shellcheck source=/dev/null
 
 # shellcheck disable=SC2034
-source "${DOT_BASH}/lib/util.bash" && {
-  declare -ag LOADER_STACK=("_home_devs_Projects_dotfiles_Bash_lib_util_bash")
-}
 
 for file in "${DOT_BASH}/lib"/*; do
  source "${file}"
@@ -19,12 +16,12 @@ done
 
 # initliaze configurations.
 for file in "${DOT_BASH}/core"/*; do
-  source "${file}"
+ source "${file}"
 done
 
 # ordered
 for file in "${DOT_BASH}/plugins"/*; do
-  source "${file}"
+ source "${file}"
 done
 
 #_::source_files_from "${DOT_BASH}/aliases"
