@@ -1,15 +1,30 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034,SC2207,SC2181,SC2154
 #
 # A Git wrapper so illegal, it should be awesome!
 
+# shellcheck disable=SC2034,SC2207,SC2181,SC2154
 _::command_exists "git" || return 0
+
+# @FIXME: move this to the Git wrapper call to reduce Bash startup time.
+git_alias_funcs=($(
+  grep --extended-regexp --only-matching 'function[[:space:]]+[[:alnum:]_]+' \
+    "${git_alias_path}/.gitalias.bash" | awk '{ print $2 }'
+))
 
 function git() {
   local method="${1:-}"
-  local exit_code
+  local -r git_alias="${git_alias_path}/.gitalias.bash"
 
-  load "${GIT_ALIAS:-${HOME}/.config/git}/.gitalias.bash"
+  function unload() {
+    for declaration in "${git_alias_funcs[@]}"; do
+      unset -f "$declaration"
+    done
+    unset -v declaration git_alias_funcs
+    unset -f unload
+  }
+
+  source "$git_alias" \
+    || echo "failed loading '${git_alias}'"
 
   if [[ -z "${method}" ]]; then
     unload
@@ -17,35 +32,17 @@ function git() {
     return $?
   fi
 
+  # git aliases
   if declare -F "${method}" &> /dev/null; then
-    echo "    This is from aliases"
     shift
-    "${method}" "$@"
+    "${method}"
     exit_code=$?
     unload
     return $exit_code
   fi
 
+  # actual git command
   unload
-    echo "    This is from git"
   command git "$@" \
     || printf "\n%s\n" "Similar alias loaded from Git/.gitalias.bash:"
 }
-
-function load() {
-  local file="$1"
-  local namespace="${file//[\/\.]/\_}"
-
-  source "${file}" || return
-
-  declare -ag  _git_func=($(
-    grep -Eo 'function[[:space:]]+[[:alnum:]_]+' "${file}" | awk '{ print $2 }'
-  ))
-}
-
-function unload() {
-  for entry in "${_git_func[@]}"; do
-    declare -f $entry
-  done
-}
-
