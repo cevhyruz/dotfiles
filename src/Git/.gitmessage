@@ -1,4 +1,11 @@
-#    RULE OF THE THUMB:
-#
-#    Limit the subject line to 50 characters --->
-#    Wrap the body at 72 characters ---------------------------------->
+# ╭────────────────────────────────────────────────────────────────────────╮
+# │  💡 RULE OF THE THUMB 💡                                               │
+# │                                                                        │
+# │   1)  Title: Summary, imperative, start upper case, no period.         │
+# │       No more than 50 characters.                                      │
+# │   2)  Single blank line between title and body.                        │
+# │   3)  Body: Explain *what* and *why* (not *how*), include references.  │
+# │       Wrap at 72 characters.                                           │
+# │   4)  Include 'Co-authored-by' for contributions.                      │
+# │   5)  Single blank line to separate the body and contributions.        │
+# ╰────────────────────────────────────────────────────────────────────────╯
