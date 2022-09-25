@@ -5,15 +5,13 @@
 
 _::command_exists "git" || return 0
 
-# @FIXME: move this to the Git wrapper call to reduce Bash startup time.
-git_alias_funcs=($(
-  grep --extended-regexp --only-matching 'function[[:space:]]+[[:alnum:]_]+' \
-    "${git_alias_path}/.gitalias.bash" | awk '{ print $2 }'
-))
-
 function git() {
   local method="${1:-}"
-  local -r git_alias="${git_alias_path}/.gitalias.bash"
+  local git_alias="${git_alias_path}/.gitalias.bash"
+  local git_alias_funcs=($(
+    bash -c ". $git_alias; declare -F" \
+      | awk '{ print $3 }'
+  ))
 
   function unload() {
     for declaration in "${git_alias_funcs[@]}"; do
@@ -23,26 +21,23 @@ function git() {
     unset -f unload
   }
 
-  source "$git_alias" \
-    || echo "failed loading '${git_alias}'"
+  source "$git_alias" || echo "failed loading '${git_alias}'"
+  trap "trap RETURN && unload" RETURN
 
+  # just an empty git command
   if [[ -z "${method}" ]]; then
-    unload
     command git
     return $?
   fi
 
   # git aliases
   if declare -F "${method}" &> /dev/null; then
-    shift
-    "${method}" "$@"
+    shift && "${method}" "$@"
     exit_code=$?
-    unload
     return $exit_code
   fi
 
   # actual git command
-  unload
   command git "$@" \
     || printf "\n%s\n" "Similar alias loaded from Git/.gitalias.bash:"
 }
