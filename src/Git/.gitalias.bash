@@ -8,7 +8,7 @@ function amend() { command git commit --amend --no-edit; }
 function undo() { command git reset HEAD~1 --quiet --mixed; }
 function unstage() { command git reset HEAD --quiet -- "$@"; }
 function discard() { command git checkout --quiet "$@"; }
-function contrib() { command git shortlog --summary --numbered; }
+function contrib() { command git shortlog --summary --numbered | cat; }
 
 function s() {
   if _::command_exists "tig"; then
