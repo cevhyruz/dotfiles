@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034,SC2207,SC2181,SC2154
 #
 # A Git wrapper so illegal, it should be awesome!
 
-# shellcheck disable=SC2034,SC2207,SC2181,SC2154
 _::command_exists "git" || return 0
 
 # @FIXME: move this to the Git wrapper call to reduce Bash startup time.
@@ -19,7 +19,7 @@ function git() {
     for declaration in "${git_alias_funcs[@]}"; do
       unset -f "$declaration"
     done
-    unset -v declaration git_alias_funcs
+    unset -v declaration
     unset -f unload
   }
 
@@ -35,7 +35,7 @@ function git() {
   # git aliases
   if declare -F "${method}" &> /dev/null; then
     shift
-    "${method}"
+    "${method}" "$@"
     exit_code=$?
     unload
     return $exit_code
