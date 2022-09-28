@@ -36,7 +36,6 @@ bind-key -T root MouseDown3Pane {
 }
 bind-key -T copy-mode-vi MouseDown3Pane {
   select-pane -t=
-    display "#{context}"
   context-menu-mouse
 }
 

@@ -115,7 +115,7 @@ bind-key -n C-\\ {
 bind-key 'r' {
   refresh-client -S
   source-file "${DOT_TMUX}/tmux.conf"
-  display "reloaded"
+  # display "reloaded"
 }
 
 # split panes should start from CWD.
@@ -184,8 +184,4 @@ bind-key -T copy-mode-vi y {
   }
   # display "#{selection}"
   # set-buffer -n"clipboard" "#{}"
-
-  if-shell -F "#{e|>:#{E:__y},2}" {
-    display-message "#{E:__y} lines yanked"
-  }
 }

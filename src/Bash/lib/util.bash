@@ -114,7 +114,7 @@ function _::command_exists() {
 
   _group "helpers"
 
-  local cmd="$1"
+  local cmd="${1:-}"
   if command -v "${cmd}" &>/dev/null; then
     return 0
   fi

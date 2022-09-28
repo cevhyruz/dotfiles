@@ -1,55 +1,4 @@
 # vim: ft=tmux fdm=marker
-#
-# description: modal statusbar theme
-
-# Modal statusbar fill (readonly|normal|copy|prefix). {{{1
-# user options:
-#   @prefix-mode-fill   [colour]
-#   @copy-mode-fill     [colour]
-#   @normal-mode-fill   [colour]
-#   @readonly-mode-fill [colour]
-#
-%hidden _status_client_mode_fill=\
-"#{?client_readonly,"\
-"#{@readonly-mode-fill},"\
-"#{?client_prefix,"\
-"#{@prefix-mode-fill},"\
-"#{?pane_in_mode,"\
-"#{@copy-mode-fill},"\
-"#{@normal-mode-fill}}}}"
-
-# segment A style
-%hidden _segment_a_style=\
-"#{?client_readonly,"\
-"#{@readonly-status-comp-a-style},"\
-"#{?client_prefix,"\
-"#{@prefix-status-comp-a-style},"\
-"#{?pane_in_mode,"\
-"#{@copy-status-comp-a-style},"\
-"#{@normal-status-comp-a-style}}}"\
-"}"
-
-# segment B style
-%hidden _segment_b_style=\
-"#{?client_readonly,"\
-"#{@readonly-status-comp-b-style},"\
-"#{?client_prefix,"\
-"#{@prefix-status-comp-b-style},"\
-"#{?pane_in_mode,"\
-"#{@copy-status-comp-b-style},"\
-"#{@normal-status-comp-b-style}}}"\
-"}"
-
-# segment C style
-%hidden _segment_c_style=\
-"#{?client_readonly,"\
-"#{@readonly-status-comp-c-style},"\
-"#{?client_prefix,"\
-"#{@prefix-status-comp-c-style},"\
-"#{?pane_in_mode,"\
-"#{@copy-status-comp-c-style},"\
-"#{@normal-status-comp-c-style}}}"\
-"}"
 
 # choose-window, session, tree
 set-option -g @tree-window-style            'fg=orange'
@@ -62,52 +11,10 @@ set-option -g @tree-session-style           'fg=colour203'
 set-option -g @tree-pane-active-flag        '*'
 set-option -g @tree-pane-active-flag-style  'fg=colour35'
 
-# buffers
-set-option -g @buffer-sample-style 'fg=colour35'
-
-set-option -g @buffer-space-alignment 1
-
-# there is no way to know the size of a glyph
-set-option -g @buffer-glyph-count 2
-set-option -g @buffer-format ""
-# set-option -g @buffer-format "#{_day} #{_date} #{_time}"
-
-# menubars - - - - - - - - - - - - - - - - - - - -
-
-# modal styles
-set -g @prefix-mode-fill   "colour24"
-set -g @copy-mode-fill     "colour94"
-set -g @normal-mode-fill   "colour236"
-set -g @readonly-mode-fill "colour124"
-
-set-option -g @glyph-style "bold,fg=colour202"
-set-option -g @separator-style "bold,fg=colour234"
-
-set-option -gF status-style   "bg=#{@normal-mode-fill},fg=colour247"
-set-option -g  @status1-bg "colour234"
-
-# segments style
-set-option -g  @readonly-status-comp-a-style "bold,bg=colour210,fg=colour124"
-set-option -g  @readonly-status-comp-b-style "default,bg=colour196,fg=colour253"
-set-option -gF @readonly-status-comp-c-style "default,bg=#{@readonly-mode-fill},fg=colour203"
-
-set-option -g  @normal-status-comp-a-style "bold,bg=colour253,fg=colour240"
-set-option -g  @normal-status-comp-b-style "default,bg=colour240,fg=colour231"
-set-option -gF @normal-status-comp-c-style "default,bg=#{@normal-mode-fill},fg=colour248"
-
-set-option -g  @prefix-status-comp-a-style "bold,bg=colour117,fg=colour23"
-set-option -g  @prefix-status-comp-b-style "default,bg=colour31,fg=colour231"
-set-option -gF @prefix-status-comp-c-style "default,bg=#{@prefix-mode-fill},fg=cyan"
-
-set-option -g  @copy-status-comp-a-style   "bold,bg=colour185,fg=colour94"
-set-option -g  @copy-status-comp-b-style   "default,bg=colour136,fg=colour231"
-set-option -gF @copy-status-comp-c-style   "bg=#{@copy-mode-fill},fg=colour180"
-
-# modal command prompt styles
 set-option -g message-style         "bg=colour234,fg=cyan"
 set-option -g message-command-style "bg=colour234"
 
-set-option -g pane-mode-changed[42] 'set -g message-style fg=orange'
+set-option -g status-style "bg=colour235,fg=colour247"
 
 # component styles
 set-option -g @day-mode-style    "short"
@@ -115,88 +22,66 @@ set-option -g @month-mode-style  "long"
 set-option -g @day-weekend-style "bold,fg=colour203"
 set-option -g @day-weekday-style "default"
 
-# _window_list styles
-set-option -g status-justify "centre"
-set-option -gF window-status-current-style "bg=colour237,fg=colour250"
-set-option -g window-status-style "bg=colour235,fg=colour245"
+set-option -g clock-mode-style   12
 
-# window status format
-set-option -gF window-status-separator '#[fg=colour238, bold]│'
+set-option -g mode-style 'bg=colour237 fg=colour250'
+
+# window status
+set-option -g status-justify              "left"
+set-option -g window-status-current-style "bg=colour239,fg=colour232"
+set-option -g window-status-style         "bg=colour236,fg=colour248"
+set-option -g window-status-separator     ""
 
 set-option -g window-status-format \
-"#[push-default bold,fg=cyan] #I#[pop-default default]: "\
-"#W "\
-"#{?#{==:#F,}, ,#F} "
+"#[push-default fg=colour235]"\
+"#[fg=cyan]  #I"\
+"#[pop-default default]: #W #{?#{==:#F,}, ,#F}  "\
+"#[bg=colour235 fg=colour236]"
 
 set-option -g window-status-current-format \
-"#[push-default bold,fg=cyan] #I#[pop-default default]: "\
-"#W "\
-"#{?#{==:#F,}, ,#F} "
+"#[push-default bg=colour239 fg=colour235]"\
+"#[fg=colour232]  #I"\
+"#[pop-default default]: #W #{?#{==:#F,}, ,#F}  "\
+"#[fg=colour239 bg=colour235]"
 
-set-option -g  status-left-length  70
-# set-option -gF status-left \
-# "#[#{_segment_a_style}] #{_pane_mode} #[reverse]#{@pl-separator-right}"\
-# "#[#{_segment_b_style}] #{_pwd_tilde} "\
-# "#[#{_segment_c_style}] #{@pl-code-branch} (#{_git_branch}) #{_git_latest_commit} #{@pl-thin-separator-right} "
+# status length
+set-option -g status-left-length  40
+set-option -g status-right-length 100
 
-set-option -gF status-left \
-"#[#{_segment_a_style}] #{b:socket_path} "\
-"#[#{_segment_b_style}] #S:#{session_windows} #[reverse]"\
-"#[#{_segment_c_style}]    #{_permission}"\
-"#[#{_segment_c_style}] #{@pl-thin-separator-right} #{_pwd_tilde} "\
+# status-style
+set-option -g status-right-style "default"
+set-option -g status-left-style "default"
 
-set-option -g  status-right-length 100
-# set-option -gF status-right \
-# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{?#{==:#{E:_has_headset},connected},#{@fa-headphones} headphones,#{@fa-volume} speaker}"\
-# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{@fa-wifi} #{@fa-no-wifi} #{_wifi_ssid}"\
-# "#[#{_segment_c_style}] #{@pl-thin-separator-left} #{_user}@#{host} "\
-# "#[#{_segment_b_style}] #{_day} #{_date} "\
-# "#[#{_segment_a_style}] #{_time} "\
+# live process icon colors
+set-option -g @process_enabled  "bold fg=colour231"
+set-option -g @process_disabled "bold fg=colour234"
 
-set-option -gF status-right \
-"#[#{_segment_c_style},bold] #{@fa-wifi} #{@fa-headphones}        "\
-"#[#{_segment_c_style}] #{@pl-thin-separator-left}#{client_user}@#{host} "\
-"#[#{_segment_b_style}] #{_day} #{_date} "\
-"#[#{_segment_a_style}] #{_time} "\
 
-# status format {{{1
+set-option -g status-left \
+"[#S] #{E:current_path}"\
+
+# status left/right
+set-option -g status-right \
+"#{E:_selection}   "\
+"#{E:wlan0_icon} #{E:sound} #{E:win_drive}  "\
+"#{E:_date} #{E:_time}"
+
 set-option -g status-format[0] \
-"#{?client_readonly,"\
-"#[fg=colour203]#{@fa-lock} client is in readonly mode. Press <#{prefix}> + R to toggle."\
-","\
+"#{?client_readonly,#[fg=colour203]#{E:@fa-lock} "\
+"readonly mode. Press <#{prefix}> + R to toggle.,"\
 "#{E:_status_left_format}"\
 "#[fill=#{E:_status_client_mode_fill}]"\
 "#{E:_status_right_format}"\
 "}"
 
+%hidden mpris=\
+"#[push-default fg=colour236]M#[fg=colour237]P#[fg=colour238]R"\
+"#[fg=colour239]I#[fg=colour240]S#[fg=colour241]_"\
+"#[fg=colour242]#{=40:#{s/\s/_:#{E:mpris_title}}}#[pop-default default]"\
+"#[push-default default]#[fg=colour241]_#[fg=colour241]P#[fg=colour240]L"\
+"#[fg=colour239]A#[fg=colour238]Y#[fg=colour237]E#[fg=colour236]R"\
+"#[pop-default default]"
+
 set-option -g status-format[1] \
-"#[fill=#{@status1-bg} align=left] #{E:@fa-th-large} #{E:_window_list}"\
-"#[nolist push-default align=right fg=colour242]"\
-"#{T;=/#{@status-right-1-length}:"\
-"#{_selection}"\
-"}"
-
-# pane-border-*
-set-option -g pane-border-format       "#{E:_pane_border_format}"
-
-set-option -g pane-border-lines        "heavy"
-set-option -g pane-border-status       "off" # (top|bottom)
-set-option -g pane-border-style        "fg=#333333,bg=#222222"
-set-option -g pane-active-border-style "fg=#333333,bg=#222222"
-
-# overrides
-set-option -g @pane-title-position "right" # (left=right)
-set-option -g @pane-title          "testigo daw"
-set-option -g @pane-title-style    "bold, fg=red"
-
-set-option -g @pane-border-modal "on" #(on|off)
-
-set-option -g window-style        "bg=#222222"
-set-option -g window-active-style "bg=#1E1E1E"
-
-set-option -g clock-mode-style   12
-set-option -g status 2
-set-option -g status-justify centre
-
-
-set-option -g mode-style 'bg=colour237 fg=colour250'
+"#[align=right]#{E:mpris}"\
+"#{E:_window_list}"

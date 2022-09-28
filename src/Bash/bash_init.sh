@@ -9,32 +9,18 @@
 
 # shellcheck disable=SC2034
 
-for file in "${DOT_BASH}/lib"/*; do
- source "${file}"
-# echo "$file"
+# If not running interactively, don't do anything
+
+# Bootstrap runtime files.
+# @TODO: write a utility function for dotfiles to print where does a certain
+# function/alias is coming from.
+
+declare -a runtime=(
+  "${DOT_BASH}"/{lib,core,plugins,aliases,functions,themes/${dotbash_theme}}/*
+  "${DOTFILES}/localrc/localrc.bash"
+)
+
+for config in "${runtime[@]}"; do
+  source "${config}"
 done
-
-# initliaze configurations.
-for file in "${DOT_BASH}/core"/*; do
- source "${file}"
-done
-
-# ordered
-for file in "${DOT_BASH}/plugins"/*; do
- source "${file}"
-done
-
-#_::source_files_from "${DOT_BASH}/aliases"
-for file in "${DOT_BASH}/aliases"/*; do
-  source "${file}"
-done
-
-for file in ${file} "${DOT_BASH}/functions"/*; do
-  source "$file"
-done
-
-source "${DOT_BASH}/themes/default.theme.bash"
-
-# local config file.
-# source "${DOT_BASH}/.bashrc.local"
-unset file
+unset config

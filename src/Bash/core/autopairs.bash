@@ -3,10 +3,9 @@
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
 # original version from https://github.com/nkakouros-original/bash-autopairs
-#
-# changes were the ff:
-# * smart spaces
-# * no pairing for literals
+
+# @TODO: press ] will jump to next
+# if pairs has no content and has spaced pairs remove spaced pairs
 
 __pairs=( "''" '""' '()' '[]' '{}')
 

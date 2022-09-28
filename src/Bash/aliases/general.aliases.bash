@@ -13,7 +13,9 @@ alias scriptinfo="grep -Eow 'function[[:space:]]+[[:alnum:]_]+'"
 # prompt whether to remove destinations.
 alias ln="ln --interactive "
 
-#  time scriptinfo "${DOT_BASH}/plugins/fzf.plugin.bash" | awk '{print $2}'
+# print functions declaration in a script.
+# usage: /path/where/file/is.file | scriptinfo
+alias scriptinfo="grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)'"
 
 # going home.
 alias home='cd ${HOME}'
@@ -47,10 +49,6 @@ fi
 
 # print which spawns the current shell session.
 alias parent='ps --no-headers -o comm "${PPID}"'
-
-# list files with TODO: and FIXME: notation
-alias todo="grep --recursive 'TOD[O]: '"
-alias fixme="grep --recursive 'FIXM[E]: '"
 
 # quit shell session.
 alias q="exit"

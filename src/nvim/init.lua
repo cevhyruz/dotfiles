@@ -9,6 +9,7 @@ end
 
 require('user.abbrev')
 require('user.scroll')
+require('user.mkdir')
 require('core.statusline')
 require('user.packages')
 require('lsp')

@@ -4,10 +4,21 @@
 # ----------------------------------------------------------------------
 
 set editing-mode vi
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[38;5;014m\e[3 q\2
+set vi-cmd-mode-string \1\e[38;5;014m\e[2 q\2
 
-$if bash
-  $include /home/devs/Projects/dotfiles/readline/surround
-$endif
+$include /home/devs/Projects/dotfiles/src/readline/surround
+
+set keymap vi-insert
+"kj": vi-movement-mode
+set keymap vi-command
+"K": history-search-backward
+"J": history-search-forward
+"qa": start-kbd-macro
+"q":  end-kbd-macro
+".":  call-last-kbd-macro
+"z":  print-last-kbd-macro
 
 # allow UTF-8 input and output instead of showing
 # an ugly stuff like $'\0123\0456'.
@@ -20,11 +31,8 @@ set colored-completion-prefix on
 set completion-display-width 1
 set completion-prefix-display-length 3
 
-# set show-all-if-ambiguous on
-# set completion-ignore-case on
-#
 # do not bell on tab-completion (default: audible)
-set bell-style none
+set bell-style audible
 
 # append slash for completed names which are symlink to directories.
 set  mark-symlinked-directories   on
@@ -45,10 +53,3 @@ set  completion-map-case          on
 # ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
 # Readline used by Bash 4.)
 set  skip-completed-text          on
-
-# displays common prefix of the list of possible
-# completions (before cycling through the list).
-set  menu-complete-display-prefix on
-
-# duration for ambiguous characters (default: 500)
-set keyseq-timeout 3000

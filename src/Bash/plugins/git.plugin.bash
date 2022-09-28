@@ -8,10 +8,7 @@ _::command_exists "git" || return 0
 function git() {
   local method="${1:-}"
   local git_alias="${git_alias_path}/.gitalias.bash"
-  local git_alias_funcs=($(
-    bash -c ". $git_alias; declare -F" \
-      | awk '{ print $3 }'
-  ))
+  local git_alias_funcs=($( bash -c ". $git_alias; declare -F" ))
 
   function unload() {
     for declaration in "${git_alias_funcs[@]}"; do
