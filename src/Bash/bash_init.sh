@@ -9,8 +9,6 @@
 
 # shellcheck disable=SC2034
 
-# If not running interactively, don't do anything
-
 # Bootstrap runtime files.
 # @TODO: write a utility function for dotfiles to print where does a certain
 # function/alias is coming from.
