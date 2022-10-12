@@ -33,7 +33,6 @@ function pyenv() {
 
 function main() {
   export PYENV_SHELL='bash'
-  source "${PYENV_ROOT}/completions/pyenv.bash"
 
   _::add_to_path "${PYENV_ROOT}/bin"
   _::add_to_path "${PYENV_ROOT}/shims"
