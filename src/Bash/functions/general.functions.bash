@@ -118,3 +118,14 @@ function terminfo() {
   echo
   echo -e "\e[4:3mcurvy underline"
 }
+
+# https://github.com/LukeSmithxyz/mutt-wizard/issues/769
+function email_milbox_name_query() {
+  login="johnfred.fadrigalan@hotmail.com"
+  fulladdr="johnfred.fadrigalan@hotmail.com"
+  # fulladdr=<your_protocol>
+  imap="imap-mail.outlook.com"
+  iport="993"
+  curl --location-trusted -s -m 5 \
+    --user "$login:$(pass "$fulladdr")" --url "${protocol:-imaps}://$imap:${iport:-993}"
+}
