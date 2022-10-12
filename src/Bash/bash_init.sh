@@ -16,9 +16,13 @@
 # function/alias is coming from.
 
 declare -a runtime=(
-  "${DOT_BASH}"/{lib,core,plugins,aliases,functions,themes/${dotbash_theme}}/*
+  "${DOT_BASH}"/{lib,core,plugins,aliases,functions,completions,themes/${dotbash_theme}}/*
   "${DOTFILES}/localrc/localrc.bash"
 )
+
+if [[ -f ~/Projects/forked-repo/bash-completion/bash_completion ]]; then
+  runtime+=(/usr/share/bash-completion/bash_completion)
+fi
 
 for config in "${runtime[@]}"; do
   source "${config}"
