@@ -30,7 +30,7 @@ bind-key -N "Clear the marked pane" M { select-pane -M }
 bind-key -N "Prompt for window index to select" "'" { command-prompt -T window-target -pindex { select-window -t ':%%' } }
 bind-key -N "Switch to previous client" ( { switch-client -p }
 bind-key -N "Switch to next client" ) { switch-client -n }
-bind-key -N "Kill current window" & { confirm-before -p"kill-window #W? (y/n)" kill-window }
+bind-key -N "Kill current window" & { confirm-before -p "kill-window #W? (y/n)" kill-window }
 bind-key -N "Rename current session" '$' { command-prompt -I'#S' { rename-session -- '%%' } }
 bind-key -N "List all paste buffers" '#' { list-buffers }
 bind-key -N "Break pane to a new window" ! { break-pane }
@@ -61,7 +61,7 @@ bind-key -N "Select the previous window" 'p' {
 if-shell -F "#{e|>:#{session_windows},1}" {
     previous-window
     set-environment -hF _message ""
-  } {
+} {
     set-environment -hF _message "No previous window"
   }
 }
@@ -101,8 +101,8 @@ bind-key -N "Toggle synchronize pane for all panes in window" y {# {{{
   }
 }
 
-bind-key -N "reload and redraw tmux" r {
-  refresh-client
+bind-key -N "Reload and redraw tmux" r {
+  refresh-client -S
   source-file "${DOT_TMUX}/tmux.conf"
   set-environment -hF _message "tmux.conf reloaded"
 }
@@ -113,6 +113,15 @@ bind-key -N "Split window verticaly" '"' { split-window -vc "#{pane_current_path
 # ------------------------------
 # Root keys
 # ------------------------------
+
+bind-key -N "" -T root 'C-y' {
+  if-shell -F "#{E:IS_VIM}" {
+    send-keys C-y
+  } {
+    copy-mode -e
+    send-keys -X -N 3 scroll-up
+  }
+}
 
 bind-key -N "Go to left pane" -T root C-h {
   refresh-client -S
@@ -162,10 +171,88 @@ bind-key -N "Go to previous pane" -T root C-\\ {
     last-pane
   }
 }
+
 # ------------------------------
-# Copy-mode keys
+# Copy-mode-vi keys
 # ------------------------------
 
+unbind -aT copy-mode-vi
+
+bind -T copy-mode-vi C-c { send -X cancel }
+bind -T copy-mode-vi '#' { send -FX search-backward '#{copy_cursor_word}' }
+bind -T copy-mode-vi * { send -FX search-forward '#{copy_cursor_word}' }
+bind -T copy-mode-vi Escape { send -X clear-selection }
+bind -T copy-mode-vi '$' { send -X end-of-line }
+bind -T copy-mode-vi , { send -X jump-reverse }
+bind -T copy-mode-vi \; { send -X jump-again }
+bind -T copy-mode-vi : { command-prompt -p'(goto line)' { send -X goto-line '%%' } }
+bind -T copy-mode-vi '/' { command-prompt -T search -p '/' { send -X search-forward '%%' } }
+bind -T copy-mode-vi ? { command-prompt -T search -p'?' { send -X search-backward '%%' } }
+bind -T copy-mode-vi 0 { send -X start-of-line }
+bind -T copy-mode-vi 1 { command-prompt -Np'(repeat)' -I1 { send -N '%%' } }
+bind -T copy-mode-vi 2 { command-prompt -Np'(repeat)' -I2 { send -N '%%' } }
+bind -T copy-mode-vi 3 { command-prompt -Np'(repeat)' -I3 { send -N '%%' } }
+bind -T copy-mode-vi 4 { command-prompt -Np'(repeat)' -I4 { send -N '%%' } }
+bind -T copy-mode-vi 5 { command-prompt -Np'(repeat)' -I5 { send -N '%%' } }
+bind -T copy-mode-vi 6 { command-prompt -Np'(repeat)' -I6 { send -N '%%' } }
+bind -T copy-mode-vi 7 { command-prompt -Np'(repeat)' -I7 { send -N '%%' } }
+bind -T copy-mode-vi 8 { command-prompt -Np'(repeat)' -I8 { send -N '%%' } } bind -T copy-mode-vi 9 { command-prompt -Np'(repeat)' -I9 { send -N '%%' } }
+bind -T copy-mode-vi A { send -X append-selection-and-cancel }
+bind -T copy-mode-vi B { send -X previous-space }
+bind -T copy-mode-vi D { send -X copy-pipe-end-of-line-and-cancel }
+bind -T copy-mode-vi E { send -X next-space-end }
+bind -T copy-mode-vi F { command-prompt -1p'(jump backward)' { send -X jump-backward '%%' } }
+bind -T copy-mode-vi G { send -X history-bottom }
+bind -T copy-mode-vi H { send -X top-line }
+bind -T copy-mode-vi J { send -X scroll-down }
+bind -T copy-mode-vi K { send -X scroll-up }
+bind -T copy-mode-vi L { send -X bottom-line }
+bind -T copy-mode-vi M { send -X middle-line }
+bind -T copy-mode-vi N { send -X search-reverse }
+bind -T copy-mode-vi P { send -X toggle-position }
+bind -T copy-mode-vi T { command-prompt -1p'(jump to backward)' { send -X jump-to-backward '%%' } }
+bind -T copy-mode-vi V { send -X select-line }
+bind -T copy-mode-vi W { send -X next-space }
+bind -T copy-mode-vi X { send -X set-mark }
+bind -T copy-mode-vi ^ { send -X back-to-indentation }
+bind -T copy-mode-vi b { send -X previous-word }
+bind -T copy-mode-vi e { send -X next-word-end }
+bind -T copy-mode-vi f { command-prompt -1p'(jump forward)' { send -X jump-forward '%%' } }
+bind -T copy-mode-vi g { send -X history-top }
+bind -T copy-mode-vi h { send -X cursor-left }
+bind -T copy-mode-vi j { send -X cursor-down }
+bind -T copy-mode-vi k { send -X cursor-up }
+bind -T copy-mode-vi z { send -X scroll-middle }
+bind -T copy-mode-vi l { send -X cursor-right }
+bind -T copy-mode-vi n { send -X search-again }
+bind -T copy-mode-vi o { send -X other-end }
+bind -T copy-mode-vi q { send -X cancel }
+bind -T copy-mode-vi r { send -X refresh-from-pane }
+bind -T copy-mode-vi t { command-prompt -1p'(jump to forward)' { send -X jump-to-forward '%%' } }
+bind -T copy-mode-vi v { send -X rectangle-toggle }
+bind -T copy-mode-vi w { send -X next-word }
+bind -T copy-mode-vi '{' { send -X previous-paragraph }
+bind -T copy-mode-vi '}' { send -X next-paragraph }
+bind -T copy-mode-vi % { send -X next-matching-bracket }
+bind -T copy-mode-vi Home { send -X start-of-line }
+bind -T copy-mode-vi End { send -X end-of-line }
+bind -T copy-mode-vi MouseDown1Pane { select-pane }
+bind -T copy-mode-vi MouseDrag1Pane { select-pane; send -X begin-selection }
+bind -T copy-mode-vi MouseDragEnd1Pane { send -X copy-pipe-and-cancel }
+bind -T copy-mode-vi WheelUpPane { select-pane; send -N5 -X scroll-up }
+bind -T copy-mode-vi WheelDownPane { select-pane; send -N5 -X scroll-down }
+bind -T copy-mode-vi DoubleClick1Pane { select-pane; send -X select-word; run -d0.3; send -X copy-pipe-and-cancel }
+bind -T copy-mode-vi TripleClick1Pane { select-pane; send -X select-line; run -d0.3; send -X copy-pipe-and-cancel }
+bind -T copy-mode-vi BSpace { send -X cursor-left }
+bind -T copy-mode-vi NPage { send -X page-down }
+bind -T copy-mode-vi PPage { send -X page-up }
+bind -T copy-mode-vi Up { send -X cursor-up }
+bind -T copy-mode-vi Down { send -X cursor-down }
+bind -T copy-mode-vi Left { send -X cursor-left }
+bind -T copy-mode-vi Right { send -X cursor-right }
+bind -T copy-mode-vi M-x { send -X jump-to-mark }
+bind -T copy-mode-vi C-Up { send -X scroll-up }
+bind -T copy-mode-vi C-Down { send -X scroll-down }
 
 # copy-mode navigation.
 bind-key -T copy-mode-vi 'C-h' {
@@ -245,15 +332,6 @@ bind-key -T copy-mode-vi 'C-y' {
   send-keys -X -N 3 scroll-up
   if-shell -F "#{selection_active}" {
     send-keys -X -N 3 cursor-down
-  }
-}
-
-bind-key -N "" -T root 'C-y' {
-  if-shell -F "#{E:IS_VIM}" {
-    send-keys C-y
-  } {
-    copy-mode -e
-    send-keys -X -N 3 scroll-up
   }
 }
 
