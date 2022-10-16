@@ -22,7 +22,7 @@ function main() {
 function lazyload_nvm() {
   for func in nvm node npm npx; do
     eval "function $func() {
-      local NVIM_DIR=$NVM_DIR
+      local NVM_DIR=$NVM_DIR
       unset -f $func
       load_nvm_normally
       \\$func \"\$@\"
