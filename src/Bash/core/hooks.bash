@@ -28,7 +28,7 @@ function __post_command() {
   eval "${POST_COMMAND[@]}"
 }
 
-function __init_hooks() { # something
+function __init_hooks() {
   declare -a PRE_COMMAND=()
   declare -a POST_COMMAND=()
 

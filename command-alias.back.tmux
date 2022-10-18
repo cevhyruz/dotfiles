@@ -1,49 +1,54 @@
 # vi:ft=tmux fdm=marker
 
-set-option -ugq command-alias
+set-option -g command-alias[0] split-pane="split-window -vc '#{pane_current_path}'"
+set-option -g command-alias[1] splitp="split-window -vc '#{pane_current_path}'"
+set-option -g command-alias[2] server-info="show-messages -JT"
+set-option -g command-alias[3] info="show-messages -JT"
+set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
+set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
 
-set-option -g command-alias split-pane="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias splitp="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias server-info="show-messages -JT"
-set-option -ag command-alias info="show-messages -JT"
-set-option -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
-set-option -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
-
-set-option -ag command-alias choose-tree=\
+set-option -g command-alias[6] choose-tree=\
 "choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -ag command-alias choose-buffer=\
+set-option -g command-alias[7] choose-buffer=\
 "choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -ag command-alias vsplit="split-window -hc '#{pane_current_path}'"
-set-option -ag command-alias split="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias popup="display-popup -EE -d '#{pane_current_path}'"
-set-option -ag command-alias neww="new-window -c '#{pane_current_path}'"
+set-option -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"
+set-option -g command-alias[9] split="split-window -vc '#{pane_current_path}'"
+set-option -g command-alias[10] popup="display-popup -EE -d '#{pane_current_path}'"
+set-option -g command-alias[11] neww="new-window -c '#{pane_current_path}'"
 
-set-option -ag command-alias reload="source-file ${DOT_TMUX}/tmux.conf"
-set-option -ag command-alias version='display-message "#{version}"'
+set-option -g command-alias[12] reload="source-file ${DOT_TMUX}/tmux.conf"
+set-option -g command-alias[13] version='display-message "#{version}"'
+set-option -g command-alias[14] checkhealth='display-message "#{version}"'
 
-set-option -ag command-alias set-theme=\
-' command-prompt -p "(theme):" {      '\
-'   set-option -sg @theme "%%";       '\
-'   source-file ${DOT_TMUX}/tmux.conf '\
-' }'
+# set current theme.
+# user-options:
+#   @theme [theme name]
+set-option -g command-alias[15] set-theme=\
+'command-prompt -p "(theme):" { '\
+'  set-option -sg @theme "%%";'\
+'  source-file ${DOT_TMUX}/tmux.conf;'\
+'}'
 
-set-option -ag command-alias current-command="display-message '#{pane_current_command}'"
+set-option -g command-alias[16] current-command="display-message '#{pane_current_command}'"
 
 #-----------------------------------------------------------------------------
 # config.tmux
 #-----------------------------------------------------------------------------
 
 # left and right padding of menu items.
-set-option -g @menu-item-padding       2
-set-option -g @menu-separator          "│"
-set-option -g @menu-separator-style    "bold,fg=colour238"
-set-option -g @menu-link-style         "fg=cyan"
+set-option -g @menu-item-padding 2
+set-option -g @menu-separator        "│"
+set-option -g @menu-separator-style  "bold,fg=colour238"
+
+set-option -g @menu-link-style "fg=cyan"
+
 set-option -g @menu-title-active-style "bold,fg=cyan,bg=#222222"
 set-option -g @menu-title-style        "bold,fg=colour244,bg=colour234"
-set-option -g @icon-style              "fg=cyan"
-set-option -g @icon-disabled-style     "fg=colour235,bg=colour233"
+
+set-option -g @icon-style          "fg=cyan"
+set-option -g @icon-disabled-style "fg=colour235,bg=colour233"
 
 %hidden menu_1="#{E:pad}Main#{E:pad}"
 %hidden menu_2="#{E:pad}Server#{E:pad}"
@@ -65,7 +70,7 @@ set-option -g @icon-disabled-style     "fg=colour235,bg=colour233"
 "#{?#{e|<:#{line},10},#{line}, "\
 "#{?#{e|<:#{line},36},M-#{a:#{e|+:97,#{e|-:#{line},10}}},}}"
 
-set-option -g command-alias[79] choose-tree-menu=\
+set-option command-alias[90] choose-tree-menu=\
 'run-shell -C "display-menu -T\"#{E:menu_title}\" -x0 -y0 \"-\" \"\" \"\" \
 #{S: \"- #[bold fg=orange]#S \
 #{?session_attached,\
@@ -132,10 +137,16 @@ display-menu -O -t= -T" #{pane_current_command} " -x"#{popup_mouse_x}" -y"#{E:ct
 }\
 '
 
+set-option command-alias[89] confirm-menu-mouse=\
+''
+
 set-option command-alias[95] context-menu=\
 'display-menu -x"#{copy_cursor_x}" -y"#{copy_cursor_y}" \
 "#{?selection_active,,-}#{E:ctx_menu_1}" "" { } \
 "#{?selection_active,,-}#{E:ctx_menu_1}As" "" { } \
+"#{E:ctx_menu_2}" "" { } \
+"#{E:ctx_menu_2}" "" { } \
+"#{E:ctx_menu_2}" "" { } \
 "#{E:ctx_menu_2}" "" { } \
 "#{E:ctx_menu_3}" "" {
   if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" {

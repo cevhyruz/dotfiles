@@ -56,7 +56,7 @@ function dataurl() {
 # print a nice 256colors chart
 function colormap() {
   for (( i = 0; i < 256; i++ )); do
-    printf "\\e[48;5;${i}m%s" "$i"
+    printf "\e[48;5;${i}m%s" "$i"
     printf '\e[0m'
     [ ! $(( (i - 15) % 6)) -eq 0 ] && printf ' ' || printf '\n'
   done
@@ -119,13 +119,60 @@ function terminfo() {
   echo -e "\e[4:3mcurvy underline"
 }
 
-# https://github.com/LukeSmithxyz/mutt-wizard/issues/769
-function email_milbox_name_query() {
-  login="johnfred.fadrigalan@hotmail.com"
-  fulladdr="johnfred.fadrigalan@hotmail.com"
-  # fulladdr=<your_protocol>
-  imap="imap-mail.outlook.com"
-  iport="993"
-  curl --location-trusted -s -m 5 \
-    --user "$login:$(pass "$fulladdr")" --url "${protocol:-imaps}://$imap:${iport:-993}"
+# pretty print and colorize value of 'LS_COLORS'.
+function lscolors() {
+  set -f;
+  for item in ${LS_COLORS//:/ }; do
+    echo "${item%=*} [\e[${item#*=}m ${item#*=} \e[0m]";
+  done
+  set +f;
+}
+
+# print current theme palette.
+function palette() {
+  echo
+  for bg in 4 10; do
+    for (( i = 0; i < 8; i++ )); do
+      echo -en " \e[${bg}${i}m   ${reset}"
+    done
+    echo
+  done
+}
+
+function foobar() {
+  echo "$Bgblack hellow $reset"
+  echo "$Bgred hellow $reset"
+  echo "$Bggreen hellow $reset"
+  echo "$Bgyellow hellow $reset"
+  echo "$Bgblue hellow $reset"
+  echo "$Bgmagenta hellow $reset"
+  echo "$Bgcyan hellow $reset"
+  echo "$Bgwhite hellow $reset"
+  echo
+  echo "$bgblack hellow $reset"
+  echo "$bgred hellow $reset"
+  echo "$bggreen hellow $reset"
+  echo "$bgyellow hellow $reset"
+  echo "$bgblue hellow $reset"
+  echo "$bgmagenta hellow $reset"
+  echo "$bgcyan hellow $reset"
+  echo "$bgwhite hellow $reset"
+  echo
+  echo "$Fgblack hellow $reset"
+  echo "$Fgred hellow $reset"
+  echo "$Fggreen hellow $reset"
+  echo "$Fgyellow hellow $reset"
+  echo "$Fgblue hellow $reset"
+  echo "$Fgmagenta hellow $reset"
+  echo "$Fgcyan hellow $reset"
+  echo "$Fgwhite hellow $reset"
+  echo
+  echo "$fgblack hellow $reset"
+  echo "$fgred hellow $reset"
+  echo "$fggreen hellow $reset"
+  echo "$fgyellow hellow $reset"
+  echo "$fgblue hellow $reset"
+  echo "$fgmagenta hellow $reset"
+  echo "$fgcyan hellow $reset"
+  echo "$fgwhite hellow $reset"
 }

@@ -1,5 +1,6 @@
 vim.g.mapleader = ","
 
+-- vim.opt.shellcmdflag = "-ic"
 vim.opt.completeopt = { 'menu', "menuone", "noselect", }
 vim.opt.termguicolors = true
 vim.opt.shortmess:append("W")

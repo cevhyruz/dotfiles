@@ -8,7 +8,15 @@
 # Globals:
 # DOT_FZF_DEFAULT_CMD : defaults to Ag.
 
-_::command_exists "fzf" || return 0
+_::command_exists "fzf" || return
+
+# # Auto-completion
+# # ---------------
+# [[ $- == *i* ]] && source "/home/devs/Projects/forked-repo/fzf/shell/completion.bash" 2> /dev/null
+#
+# # Key bindings
+# # ------------
+# source "/home/devs/Projects/forked-repo/fzf/shell/key-bindings.bash"
 
 function __bootstrap_fzf() {
   local -ar __FZF_IGNORED_DIRS=(
@@ -41,7 +49,6 @@ function __bootstrap_fzf() {
     "--inline-info"
     "--header='' ")
 
-  # fade-in-black
   local -ar __FZF_THEME=(
     "--color=fg:-1"
     "--color=bg:235"

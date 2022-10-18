@@ -386,5 +386,4 @@ set keymap vi-command
 
 $endif
 
-
 # vi:filetype=readline

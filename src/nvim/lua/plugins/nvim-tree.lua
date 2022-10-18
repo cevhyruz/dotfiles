@@ -1,6 +1,5 @@
 local status_ok, nvim_tree = pcall(require, 'nvim-tree')
-if not status_ok then
-  print('nvim-tree is not ok')
+if not status_ok then print('nvim-tree is not ok')
   return
 end
 
@@ -103,7 +102,7 @@ nvim_tree.setup({
   },
   view = {
     width = 35,
-    height = 30,
+    -- height = 30,
     hide_root_folder = false,
     side = "left",
     preserve_window_proportions = true,

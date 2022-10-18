@@ -7,3 +7,4 @@
 [[ -z $DOT_BASH ]] && return 0
 
 alias runtime='printf "%s\n" "${runtime[@]}"'
+alias scriptnames='printf "%s\n" "${scriptnames[@]}"'

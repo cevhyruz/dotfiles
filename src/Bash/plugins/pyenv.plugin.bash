@@ -42,7 +42,7 @@ function main() {
   export PYTHON_CONFIGURE_OPTS="--enable-shared"
 
   # disable prompt
-  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=0
 }
 
 main && unset -f main

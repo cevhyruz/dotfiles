@@ -8,6 +8,8 @@ if _::command_exists "tig"; then
   test
 fi
 
+alias t='tmux'
+
 alias g='git'
 
 # add

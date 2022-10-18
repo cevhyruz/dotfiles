@@ -6,11 +6,11 @@ set-option -g @fa-no-wifi "#[#{@icon-disable}] "
 set-option -g @fa-wifi " "
 
 set-option -g @fa-no-headphones "#[#{@icon-disable}]"
-set-option -g @fa-headphones "    "
+set-option -g @fa-headphones " "
 
 set-option -g @u-headphones "🎧"
 
-set-option -g @fa-volume-up ""
+set-option -g @fa-volume-up "    "
 
 set-option -g @fa-lock ""
 set-option -g @fa-windows ""

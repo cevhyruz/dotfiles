@@ -5,9 +5,21 @@
 # Core utility functions for managing Dotfiles.
 # Entry file to load all library file for bash.
 
+# @about Check if current directory is a git repositry. {{{1
+# @return 0 if it is a git repository, 1 otherwise.
+#
+function _::is_git_repo() {
+  if command git rev-parse &> /dev/null &&
+    [[ $(command git rev-parse --is-inside-git-dir 2> /dev/null) == "false" ]]; then
+    return 0
+  fi
+  return 1
+}
+
 # @about Add/prepend [path] into the global environment path. {{{1
 # @param [path]
 # @return 0 if the [path] was successfully added, 1 otherwise.
+#
 function _::add_to_path() {
   if [[ -d ${1:-} && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
     if [[ ${2:-before} == "after" ]]; then

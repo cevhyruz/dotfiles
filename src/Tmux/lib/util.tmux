@@ -1,6 +1,20 @@
 # vi:ft=tmux
-#
-# @TODO: This is too awesome. make this a plugin!
+
+# process checks
+
+# process checks
+# @FIXME: Use regular expression comparison here (fnmatch(3)).
+%hidden IS_VIM="ps -o state= -o comm= -t #{pane_tty} | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+%hidden IS_BASH="ps -o comm= -t #{pane_tty} | grep -q bash"
+%hidden IS_TIG="ps -o comm= -t #{pane_tty} | grep -q tig"
+
+%hidden IS_FZF="#{==:#{pane_current_command},fzf}"
+%hidden IS_VIM="#{m:*vim,#{pane_current_command}}"
+%hidden IS_SHELL="#{m:*sh,#{pane_current_command}}"
+%hidden IS_TIG="#{==:#{pane_current_command},tig}"
+
+%hidden _IS_FZF="ps -o comm= -t #{pane_tty} | grep -q fzf"
+%hidden _IS_VIM="ps -o state= -o comm= -t #{pane_tty} | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
 
 # set padding depending on '@menu-item-padding' value.
 # @FIXME: expand this without using 'set-option'
@@ -8,13 +22,6 @@
 #   @menu-item-padding [number]
 set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 %hidden pad="#{E:@_padding}"
-
-# process checks
-# @FIXME: Use regular expression comparison here (fnmatch(3)).
-%hidden IS_FZF="ps -o comm= -t #{pane_tty} | grep -q fzf"
-%hidden IS_VIM="ps -o state= -o comm= -t #{pane_tty} | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
-%hidden IS_BASH="ps -o comm= -t #{pane_tty} | grep -q bash"
-%hidden IS_TIG="ps -o comm= -t #{pane_tty} | grep -q tig"
 
 # current path directory permission.
 %hidden _permission=\
@@ -45,6 +52,28 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 # user options:
 #   @month-mode-style (short|long)
 %hidden _date="#{?#{==:#{@month-mode-style},short},%b,%B}-%d"\
+
+%hidden _window_status_format=\
+"#{p2:}#I #W#{?#F,#F, }#{p2:}"
+
+
+# Show pane mode
+# readonly
+# prefix
+# tree-mode
+# buffer-mode
+# view-mode
+# copy-mode
+%hidden _pane_mode=\
+"#{?client_readonly,"\
+"#{@fa-lock}readonly,"\
+"#[push-default fg=color203]#{?pane_synchronized,sync-on,}#[pop-default default] #{?client_prefix,"\
+"prefix,"\
+"#{?pane_in_mode,"\
+"#{pane_mode},"\
+"normal}}}"
+
+
 
 # tmux default window status list for statusline portability.
 # options:
@@ -175,3 +204,5 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 ",#{e|-:#{selection_start_x},#{selection_end_x}}"\
 ",#{e|-:#{selection_end_x},#{selection_start_x}}"\
 "},#{selection_active}} char}/s,}"
+
+%hidden message="#{?#{==:#{E:_selection},},#{E:_message},#{E:_selection}}"

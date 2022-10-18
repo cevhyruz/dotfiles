@@ -1,25 +1,25 @@
 local maputils = require "utils.maputils"
 local mappings = require "user.keybindings"
 
-require('user.options')
 
 local function init()
   maputils.set_keymap(mappings.dotfiles_builtin)
+  require('user.options')
+  require('user.abbrev')
+  require('user.scroll')
+  require('user.mkdir')
+  require('core.statusline')
+  require('user.packages')
+  require('lsp')
+
+  require('utils.utils')
+
+  dofile("/home/devs/Projects/dotfiles/localrc/localrc.lua")
+
 end
 
-require('user.abbrev')
-require('user.scroll')
-require('user.mkdir')
-require('core.statusline')
-require('user.packages')
-require('lsp')
 
-require('utils.utils')
-
-dofile("/home/devs/Projects/dotfiles/localrc/localrc.lua")
-
-
--- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - 
+-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - -
 Set = {}
 
 Set.mt = {}
@@ -67,5 +67,10 @@ local s2 = Set.new{30, 1}
 
 Set.mt.__add = Set.union
 
--- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - 
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  command = [[%s/\s\+$//e]],
+})
+
+-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - -
 return init()

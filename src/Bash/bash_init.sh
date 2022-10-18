@@ -14,15 +14,23 @@
 # function/alias is coming from.
 
 declare -a runtime=(
-  "${DOT_BASH}"/{lib,core,plugins,aliases,functions,completions,themes/${dotbash_theme}}/*
+  "${DOT_BASH}"/{lib,core,plugins,completions,aliases,functions}/*
+  "$HOME/.fzf.bash"
+  "${DOT_BASH}/themes/${dotbash_theme}.bash"
   "${DOTFILES}/localrc/localrc.bash"
 )
 
+# bash-completion
 if [[ -f ~/Projects/forked-repo/bash-completion/bash_completion ]]; then
   runtime+=(/usr/share/bash-completion/bash_completion)
 fi
 
+
+declare -a scriptnames=()
+declare -i index=1
 for config in "${runtime[@]}"; do
-  source "${config}"
+  source "$config"
+  scriptnames+=("${index}: ${config}")
+  (( index++ ))
 done
 unset config

@@ -24,12 +24,12 @@ function init() {
   # TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" \
   TEST_DIRECTORY="${DOTFILES}/test" \
     && export TEST_DIRECTORY
-  TEST_DEPS_DIR="${DOT_BASH}/../test_lib" \
+  TEST_DEPS_DIR="${DOT_BASH}/../../test_lib" \
     && export TEST_DEPS_DIR
 
   update_modules
 
-  TEST_DIRS=(${TEST_DIRECTORY}/Bash${1:+/})
+  TEST_DIRS=(${TEST_DIRECTORY}/Bash)
 
   run_test "$@"
 }

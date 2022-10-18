@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2207,SC2034
+#
+# @TODO:
+# command-alias completion
+#
+# Starting tmux. Should complete when there is no available socket
+# tmux [-2CDluvV] [-c shell-command] [-f file] [-L socket-name] [-S socket-path]
+#      [-T features] [command [flags]]
+
+
+# @TODO: use bash-completion one.
+_tmux_filedir ()
+{
+    local IFS='
+';
+    _tmux_expand || return 0;
+    if [ "$1" = -d ]; then
+        COMPREPLY=(${COMPREPLY[@]} $( compgen -d -- $cur ));
+        return 0;
+    fi;
+    COMPREPLY=(${COMPREPLY[@]} $( eval compgen -f -- \"$cur\" ))
+}
+
+function _tmux_complete_client() {
+    local IFS=$'\n'
+    local cur="${1}"
+    COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-clients 2>/dev/null | cut -f 1 -d ':')" -- "${cur}") )
+}
+function _tmux_complete_session() {
+    local IFS=$'\n'
+    local cur="${1}"
+    COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-sessions 2>/dev/null | cut -f 1 -d ':')" -- "${cur}") )
+}
+function _tmux_complete_window() {
+    local IFS=$'\n'
+    local cur="${1}"
+    local session_name="$(echo "${cur}" | sed 's/\\//g' | cut -d ':' -f 1)"
+    local sessions
+
+    sessions="$(tmux -q list-sessions 2>/dev/null | sed -re 's/([^:]+:).*$/\1/')"
+    if [[ -n "${session_name}" ]]; then
+        sessions="${sessions}
+        $(tmux -q list-windows -t "${session_name}" 2>/dev/null | sed -re 's/^([^:]+):.*$/'"${session_name}"':\1/')"
+    fi
+    cur="$(echo "${cur}" | sed -e 's/:/\\\\:/')"
+    sessions="$(echo "${sessions}" | sed -e 's/:/\\\\:/')"
+    COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "${sessions}" -- "${cur}") )
+}
+
+_comp_cmd_tmux()
+{
+    local cur prev words cword
+    _init_completion || return
+
+    if [[ "$prev" == -* ]] && [[ $cword -eq 2 ]]; then
+      case $prev in
+        -L) # socket name
+          return
+          ;;
+        -S) # socket path
+          echo 'socket shit'
+          return
+          ;;
+        # -T) # features ( see terminal-features )
+        #   return
+        #   ;;
+        -f) # alternative config file
+          _filedir
+          return
+          ;;
+      esac
+    fi
+
+
+    if [[ $cur == -* ]] && [[ $cword -lt 2 ]]; then
+      COMPREPLY=($(_parse_usage tmux))
+    elif [[ $cword -eq 1 ]]; then
+      COMPREPLY=($( compgen -W "$(tmux start-server\; list-commands | cut -d' ' -f1)" -- "$cur" ))
+    elif [[ $prev != -* ]]; then
+      COMPREPLY=($( compgen -W "$(tmux list-commands "$prev" | _parse_usage -)" -- "$cur" ))
+    fi
+
+    if [[ $cword -gt 2 ]]; then
+      echo "${words}"
+    fi
+
+
+    case $prev in
+      list-comands )
+        # COMPREPLY=(
+        #   $( compgen -W "$(tmux list-commands | cut -d' ' -f1)" -- "$cur" )
+        # )
+        echo 'hale'
+        ;;
+    esac
+
+    return 0
+} &&
+    complete -F _comp_cmd_tmux tmux
+
+# ex: filetype=sh
