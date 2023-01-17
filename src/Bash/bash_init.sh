@@ -20,12 +20,6 @@ declare -a runtime=(
   "${DOTFILES}/localrc/localrc.bash"
 )
 
-# bash-completion
-if [[ -f ~/Projects/forked-repo/bash-completion/bash_completion ]]; then
-  runtime+=(/usr/share/bash-completion/bash_completion)
-fi
-
-
 declare -a scriptnames=()
 declare -i index=1
 for config in "${runtime[@]}"; do
