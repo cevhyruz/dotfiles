@@ -42,9 +42,6 @@ function _prompt_git_status() {
 
   _::is_git_repo || return
 
-
-  command git update-index --really-refresh
-
   command git diff --quiet --ignore-submodules --cached ||
     status+="+"
 
