@@ -14,7 +14,9 @@ local function init()
 
   require('utils.utils')
 
-  dofile("/home/devs/Projects/dotfiles/localrc/localrc.lua")
+  if vim.fn.filereadable("/home/devs/Projects/dotfiles/localrc/localrc.lua") ~= 0 then
+    dofile("/home/devs/Projects/dotfiles/localrc/localrc.lua")
+  end
 
 end
 
