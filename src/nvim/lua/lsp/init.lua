@@ -23,7 +23,7 @@ local capability_overrides = {
   snippetSupport = true
 }
 
-local capabilities = cmp_nvim_lsp.update_capabilities(
+local capabilities = cmp_nvim_lsp.default_capabilities(
   vim.lsp.protocol.make_client_capabilities(),
   capability_overrides)
 
