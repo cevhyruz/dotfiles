@@ -4,10 +4,16 @@ $if mode=vi
   set show-mode-in-prompt on
   set vi-ins-mode-string "\1\e[0 q\2"
   set vi-cmd-mode-string "\1\e[2 q\r\e[2 q\r\2"
-
   # switch to command mode
   "kj": vi-movement-mode
 set keymap vi-command
+
+  # disable FCEDIT
+  $if Bash
+    "v": ""
+    ";q": "dd\C-d"
+  $endif
+
   # multi-line navigation
   "j": next-screen-line
   "k": previous-screen-line
