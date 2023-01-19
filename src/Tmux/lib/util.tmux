@@ -39,7 +39,9 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 # time format that syncs with clock-mode-style.
 # options:
 #   clock-mode-style [styles]
-%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S %p"
+# %hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S"
+%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S"\
+"#{?#{==:#{clock-mode-style},12}, %p,}"
 
 # Day format that changes styles on weekdays/weekends.
 # user options:
