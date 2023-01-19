@@ -1,0 +1,42 @@
+# vi:ft=readline
+
+set completion-display-width 1
+set completion-prefix-display-length 3
+
+# Make sure we don't output everything on the 1 line
+set horizontal-scroll-mode Off
+
+# append slash for completed names which are symlink to directories.
+set mark-symlinked-directories on
+
+# case-insensitive filename matching and completion.
+set completion-ignore-case on
+
+# match all files begin with dot (.)
+set match-hidden-files on
+
+# when complete-ignore-case is On, treats '_' and '-'
+# as the same when matching and completing.
+set completion-map-case on
+
+# be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing <tab> will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla".
+set skip-completed-text on
+
+# easier tab completion
+set show-all-if-ambiguous on
+set visible-stats on
+set page-completions off
+
+# display common completion prefix using the value of LS_COLORS
+# for custom suffix 'readline-colored-completion-prefix'
+set colored-completion-prefix on
+set colored-stats on
+
+# display the common prefix of the list of possible completions
+# (which may be empty) before cycling through the list.
+set menu-complete-display-prefix on
+
+set print-completions-horizontally on

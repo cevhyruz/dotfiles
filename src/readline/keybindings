@@ -1,0 +1,22 @@
+# vi:ft=readline
+
+$if mode=vi
+  set show-mode-in-prompt on
+  set vi-ins-mode-string "\1\e[0 q\2"
+  set vi-cmd-mode-string "\1\e[2 q\r\e[2 q\r\2"
+
+  # switch to command mode
+  "kj": vi-movement-mode
+set keymap vi-command
+  # multi-line navigation
+  "j": next-screen-line
+  "k": previous-screen-line
+  # history navigation
+  "K": history-search-backward
+  "J": history-search-forward
+  # all about macros
+  "qa": start-kbd-macro
+  "q":  end-kbd-macro
+  ".":  call-last-kbd-macro
+  "z":  print-last-kbd-macro
+$endif

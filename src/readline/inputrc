@@ -2,13 +2,14 @@
 # inputrc for libreadline see readline(3readline)
 # and `info rluserman' for more information.
 # ----------------------------------------------------------------------
+# This file controls the behaviour of line input editing for
+# programs that use the GNU Readline library.  Existing
+# programs include FTP, Bash, and GDB.
+#
+# You can re-read the inputrc file with C-x C-r.
+# Lines beginning with '#' are comments.
 
 set editing-mode vi
-
-$include /home/devs/Projects/dotfiles/src/readline/surround
-
-# Make sure we don't output everything on the 1 line
-set horizontal-scroll-mode Off
 
 # allow UTF-8 input and output instead of showing
 # an ugly stuff like $'\0123\0456'.
@@ -23,10 +24,10 @@ set convert-meta Off
 # Keep the 8th bit for display
 set output-meta On
 
-set colored-stats on
-set colored-completion-prefix on
-set completion-display-width 1
-set completion-prefix-display-length 3
-
 # (none|visible|audible)
 set bell-style none
+
+# plugins
+$include /home/devs/Projects/dotfiles/src/readline/keybindings
+$include /home/devs/Projects/dotfiles/src/readline/surround
+$include /home/devs/Projects/dotfiles/src/readline/completion
