@@ -341,5 +341,7 @@ bind-key -N "Copy shit" -T copy-mode-vi y {
   } {
     send-keys -X copy-selection
   }
-  set-environment -hF _message "yanked #{E:_selection}"
+  if-shell -F "#{E:_selection}" {
+    set-environment -hF _message "yanked #{E:_selection}"
+  }
 }
