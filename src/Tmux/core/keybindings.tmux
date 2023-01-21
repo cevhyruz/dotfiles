@@ -95,7 +95,6 @@ bind-key -N "Toggle read-only mode" R { switch-client -r }
 bind-key -N "Toggle synchronize pane for all panes in window" y {# {{{
   if-shell -F "#{e|>:#{window_panes},1}" {
     set-window-option synchronize-panes
-    set-environment -hF _message "sync is on"
   } {
     set-environment -hF _message "No other panes to sync"
   }
