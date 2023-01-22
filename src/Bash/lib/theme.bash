@@ -25,7 +25,7 @@ function init::theme() {
   local palette=("black" "red" "green" "yellow" "blue" "magenta" "cyan" "white")
   local prefix
 
-  if [[ "${COLORTERM}" =~ ^(truecolor|24bit)$ ]]; then
+  if [[ "${COLORTERM-}" =~ ^(truecolor|24bit)$ ]] || [[ "${TERM-}" =~ *256color* ]]; then
     local scheme_index=
     for style in Bg bg Fg fg; do
       case $style in
@@ -41,7 +41,6 @@ function init::theme() {
       done
     done
   else
-
     for style in Bg bg Fg fg; do
       case $style in
         Bg ) prefix=10 ;;
