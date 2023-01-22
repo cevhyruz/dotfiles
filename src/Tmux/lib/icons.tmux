@@ -10,10 +10,12 @@ set-option -g @fa-headphones " "
 
 set-option -g @u-headphones "🎧"
 
-set-option -g @fa-volume-up "    "
+set-option -g @fa-volume-up " "
+set-option -g @fa-volume-up " "
 
 set-option -g @fa-lock ""
 set-option -g @fa-windows ""
+set-option -g @fa-windows " "
 
 # required powerline-extra-symbols
 set-option -g @pl-thin-separator-left  "#[push-default #{@separator-style}] \ue0b3 #[pop-default default]" # 

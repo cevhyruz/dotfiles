@@ -1,59 +1,34 @@
 # vi:ft=tmux fdm=marker
 
-set-option -ugq command-alias
+set -ugq command-alias
 
-set-option -g command-alias split-pane="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias splitp="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias server-info="show-messages -JT"
-set-option -ag command-alias info="show-messages -JT"
-set-option -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
-set-option -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
+set -ag command-alias split-pane="splitw -vc '#{pane_current_path}'"
+set -ag command-alias splitp="splitw -vc '#{pane_current_path}'"
+set -ag command-alias info="showmsgs -JT"
+set -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
+set -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
 
-set-option -ag command-alias choose-tree=\
+set -ag command-alias choose-tree=\
 "choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -ag command-alias choose-buffer=\
+set -ag command-alias choose-buffer=\
 "choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -ag command-alias vsplit="split-window -hc '#{pane_current_path}'"
-set-option -ag command-alias split="split-window -vc '#{pane_current_path}'"
-set-option -ag command-alias popup="display-popup -EE -d '#{pane_current_path}'"
-set-option -ag command-alias neww="new-window -c '#{pane_current_path}'"
+set -ag command-alias vsplit="splitw -hc '#{pane_current_path}'"
+set -ag command-alias split="splitw -vc '#{pane_current_path}'"
+set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
+set -ag command-alias neww="neww -c '#{pane_current_path}'"
 
-set-option -ag command-alias reload="source-file ${DOT_TMUX}/tmux.conf"
-set-option -ag command-alias version='display-message "#{version}"'
+set -ag command-alias reload="source ${DOT_TMUX}/tmux.conf"
+set -ag command-alias version='display "#{version}"'
 
-set-option -ag command-alias set-theme=\
+set -ag command-alias set-theme=\
 ' command-prompt -p "(theme):" {      '\
-'   set-option -sg @theme "%%";       '\
+'   set -sg @theme "%%";              '\
 '   source-file ${DOT_TMUX}/tmux.conf '\
 ' }'
 
-set-option -ag command-alias current-command="display-message '#{pane_current_command}'"
-
-#-----------------------------------------------------------------------------
-# config.tmux
-#-----------------------------------------------------------------------------
-
-# left and right padding of menu items.
-set-option -g @menu-item-padding       2
-set-option -g @menu-separator          "│"
-set-option -g @menu-separator-style    "bold,fg=colour238"
-set-option -g @menu-link-style         "fg=cyan"
-set-option -g @menu-title-active-style "bold,fg=cyan,bg=#222222"
-set-option -g @menu-title-style        "bold,fg=colour244,bg=colour234"
-set-option -g @icon-style              "fg=cyan"
-set-option -g @icon-disabled-style     "fg=colour235,bg=colour233"
-
-%hidden menu_1="#{E:pad}Main#{E:pad}"
-%hidden menu_2="#{E:pad}Server#{E:pad}"
-%hidden menu_3="#{E:pad}Session#{E:pad}"
-
-%hidden link_next_text="#[push-default #{@menu-link-style}]Next menu"
-%hidden link_prev_text="#[push-default #{@menu-link-style}]Prev menu"
-%hidden link_path="#[pop-deafult dim]testigo"
-
-%hidden menu_sep="#[push-default #{@menu-separator-style}]#{@menu-separator}#[pop-default default]"
+set -ag command-alias current-command="display-message '#{pane_current_command}'"
 
 #-----------------------------------------------------------------------------
 # choose-tree.tmux
@@ -65,7 +40,7 @@ set-option -g @icon-disabled-style     "fg=colour235,bg=colour233"
 "#{?#{e|<:#{line},10},#{line}, "\
 "#{?#{e|<:#{line},36},M-#{a:#{e|+:97,#{e|-:#{line},10}}},}}"
 
-set-option -g command-alias[79] choose-tree-menu=\
+set -g command-alias[79] choose-tree-menu=\
 'run-shell -C "display-menu -T\"#{E:menu_title}\" -x0 -y0 \"-\" \"\" \"\" \
 #{S: \"- #[bold fg=orange]#S \
 #{?session_attached,\
@@ -111,7 +86,7 @@ set-option -g command-alias[79] choose-tree-menu=\
 
 # %hidden offset_y="#{e|>:#{pane_height},}"
 
-set-option command-alias[94] context-menu-mouse=\
+set -ag command-alias context-menu-mouse=\
 'setenv -h context 1; \
 setenv -h confirm-question "Do you like to kill current pane?";\
 display-menu -O -t= -T" #{pane_current_command} " -x"#{popup_mouse_x}" -y"#{E:ctx_menu_position_bot}" \
@@ -132,7 +107,7 @@ display-menu -O -t= -T" #{pane_current_command} " -x"#{popup_mouse_x}" -y"#{E:ct
 }\
 '
 
-set-option command-alias[95] context-menu=\
+set -ag command-alias context-menu=\
 'display-menu -x"#{copy_cursor_x}" -y"#{copy_cursor_y}" \
 "#{?selection_active,,-}#{E:ctx_menu_1}" "" { } \
 "#{?selection_active,,-}#{E:ctx_menu_1}As" "" { } \
@@ -143,118 +118,3 @@ set-option command-alias[95] context-menu=\
     send-keys -X select-line
   }
 }'
-
-#-----------------------------------------------------------------------------
-# menu.tmux
-#-----------------------------------------------------------------------------
-
-# 3 Tabs tmux menu.
-
-%hidden menu_title=\
-"#{E:menu_sep}"\
-"#[push-default]#{?#{==:#{name},Main},#[#{@menu-title-active-style}]#{E:menu_1},"\
-"#[#{@menu-title-style}]#{E:menu_1}}#[pop-default default]#{E:menu_sep}"\
-"#[push-default]#{?#{==:#{name},Server},#[#{@menu-title-active-style}]#{E:menu_2},#[#{@menu-title-style}]#{E:menu_2}}#[pop-default default]#{E:menu_sep}"\
-"#[push-default]#{?#{==:#{name},Session},#[#{@menu-title-active-style}]#{E:menu_3},#[#{@menu-title-style}]#{E:menu_3}}#[pop-default default]#{E:menu_sep}"
-
-%hidden menu_help="-Press <#[push-default fg=cyan]?#[pop-default default]> for for \"help\"."
-
-# menubar
-%hidden menu_item_1="#{E:pad}New window#{E:pad}"
-%hidden menu_item_2="#{E:pad}New named window#{E:pad}"
-%hidden menu_item_3="#{E:pad}Break as named pane#{E:pad}"
-%hidden menu_item_4="#{E:pad}New named session#{E:pad}"
-%hidden menu_item_5="#{E:pad}Open with Vifm#{E:pad}"
-set-option command-alias[99] menubar=\
-'setenv -h name "Main";\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
-  "-" "" ""\
-  "#{E:menu_help}" "" ""\
-  "#{E:menu_item_1}" "" ""\
-  "#{E:menu_item_2}" "" ""\
-  "#{E:menu_item_3} -->" "" "menubar_sub"\
-  "-" "" ""\
-  "#{E:menu_help}" "" ""\
-  "#{E:menu_item_4}" "" ""\
-  "#{E:menu_item_5}" "" ""\
-  "-" "" ""\
-  "#{E:menu_help}" "" ""\
-  "#{E:menu_item_4}" "" ""\
-  "-" "" ""\
-  ""\
-  "#{E:link_next_text}#{E:menu_2}" ">" serverbar\
-'
-
-set-option command-alias[96] menubar_sub=\
-'setenv -h name "Main";\
-setenv -h menu 1;\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
-  "-" "" ""\
-  "-#[push-default default fg=red normal bright]Break as named Pane" "" ""\
-  "-" "" ""\
-  "#{E:menu_item_1}" "" ""\
-  "#{E:menu_item_2}" "" ""\
-  "#{E:menu_item_3}" "" ""\
-  "-" "" ""\
-  "#{E:menu_item_4}" "" ""\
-  "-" "" ""\
-  ""\
-  "#{E:link_prev_text}#{E:menu_1}" "<" menubar\
-  ""\
-  "Help" "?" serverbar\
-'
-
-# serverbar
-%hidden server_item_1="#{E:pad}Reload tmux session#{E:pad}"
-%hidden server_item_2="#{E:pad}Quick edit a dotfile config file#{E:pad}"
-%hidden server_item_3="#{E:pad}Network connection#{E:pad}"
-%hidden server_item_4="#{E:pad}user options status#{E:pad}"
-%hidden server_item_5="#{E:pad}Theme styles#{E:pad}"
-set-option command-alias[98] serverbar=\
-'setenv -h name "Server";\
-display-menu -T"#{E:menu_title}"  -x0 -y0 \
-  "-" "" ""\
-  "#{E:menu_help}" "" ""\
-  "-" "" ""\
-  "#{E:server_item_1}" "" ""\
-  "#{E:menu_item_4}" "" ""\
-  "-" "" ""\
-  "#{E:menu_item_5}" "" ""\
-  "#{E:menu_item_1}" "" ""\
-  "#{E:server_item_2}" "" ""\
-  "#{E:server_item_3}" "" ""\
-  "-" "" ""\
-  "#{E:server_item_2}" "" ""\
-  "#{E:server_item_3}" "" ""\
-  "-" "" ""\
-  "#{E:menu_item_5}" "" ""\
-  "#{E:menu_item_1}" "" ""\
-  "#{E:server_item_2}" "" ""\
-  "#{E:server_item_3}" "" ""\
-  "-" "" ""\
-  ""\
-  "#{E:link_prev_text}#{E:menu_1}" "<" menubar \
-  "#{E:link_next_text}#{E:menu_3}" ">" sessionbar \
-'
-# sessionbar
-%hidden session_item_1="#{E:pad}Session keybindings#{E:pad}"
-%hidden session_item_2="#{E:pad}Session Overrides#{E:pad}"
-%hidden session_item_3="#{E:pad}Formatting styles#{E:pad}"
-%hidden session_item_4="#{E:pad}Style persisten per Session#{E:pad}"
-%hidden session_item_5="#{E:pad}Man Pages#{E:pad}"
-set-option command-alias[97] sessionbar=\
-'setenv -h name "Session";\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
-  "-" "" ""\
-  "#{E:menu_help}" "" ""\
-  "-" "" ""\
-  "#{E:session_item_1}" "" ""\
-  "#{E:session_item_2}" "" ""\
-  "-" "" ""\
-  "#{E:session_item_3}" "" ""\
-  "#{E:session_item_4}" "" ""\
-  "#{E:session_item_5}" "" ""\
-  "-" "" ""\
-  ""\
-  "#{E:link_prev_text}#[align=right,default,dim]#{E:menu_2}" "<" serverbar \
-'

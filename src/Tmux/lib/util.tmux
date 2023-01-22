@@ -36,24 +36,27 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 # wlan0 ssid name.
 %hidden wlan0_ssid="#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"
 
-# time format that syncs with clock-mode-style.
-# options:
-#   clock-mode-style [styles]
-# %hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S"
-%hidden _time="#{?#{==:#{clock-mode-style},24},%H,%I}:%M:%S"\
+# Time format that syncs with clock-mode-style time format.
+# user option:
+#   clock-mode-style [style]
+%hidden _time=\
+"#{?#{==:#{clock-mode-style},24},%H,}"\
+"#{?#{==:#{clock-mode-style},12},%I,}"\
+":%M:%S"\
 "#{?#{==:#{clock-mode-style},12}, %p,}"
 
-# Day format that changes styles on weekdays/weekends.
+# Date format that changes styles.
 # user options:
+#   @month-mode-style  (short|long)
 #   @day-mode-style    (short|long)
 #   @day-weekend-style [style]
 #   @day-weekday-style [style]
-%hidden _day="#{?#{==:#{@day-mode-style},short},%a,%A}"
-
-# Month format that changes styles.
-# user options:
-#   @month-mode-style (short|long)
-%hidden _date="#{?#{==:#{@month-mode-style},short},%b,%B}-%d"\
+%hidden _date=\
+"#{?#{==:#{@day-mode-style},short},%a,}"\
+"#{?#{==:#{@day-mode-style},long},%A,} "\
+"#{?#{==:#{@month-mode-style},short},%b,}"\
+"#{?#{==:#{@month-mode-style},long},%B,}"\
+"-%d"
 
 %hidden _window_status_format=\
 "#{p2:}#I #W#{?#F,#F, }#{p2:}"
@@ -68,8 +71,9 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 # copy-mode
 %hidden _pane_mode=\
 "#{?client_readonly,"\
-"#{@fa-lock}readonly,"\
-"#[push-default fg=color203]#{?pane_synchronized,sync-on,}#[pop-default default] #{?client_prefix,"\
+"#{@fa-lock} readonly,"\
+"#[push-default fg=color203]"\
+"#{?pane_synchronized,sync-on,}#[pop-default default] #{?client_prefix,"\
 "prefix,"\
 "#{?pane_in_mode,"\
 "#{pane_mode},"\
@@ -207,4 +211,10 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 ",#{e|-:#{selection_end_x},#{selection_start_x}}"\
 "},#{selection_active}} char}/s,}"
 
-%hidden message="#{?#{==:#{E:_selection},},#{E:_message},#{E:_selection}}"
+# Show selected characters/lines
+# or display a status message
+# user options:
+#   @status-message-style [style]
+%hidden message=\
+"#{?#{==:#{E:_selection},},#[push-default #{@status-message-style}]"\
+"#{E:_message},#{E:_selection}}#[pop-default default]"

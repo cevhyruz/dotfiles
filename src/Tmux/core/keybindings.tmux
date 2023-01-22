@@ -113,6 +113,10 @@ bind-key -N "Split window verticaly" '"' { split-window -vc "#{pane_current_path
 # Root keys
 # ------------------------------
 
+bind-key -N "Send the prefix key" -T root M-o {
+  display-message 'alt-o'
+}
+
 bind-key -N "" -T root 'C-y' {
   if-shell -F "#{E:IS_VIM}" {
     send-keys C-y
