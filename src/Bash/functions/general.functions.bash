@@ -8,7 +8,7 @@
 # extract archived/compressed files.
 function extract () {
   local file="${1-}"
-  if [[ -f $file ]] ; then
+  if [[ -f $file ]]; then
     case $file in
       *.tar.bz2)   tar xvjf $file ;;
       *.tar.gz)    tar xvzf $file ;;
