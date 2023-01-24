@@ -23,8 +23,9 @@ set keymap vi-command
 "yiW": "mtlBgyE`t"
 "ciw": "diwi"
 "ciW": "diWi"
+
 #*Outer* word-select (aw/aW) is the same than *inner* for word-select
-"daw": "diw"
+"daw": "diww"
 "daW": "diW"
 "yaw": "yiw"
 "yaW": "yiW"
@@ -107,11 +108,7 @@ set keymap vi-command
 "yi\"": "modi\"hp`o"
 "ya\"": "moda\"hp`o"
 
-
-##############################
-#  BASH SURROUND POWAAA      #
-##############################
-#ds
+# ds
 "ds)": "mtF(xf)x`th"
 "ds(": "mtF(xf)x`th"
 "ds]": "mtF[xf]x`th"
@@ -124,6 +121,7 @@ set keymap vi-command
 "ds>": "mtF<xf>x`th"
 "ds`": "mtF`xf`x`th"
 "ds\"": "mtF\"xf\"x`th"
+
 #cs)x
 "cs)]": "mtF(r[f)r]`t"
 "cs)[": "mtF(xi[ \ef)xi ]\e`tl"
@@ -135,6 +133,7 @@ set keymap vi-command
 "cs)<": "mtF(xi< \ef)xi >\e`tl"
 "cs)`": "mtF(r`f)r``t"
 "cs)\"": "mtF(r\"f)r\"`t"
+
 #cs]x
 "cs])": "mtF[r(f]r)`t"
 "cs](": "mtF[xi( \ef]xi )\e`tl"
@@ -146,6 +145,7 @@ set keymap vi-command
 "cs]<": "mtF[xi< \ef]xi >\e`tl"
 "cs]`": "mtF[r`f]\er``t"
 "cs]\"": "mtF[r\"f]r\"`t"
+
 #cs}x
 "cs})": "mtF{r(f}r)`t"
 "cs}(": "mtF{x( \ef}xi )\e`tl"
@@ -157,6 +157,7 @@ set keymap vi-command
 "cs}<": "mtF{xi< \ef}xi >\e`tl"
 "cs}`": "mtF{r`f}r``t"
 "cs}\"": "mtF{r\"f}r\"`t"
+
 #cs'x
 "cs')": "mtF'r(f'r)`t"
 "cs'(": "mtF'xi( \ef'xi )\e`tl"
@@ -169,6 +170,7 @@ set keymap vi-command
 "cs'<": "mtF'xi< \ef'xi >\e`tl"
 "cs'`": "mtF'r`f'r``t"
 "cs'\"": "mtF'r\"f'r\"`t"
+
 #cs*x
 "cs*)": "mtF*r(f*r)`t"
 "cs*(": "mtF*xi( \ef*xi )\e`tl"
@@ -181,6 +183,7 @@ set keymap vi-command
 "cs*<": "mtF*xi< \ef*xi >\e`tl"
 "cs*`": "mtF*r`f*r``t"
 "cs*\"": "mtF*r\"f*r\"`t"
+
 #cs>x
 "cs>)": "mtF<r(f>r)`t"
 "cs>(": "mtF<xi( \ef>xi )\e`tl"
@@ -203,7 +206,8 @@ set keymap vi-command
 "cs`<": "mtF`xi< \ef`xi >\e`tl"
 "cs`*": "mtF`r*f`r*`t"
 "cs`\"": "mtF`r\"f`r\"`t"
-#cs\"x
+
+#cs"x
 "cs\")": "mtF\"r(f\"r)`t"
 "cs\"(": "mtF\"xi( \ef\"xi )\e`tl"
 "cs\"}": "mtF\"r{f\"r}`t"
@@ -215,6 +219,7 @@ set keymap vi-command
 "cs\">": "mtF\"r<f\"r>`t"
 "cs\"<": "mtF\"xi< \ef\"xi >\e`tl"
 "cs\"`": "mtF\"r`f\"r``t"
+
 #"Specials"
 "cs][": "mtF[a \ef]i \e`tl"
 "cs)(": "mtF(a \ef)i \e`tl"
