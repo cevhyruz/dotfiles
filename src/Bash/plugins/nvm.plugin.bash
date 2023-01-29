@@ -1,53 +1,26 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2162
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
-# Lazyload nvm (Node Version Manager) if it is present.
-# config:
-#   lazyload_nvm=[true|false]
+# lazyload nvm
 
 function main() {
-  declare -g NVM_DIR="${HOME}/.nvm"
-  declare -ag exposed_funcs=("nvim" "node" "npm" "npx")
+  if [[ -z "${XDG_CONFIG_HOME-}" ]]; then
+    export NVM_DIR="${HOME}/.nvm"
+  else
+    export NVM_DIR="${XDG_CONFIG_HOME-}/nvm"
+  fi
 
-  if [[ -d $NVM_DIR ]]; then
-    if [[ $lazyload_nvm == true ]]; then
-      lazyload_nvm
-     else
-      load_nvm_normally
-    fi
+  local default
+  read default < "${NVM_DIR}/alias/default"
+  if [[ -d "${NVM_DIR}" ]]; then
+    _::add_to_path "${NVM_DIR}/versions/node/v${default}"*"/bin"
   fi
 }
 
-function lazyload_nvm() {
-  for func in nvm node npm npx; do
-    eval "function $func() {
-      local NVM_DIR=$NVM_DIR
-      unset -f $func
-      load_nvm_normally
-      \\$func \"\$@\"
-    }"
-  done
-  unset -v func NVM_DIR
+function nvm() {
+  source "${NVM_DIR}"/nvm.sh &&
+    nvm "$@";
 }
 
-function load_nvm_normally() {
-  if command -v brew &>/dev/null &&
-    [[ -s "$(brew --prefix nvm)/nvm.sh" ]]; then
-    source "$(brew --prefix nvm)/nvm.sh"
-  elif [[ -s "${NVM_DIR}/nvm.sh" ]]; then
-    source "${NVM_DIR}/nvm.sh"
-  fi
-  if [[ -f "${NVM_DIR}/bash_completion" ]]; then
-    source "${NVM_DIR}/bash_completion"
-  fi
-  unset -v NVM_DIR
-}
-
-function cleanup() {
-  unset -v exposed_funcs
-  unset -f main lazyload_nvm cleanup
-  unset -v lazyload_nvm
-}
-
-main && cleanup
+main
