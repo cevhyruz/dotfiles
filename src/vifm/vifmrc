@@ -161,7 +161,7 @@ set classify+='::*back::'
 " Config
 set classify+=' ::gitignore::'
 
-source ~/Projects/dotfiles/vifm/keybindings.vifm
+source ~/Projects/dotfiles/src/vifm/keybindings.vifm
 
 " Show hidden files by default.
 windo normal zo

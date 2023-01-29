@@ -53,3 +53,5 @@ highlight BrokenLink ctermfg=0 ctermbg=237 cterm=none
 " - incomplete source color scheme: missing bg of String
 " - incomplete source color scheme: missing bg of Number
 " - incomplete source color scheme: missing fg of Todo
+
+" vim:ft=vim:
