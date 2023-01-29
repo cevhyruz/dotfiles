@@ -69,7 +69,7 @@ function __bootstrap_fzf() {
 
   __set_fzf "ag"
   __set_fzf_aliases
-  __cleanup
+  cleanup
 }
 
 function __set_fzf() {
@@ -148,7 +148,7 @@ function __set_fzf_aliases() {
   alias envars='printenv | fzf'
 }
 
-function __cleanup() {
+function cleanup() {
   unset -f \
     __set_fzf \
     __set_fzf_as_fd \
@@ -156,7 +156,7 @@ function __cleanup() {
     __set_fzf_as_rg \
     __set_fzf_as_find \
     __set_fzf_command \
-    __cleanup
+    cleanup
 }
 
 __bootstrap_fzf

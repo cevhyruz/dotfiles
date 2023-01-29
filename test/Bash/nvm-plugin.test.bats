@@ -42,6 +42,6 @@ load "${TEST_DIRECTORY}/test_helper.bash"
   run declare -F __lazy_load_nvm
   assert_failure 1
 
-  run declare -F __cleanup
+  run declare -F cleanup
   assert_failure 1
 }
