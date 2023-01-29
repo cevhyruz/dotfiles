@@ -7,6 +7,8 @@
 # allow sudo'ing aliases.
 alias sudo="sudo "
 
+alias today='date "+%A, %B %-d, %Y"'
+
 # show all function definitions in a script.
 alias scriptinfo="grep -Eow 'function[[:space:]]+[[:alnum:]_]+'"
 
