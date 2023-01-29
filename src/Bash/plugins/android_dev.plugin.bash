@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-function _set_android_dev_plugin() {
+function main() {
   if [[ -d '/usr/lib/Android' ]]; then
 
     export readonly ANDROID_HOME='/usr/lib/Android'
@@ -25,4 +25,4 @@ function _set_android_dev_plugin() {
   fi
 }
 
-_set_android_dev_plugin && unset _set_android_dev_plugin
+main

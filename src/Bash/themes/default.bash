@@ -76,4 +76,4 @@ function _set_ps1() {
   unset -v return_string
 }
 
-main && unset -f main
+main

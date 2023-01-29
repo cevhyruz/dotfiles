@@ -45,4 +45,4 @@ function main() {
   export PYENV_VIRTUALENV_DISABLE_PROMPT=0
 }
 
-main && unset -f main
+main

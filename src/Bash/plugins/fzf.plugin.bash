@@ -18,7 +18,7 @@ _::command_exists "fzf" || return
 # # ------------
 # source "/home/devs/Projects/forked-repo/fzf/shell/key-bindings.bash"
 
-function __bootstrap_fzf() {
+function main() {
   local -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
@@ -159,4 +159,4 @@ function cleanup() {
     cleanup
 }
 
-__bootstrap_fzf
+main

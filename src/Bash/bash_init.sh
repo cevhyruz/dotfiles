@@ -28,3 +28,7 @@ for config in "${runtime[@]}"; do
   (( index++ ))
 done
 unset config
+
+# unset common functions
+unset -f main
+unset -f cleanup

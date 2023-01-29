@@ -151,4 +151,4 @@ function glossary() {
   unset func
 }
 
-main unset -f main
+main
