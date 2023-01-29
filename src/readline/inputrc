@@ -28,6 +28,17 @@ set output-meta On
 set bell-style none
 
 # plugins
+
+set show-mode-in-prompt on
+
+$if Bash
+  set vi-ins-mode-string "\1\e[5 q\2"
+  set vi-cmd-mode-string "\1\e[0 q\r\e[2 q\r\2"
+$else
+  set vi-ins-mode-string "\1\e[5 q(ins)\2"
+  set vi-cmd-mode-string "\1\e[0 q\r\e[2 q\r(cmd)\2"
+$endif
+
 $include /home/devs/Projects/dotfiles/src/readline/keybindings
 $include /home/devs/Projects/dotfiles/src/readline/surround
 $include /home/devs/Projects/dotfiles/src/readline/completion
