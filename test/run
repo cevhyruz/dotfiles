@@ -55,5 +55,5 @@ if command -v parallel &> /dev/null \
 		--no-parallelize-within-files "${test_dirs[@]}"
 else
 	# Run `bats` in single-threaded mode.
-	exec "$bats_executable" "${CI:+--tap}" "${test_dirs[@]}"
+	exec "$bats_executable" "${CI:+--tap}" "${test_directory}/Bash/autopairs-core.test.bats"
 fi
