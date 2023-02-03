@@ -162,7 +162,7 @@ function _pair() {
   fi
 }
 
-# dont bind when we are mocking tests
+# don't bind when we are mocking tests.
 if [[ -z "${TEST_DIRECTORY:-}" ]]; then
   _pair
 fi
