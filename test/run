@@ -11,27 +11,47 @@
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
 
-function update_modules() {
-  git submodule init && git submodule update
-}
+test_directory="$(cd "$(dirname "$0")" && pwd)"
+bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
-function run_test() {
-  exec "${TEST_DEPS_DIR}/bats-core/bin/bats" \
-    ${CI:+--tap} "${TEST_DIRS}"
-}
+export TEST_DIRECTORY="$test_directory"
+export TEST_DEPS_DIR="${test_directory}/../test_lib"
 
-function init() {
-  # TEST_DIRECTORY="$(cd "$(dirname "$0")" && pwd)" \
-  TEST_DIRECTORY="${DOTFILES}/test" \
-    && export TEST_DIRECTORY
-  TEST_DEPS_DIR="${DOT_BASH}/../../test_lib" \
-    && export TEST_DEPS_DIR
+# Make sure BATS is available:
+git submodule init && git submodule update
 
-  update_modules
+# Which tests do we run?
+if [[ $# -eq 0 ]]; then
+	test_dirs=("${test_directory}"/Bash)
+else
+	test_dirs=("$@")
+fi
 
-  TEST_DIRS=(${TEST_DIRECTORY}/Bash)
-
-  run_test "$@"
-}
-
-init "$@"
+# Make sure that the `parallel` command is installed,
+# AND that it is the GNU version of `parallel`.
+# If that is the case, try to guess the number of CPU cores,
+# so we can run `bats` in parallel processing mode, which is a lot faster.
+if command -v parallel &> /dev/null \
+	&& parallel -V &> /dev/null \
+	&& { parallel -V 2> /dev/null | grep -q '^GNU\>'; }; then
+	# Expect to run at least on a dual-core CPU; slightly degraded performance
+	# shouldn't matter otherwise.
+	declare -i -r test_jobs_default=2
+	# shellcheck disable=SC2155
+	declare -i -r test_jobs_effective="$(
+		if [[ "${TEST_JOBS:-detect}" = "detect" ]] \
+			&& command -v nproc &> /dev/null; then
+			nproc
+		elif [[ -n "${TEST_JOBS}" ]] \
+			&& [[ "${TEST_JOBS}" != "detect" ]]; then
+			echo "${TEST_JOBS}"
+		else
+			echo "${test_jobs_default}"
+		fi
+	)"
+	exec "$bats_executable" "${CI:+--tap}" --jobs "${test_jobs_effective}" \
+		--no-parallelize-within-files "${test_dirs[@]}"
+else
+	# Run `bats` in single-threaded mode.
+	exec "$bats_executable" "${CI:+--tap}" "${test_dirs[@]}"
+fi

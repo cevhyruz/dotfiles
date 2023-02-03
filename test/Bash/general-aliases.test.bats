@@ -2,10 +2,9 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load "${TEST_DIRECTORY}/test_helper.bash"
-load "Bash/aliases/general.aliases.bash"
+load "${DOT_BASH}/aliases/general.aliases.bash"
 
-
-@test "${TEST_FILE}: Verify aliases has all been loaded" {
+@test "Verify aliases has all been loaded" {
   local aliases=(
       "sudo"
       "home"
@@ -21,8 +20,6 @@ load "Bash/aliases/general.aliases.bash"
       "lscolor"
       "vdir"
       "parent"
-      "todo"
-      "fixme"
       "q"
       "c"
       "-"

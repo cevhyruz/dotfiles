@@ -10,14 +10,17 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+# helpers
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
+
+# utilities
 load "${DOT_BASH}/lib/util.bash"
 load "${DOT_BASH}/lib/apidoc.bash"
 
 if [[ -t 0 ]]; then
-  TEST_FILE="$(printf "\e[1m[%s]\e[0m\n" "${BATS_TEST_FILENAME}")"
+  TEST_FILE="$(printf "\e[1m[%s]\e[0m\n" "${BATS_TEST_FILENAME##*/}")"
 fi
 
 function local_setup() { :; }

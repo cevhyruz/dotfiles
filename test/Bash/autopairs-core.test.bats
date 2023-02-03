@@ -2,13 +2,13 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load "${TEST_DIRECTORY}/test_helper.bash"
-load "Bash/core/autopairs.bash"
+load "${DOT_BASH}/core/autopairs.bash"
 
 function local_setup() {
   case=( '""' "''" '()' '{}' '[]')
 }
 
-@test "${TEST_FILE}: double spaces inside of pairs." {
+@test "double spaces inside of pairs." {
   for test_case in "${case[@]}"; do
     READLINE_LINE=${test_case}
     READLINE_POINT=1
@@ -23,7 +23,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: spacing still works when no pairs." {
+@test "spacing still works when no pairs." {
     READLINE_LINE=foobar
     READLINE_POINT=3
     __smart_space
@@ -31,7 +31,7 @@ function local_setup() {
     assert_equal "${READLINE_POINT}" 4
 }
 
-@test "${TEST_FILE}: backspace inside pairs." {
+@test "backspace inside pairs." {
   for test_case in "${case[@]}"; do
     READLINE_LINE=${test_case}
     READLINE_POINT=1
@@ -41,7 +41,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: backspace stil works normally." {
+@test "backspace stil works normally." {
   READLINE_LINE="foobar"
   READLINE_POINT=3
   __depair
@@ -49,7 +49,7 @@ function local_setup() {
   assert_equal "${READLINE_POINT}" 2
 }
 
-@test "${TEST_FILE}: backspace inside pairs with spaces" {
+@test "backspace inside pairs with spaces" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="${test_case:0:1}  ${test_case:1:1}"
     READLINE_POINT=2
@@ -64,7 +64,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: don't close open pair if escaped." {
+@test "don't close open pair if escaped." {
   for test_case in "${case[@]}"; do
     READLINE_LINE="\\"
     READLINE_POINT=1
@@ -74,7 +74,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: don't treat escaped open pair as unclosed." {
+@test "don't treat escaped open pair as unclosed." {
   for test_case in "${case[@]}"; do
     READLINE_LINE="\\${test_case:0:1}"
     READLINE_POINT=2
@@ -90,7 +90,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: auto pair" {
+@test "auto pair" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="foo "
     READLINE_POINT=4
@@ -99,7 +99,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: bump cursor for already closed pairs" {
+@test "bump cursor for already closed pairs" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="foo ${test_case:0:1}${test_case:1:1}"
     READLINE_POINT=5
@@ -114,7 +114,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: auto close open pair" {
+@test "auto close open pair" {
   for test_case in "${case[@]}"; do
     READLINE_LINE="${test_case:0:1}foobar"
     READLINE_POINT=7
@@ -127,7 +127,7 @@ function local_setup() {
   done
 }
 
-@test "${TEST_FILE}: no backspace when readline is empty" {
+@test "no backspace when readline is empty" {
   READLINE_LINE=''
   READLINE_POINT=1
   run __depair

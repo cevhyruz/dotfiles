@@ -2,20 +2,20 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load "${TEST_DIRECTORY}/test_helper.bash"
-load "Bash/core/hooks.bash"
+load "${DOT_BASH}/core/hooks.bash"
 
-@test "${TEST_FILE} environment variables should be ready and initialized." {
+@test "environment variables should be ready and initialized." {
    run test -v FIRST_PROMPT
    assert_success
 }
 
-@test "${TEST_FILE} __pre_command will return if '\$AT_PROMPT' is unset." {
+@test "__pre_command will return if '\$AT_PROMPT' is unset." {
   unset AT_PROMPT
   run __pre_command
   assert_failure 1
 }
 
-@test "${TEST_FILE} __pre_command should run '\$PRE_COMMAND' in order of precedence" {
+@test "__pre_command should run '\$PRE_COMMAND' in order of precedence" {
   AT_PROMPT=1
   PRE_COMMAND='echo one;'
   PRE_COMMAND+='echo two;'
@@ -25,13 +25,13 @@ load "Bash/core/hooks.bash"
   assert_success
 }
 
-@test "${TEST_FILE} __post_command should return if '\$FIRST_PROMPT' has been set." {
+@test "__post_command should return if '\$FIRST_PROMPT' has been set." {
   FIRST_PROMPT=1
   run __post_command
   assert_failure 1
 }
 
-@test "${TEST_FILE} __post_command should run '\$POST_COMMAND in order or precedence'" {
+@test "__post_command should run '\$POST_COMMAND in order or precedence'" {
   unset FIRST_PROMPT
   POST_COMMAND='echo one;'
   POST_COMMAND+='echo two;'

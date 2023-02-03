@@ -2,9 +2,9 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load "${TEST_DIRECTORY}/test_helper.bash"
-load Bash/core/envars.bash
+load "${DOT_BASH}/core/envars.bash"
 
-@test "${TEST_FILE}: Make sure envars has been set properly" {
+@test "Make sure envars has been set properly" {
 
   # mailcheck should unset when mailwarn is disabled.
   shopt -u mailwarn
