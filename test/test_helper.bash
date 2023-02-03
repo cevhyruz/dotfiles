@@ -6,9 +6,8 @@
 #
 # Usage:
 #   load "${TEST_DIRECTORY}/test_helper.bash"
-# set -o nounset
-# set -o errexit
-# set -o pipefail
+
+set -o nounset
 
 # helpers
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
