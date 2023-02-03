@@ -57,7 +57,7 @@ jobs:
       run: python3 -m pip install vim-vint==0.4a1
 
     - name: Run vim-vint
-      run: vint --warning --verbose --enable-neovim nvim/**/*.vim
+      run: vint --warning --verbose --enable-neovim src/nvim/**/*.vim
 
     - name: Install shfmt
       run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
