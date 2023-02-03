@@ -38,7 +38,6 @@ shopt -s huponexit               # send SIGHUP to all jobs when interative login
 shopt -s lithist                 # save multi-line cmd history with embedded newlines.
 shopt -s nullglob                # expand patterns with no match to null string.
 shopt -s xpg_echo                # expand backslash-escape sequences.
-shopt -s progcomp_alias          # if no command, attempt completion on expanded alias.
 
 # disabled options
 
