@@ -79,12 +79,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
+    - uses: actions/checkout@v3
     - uses: actions/setup-ruby@v1
       with:
-        ruby-version: '2.7'
+        ruby-version: '3.0'
 
     - name: Install Ruby dependencies
       run: bundle update --bundler && bundle install
