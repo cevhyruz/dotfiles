@@ -2,7 +2,7 @@
 # vi:ft=bats fdm=marker ts=2 sw=2 et
 
 load "${TEST_DIRECTORY}/test_helper.bash"
-# load "${DOT_BASH}/plugins/fzf.plugin.bash"
+load "${DOT_BASH}/plugins/fzf.plugin.bash"
 
 LOCAL_DEP="fzf"
 

@@ -25,12 +25,10 @@ fi
 
 function local_setup() { :; }
 function local_teardown() { :; }
+function local_fixtures() { :; }
 
 function fixtures() {
-  test_home="${DOTFILES}/tmp_home"
-  mkdir -p "${test_home}"
-  cp "${TEST_DIRECTORY}/fixtures/bash_script_file_1.bash" \
-    "${test_home}/bash_script_file_1.bash"
+  local_fixtures
 }
 
 function setup() {
@@ -51,6 +49,5 @@ function setup() {
 }
 
 function teardown() {
-  rm -rf "${test_home}"
   local_teardown
 }
