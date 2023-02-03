@@ -15,8 +15,6 @@ test_directory="$(cd "$(dirname "$0")" && pwd)"
 bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
 # Locate ourselves for easy reference.
-export DOT_BASH="${test_directory}/../src/Bash"
-export DOTFILES="${test_directory}/../"
 export TEST_DIRECTORY="$test_directory"
 export TEST_DEPS_DIR="${test_directory}/../test_lib"
 
