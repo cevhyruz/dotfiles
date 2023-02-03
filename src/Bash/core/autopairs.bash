@@ -162,6 +162,7 @@ function _pair() {
   fi
 }
 
-if [[ -z "${BATS_TEST_NAME:-}" ]]; then
+# dont bind when we are mocking tests
+if [[ -z "${TEST_DIRECTORY:-}" ]]; then
   _pair
 fi
