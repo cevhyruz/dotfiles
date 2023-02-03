@@ -14,14 +14,16 @@
 test_directory="$(cd "$(dirname "$0")" && pwd)"
 bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
-# Locate ourselves for easy reference.
+# locate ourselves for easy reference.
+export DOTFILES="${test_directory}/../"
+export DOT_BASH="${test_directory}/../src/Bash"
 export TEST_DIRECTORY="$test_directory"
 export TEST_DEPS_DIR="${test_directory}/../test_lib"
 
-# Make sure BATS is available:
+# make sure BATS is available:
 git submodule init && git submodule update
 
-# Which tests do we run?
+# which tests do we run?
 if [[ $# -eq 0 ]]; then
 	test_dirs=("${test_directory}"/Bash)
 else
