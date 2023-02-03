@@ -8,7 +8,10 @@
 # Globals:
 # DOT_FZF_DEFAULT_CMD : defaults to Ag.
 
-_::command_exists "fzf" || return
+# @FIXME: should not return when mocking tests.
+if [[ -z "${TEST_DIRECTORY:-}" ]]; then
+  _::command_exists "fzf" || return
+fi
 
 # # Auto-completion
 # # ---------------
