@@ -60,7 +60,7 @@ jobs:
       run: vint --warning --verbose --enable-neovim src/nvim/**/*.vim
 
     - name: Install shfmt
-      run: GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt
+      run: GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
     - name: Install shellcheck
       run: brew install shellcheck
