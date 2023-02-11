@@ -91,7 +91,4 @@ jobs:
       run: bashcov test/run
 
     - name: Upload reports to Codecov
-      run: |
-        curl -sO https://uploader.codecov.io/latest/linux/codecov
-        chmod +x codecov
-        ./codecov
+      run: bash <(curl -s https://codecov.io/bash) -Z
