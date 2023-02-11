@@ -1,0 +1,92 @@
+# vi ft=i3config
+general {
+  output_format = "i3bar"
+  colors = true
+  color_good = "#00FF00"
+  color_degraded = "#FFFF00"
+  color_bad = "#FFA188"
+}
+
+order += "wireless wlan0"
+order += "volume master"
+# order += "ipv6"
+order += "disk /"
+# order += "run_watch DHCP"
+# order += "run_watch VPNC"
+# order += "path_exists VPN"
+order += "ethernet eth0"
+order += "battery 0"
+# order += "cpu_temperature 0"
+order += "memory"
+order += "load"
+order += "tztime local"
+
+volume master {
+  format = " %volume"
+  format_muted = "muted (%volume)"
+  device = "pulse:alsa_output.pci-0000_00_1b.0.analog-stereo"
+}
+
+wireless wlan0 {
+  # format_up = "W: (%quality at %essid, %bitrate) %ip"
+  format_up = " %essid (%bitrate)"
+  format_down = ""
+}
+
+ethernet eth0 {
+  format_up = "E: %ip (%speed)"
+  # format_down = "E: down"
+  format_down = ""
+}
+
+battery 0 {
+  format = "%status %percentage %remaining %emptytime"
+  format_down = ""
+  status_chr = "⚡ CHR"
+  status_bat = "🔋 BAT"
+  status_unk = "? UNK"
+  status_full = "☻ FULL"
+  path = "/sys/class/power_supply/BAT%d/uevent"
+  low_threshold = 10
+}
+
+run_watch DHCP {
+  pidfile = "/var/run/dhclient*.pid"
+}
+
+run_watch VPNC {
+  # file containing the PID of a vpnc process
+  pidfile = "/var/run/vpnc/pid"
+}
+
+path_exists VPN {
+  # path exists when a VPN tunnel launched by nmcli/nm-applet is active
+  path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+tztime local {
+  format = "%A %Y-%m-%d %I:%M:%S %p"
+}
+
+load {
+  format = "%5min"
+}
+
+cpu_temperature 0 {
+  format = "T: %degrees °C"
+  path = "/sys/devices/platform/coretemp.0/temp1_input"
+}
+
+memory {
+  format = "%used"
+  threshold_degraded = "10%"
+  format_degraded = "MEMORY: %free"
+}
+
+disk "/" {
+  format = "%free"
+}
+
+read_file uptime {
+  path = "/proc/uptime"
+}

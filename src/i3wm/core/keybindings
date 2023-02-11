@@ -1,0 +1,88 @@
+# vi:ft=i3config
+
+# start dmenu (a program launcher)
+# bindsym $mod+d exec --no-startup-id dmenu_run
+
+# fzf as dmenu
+bindsym $mod+d exec $floatterm $float_small --execute bash -ic man "$(apropos . | fzf)"
+
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# toggle tiling / floating bindsym $mod+Shift+space floating toggle
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+# bindsym $Green_Grass.jpg focus the child container
+# bindsym $mod+d focus child
+
+
+# different ways of launching a terminal
+bindsym $mod+Return exec  $term
+bindsym $mod+Shift+t exec $floatterm $float_normal
+
+
+
+# modes
+bindsym $mod+v mode "adjust volume"
+bindsym $mod+o mode "orientation"
+bindsym $mod+r mode "resize"
+bindsym $mod+g mode "toggle gaps"
+bindsym $mod+m mode "move window"
+
+bindsym $mod+1  $switch $ws1
+bindsym $mod+2  $switch $ws2
+bindsym $mod+3  $switch $ws3
+bindsym $mod+4  $switch $ws4
+bindsym $mod+5  $switch $ws5
+bindsym $mod+6  $switch $ws6
+bindsym $mod+7  $switch $ws7
+bindsym $mod+8  $switch $ws8
+bindsym $mod+9  $switch $ws9
+bindsym $mod+10 $switch $ws10
+
+# Mouse+$mod to drag floating windows
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# change focus (hjkl)
+bindsym $mod+$left  focus left
+bindsym $mod+$down  focus down
+bindsym $mod+$up    focus up
+bindsym $mod+$right focus right
+
+# change focus (arrow keys)
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+# move focused window (hjkl)
+bindsym $mod+Shift+$left  move left
+bindsym $mod+Shift+$down  move down
+bindsym $mod+Shift+$up    move up
+bindsym $mod+Shift+$right move right
+# move focused window (arrow keys)
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Right move right
+
+# cycle through workspaces
+bindsym $mod+n workspace next
+bindsym $mod+p workspace prev
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+set $exitmsg You pressed the exit shortcut. Do you really want to exit i3?
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m '$exitmsg' -B 'Yes, exit i3' 'i3-msg exit'"

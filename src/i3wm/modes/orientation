@@ -1,0 +1,14 @@
+# vi:ft=i3config
+
+mode "orientation" {
+  bindsym v split v mode "default" exec --no-startup-id dmenu_run floating
+  bindsym h split h mode "default" exec --no-startup-id dmenu_run
+  bindsym f split h mode "default" exec --no-startup-id dmenu_run
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym q      mode "default"
+  bindsym ctrl+c mode "default"
+  bindsym $mod+r mode "default"
+}
+
