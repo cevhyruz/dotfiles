@@ -1,3 +1,5 @@
+# vi:ft=ruby
+
 require 'codecov'
 require 'simplecov'
 
@@ -10,6 +12,13 @@ SimpleCov.start do
     "Bash/functions/"
   ]
   enable_coverage :branch
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+    Codecov::SimpleCov::Formatter,
+    SimpleCovSmallBadge::Formatter
+  ])
 end
 
-SimpleCov.formatter = Codecov::SimpleCov::Formatter
+SimpleCovSmallBadge.configure do |config|
+  config.rounded_border = true
+  config.background = '#ffffcc'
+end
