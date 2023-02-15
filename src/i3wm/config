@@ -2,22 +2,15 @@
 # i3 config file (v4.22)
 # see https://i3wm.org/docs/userguide.html for a complete reference!
 
-for_window [class="^.*"] border normal; gaps inner current set 10; gaps outer current set 40
-for_window [title="floating_term"] floating enable
+for_window [class="^.*"] border pixel 2 radius 10; gaps inner current set 10; gaps outer current set 40
+for_window [title="floating_term"] floating enable sticky enable
 
 set $i3wm_home ~/Projects/dotfiles/src/i3wm
 
-# core
-include $i3wm_home/core/startup
-include $i3wm_home/core/keybindings
-include $i3wm_home/core/i3bar
-
-# modes
+include $i3wm_home/core/*
 include $i3wm_home/modes/*
 
 set $mod Mod1
-
-
 
 # aliases
 set $move      move container to workspace number
@@ -26,7 +19,7 @@ set $switch    workspace number
 set $term      --no-startup-id gnome-terminal
 
 # floating window sizes (width X height)
-set $float_small  --geometry 50x30
+set $float_small  --geometry 50x20
 set $float_normal --geometry 90x40
 set $float_large  --geometry 90x40
 

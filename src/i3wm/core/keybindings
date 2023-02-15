@@ -1,16 +1,21 @@
 # vi:ft=i3config
 
 # start dmenu (a program launcher)
-# bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id dmenu_run
+
+# open htop
+bindsym Ctrl+Shift+Esc exec --no-startup-id htop
 
 # fzf as dmenu
-bindsym $mod+d exec $floatterm $float_small --execute bash -ic man "$(apropos . | fzf)"
-
+# bindsym $mod+d exec $floatterm $float_small --execute \
+#   ~/Projects/dotfiles/src/i3wm/bin/launcher.bash
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
-# toggle tiling / floating bindsym $mod+Shift+space floating toggle
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
@@ -20,10 +25,8 @@ bindsym $mod+space focus mode_toggle
 
 
 # different ways of launching a terminal
-bindsym $mod+Return exec  $term
+bindsym $mod+Return  exec  $term
 bindsym $mod+Shift+t exec $floatterm $float_normal
-
-
 
 # modes
 bindsym $mod+v mode "adjust volume"

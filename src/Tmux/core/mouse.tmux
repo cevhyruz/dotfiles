@@ -8,13 +8,13 @@
 # [ / ] 1.) double click select word.
 # [ / ] 2.) tripple click select line.
 # [ / ] 2.) left click select cursor position .
-# [ / ] 4.) right-click select position and open a menu.
+# [ x ] 4.) right-click select position and open a menu.
 # [ / ] 5.) left-click + drag starts selection but won't cancel on click-up
 # [ x ] 6.) mouse scroll should not drag a selection.
 # [ x ] 7.) mouse scroll-down to bottom should not cancel if there is a selection
 # [ x ] 8.) mouse scrol-down to bottom should not cancel if there is
 
-# mouse scrollup /
+# Scroll Up  /
 bind-key -T root WheelUpPane {
   select-pane -t=
   if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" {
@@ -32,7 +32,26 @@ bind-key -T copy-mode-vi WheelUpPane {
 # Right click
 bind-key -T root MouseDown3Pane {
   select-pane -t=
-  context-menu-mouse
+
+setenv -h context 1; \
+setenv -h confirm-question "Do you like to kill current pane?";\
+display-menu -O -t= -T" #{pane_current_command} " -x"#{popup_mouse_x}" -y"#{E:ctx_menu_position_bot}" \
+"#{E:ctx_menu_1}" "" {} \
+"#{E:ctx_menu_2}" "" {} \
+"#{E:ctx_menu_3}" ""  {
+  display-menu -O -t= -T"[#[reverse bold] #{confirm-question} #[default]]" \
+    "-" "" ""\
+    "Yes," "" ""\
+    "No, do not" "" ""\
+    "-" "" ""
+} \
+"#{E:ctx_menu_4}" "" {
+  if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" {
+    copy-mode
+    send-keys -X select-line
+  }
+}
+
 }
 bind-key -T copy-mode-vi MouseDown3Pane {
   select-pane -t=

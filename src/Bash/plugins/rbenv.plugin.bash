@@ -6,8 +6,8 @@
 
 export RBENV_ROOT="${HOME}/Projects/cloned-repo/rbenv"
 
-_::add_to_path "${RBENV_ROOT}/shims"
-_::add_to_path "${RBENV_ROOT}/bin"
+_::add_to_path "${RBENV_ROOT}/shims" "after"
+_::add_to_path "${RBENV_ROOT}/bin" "after"
 
 function rbenv() {
   local command="${1:-}"

@@ -5,30 +5,6 @@
 # general functions that is too complicated to be an alias
 # and/or to small to be a plugin nor core functions.
 
-# extract archived/compressed files.
-function extract () {
-  local file="${1-}"
-  if [[ -f $file ]]; then
-    case $file in
-      *.tar.bz2)   tar xvjf $file ;;
-      *.tar.gz)    tar xvzf $file ;;
-      *.tar.xz)    tar Jxvf $file ;;
-      *.bz2)       bunzip2 $file ;;
-      *.rar)       rar x $file ;;
-      *.gz)        gunzip $file ;;
-      *.tar)       tar xvf $file ;;
-      *.tbz2)      tar xvjf $file ;;
-      *.tgz)       tar xvzf $file ;;
-      *.zip)       unzip -d "$(echo $file | sed 's/\(.*\)\.zip/\1/')" $file ;;
-      *.Z)         uncompress $file ;;
-      *.7z)        7z x $file ;;
-      *)           echo "don't know how to extract '$1'" ;;
-    esac
-  else
-    echo "$file is not a valid compressed file!"
-  fi
-}
-
 # create directory and enter it.
 # usage: md [directory]
 function md() {

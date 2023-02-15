@@ -5,9 +5,6 @@
 #
 # tmux version: next-3.4
 
-set-option -g lock-command "cmatrix -sb -C magenta"
-set-option -g lock-after-time 300
-
 set-option -g @theme default
 set-option -g prefix `
 set-option -g prefix2 C-b
