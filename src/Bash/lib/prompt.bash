@@ -55,10 +55,12 @@ function _prompt_git_status() {
 
   _::is_git_repo || return
 
+  command git update-index --really-refresh
+
   command git diff --quiet --ignore-submodules --cached ||
     status+="+"
 
-  command git diff-files --quiet --ignore-submodules ||
+  command git diff-files --quiet --ignore-submodules -- ||
     status+="!"
 
   test -n "$(command git ls-files --others --exclude-standard :/)" &&
@@ -68,5 +70,5 @@ function _prompt_git_status() {
     status+="*"
 
   printf "%b" "\[${1-$Bgwhite}\] ${status}"
-  unset -v status
+  status=''
 }
