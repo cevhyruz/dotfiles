@@ -7,5 +7,7 @@
 export GO111MODULE=on
 export GOPATH="${HOME}/go"
 
+export GOROOT=/usr/local/go
+
 _::add_to_path "/usr/local/go/bin"
 _::add_to_path "${GOPATH}/bin"

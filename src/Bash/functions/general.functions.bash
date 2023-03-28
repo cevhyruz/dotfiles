@@ -5,20 +5,17 @@
 # general functions that is too complicated to be an alias
 # and/or to small to be a plugin nor core functions.
 
+# Creates an archive (*.tar.gz) from given directory.
+function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+
+# Create a ZIP archive of a file or folder.
+function makezip() { zip -r "${1%%/}.zip" "$1" ; }
+
 # create directory and enter it.
 # usage: md [directory]
 function md() {
   local directory="${1:-}"
   mkdir -p "${directory}" && cd "$_" || return 1
-}
-
-# force refresh tmux client when cd'ing,
-# otherwise just change cd normally.
-function cd() {
-  if [[ $# -gt 0 ]]; then
-    builtin cd "$@" || return 1
-  fi
-  tmux refresh-client -S &> /dev/null || true
 }
 
 # Determine size of a file or total size of a directory

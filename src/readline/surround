@@ -15,8 +15,8 @@ $endif
 "\C-x\C-u": vi-undo
 "u": "ma\C-x\C-u`ah"
 # upcase/downcase
-"viwU": "lb\C-x\C-^"
-"viwu": "lb\C-x\C-,"
+# "viwU": "lb\C-x\C-^"
+# "viwu": "lb\C-x\C-,"
 # yiw/W {{{1
 "yiw": "mtlbYe`t"
 "yiW": "mtlBYE`t"

@@ -19,9 +19,10 @@ export EDITOR
 export BROWSER="/usr/bin/google-chrome"
 
 # larger history (default: 500)
-HISTSIZE=20000
-HISTFILESIZE=20000
+HISTSIZE=100000
+HISTFILESIZE=$HISTSIZE
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL='ignorespace:erasedups';
+
 HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';

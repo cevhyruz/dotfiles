@@ -15,6 +15,19 @@ function _make_prompt_var() {
   fi
 }
 
+# TODO:
+# [x] Add return status.
+# [x] Merge the same stack (tree-like view).
+# [x] Dim color for stdout.
+function _ps4_callstack() {
+  set +u
+  for (( i = ${#FUNCNAME[@]}; i > 0; i-- )); do
+    printf  '\e[38;5;5m%b\e[36m:%b:\e[38;5;187m%b\e[0m \e[31m>\e[0m ' \
+      "${BASH_SOURCE[i]##*/}" "${BASH_LINENO[i]}" "${FUNCNAME[i]}()"
+  done
+  set -u
+}
+
 function _prompt_git_head() {
   local git_head
 
@@ -48,7 +61,7 @@ function _prompt_git_status() {
   command git diff-files --quiet --ignore-submodules ||
     status+="!"
 
-  test -n "$( command git ls-files --others --exclude-standard :/ )" &&
+  test -n "$(command git ls-files --others --exclude-standard :/)" &&
     status+="?"
 
   command git rev-parse --verify refs/stash &> /dev/null &&

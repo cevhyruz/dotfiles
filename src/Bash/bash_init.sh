@@ -20,6 +20,12 @@ declare -a runtime=(
   "${DOTFILES}/localrc/localrc.bash"
 )
 
+# TODO:
+# Add a runtime API so we are able to include a project from localrc.
+# eg:
+#   runtime+=(/home/devs/Projects/visual-bash/vmb_init)
+#   runtime+=(/home/devs/Projects/bash-diagnostics/init.bash)
+
 declare -a scriptnames=()
 declare -i index=1
 for config in "${runtime[@]}"; do

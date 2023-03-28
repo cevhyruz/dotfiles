@@ -1,10 +1,7 @@
 # vi:ft=i3config
 
-# start dmenu (a program launcher)
+# start dmenu (a program launcher
 bindsym $mod+d exec --no-startup-id dmenu_run
-
-# open htop
-bindsym Ctrl+Shift+Esc exec --no-startup-id htop
 
 # fzf as dmenu
 # bindsym $mod+d exec $floatterm $float_small --execute \
@@ -23,9 +20,8 @@ bindsym $mod+space focus mode_toggle
 # bindsym $Green_Grass.jpg focus the child container
 # bindsym $mod+d focus child
 
-
 # different ways of launching a terminal
-bindsym $mod+Return  exec  $term
+bindsym $mod+Return exec  $term
 bindsym $mod+Shift+t exec $floatterm $float_normal
 
 # modes

@@ -2,48 +2,86 @@
 # shellcheck shell=bash disable=SC2034,SC2016
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
-# Execute an array or commands delimited by ';'
-# before and after the shell command.
+# very simple implementation of Bash-preexec
 #
 # Globals:
 # PRE_COMMAND  : commands to be run before the command.
 # POST_COMMAND : commands to be run after the command.
-# EXIT_CODE    : exit status of the given command.
 
-function __pre_command() {
-  if [[ -z "${AT_PROMPT:-}" ]]; then
-    return 1
-  fi
+function _exec_precmd() {
+  [[ -z "${AT_PROMPT:-}" ]] && return 1
   unset AT_PROMPT
-  eval "${PRE_COMMAND[@]}"
+
+  for cmd in "${hooks_precmd[@]}"; do
+    eval "$cmd"
+  done
+  unset cmd
 }
 
-function __post_command() {
-  declare -g EXIT_CODE="$?"
-  AT_PROMPT=1
-  if [[ -n "${FIRST_PROMPT:-}" ]]; then
+function _exec_postcmd() {
+  declare -g EXIT_CODE=$?
+  declare -g AT_PROMPT=1
+
+  [[ -n "${FIRST_PROMPT:-}" ]] && {
     unset FIRST_PROMPT
     return 1
+  }
+
+  for cmd in "${hooks_postcmd[@]}"; do
+    eval "$cmd"
+  done
+  unset cmd
+}
+
+function ::post_command() {
+  local has_cmd=0
+  if (( ${#hooks_postcmd[@]} > 0 )); then
+    for hook in "${hooks_postcmd[@]}"; do
+      if [[ "$hook" == "$1" ]]; then
+        has_cmd=1 && break
+      fi
+    done
+    unset hook
+    if [[ $has_cmd -eq 1 ]]; then
+      return 0
+    fi
+    hooks_postcmd+=("$1")
+  else
+    hooks_postcmd=("$1")
   fi
-  eval "${POST_COMMAND[@]}"
+}
+
+function ::pre_command() {
+  local has_cmd=0
+  if (( ${#hooks_precmd[@]} > 0 )); then
+    for hook in "${hooks_precmd[@]}"; do
+      if [[ "$hook" == "$1" ]]; then
+        has_cmd=1 && break
+      fi
+    done
+    unset hook
+    if [[ $has_cmd -eq 1 ]]; then
+      return 0
+    fi
+    hooks_precmd+=("$1")
+  else
+    hooks_precmd=("$1")
+  fi
 }
 
 function __init_hooks() {
-  declare -a PRE_COMMAND=()
-  declare -a POST_COMMAND=()
+  declare -ag hooks_precmd=()
+  declare -ag hooks_postcmd=()
 
-  # avoid __post_command pre-firing before the first prompt.
   FIRST_PROMPT=1
 
   # FIXME: For some reason, bash trap triggers an error
   # when inside bats. We'll skip initializing for now.
   if [[ -z "${TEST_DIRECTORY:-}" ]]; then
-    trap '__pre_command' DEBUG
+    trap '_exec_precmd' DEBUG
   fi
 
-  # fireup __post_command after every prompt
-  # and pass previous command return status.
-  PROMPT_COMMAND+=('__post_command;')
+  PROMPT_COMMAND=('_exec_postcmd')
 }
 
 __init_hooks && unset -f __init_hooks

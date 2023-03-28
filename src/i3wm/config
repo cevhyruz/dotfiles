@@ -2,13 +2,32 @@
 # i3 config file (v4.22)
 # see https://i3wm.org/docs/userguide.html for a complete reference!
 
-for_window [class="^.*"] border pixel 2 radius 10; gaps inner current set 10; gaps outer current set 40
-for_window [title="floating_term"] floating enable sticky enable
-
 set $i3wm_home ~/Projects/dotfiles/src/i3wm
 
-include $i3wm_home/core/*
-include $i3wm_home/modes/*
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+exec --no-startup-id feh --bg-scale ~/Pictures/Green_Grass.jpg
+
+exec --no-startup-id mons -s
+# exec --no-startup-id picom -b
+
+# -- general window properties
+for_window [class="^.*"] border pixel 2
+
+
+# floating / drowndown window
+for_window [title="floating_term"] floating enable
+for_window [title="floating_term"] resize set 625 400
+for_window [title="floating_term"] move scratchpad
+
+bindsym $mod+u [title="floating_term"] scratchpad show [title="floating_term"] move position center
+
 
 set $mod Mod1
 
@@ -42,3 +61,7 @@ set $ws7  "7"
 set $ws8  "8"
 set $ws9  "9"
 set $ws10 "10"
+
+include $i3wm_home/i3bar
+include $i3wm_home/keybindings
+include $i3wm_home/modes
