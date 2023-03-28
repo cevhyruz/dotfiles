@@ -5,37 +5,37 @@ load "${TEST_DIRECTORY}/test_helper.bash"
 load "${DOT_BASH}/core/hooks.bash"
 
 @test "environment variables should be ready and initialized." {
-   run test -v FIRST_PROMPT
-   assert_success
+  run test -v FIRST_PROMPT
+  assert_success
 }
 
-@test "__pre_command will return if '\$AT_PROMPT' is unset." {
+@test "_exec_precmd will return if '\$AT_PROMPT' is unset." {
   unset AT_PROMPT
-  run __pre_command
+  run _exec_precmd
   assert_failure 1
 }
 
-@test "__pre_command should run '\$PRE_COMMAND' in order of precedence" {
+@test "_exec_precmd should run '\$hooks_precmd[@]' in order of precedence." {
   AT_PROMPT=1
-  PRE_COMMAND='echo one;'
-  PRE_COMMAND+='echo two;'
-  run __pre_command
+  ::pre_command "echo one"
+  ::pre_command "echo two"
+  run _exec_precmd
   assert_line --index 0 "one"
   assert_line --index 1 "two"
   assert_success
 }
 
-@test "__post_command should return if '\$FIRST_PROMPT' has been set." {
+@test "_exec_postcmd should return if '\$FIRST_PROMPT' has been set." {
   FIRST_PROMPT=1
-  run __post_command
+  run _exec_postcmd
   assert_failure 1
 }
 
-@test "__post_command should run '\$POST_COMMAND in order or precedence'" {
+@test "_exec_postcmd should run '\$hooks_postcmd[@]' in order or precedence." {
   unset FIRST_PROMPT
-  POST_COMMAND='echo one;'
-  POST_COMMAND+='echo two;'
-  run __post_command
+  ::post_command "echo one"
+  ::post_command "echo two"
+  run _exec_postcmd
   assert_line --index 0 "one"
   assert_line --index 1 "two"
   assert_success
