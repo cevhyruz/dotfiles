@@ -7,7 +7,7 @@ function init::theme() {
   reset_underline="\e[24m"
   reset_reverse="\e[27m"
   reset="\e[0m"
-  resetall="\e[0m${reset_bold}${reset_underline}${reset_reverse}";
+  resetall="\e[0m"
   bold="\e[1m";
   dim="\e[2m";
   italic="\e[3m";

@@ -31,36 +31,6 @@ function _::add_to_path() {
   fi
 }
 
-function _::is_dir() {
-  _about "Test if given path is a directory."
-  _param "[directory path]"
-  _return "0 if path is a directory with contents."
-  _return "1 if it is empty, non-existent, glob or points to a file."
-
-  _group "helpers"
-  local -r DIR_PATH="${1-}"
-
-  [[ -z "$(ls --almost-all "${DIR_PATH}" 2>/dev/null)" ]] && return 1
-
-  if [[ -d "${DIR_PATH}" ]]; then
-    return 0
-  fi
-  for entry in "${LOADER_STACK[@]}"; do
-    if [[ ${entry} == "${namespace}" ]]; then
-      return 1
-    fi
-  done
-  LOADER_STACK+=("${namespace}")
-  old_func_def="$(declare -F)"
-  source "$1" || return $?
-  new_func_def="$(declare -F)"
-  # @FIXME: this is pretty slow.
-  eval "declare -arg ${namespace}=(
-    $(diff --rcs <(echo "${old_func_def}") <(echo "${new_func_def}") |
-    grep 'declare' |
-    awk '{print $3}'))"
-}
-
 # @about Add/prepend [path] into the global environment path. {{{1
 # @param [path]
 # @return 0 if the [path] was successfully added, 1 otherwise.
