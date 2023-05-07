@@ -341,7 +341,7 @@ bind-key -T copy-mode-vi 'C-y' {
 # yanking.
 bind-key -N "Copy shit" -T copy-mode-vi y {
   if-shell -b "command -v xclip" {
-    send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
+    send-keys -X copy-pipe 'xclip -in -selection clipboard'
   } {
     send-keys -X copy-selection
   }
