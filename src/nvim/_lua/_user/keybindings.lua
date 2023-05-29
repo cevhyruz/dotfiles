@@ -2,8 +2,8 @@ local M = {}
 
 local hlsearch = require "components.hlsearch"
 local spell = require "components.spell"
-local runtest = require "components.runtest"
 
+local runtest = require "components.runtest"
 local lspbuf = vim.lsp.buf
 local diags = vim.diagnostic
 
@@ -13,6 +13,7 @@ M.dotfiles_builtin = {
   { 'n',   '[d',             diags.goto_prev,            },
   { 'n',   ']d',             diags.goto_next,            },
   { 'n',   '<leader>q',      diags.setloclist,           },
+
   -- see   ':help vim.lsp.*'
   { 'n',   'gd',             lspbuf.definition,          },
   { 'n',   'gD',             lspbuf.declaration,         },
@@ -24,19 +25,21 @@ M.dotfiles_builtin = {
   { 'n',   'gr',             lspbuf.references,          },
   { 'n',   '<Leader>ca',     lspbuf.code_action,         },
   { 'n',   '<Tab>',   '<Cmd>AerialToggle<CR><C-w>w' },
+
   -- visual-select recently pasted text
   { 'n',   'gp',             '`[v`]' },
+
   -- adjust indentation of  selected text
   { 'n',   '<Leader>H',      '`[V`]<' },
   { 'n',   '<Leader>L',      '`[V`]>' },
 
   -- easy mode switching
-  { {'n', 'x', 'i', 'v'}, 'kj', '<Esc>', "" },
-  {  'c',                 'kj', '<C-c>' },
+  { 'x',   'kj',             '<Esc>' },
+  { 'i',   'kj',             '<Esc>' },
+  { 'v',   'kj',             '<Esc>' },
+  { 'c',   'kj',             '<C-c>' },
 
-  ["kj"]  = { "<Esc>", "move down through wrapped line", { "n", "x", "i", "v" } },
-  ["kij"] = { "<Esc>", "description of the key throu something", { "n" } },
-  [";"]   = { ":",     "quick command line",, { "n" } },
+  { {"x", "i", "v", "c" },   'kj',             '<Esc>' },
 
   -- command line navigation (history)
   { 'c',   'K',              '<Up>' },
@@ -49,8 +52,8 @@ M.dotfiles_builtin = {
   -- quick commandline
   { 'n',   ';',              ':' },
   -- quick text-reposition
-  { 'n',   '<m-j>',          'Vmz:m+<cr>`zV'              },
-  { 'n',   '<M-k>',          'Vmz:m-2<CR>`zV'             },
+  { 'n',   '<m-j>',          'Vmk:m+<cr>`zV'              },
+  { 'n',   '<M-k>',          'Vmr:m-2<CR>`zV'             },
   { 'v',   '<M-j>',          ':m\'>+<CR>`<my`>mzgv`yo`z'  },
   { 'v',   '<M-k>',          ':m\'<-2<CR>`>my`<mzgv`yo`z' },
   -- easy navigation for wraped lines

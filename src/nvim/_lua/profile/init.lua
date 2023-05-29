@@ -1,0 +1,1 @@
+-- meant to have user options, globals, autocmds, commands, etc.
