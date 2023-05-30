@@ -1,6 +1,5 @@
 # vi:ft=readline
 
-
 #"B"  vi-prev-word
 #"b"  vi-prev-word
 #"E"  vi-end-word
@@ -13,18 +12,18 @@
 $if mode=vi
   # switch to command mode
   "kj": VI-MOVEMENT-MODE
-  # insert mode (navigation) to be use 'inside' macros,
+  # insert mode (navigation) for use 'inside' macros,
   # this will make the whole macro as a single action allowing easy undoing.
   # e, E
   "\C-x\C-e": vi-end-word
   "\C-x\C-l": vi-end-bigword
   "\C-x\C-a": vi-append-mode
-  "\C-f": character-search
+  "\C-f":     character-search
   "\C-x\C-o": vi-append-eol
 
   "\C-x\C-d": vi-delete-to
 
-  "\C-x1": vi-arg-digit
+  "\C-x1":   vi-arg-digit
   "\C-\C-2": vi-arg-digit
 
 
@@ -35,19 +34,22 @@ $if mode=vi
 
 set keymap vi-command
 
-  # disable FCEDIT
-  $if Bash
-    ";q": "dd\C-d"
-  $endif
-  # multi-line navigation
-  "j": next-screen-line
-  "k": previous-screen-line
-  # history navigation
-  "K": history-search-backward
-  "J": history-search-forward
-  # macros
-  "qa": start-kbd-macro
-  "q":  end-kbd-macro
-  ".":  call-last-kbd-macro
-  "z":  print-last-kbd-macro
-$endif
+# Quick exit.
+#
+# FIXME:
+# In python this should not wait for key press before terminating the prompt.
+";q": "dd\C-d"
+
+# multi-line navigation
+"j": next-screen-line
+"k": previous-screen-line
+
+# history navigation
+"K": history-search-backward
+"J": history-search-forward
+
+# macros
+"qa": start-kbd-macro
+"q":  end-kbd-macro
+".":  call-last-kbd-macro
+"z":  print-last-kbd-macro
