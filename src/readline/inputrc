@@ -31,13 +31,9 @@ set bell-style none
 
 set show-mode-in-prompt on
 
+# Set REPL prompt for various applications.
 set vi-ins-mode-string "\1\e[5 q\2"
 set vi-cmd-mode-string "\1\e[0 q\e[2 q\2"
-
-$if Lua
-  set vi-ins-mode-string "\1\e[5 q\2"
-  set vi-cmd-mode-string "\1\e[0 q\e[2 q\2"
-$endif
 
 $include /home/devs/Projects/dotfiles/src/readline/keybindings
 $include /home/devs/Projects/dotfiles/src/readline/surround
