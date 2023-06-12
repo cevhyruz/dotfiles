@@ -195,7 +195,9 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 "(group #{session_group}: #{session_group_list}),"\
 "}}}"
 
-# vim-style selection, display selected character/lines count.
+# vim-style selection display, display selected character/lines count.
+# user options:
+#   @visual-line [number]
 %hidden _selection=\
 "#{?#{selection_active},"\
 "#{?#{e|>:#{e|+:#{?#{e|<:#{selection_end_y},#{selection_start_y}}"\
@@ -210,6 +212,9 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 ",#{e|-:#{selection_start_x},#{selection_end_x}}"\
 ",#{e|-:#{selection_end_x},#{selection_start_x}}"\
 "},#{selection_active}} char}/s,}"
+
+%hidden foobar=\
+"#{?#{@visual-line},true,false}"
 
 # Show selected characters/lines
 # or display a status message
