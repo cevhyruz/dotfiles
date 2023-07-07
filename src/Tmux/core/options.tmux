@@ -17,7 +17,7 @@ set-option -g renumber-windows on
 set-option -g xterm-keys on
 set-option -g assume-paste-time 1
 set-option -g base-index 1
-set-option -g bell-action none
+set-option -g bell-action any
 set-option -g default-command "${SHELL}"
 set-option -g default-shell "${SHELL}"
 set-option -g display-time  5000
