@@ -2,7 +2,6 @@
 {
   "explorer.openEditors.visible": 0,
   "explorer.autoReveal": false,
-  "breadcrumbs.enabled": false,
   "keyboard.dispatch": "keyCode",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "Lua.telemetry.enable": true,
@@ -14,6 +13,7 @@
   "editor.rulers": [
      { "column": 80, "color": "#303030" },
   ],
+  "editor.detectIndentation": true,
 	"editor.guides.highlightActiveIndentation": false,
   "editor.matchBrackets": "never",
   "editor.minimap.scale": 1,
