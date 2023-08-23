@@ -4,7 +4,8 @@
 // navigate windows left
 { "key": "ctrl+h",                "command": "vim.remap",
                                   "when": "vim.mode == 'Normal'",
-                                  "args": { "after": ["<C-w>", "h"] } },
+                                  "args": { "after": ["<C-w>", "h"] },
+},
 // navigate window down.
 { "key": "ctrl+j",                "command": "vim.remap",
                                   "when": "vim.mode == 'Normal'",
@@ -16,8 +17,8 @@
 // navigate window right.
 { "key": "ctrl+l",                "command": "vim.remap",
                                   "when": "vim.mode == 'Normal'",
-                                  // linebreak
                                   "args": { "after": ["<C-w>", "l"] } },
+
 { "key": "ctrl+j",                "command": "vim.remap",
                                   "when": "vim.mode == 'Insert'",
                                   "args": { "after": ["<C-m>"] } },
@@ -27,13 +28,27 @@
 // toggle file explorer
 { "key": "ctrl+n",                "command": "workbench.action.toggleSidebarVisibility",
                                   "when": "explorerViewletFocus || editorTextFocus && !inQuickOpen" },
+
 { "key": "ctrl+n",                "command": "workbench.view.explorer",
                                   "when": "editorTextFocus && !explorerViewletVisible && !inQuickOpen" },
+
 // open selected file in editor then hide fileExplorer.
 { "key": "ctrl+m",                "command": "extension.multiCommand.execute",
                                   "args": { "sequence": [ "list.select", "workbench.action.toggleSidebarVisibility" ] },
                                   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
-// renaming
+// enter expand list.
+{ "key": "enter",                 "command": "list.toggleExpand",
+                                  "when": "listFocus && !inputFocus" },
+// open file
+{ "key": "enter",                 "command": "explorer.openAndPassFocus",
+                                  "when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsFolder && !inputFocus" },
+// explorer expand list.
+{ "key": "i",                     "command": "list.toggleExpand",
+                                  "when": "listFocus && !inputFocus" },
+// Preview file
+{ "key": "i",                     "command": "filesExplorer.openFilePreserveFocus",
+                                  "when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsFolder && !inputFocus" },
+
 { "key": "r",                     "command": "renameFile",
                                   "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 // deleting.
