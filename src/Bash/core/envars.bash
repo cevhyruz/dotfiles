@@ -10,13 +10,12 @@ unset MAILCHECK
 # append current sessions history to the history file.
 PROMPT_COMMAND=('history -a;')
 
-# useful editors.
-VISUAL="$(command -v nvim || command -v vim || command -v )"
-EDITOR="${VISUAL}"
-export EDITOR
+_::command_exists "nvim" && VISUAL="nvim"
+
+export EDITOR="$VISUAL"
 
 # default browser
-export BROWSER="/usr/bin/google-chrome"
+_::command_exists "google-chrome" && export BROWSER="/usr/bin/google-chrome"
 
 # larger history (default: 500)
 HISTSIZE=100000
@@ -24,5 +23,3 @@ HISTFILESIZE=$HISTSIZE
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL='ignorespace:erasedups';
-
-HISTIGNORE='bash:fish:zsh:dash:exit:logout:clear:pushd:popd:ls:echo';
