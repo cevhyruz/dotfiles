@@ -81,7 +81,14 @@ function __init_hooks() {
     trap '_exec_precmd' DEBUG
   fi
 
+  if [[ -n $PROMPT_COMMAND ]]; then
+    for cmd in "${PROMPT_COMMAND[@]}"; do
+     ::post_command "$cmd"
+    done
+  fi
+
   PROMPT_COMMAND=('_exec_postcmd')
+
 }
 
 __init_hooks && unset -f __init_hooks
