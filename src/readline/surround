@@ -1,40 +1,29 @@
 # vi:ft=readline fdm=marker
 
-$if mode=vi
-set keymap vi-command
-
-$if Bash
-  # copy to X Selection
-  "yy": "\C-x\C-y"
-$else
-  "yy": "mt^y$`t"
-$endif
-"\C-x\C-^": upcase-word
-"\C-x\C-,": downcase-word
-# anchored undo
-"\C-x\C-u": vi-undo
-"u": "ma\C-x\C-u`ah"
-# upcase/downcase
-# "viwU": "lb\C-x\C-^"
-# "viwu": "lb\C-x\C-,"
 # yiw/W {{{1
 "yiw": "mtlbYe`t"
 "yiW": "mtlBYE`t"
+
 # yaw/W {{{1
 "yaw": "yiw"
 "yaW": "yiW"
+
 # diw/W {{{1
 "diw": "lbde"
 "diW": "lBdE"
+
 # daw/W {{{1
 "daw": "diw"
 "daW": "diW"
+
 # caw/W {{{1
 "caw": "ciw"
 "caW": "ciW"
+
 # ciw/W {{{1
 "ciw": "diwi"
 "ciW": "diWi"
+
 # di  {{{1
 "di'":  "lF'lmtf'd`t"
 "di\"": "lF\"lmtf\"d`t"
@@ -48,6 +37,7 @@ $endif
 "di}":  "lF{lmtf}d`t"
 "di>":  "lF<lmtf>d`t"
 "di<":  "lF<lmtf>d`t"
+
 # da  {{{1
 "da'":  "mtlF'df'"
 "da\"": "lF\"df\""
@@ -61,6 +51,7 @@ $endif
 "da}":  "lF{df}"
 "da>":  "lF<df>"
 "da<":  "lF<df>"
+
 # ds  {{{1
 "ds  ":  "lmtF a\C-h\C-f \e[C\C-h\e`t"
 "ds'":  "lmtF'a\C-h\C-f'\e[C\C-h\e`t"
@@ -75,6 +66,7 @@ $endif
 "ds}":  "lmtF{a\C-h\C-f}\e[C\C-h\e`t"
 "ds<":  "lmtF<a\e[C\C-h\C-h\C-f>\e[C\C-h\C-h\e`t"
 "ds>":  "lmtF<a\C-h\C-f>\e[C\C-h\e`t"
+
 # ci  {{{1
 "ci'":  "lF'lmtf'c`t"
 "ci\"": "lF\"lmtf\"c`t"
@@ -88,6 +80,7 @@ $endif
 "ci}":  "ci{"
 "ci<":  "lF<lmtf>c`t"
 "ci>":  "ci<"
+
 # ca  {{{1
 "ca'":  "mtlF'cf'"
 "ca\"": "mtlF\"cf\""
@@ -101,6 +94,7 @@ $endif
 "ca}":  "ca{"
 "ca<":  "mtlF<cf>"
 "ca>":  "ca<"
+
 # cs  {{{1
 # cs[space] {{{2
 "cs  '":  "mtF a\C-h'\C-f \e[C\C-h'\e`t"
@@ -115,6 +109,7 @@ $endif
 "cs  }":  "mtF a\C-h{\C-f \e[C\C-h}\e`t"
 "cs  <":  "mtF a\C-h< \C-f \e[C\C-h >\e`t"
 "cs  >":  "mtF a\C-h<\C-f \e[C\C-h>\e`t"
+
 # cs'  {{{2
 "cs'\"": "mtF'a\C-h"\C-f'\e[C\C-h"\e`t"
 "cs'`":  "mtF'a\C-h`\C-f'\e[C\C-h`\e`t"
@@ -127,6 +122,7 @@ $endif
 "cs'}":  "mtF'a\C-h{\C-f'\e[C\C-h}\e`t"
 "cs'<":  "mtF'a\C-h< \C-f'\e[C\C-h >\e`t"
 "cs'>":  "mtF'a\C-h<\C-f'\e[C\C-h>\e`t"
+
 # cs"  {{{2
 "cs\"'": "mtF\"a\C-h'\C-f\"\e[C\C-h'\e`t"
 "cs\"`": "mtF\"a\C-h`\C-f\"\e[C\C-h`\e`t"
@@ -139,6 +135,7 @@ $endif
 "cs\"}": "mtF\"a\C-h{\C-f\"\e[C\C-h}\e`t"
 "cs\"<": "mtF\"a\C-h< \C-f\"\e[C\C-h >\e`t"
 "cs\">": "mtF\"a\C-h<\C-f\"\e[C\C-h>\e`t"
+
 # cs`  {{{2
 "cs`'":  "mtF`a\C-h'\C-f`\e[C\C-h'\e`t"
 "cs`\"": "mtF`a\C-h"\C-f`\e[C\C-h"\e`t"
@@ -151,6 +148,7 @@ $endif
 "cs`}":  "mtF`a\C-h{\C-f`\e[C\C-h}\e`t"
 "cs`<":  "mtF`a\C-h< \C-f`\e[C\C-h >\e`t"
 "cs`>":  "mtF`a\C-h<\C-f`\e[C\C-h>\e`t"
+
 # cs*  {{{2
 "cs*'":  "mtF*a\C-h'\C-f*\e[C\C-h'\e`t"
 "cs*\"": "mtF*a\C-h"\C-f*\e[C\C-h"\e`t"
@@ -163,6 +161,7 @@ $endif
 "cs*}":  "mtF*a\C-h{\C-f*\e[C\C-h}\e`t"
 "cs*<":  "mtF*a\C-h< \C-f*\e[C\C-h >\e`t"
 "cs*>":  "mtF*a\C-h<\C-f*\e[C\C-h>\e`t"
+
 # cs(  {{{2
 "cs('":  "mtF(a\e[C\C-h\C-h'\C-f)\e[C\C-h\C-h'\e`t"
 "cs(\"": "mtF(a\e[C\C-h\C-h"\C-f)\e[C\C-h\C-h"\e`t"
@@ -175,6 +174,7 @@ $endif
 "cs(}":  "mtF(a\e[C\C-h\C-h{\C-f)\e[C\C-h\C-h}\e`t"
 "cs(<":  "mtF(a\e[C\C-h\C-h< \C-f)\e[C\C-h\C-h >\e`t"
 "cs(>":  "mtF(a\e[C\C-h\C-h<\C-f)\e[C\C-h\C-h>\e`t"
+
 # cs)  {{{2
 "cs)'":  "mtF(a\C-h'\C-f)\e[C\C-h'\e`t"
 "cs)\"": "mtF(a\C-h"\C-f)\e[C\C-h"\e`t"
@@ -187,6 +187,7 @@ $endif
 "cs)}":  "mtF(a\C-h{\C-f)\e[C\C-h}\e`t"
 "cs)<":  "mtF(a\C-h< \C-f)\e[C\C-h >\e`t"
 "cs)>":  "mtF(a\C-h<\C-f)\e[C\C-h>\e`t"
+
 # cs[  {{{2
 "cs['":  "mtF[a\e[C\C-h\C-h'\C-f]\e[C\C-h\C-h'\e`t"
 "cs[\"": "mtF[a\e[C\C-h\C-h"\C-f]\e[C\C-h\C-h"\e`t"
@@ -199,6 +200,7 @@ $endif
 "cs[}":  "mtF[a\e[C\C-h\C-h{\C-f]\e[C\C-h\C-h}\e`t"
 "cs[<":  "mtF[a\e[C\C-h\C-h< \C-f]\e[C\C-h\C-h >\e`t"
 "cs[>":  "mtF[a\e[C\C-h\C-h<\C-f]\e[C\C-h\C-h>\e`t"
+
 # cs]  {{{2
 "cs]'":  "mtF[a\C-h'\C-f]\e[C\C-h'\e`t"
 "cs]\"": "mtF[a\C-h"\C-f]\e[C\C-h"\e`t"
@@ -211,6 +213,7 @@ $endif
 "cs]}":  "mtF[a\C-h{\C-f]\e[C\C-h}\e`t"
 "cs]<":  "mtF[a\C-h< \C-f]\e[C\C-h >\e`t"
 "cs]>":  "mtF[a\C-h<\C-f]\e[C\C-h>\e`t"
+
 # cs{  {{{2
 "cs{'":  "mtF{a\e[C\C-h\C-h'\C-f}\e[C\C-h\C-h'\e`t"
 "cs{\"": "mtF{a\e[C\C-h\C-h"\C-f}\e[C\C-h\C-h"\e`t"
@@ -223,6 +226,7 @@ $endif
 "cs{]":  "mtF{a\e[C\C-h\C-h[\C-f}\e[C\C-h\C-h]\e`t"
 "cs{<":  "mtF{a\e[C\C-h\C-h< \C-f}\e[C\C-h\C-h >\e`t"
 "cs{>":  "mtF{a\e[C\C-h\C-h<\C-f}\e[C\C-h\C-h>\e`t"
+
 # cs}  {{{2
 "cs}'":  "mtF{a\C-h'\C-f}\e[C\C-h'\e`t"
 "cs}\"": "mtF{a\C-h"\C-f}\e[C\C-h"\e`t"
@@ -235,6 +239,7 @@ $endif
 "cs}{":  "mtF{a\C-h{ \C-f}\e[C\C-h }\e`t"
 "cs}<":  "mtF{a\C-h< \C-f}\e[C\C-h >\e`t"
 "cs}>":  "mtF{a\C-h<\C-f}\e[C\C-h>\e`t"
+
 # cs<  {{{2
 "cs<'":  "mtF<a\e[C\C-h\C-h'\C-f>\e[C\C-h\C-h'\e`t"
 "cs<\"": "mtF<a\e[C\C-h\C-h"\C-f>\e[C\C-h\C-h"\e`t"
@@ -247,6 +252,7 @@ $endif
 "cs<[":  "mtF<a\e[C\C-h\C-h[ \C-f>\e[C\C-h\C-h ]\e`t"
 "cs<]":  "mtF<a\e[C\C-h\C-h[\C-f>\e[C\C-h\C-h]\e`t"
 "cs<>":  "mtF<a\e[C\C-h\C-h<\C-f>\e[C\C-h\C-h>\e`t"
+
 # cs>  {{{2
 "cs>'":  "mtF<a\C-h'\C-f>\e[C\C-h'\e`t"
 "cs>\"": "mtF<a\C-h"\C-f>\e[C\C-h"\e`t"
@@ -259,6 +265,7 @@ $endif
 "cs>{":  "mtF<a\C-h{ \C-f>\e[C\C-h }\e`t"
 "cs>}"   "mtF<a\C-h{\C-f>\e[C\C-h}\e`t"
 "cs><":  "mtF<a\C-h< \C-f>\e[C\C-h >\e`t"
+
 # yi  {{{1
 "yi'":  "modi'hp`o"
 "yi\"": "modi\"hp`o"
@@ -272,6 +279,7 @@ $endif
 "yi}":  "modi}hp`o"
 "yi<":  "modi<hp`o"
 "yi>":  "modi>hp`o"
+
 # ya  {{{1
 "ya'":  "moda'hp`o"
 "ya\"": "moda\"hp`o"
@@ -285,6 +293,7 @@ $endif
 "ya}":  "moda}hp`o"
 "ya<":  "moda<hp`o"
 "ya>":  "moda>hp`o"
+
 # ysw  {{{1
 "ysw  ": "mti \C-x\C-e\C-x\C-a \e`tl"
 "ysw'":  "mti'\C-x\C-e\C-x\C-a'\e`tl"
@@ -299,6 +308,7 @@ $endif
 "ysw}":  "mti{\C-x\C-e\C-x\C-a}\e`tl"
 "ysw<":  "mti< \C-x\C-e\C-x\C-a >\e`tl"
 "ysw>":  "mti<\C-x\C-e\C-x\C-a>\e`tl"
+
 # ysW {{{1
 "ysW  ": "mti \C-x\C-l\C-x\C-a \e`tl"
 "ysW'":  "mti'\C-x\C-l\C-x\C-a'\e`tl"
@@ -313,6 +323,7 @@ $endif
 "ysW}":  "mti{\C-x\C-l\C-x\C-a}\e`tl"
 "ysW<":  "mti< \C-x\C-l\C-x\C-a >\e`tl"
 "ysW>":  "mti<\C-x\C-l\C-x\C-a>\e`tl"
+
 # ysiw  {{{1
 "ysiw  ": "lmtbi \e[D\C-x\C-e\C-x\C-a \e`t"
 "ysiw'":  "lmtbi'\e[D\C-x\C-e\C-x\C-a'\e`t"
@@ -327,6 +338,7 @@ $endif
 "ysiw}":  "lmtbi{\e[D\C-x\C-e\C-x\C-a}\e`t"
 "ysiw<":  "lmtbi< \e[D\C-x\C-e\C-x\C-a >\e`t"
 "ysiw>":  "lmtbi<\e[D\C-x\C-e\C-x\C-a>\e`t"
+
 # ysiW  {{{1
 "ysiW  ": "lmtBi \e[D\C-x\C-l\C-x\C-a \e`t"
 "ysiW'":  "lmtBi'\e[D\C-x\C-l\C-x\C-a'\e`t"
@@ -341,6 +353,7 @@ $endif
 "ysiW}":  "lmtBi{\e[D\C-x\C-l\C-x\C-a}\e`t"
 "ysiW<":  "lmtBi< \e[D\C-x\C-l\C-x\C-a >\e`t"
 "ysiW>":  "lmtBi<\e[D\C-x\C-l\C-x\C-a>\e`t"
+
 # yss  {{{1
 "yss  ": "lmtI \C-x\C-o \e`t"
 "yss'":  "lmtI'\C-x\C-o'\e`t"
@@ -355,6 +368,7 @@ $endif
 "yss}":  "lmtI{\C-x\C-o}\e`t"
 "yss<":  "lmtI< \C-x\C-o >\e`t"
 "yss>":  "lmtI<\C-x\C-o>\e`t"
+
 # ysi  {{{1
 # ysi'  {{{2
 "ysi'  ": "lmtF'a \C-f' \e`t"
@@ -370,6 +384,7 @@ $endif
 "ysi'}":  "lmtF'a{\C-f'}\e`t"
 "ysi'<":  "lmtF'a< \C-f' >\e`t"
 "ysi'>":  "lmtF'a<\C-f'>\e`t"
+
 # ysi"  {{{2
 "ysi\"  ": "lmtF\"a \C-f\" \e`t"
 "ysi\"'":  "lmtF\"a'\C-f\"'\e`t"
@@ -384,6 +399,7 @@ $endif
 "ysi\"}":  "lmtF\"a{\C-f\"}\e`t"
 "ysi\"<":  "lmtF\"a< \C-f\" >\e`t"
 "ysi\">":  "lmtF\"a<\C-f\">\e`t"
+
 # ysi`  {{{2
 "ysi`  ": "lmtF`a \C-f` \e`t"
 "ysi`'":  "lmtF`a'\C-f`'\e`t"
@@ -398,6 +414,7 @@ $endif
 "ysi`}":  "lmtF`a{\C-f`}\e`t"
 "ysi`<":  "lmtF`a< \C-f` >\e`t"
 "ysi`>":  "lmtF`a<\C-f`>\e`t"
+
 # ysi*  {{{2
 "ysi*  ": "lmtF*a \C-f* \e`t"
 "ysi*'":  "lmtF*a'\C-f*'\e`t"
@@ -412,6 +429,7 @@ $endif
 "ysi*}":  "lmtF*a{\C-f*}\e`t"
 "ysi*<":  "lmtF*a< \C-f* >\e`t"
 "ysi*>":  "lmtF*a<\C-f*>\e`t"
+
 # ysi(  {{{2
 "ysi(  ": "lmtF(a \C-f) \e`t"
 "ysi('":  "lmtF(a'\C-f)'\e`t"
@@ -426,6 +444,7 @@ $endif
 "ysi(}":  "lmtF(a{\C-f)}\e`t"
 "ysi(<":  "lmtF(a< \C-f) >\e`t"
 "ysi(>":  "lmtF(a<\C-f)>\e`t"
+
 # ysi)  {{{2
 "ysi)  ": "ysi(  "
 "ysi)'":  "ysi('"
@@ -440,6 +459,7 @@ $endif
 "ysi)}":  "ysi(}"
 "ysi)<":  "ysi(<"
 "ysi)>":  "ysi(>"
+
 # ysi[  {{{2
 "ysi[  ": "lmtF[a \C-f] \e`t"
 "ysi['":  "lmtF[a'\C-f]'\e`t"
@@ -454,6 +474,7 @@ $endif
 "ysi[}":  "lmtF[a{\C-f]}\e`t"
 "ysi[<":  "lmtF[a< \C-f] >\e`t"
 "ysi[>":  "lmtF[a<\C-f]>\e`t"
+
 # ysi]  {{{2
 "ysi]  ": "ysi[  "
 "ysi]'":  "ysi['"
@@ -468,6 +489,7 @@ $endif
 "ysi]}":  "ysi[}"
 "ysi]<":  "ysi[<"
 "ysi]>":  "ysi[>"
+
 # ysi{  {{{2
 "ysi{  ": "lmtF{a \C-f} \e`t"
 "ysi{'":  "lmtF{a'\C-f}'\e`t"
@@ -482,6 +504,7 @@ $endif
 "ysi{}":  "lmtF{a{\C-f}}\e`t"
 "ysi{<":  "lmtF{a< \C-f} >\e`t"
 "ysi{>":  "lmtF{a<\C-f}>\e`t"
+
 # ysi}  {{{2
 "ysi}  ": "ysi{  "
 "ysi}'":  "ysi{'"
@@ -496,6 +519,7 @@ $endif
 "ysi}}":  "ysi{}"
 "ysi}<":  "ysi{<"
 "ysi}>":  "ysi{>"
+
 # ysi<  {{{2
 "ysi<  ": "lmtF<a \C-f> \e`t"
 "ysi<'":  "lmtF<a'\C-f>'\e`t"
@@ -510,6 +534,7 @@ $endif
 "ysi<}":  "lmtF<a{\C-f>}\e`t"
 "ysi<<":  "lmtF<a< \C-f> >\e`t"
 "ysi<>":  "lmtF<a<\C-f>>\e`t"
+
 # ysi>  {{{2
 "ysi>  ": "ysi<  "
 "ysi>'":  "ysi<'"
@@ -524,6 +549,7 @@ $endif
 "ysi>}":  "ysi<}"
 "ysi><":  "ysi<<"
 "ysi>>":  "ysi<>"
+
 # ysa  {{{1
 # ysa'  {{{2
 "ysa'  ": "lmtF'i \C-f'\e[C \e`t"
@@ -539,6 +565,7 @@ $endif
 "ysa'}":  "lmtF'i{\C-f'\e[C}\e`t"
 "ysa'<":  "lmtF'i< \C-f'\e[C >\e`t"
 "ysa'>":  "lmtF'i<\C-f'\e[C>\e`t"
+
 # ysa"  {{{2
 "ysa\"  ": "lmtF\"i \C-f\"\e[C \e`t"
 "ysa\"'":  "lmtF\"i'\C-f\"\e[C'\e`t"
@@ -553,6 +580,7 @@ $endif
 "ysa\"}":  "lmtF\"i{\C-f\"\e[C}\e`t"
 "ysa\"<":  "lmtF\"i< \C-f\"\e[C >\e`t"
 "ysa\">":  "lmtF\"i<\C-f\"\e[C>\e`t"
+
 # ysa`  {{{2
 "ysa`  ": "lmtF`i \C-f`\e[C \e`t"
 "ysa`'":  "lmtF`i'\C-f`\e[C'\e`t"
@@ -567,6 +595,7 @@ $endif
 "ysa`}":  "lmtF`i{\C-f`\e[C}\e`t"
 "ysa`<":  "lmtF`i< \C-f`\e[C >\e`t"
 "ysa`>":  "lmtF`i<\C-f`\e[C>\e`t"
+
 # ysa*  {{{2
 "ysa*  ": "lmtF*i \C-f*\e[C \e`t"
 "ysa*'":  "lmtF*i'\C-f*\e[C'\e`t"
@@ -581,6 +610,7 @@ $endif
 "ysa*}":  "lmtF*i{\C-f*\e[C}\e`t"
 "ysa*<":  "lmtF*i< \C-f*\e[C >\e`t"
 "ysa*>":  "lmtF*i<\C-f*\e[C>\e`t"
+
 # ysa(  {{{2
 "ysa(  ": "lmtF(i \C-f)\e[C \e`t"
 "ysa('":  "lmtF(i'\C-f)\e[C'\e`t"
@@ -595,6 +625,7 @@ $endif
 "ysa(}":  "lmtF(i{\C-f)\e[C}\e`t"
 "ysa(<":  "lmtF(i< \C-f)\e[C >\e`t"
 "ysa(>":  "lmtF(i<\C-f)\e[C>\e`t"
+
 # ysa)  {{{2
 "ysa)  ": "ysa(  "
 "ysa)'":  "ysa('"
@@ -609,6 +640,7 @@ $endif
 "ysa)}":  "ysa(}"
 "ysa)<":  "ysa(<"
 "ysa)>":  "ysa(>"
+
 # ysa[  {{{2
 "ysa[  ": "lmtF[i \C-f]\e[C \e`t"
 "ysa['":  "lmtF[i'\C-f]\e[C'\e`t"
@@ -623,6 +655,7 @@ $endif
 "ysa[}":  "lmtF[i{\C-f]\e[C}\e`t"
 "ysa[<":  "lmtF[i< \C-f]\e[C >\e`t"
 "ysa[>":  "lmtF[i<\C-f]\e[C>\e`t"
+
 # ysa]  {{{2
 "ysa]  ": "ysa[  "
 "ysa]'":  "ysa['"
@@ -637,6 +670,7 @@ $endif
 "ysa]}":  "ysa[}"
 "ysa]<":  "ysa[<"
 "ysa]>":  "ysa[>"
+
 # ysa{  {{{2
 "ysa{  ": "lmtF{i \C-f}\e[C \e`t"
 "ysa{'":  "lmtF{i'\C-f}\e[C'\e`t"
@@ -651,6 +685,7 @@ $endif
 "ysa{}":  "lmtF{i{\C-f}\e[C}\e`t"
 "ysa{<":  "lmtF{i< \C-f}\e[C >\e`t"
 "ysa{>":  "lmtF{i<\C-f}\e[C>\e`t"
+
 # ysa}  {{{2
 "ysa}  ": "ysa{  "
 "ysa}'":  "ysa{'"
@@ -665,6 +700,7 @@ $endif
 "ysa}}":  "ysa{}"
 "ysa}<":  "ysa{<"
 "ysa}>":  "ysa{>"
+
 # ysa<  {{{2
 "ysa<  ": "lmtF<i \C-f>\e[C \e`t"
 "ysa<'":  "lmtF<i'\C-f>\e[C'\e`t"
@@ -679,6 +715,7 @@ $endif
 "ysa<}":  "lmtF<i{\C-f>\e[C}\e`t"
 "ysa<<":  "lmtF<i< \C-f>\e[C >\e`t"
 "ysa<>":  "lmtF<i<\C-f>\e[C>\e`t"
+
 # ysa> {{{2
 "ysa>  ": "ysa<  "
 "ysa>'":  "ysa<'"
@@ -693,4 +730,3 @@ $endif
 "ysa>}":  "ysa<}"
 "ysa><":  "ysa<<"
 "ysa>>":  "ysa<>"
-$endif

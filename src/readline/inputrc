@@ -2,12 +2,6 @@
 # inputrc for libreadline see readline(3readline)
 # and `info rluserman' for more information.
 # ----------------------------------------------------------------------
-# This file controls the behaviour of line input editing for
-# programs that use the GNU Readline library.  Existing
-# programs include FTP, Bash, and GDB.
-#
-# You can re-read the inputrc file with C-x C-r.
-# Lines beginning with '#' are comments.
 
 set editing-mode vi
 
@@ -35,6 +29,100 @@ set show-mode-in-prompt on
 set vi-ins-mode-string "\1\e[5 q\2"
 set vi-cmd-mode-string "\1\e[0 q\e[2 q\2"
 
-$include /home/devs/Projects/dotfiles/src/readline/keybindings
+# === keybindings ===
+
+$if mode=vi
+# switch to command mode
+"kj": vi-movement-mode
+
+# insert mode (navigation) for use 'inside' macros,
+# this will make the whole macro as a single action allowing easy undo.
+"\C-x\C-e": vi-end-word
+"\C-x\C-l": vi-end-bigword
+"\C-x\C-a": vi-append-mode
+"\C-f":     character-search
+"\C-x\C-o": vi-append-eol
+
+# Copy to X selection
+"yy": "\C-x\C-y"
+
+# NOTE: There maybe a distinction with this vs. 'b,w,e'.
+# we can maybe use add a switch movement function.
+"\C-x\C-w": vi-end-bigword
+"\C-x\C-i": vi-bWord
+
+set keymap vi-command
+
+# surround with ease
 $include /home/devs/Projects/dotfiles/src/readline/surround
-$include /home/devs/Projects/dotfiles/src/readline/completion
+
+# anchored undo
+"\C-x\C-u": vi-undo
+"u": "ma\C-x\C-u`ah"
+
+# upcase/downcase word
+"\C-x\C-^": upcase-word
+"\C-x\C-p": downcase-word
+"viwU": "mtb\C-x\C-^`t"
+"viwu": "mtb\C-x\C-p`t"
+
+# terminate session
+# FIXME: In python this waits for a key press before terminating session.
+";q": "dd\C-d"
+
+# multi-line navigation
+"j": next-screen-line
+"k": previous-screen-line
+
+# history navigation
+"K": history-search-backward
+"J": history-search-forward
+
+# macros
+"qa": start-kbd-macro
+"q":  end-kbd-macro
+".":  call-last-kbd-macro
+"z":  print-last-kbd-macro
+
+# === completion ====
+
+set completion-display-width 1
+set completion-prefix-display-length 3
+
+# Make sure we don't output everything on the 1 line
+set horizontal-scroll-mode Off
+
+# append slash for completed names which are symlink to directories.
+set mark-symlinked-directories on
+
+# case-insensitive filename matching and completion.
+set completion-ignore-case on
+
+# match all files begin with dot (.)
+set match-hidden-files on
+
+# when complete-ignore-case is On, treats '_' and '-'
+# as the same when matching and completing.
+set completion-map-case on
+
+# be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing <tab> will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla".
+set skip-completed-text on
+
+# easier tab completion
+set show-all-if-ambiguous on
+set visible-stats on
+set page-completions off
+
+# display common completion prefix using the value of LS_COLORS
+# for custom suffix 'readline-colored-completion-prefix'
+set colored-completion-prefix on
+set colored-stats on
+
+# display the common prefix of the list of possible completions
+# (which may be empty) before cycling through the list.
+set menu-complete-display-prefix on
+
+set print-completions-horizontally on
