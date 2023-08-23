@@ -43,15 +43,18 @@ $if mode=vi
 "\C-f":     character-search
 "\C-x\C-o": vi-append-eol
 
-# Copy to X selection
-"yy": "\C-x\C-y"
-
 # NOTE: There maybe a distinction with this vs. 'b,w,e'.
 # we can maybe use add a switch movement function.
 "\C-x\C-w": vi-end-bigword
 "\C-x\C-i": vi-bWord
 
 set keymap vi-command
+
+$if Bash
+  # Copy to X selection
+  # \C-x\C-y is bound when plugin 'clipboard' is enabled.
+  "yy": "\C-x\C-y"
+$endif
 
 # surround with ease
 $include /home/devs/Projects/dotfiles/src/readline/surround

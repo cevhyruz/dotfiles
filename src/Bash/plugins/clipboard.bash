@@ -9,5 +9,3 @@ alias pbpaste="xsel --clipboard"
 
 # readline functions
 bind -m vi-command -x '"\C-x\C-y": printf "%s" "${READLINE_LINE-}" | pbcopy'
-
-main
