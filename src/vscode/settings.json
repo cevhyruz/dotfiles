@@ -3,6 +3,10 @@
   // extension settings
   "vscode_custom_css.imports": ["file:///home/devs/.vscode/custom.css"],
 
+  "editor.renderLineHighlightOnlyWhenFocus": true,
+  "editor.lightbulb.enabled": true,
+  "terminal.integrated.gpuAcceleration": "on",
+
   "explorer.openEditors.visible": 1,
   "explorer.autoReveal": false,
   "keyboard.dispatch": "keyCode",
@@ -23,126 +27,127 @@
   "editor.matchBrackets": "never",
   "editor.minimap.scale": 1,
   "editor.wordWrap": "on",
-  "editor.fontFamily": "'Dejavu Sans Mono for Powerline', 'monospace', monospace",
-  "editor.renderFinalNewline": "on",
+  "editor.fontFamily": "'Dejavu Sans Mono for Powerline', monospace",
+  "editor.renderFinalNewline": "off",
   "editor.renderWhitespace": "trailing", "editor.occurrencesHighlight": false,
   "editor.selectionHighlight": false,
   "editor.links": false,
   "workbench.editor.labelFormat": "medium",
   "workbench.editor.enablePreview": false,
   "workbench.activityBar.visible": false,
-  "workbench.editor.showTabs": true,
+  "workbench.editor.showTabs": false,
   "workbench.tree.indent": 20,
   "workbench.tree.renderIndentGuides": "always",
   "workbench.colorCustomizations": {
-
-    // Borders
-		"sideBarSectionHeader.border":       "#ffffff15",
-    "sideBar.border":                    "#3C3C3C",
-    "editorGroup.border":       "#3C3C3C",
-		"statusBar.border":         "#3C3C3C",
-		"activityBar.border":       "#1C1C1C",
-
-
-		"activityBar.activeBorder": "#0078d4",
-
-		"focusBorder":              "#3C3C3C", 
+    "[*Dark*]": {
+      // Borders
+      "sideBarSectionHeader.border":       "#ffffff15",
+      "sideBar.border":                    "#3C3C3C",
+      "editorGroup.border":       "#3C3C3C",
+      "statusBar.border":         "#3C3C3C",
+      "activityBar.border":       "#1C1C1C",
 
 
-    // 
-		"editorHoverWidget.background": "#2B2B2B",
-		"editorHoverWidget.foreground": "#cccccc",
-		"editorHoverWidget.border":     "#555555",
-		"editorHoverWidget.highlightForeground": "#333333",
+      "activityBar.activeBorder": "#0078d4",
 
-		"editorHoverWidget.statusBarBackground": "#252525",
-
-    // Scrollbar Slider
-    "scrollbarSlider.activeBackground":  "#444444",
-    "scrollbarSlider.background":        "#2D2D2D",
-    "scrollbarSlider.hoverBackground":   "#444444",
-
-    // statusBar
-    "statusBar.background":             "#1C1C1C",
-    "statusBar.foreground":             "#BCBCBC",
-    "statusBar.noFolderBackground" :     "#212121",
-
-    // ActivityBar
-		"activityBar.background": "#333333",
-		"activityBar.foreground": "#d7d7d7",
-		"activityBar.inactiveForeground": "#ffffff80",
-
-    // Badge
-		"activityBarBadge.background": "#0078d4",
-		"activityBarBadge.foreground": "#ffffff",
-
-    "sideBar.background":                "#1C1C1C",
-
-    "sideBarSectionHeader.background":   "#1F1F1F",
-		"sideBarSectionHeader.foreground":   "#0078d4",
-
-		"minimap.findMatchHighlight": "#d18616",
-		"minimap.foregroundOpacity": "#ff1212b3",
-		"minimap.selectionHighlight": "#264f78",
-		"minimap.selectionOccurrenceHighlight": "#676767",
+      "focusBorder":              "#3C3C3C", 
 
 
-		"minimap.errorHighlight": "#bc3c3c",
-		"minimap.warningHighlight": "#c18345",
+      // 
+      "editorHoverWidget.background": "#2B2B2B",
+      "editorHoverWidget.foreground": "#cccccc",
+      "editorHoverWidget.border":     "#555555",
+      "editorHoverWidget.highlightForeground": "#333333",
 
-    // minimap git status
-		"minimapGutter.addedBackground": "#2ea043",
-		"minimapGutter.deletedBackground": "#f85149",
-		"minimapGutter.modifiedBackground": "#0078d4",
+      "editorHoverWidget.statusBarBackground": "#252525",
 
-		"minimapSlider.activeBackground": "#1c1c1c80",
-		"minimapSlider.background": "#26262680",
-		"minimapSlider.hoverBackground": "#1c1c1c80",
+      // Scrollbar Slider
+      "scrollbarSlider.activeBackground":  "#444444",
+      "scrollbarSlider.background":        "#2D2D2D",
+      "scrollbarSlider.hoverBackground":   "#444444",
 
+      // statusBar
+      "statusBar.background":             "#1C1C1C",
+      "statusBar.foreground":             "#BCBCBC",
+      "statusBar.noFolderBackground" :     "#212121",
 
-    "sideBarTitle.foreground":           "#FFFFFF",
+      // ActivityBar
+      "activityBar.background": "#333333",
+      "activityBar.foreground": "#d7d7d7",
+      "activityBar.inactiveForeground": "#ffffff80",
 
-    "editor.background":                 "#1F1F1F",
-    "editor.lineHighlightBackground":    "#222222",
-    "editor.lineHighlightBorder":        "#222222",
-    "editorLineNumber.foreground":       "#444444",
-    "editorLineNumber.activeForeground": "#A8A8A8",
+      // Badge
+      "activityBarBadge.background": "#0078d4",
+      "activityBarBadge.foreground": "#ffffff",
 
-    // cursorline
-    "list.focusBackground":              "#333333",
-    "list.focusOutline":                 "#232323",
+      "sideBar.background":                "#1C1C1C",
 
-    // quick command / quick completion
-		"quickInputList.focusForeground": "#ffffff",
-    "quickInputList.focusBackground": "#303030",
-		"quickInputList.focusIconForeground": "red", // move icon to right
+      "sideBarSectionHeader.background":   "#1F1F1F",
+      "sideBarSectionHeader.foreground":   "#0078d4",
 
-
-
-    "quickInput.background": "#1C1C1C",
-    "quickInput.foreground": "#CCCCCC",
-
-		"quickInputTitle.background": "#ffffff1b",
-
-    // selection bg/fg
-    "list.activeSelectionBackground":    "#282823",
-    "list.inactiveSelectionForeground":  "#cccccc",
-
-    "list.focusHighlightForeground": "#CCCCCC",
-    "list.highlightForeground": "#C6C6C6",
-
-    // terminal
-    "terminal.background": "#1A1A1A",
-		"terminal.foreground": "#cccccc",
-		"terminal.inactiveSelectionBackground": "#3a3d41",
-		"terminal.tab.activeBorder": "red",
+      "minimap.findMatchHighlight": "#d18616",
+      "minimap.foregroundOpacity": "#ff1212b3",
+      "minimap.selectionHighlight": "#264f78",
+      "minimap.selectionOccurrenceHighlight": "#676767",
 
 
-    "list.inactiveSelectionBackground": "#262626",
-    "tree.indentGuidesStroke": "#626262",
-    "scrollbar.shadow": "#1C1C1C",
-    "editorIndentGuide.activeBackground": "red",
-    "editorIndentGuide.background": "#2E2E2E"
+      "minimap.errorHighlight": "#bc3c3c",
+      "minimap.warningHighlight": "#c18345",
+
+      // minimap git status
+      "minimapGutter.addedBackground": "#2ea043",
+      "minimapGutter.deletedBackground": "#f85149",
+      "minimapGutter.modifiedBackground": "#0078d4",
+
+      "minimapSlider.activeBackground": "#1c1c1c80",
+      "minimapSlider.background": "#26262680",
+      "minimapSlider.hoverBackground": "#1c1c1c80",
+
+
+      "sideBarTitle.foreground":           "#FFFFFF",
+
+      "editor.background":                 "#1F1F1F",
+      "editor.lineHighlightBackground":    "#222222",
+      "editor.lineHighlightBorder":        "#222222",
+      "editorLineNumber.foreground":       "#444444",
+      "editorLineNumber.activeForeground": "#A8A8A8",
+
+      // cursorline
+      "list.focusBackground":              "#333333",
+      "list.focusOutline":                 "#232323",
+
+      // quick command / quick completion
+      "quickInputList.focusForeground": "#ffffff",
+      "quickInputList.focusBackground": "#303030",
+      "quickInputList.focusIconForeground": "red", // move icon to right
+
+
+
+      "quickInput.background": "#1C1C1C",
+      "quickInput.foreground": "#CCCCCC",
+
+      "quickInputTitle.background": "#ffffff1b",
+
+      // selection bg/fg
+      "list.activeSelectionBackground":    "#282823",
+      "list.inactiveSelectionForeground":  "#cccccc",
+
+      "list.focusHighlightForeground": "#CCCCCC",
+      "list.highlightForeground": "#C6C6C6",
+
+      // terminal
+      "terminal.background": "#1A1A1A",
+      "terminal.foreground": "#cccccc",
+      "terminal.inactiveSelectionBackground": "#3a3d41",
+      "terminal.tab.activeBorder": "red",
+
+
+      "list.inactiveSelectionBackground": "#262626",
+      "tree.indentGuidesStroke": "#626262",
+      "scrollbar.shadow": "#1C1C1C",
+      "editorIndentGuide.activeBackground": "red",
+      "editorIndentGuide.background": "#2E2E2E"
+    }
   },
   "terminal.integrated.commandsToSkipShell": [
     "vim.remap",
@@ -191,6 +196,6 @@
     },
   ],
   "editor.experimentalWhitespaceRendering": "font",
-  "editor.minimap.enabled": false,
   "window.zoomLevel": -1,
+  "workbench.colorTheme": "Visual Studio Dark",
 }
