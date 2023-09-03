@@ -22,6 +22,13 @@ local default_plugins = {
     end,
   },
 
+
+  -- Note and documents
+  {
+    "vimwiki/vimwiki",
+    lazy = false,
+  },
+
   -- git stuff
   {
     "lewis6991/gitsigns.nvim",
