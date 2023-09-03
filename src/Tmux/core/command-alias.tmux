@@ -30,6 +30,8 @@ set -ag command-alias set-theme=\
 
 set -ag command-alias current-command="display-message '#{pane_current_command}'"
 
+set -ag command-alias which='run "ps -o state= -o comm -t #{pane_tty}"'
+
 #-----------------------------------------------------------------------------
 # choose-tree.tmux
 #-----------------------------------------------------------------------------
