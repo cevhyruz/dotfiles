@@ -5,8 +5,11 @@
 # https://go.dev/doc/install
 
 export GO111MODULE=on
+
+# external packages go here.
 export GOPATH="${HOME}/go"
 
+# standard library
 export GOROOT=/usr/local/go
 
 _::add_to_path "/usr/local/go/bin"

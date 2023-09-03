@@ -1,19 +1,8 @@
 #!/usr/bin/env bash
 #
-# Helper functions for building bash prompt
+# Library functions for building bash prompts.
 
-# make prompt var that changes value depending on last command return status.
-# @param1: variable to store colors
-# @param2: value of the variable when last command is true
-# @param3: value of the variable when last command is false
-#
-function _make_prompt_var() {
-  if [[ "${EXIT_CODE:-}" -eq 0 ]]; then
-    eval "declare -g $1=\"$2\""
-  else
-    eval "declare -g $1=\"$3\""
-  fi
-}
+# =========== PS4 ============
 
 # TODO:
 # [x] Add return status.
@@ -28,47 +17,99 @@ function _ps4_callstack() {
   set -u
 }
 
-function _prompt_git_head() {
-  local git_head
+# =========== PS1 ============
 
-  _::is_git_repo || return
+# Display current working directory full path.
+function __cwd() { 
+    local separator='/'
+    local separator_color="\e[1;38;5;130m" # bold orange
+    local pwd="${PWD//${HOME}/${separator_color}\~}"
+    local dir_colors="\e[1;38;5;74m"       # bold blue
 
-   git_head="$(
-    command git symbolic-ref --quiet --short HEAD 2> /dev/null ||
-    command git rev-parse --short HEAD 2> /dev/null ||
-    printf "unknown" )"
+    pwd="${reset}${pwd////${separator_color}${separator}\\e\[1;38;5;74m}${reset}"
 
-  if [[ "${git_head}" =~ (main|master) ]]; then
-    printf "${4:- }\[${2}\]${git_head}"
-  elif [[ "${git_head}" =~ [0-9]+ ]]; then
-    printf "${4:- }\[${3}\]${git_head}"
-  else
-    printf "${4:- }\[${1}\]${git_head}"
-  fi
+    printf "%b" "${pwd}"
 }
 
-# show git status
-# @param1: [something]
-#
-function _prompt_git_status() {
+
+# =========== Git prompt ============
+
+# Display current git branch/HEAD.
+function _prompt_git_head() {
+  local head_file head
+  local dir="$PWD"
+
+  while [[ -n "$dir" ]]; do
+    head_file="$dir/.git/HEAD"
+    if [[ -f "$dir/.git" ]]; then
+      read -ra head_file < "${dir}/.git" && head_file="${dir}/${head_file#gitdir: }/HEAD"
+    fi
+
+    [[ -e "$head_file" ]] && break
+    dir="${dir%/*}"
+  done
+
+  if [[ -e "$head_file" ]]; then
+    read -r head < "$head_file" || return
+    printf "${bold}${Bggreen}"
+    case "$head" in
+      ref:*) printf "${head#ref: refs/heads/}" ;;
+      "")    printf "uknown" ;;
+      *)     printf "${head:0:9}" ;;
+    esac
+    return 0
+  fi
+  return 1
+}
+
+# Checks if the current directory is/or within a git repository.
+# return: 0 if dir is a/inside git repository, 1 otherwise.
+function _is_git() {
+  local relative_path
+  if [[ -d .git ]]; then
+    return 0
+  fi
+  IFS="/" read -ra dir <<< "${PWD//${HOME}\//}"
+  for entry in "${dir[@]}"; do
+    relative_path+="../"
+    if [[ -d "${PWD}/${relative_path}.git" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# show git branch and status in prompt.
+# output:  [HEAD] [status icons]
+# sample:  master +!?
+function __git_ps1() {
+  _is_git || return
+
   local status=''
 
-  _::is_git_repo || return
+  _prompt_git_head   "${bold}${Bggreen}" "${Bgred}" "${Bgyellow}" "${Bgwhite}:" 
 
-  command git update-index --really-refresh &>/dev/null
+  command git update-index --really-refresh &> /dev/null
 
+  # tags ~5ms
+  printf " " && command git describe --tags 2> /dev/null
+
+  # ~4ms staged
   command git diff --quiet --ignore-submodules --cached ||
     status+="+"
 
+  # ~4ms modified
   command git diff-files --quiet --ignore-submodules -- ||
     status+="!"
 
+  # ~7ms untracked
   test -n "$(command git ls-files --others --exclude-standard :/)" &&
     status+="?"
 
-  command git rev-parse --verify refs/stash &>/dev/null &&
+  # ~4ms stashed
+  command git rev-parse --verify refs/stash > /dev/null 2>&1 &&
     status+="*"
 
-  printf "%b" "\[${1-$Bgwhite}\] ${status}"
-  status=''
+  printf "%b" "${1-$Bgwhite} ${status}"
+
 }

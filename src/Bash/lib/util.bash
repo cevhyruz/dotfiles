@@ -5,15 +5,18 @@
 # Core utility functions for managing Dotfiles.
 # Entry file to load all library file for bash.
 
-# @about Check if current directory is a git repositry. {{{1
-# @return 0 if it is a git repository, 1 otherwise.
+
+# make prompt var that changes value depending on last command return status.
+# @param1: variable to store colors
+# @param2: value of the variable when last command is true
+# @param3: value of the variable when last command is false
 #
-function _::is_git_repo() {
-  if command git rev-parse &> /dev/null &&
-    [[ $(command git rev-parse --is-inside-git-dir 2> /dev/null) == "false" ]]; then
-    return 0
+function _make_prompt_var() {
+  if [[ "${ret:-${EXIT_CODE-}}" -eq 0 ]]; then
+    eval "declare -g $1=\"$2\""
+  else
+    eval "declare -g $1=\"$3\""
   fi
-  return 1
 }
 
 # @about Add/prepend [path] into the global environment path. {{{1

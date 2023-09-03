@@ -20,7 +20,7 @@ function main() {
   _set_prompts
 }
 
-function  set_default_palette::ansi() {
+function set_default_palette::ansi() {
   if has_truecolors; then
     for style in Bg bg Fg fg; do
       local scheme_index=
@@ -46,14 +46,14 @@ function  set_default_palette::ansi() {
   fi
 }
 
-
 function _set_prompts() {
+
   _make_prompt_var "arrow_color" \
     "\[${bold}\]\[${Bggreen}\]" \
     "\[${bold}\]\[${Bgred}\]"
 
   _make_prompt_var "return_string" \
-    "" "\[${resetall}\]\[${dim}\]\t\t[exited ${EXIT_CODE-}]\[${reset}\]"
+    "" "\[${resetall}\]\[${dim}\]\t\t[exited ${ret-}]\[${reset}\]"
 
   local -a arrow=(
     "${arrow_color}╭─\[${reset}\]"
@@ -78,14 +78,15 @@ function _set_prompts() {
     )
   fi
 
+
+  # ~6ms
   local -a prompt=(
     "\[${reset}\]\[${normal}\]"
     "${arrow[0]}"
     "${userhost_color} \\\u@\H"
     "\[${Bgmagenta}\]:"
-    "\[${Bgcyan}\]\w"
-    "$( _prompt_git_head   "${Bggreen}" "${Bgred}" "${Bgyellow}" "${Bgwhite}:" )"
-    "$( _prompt_git_status "${Bgyellow}" )"
+    "$( __cwd ):"
+    "$( __git_ps1 "${bold}" )" # ~20ms
     "${return_string}"
     "\n"
     "${virtual_env[@]}"
@@ -102,7 +103,7 @@ function _set_prompts() {
   # we need to normalize after reading and before executing the command.
   PS0='$(printf "${normal}")'
 
-  # Re-assign PS1 so we can get return status.
+  # Re-evaluate PS1 so we can get return status.
   ::post_command "${FUNCNAME[0]}"
 
   # Print newline after every command.
