@@ -15,11 +15,11 @@ function _print::purple() { _print "$1" 5; }
 function _print::red()    { _print "$1" 1; }
 function _print::yellow() { _print "$1" 3; }
 
-function print::question() { _print::yellow "${INDENTION}[?] $1";        }
-function print::success()  { _print::green  "${INDENTION}[Done] $1\n";   }
-function print::warn()     { _print::yellow "${INDENTION}[Warn] $1\n";   }
+function print::question() { _print::yellow "${INDENTION-}[?] $1";        }
+function print::success()  { _print::green  "${INDENTION-}[Done] $1\n";   }
+function print::warn()     { _print::yellow "${INDENTION-}[Warn] $1\n";   }
 
-function print::error()    { _print::red    "${INDENTION}[Err] $1 $2\n"; }
+function print::error()    { _print::red    "${INDENTION-}[Err] $1 $2\n"; }
 
 function print::error_stream() {
   while read -r line; do
@@ -94,6 +94,11 @@ function cleanup() {
   \rm -v "${TMP_FILES[@]}";
 }
 
+
+# execute commands with a spinner.
+# @param1: [cmd]
+# @param2: [message]
+#
 function execute() {
   local -r FRAMES='/-\|'
   local -r NUMBER_OR_FRAMES=${#FRAMES}
