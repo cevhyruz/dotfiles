@@ -1,15 +1,34 @@
-require "core"
 
--- custom options, autocmds, usercommands.
-local localrc_path = vim.api.nvim_get_runtime_file("/lua/custom/localrc.lua", false)[1]
-if localrc_path then
-  dofile(localrc_path)
+require "core.bootstrap".setup()
+
+-- localrc
+
+
+local Component = {}
+
+function Component:new()
+  local component = {
+    -- define properties and methods specific to this component
+    foobar = "this foobar"
+  }
+
+
+  -- self is just Component = {
+  --   new = function()
+  -- }
+  --print(vim.inspect(self))
+
+
+  setmetatable(component, self)
+  self.__index = self
+
+
+
+  return component
 end
 
-require("core.utils").load_mappings()
-
--- Installs lazy.nvim, mason.nvim and configures lazy plugin configs,
--- If no path has been given, install location defaults to '~/.local/share/nvim'.
--- @param1 lazy_path:string Path to lazy.nvim install location.
--- @param2 mason_path:string Path to mason.nvim install location.
-require("core.bootstrap").init()
+local foobar = {
+  {x = 10, y = 10},
+  {x = 10, y = 10},
+  {x = 10, y = 10},
+}

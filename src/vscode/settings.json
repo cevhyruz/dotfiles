@@ -50,10 +50,10 @@
 
       "activityBar.activeBorder": "#0078d4",
 
-      "focusBorder":              "#3C3C3C", 
+      "focusBorder":              "#3C3C3C",
 
 
-      // 
+      //
       "editorHoverWidget.background": "#2B2B2B",
       "editorHoverWidget.foreground": "#cccccc",
       "editorHoverWidget.border":     "#555555",
@@ -196,6 +196,7 @@
     },
   ],
   "editor.experimentalWhitespaceRendering": "font",
-  "window.zoomLevel": -1,
   "workbench.colorTheme": "Visual Studio Dark",
+  "editor.minimap.enabled": false,
+  "window.zoomLevel": -1,
 }

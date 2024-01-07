@@ -43,8 +43,9 @@ function main() {
     "--layout=reverse"
     "--preview-window=60%:hidden:border-sharp"
     "--preview='batcat --style=numbers --color=always --line-range :500 {}'"
-    "--info='hidden'"
-    "--header='' ")
+#    "--info='hidden'"
+    "--scrollbar='▉'"
+    "--header='========================================================================' ")
 
   local bg="#1E1E1E"
   local fg="-1"
@@ -59,7 +60,7 @@ function main() {
 
     "--color=fg:$fg"            # Text
     "--color=bg:$bg"           # Background
-    "--color=preview-fg:$prev_fg"   # Preview window text 
+    "--color=preview-fg:$prev_fg"   # Preview window text
     "--color=preview-bg:$prev_bg"   # Preview window background
     "--color=hl:1"            # Highlighted substrings
     "--color=fg+:249"            # Text (Current line)

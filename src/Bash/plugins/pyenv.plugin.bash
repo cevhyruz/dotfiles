@@ -34,11 +34,13 @@ function pyenv() {
 function main() {
   export PYENV_SHELL='bash'
 
+  # NOTE: Make sure this is above '/usr/*' in path,
+  # so we won't mess up the system's python.
   _::add_to_path "${PYENV_ROOT}/bin"
   _::add_to_path "${PYENV_ROOT}/shims"
 
   # Enable dynamic python library.
-  # some program needed this (eg: YouCompleteMe)
+  # some programs needed this (eg: YouCompleteMe)
   export PYTHON_CONFIGURE_OPTS="--enable-shared"
 
   # disable prompt
