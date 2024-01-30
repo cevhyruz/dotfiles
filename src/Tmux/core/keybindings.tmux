@@ -77,7 +77,6 @@ bind-key -N "Select the next window" n {
 
 bind-key -N "Prompt for a command" : {
   command-prompt -p ":"
-  set-environment -hF _message ""
 }
 
 bind-key -N "Search for URLs in current pane" u {
@@ -100,11 +99,7 @@ bind-key -N "Toggle synchronize pane for all panes in window" y {# {{{
   }
 }
 
-bind-key -N "Reload and redraw tmux" r {
-  refresh-client -S
-  source-file "${DOT_TMUX}/tmux.conf"
-  set-environment -hF _message "tmux.conf reloaded"
-}
+bind-key -N "Reload and redraw tmux" r { reload }
 
 bind-key -N "Split window horizontally" % { split-window -hc "#{pane_current_path}" }
 bind-key -N "Split window verticaly" '"' { split-window -vc "#{pane_current_path}" }

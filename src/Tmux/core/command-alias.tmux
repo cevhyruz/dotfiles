@@ -19,7 +19,13 @@ set -ag command-alias split="splitw -vc '#{pane_current_path}'"
 set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
 set -ag command-alias neww="neww -c '#{pane_current_path}'"
 
-set -ag command-alias reload="source ${DOT_TMUX}/tmux.conf"
+
+# Reload and redraw tmux,
+set -ag command-alias reload=\
+' refresh-client -S; '\
+' source-file "${DOT_TMUX}/tmux.conf"; '\
+' set-environment -hF _message "config file reloaded!"'\
+
 set -ag command-alias version='display "#{version}"'
 
 set -ag command-alias set-theme=\
