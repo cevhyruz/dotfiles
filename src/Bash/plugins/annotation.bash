@@ -3,9 +3,21 @@
 # vi: ft=sh fdm=marker ts=2 sw=2 et
 #
 
+
 # list files with TODO: and FIXME: notation
-alias todo="grep --recursive 'TOD[O]: '"
-alias fixme="grep --recursive 'FIXM[E]: '"
+if _::is_installed "fzf" "annotation"; then
+
+  function todo() {
+    nvim $(grep --color=always --recursive "TOD[O]" | fzf)
+  }
+
+  function fixme() {
+    :;
+  }
+else
+  alias todo="grep --recursive 'TOD[O]: '"
+  alias fixme="grep --recursive 'FIXM[E]: '"
+fi
 
 
 # @TODO: Features:

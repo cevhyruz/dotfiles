@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2034
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+#
+
+# This is auto-generated file, do not modify!
+# Timestamp: Mon - Aug 05, 2024 (06:22 PM)
+
+# Path to Dotfiles and Bash directory.
+export DOTFILES="/home/cevhyruz/Projects/dotfiles"
+export DOT_BASH="/home/cevhyruz/Projects/dotfiles/src/Bash"
+
+dotbash_git_alias_dir="/Git"
+
+
+# all plugins (uncomment to disable)
+declare -A plugins=(
+      ["android_dev"]="gradle"
+       ["annotation"]="fzf"
+        ["clipboard"]="xsel"
+["command_not_found"]=""
+          ["extract"]=""
+              ["fzf"]="fzf"
+              ["git"]="git"
+           ["golang"]="go"
+              ["grc"]="grc"
+             ["less"]=""
+              ["man"]=""
+             ["note"]="fzf"
+              ["nvm"]="nvm"
+            ["pyenv"]="pyenv"
+            ["rbenv"]="rbenv"
+               ["rm"]=""
+             ["rust"]="rush"
+              ["ssh"]=""
+            ["timer"]=""
+             ["todo"]=""
+           ["vscode"]="vscode"
+            ["which"]=""
+         ["whiptail"]="whiptail"
+       ["youtube-dl"]="youtube-dl"
+)
+
+
+dotbash_theme="default"
+
+GIT_ALIAS="/Git"
+
+
+# initialize config
+source "${DOT_BASH}/bash_init.sh";
+
+# bashrc::init && source "/localrc/localrc.bash"
+# unset lib functions,env here...

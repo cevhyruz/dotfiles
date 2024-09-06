@@ -5,19 +5,21 @@
 bar {
   position top
   status_command i3status
-  workspace_min_width 25
-  separator_symbol "   "
-  font pango:Hack 9
+  workspace_min_width 30
+  i3bar_command i3bar --transparency
+  separator_symbol " | "
+  font pango: FontAwesome, Hack 9
+  height 25
   colors {
-    background #262626
-    statusline #dadada
+    background #232323
+    statusline #285577
     separator  #666666
-
-    focused_workspace  #4C7899 #285577 #FFFFFF
-    active_workspace   #333333 #222222 #FFFFFF
-    inactive_workspace #333333 #222222 #888888
-    urgent_workspace   #2F343A #900000 #FFFFFF
-    binding_mode       #2F343A #900000 #FFFFFF
+                       # border bg       fg
+    focused_workspace  #285577  #285577  #262626
+    active_workspace   #285577  #285577  #262626
+    inactive_workspace #285577  #285577  #262626
+    urgent_workspace   #285577  #285577  #FFFFFF
+    binding_mode       #285577  #285577  #FFFFFF
   }
 }
 

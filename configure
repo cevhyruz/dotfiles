@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# Compile runtime files to avoid heavy startup time.
+
+function configure() {
+  build_templates
+}
+
+# check if the required program for plugins are installed,
+# if yes, we'll declare a variable for reference.
+declare varname
+for prereq in "${!plugins[@]}"; do
+  [[ -z "${plugins[$prereq]}" ]] && continue
+  varname="__plug_${plugins[$prereq]}_installed"
+  if command -v "${plugins[$prereq]}" &>/dev/null; then
+    if ! declare -p "$varname" &>/dev/null; then
+      eval "declare -g __plug_${plugins[$prereq]}_installed=1"
+    fi
+  fi
+done
+unset varname
+
+function build_templates() {
+
+  declare -a templates=(
+    "${HOME}${dotfilesdir}/Projects/dotfiles/src/Bash/.bashrc.template"
+    # "${dotfilesdir}/src/Git/.gitconfig.template"
+    # "${dotfilesdir}/src/readline/inputrc.template"
+  )
+
+  declare -A replacements=(
+    ["DOTFILES"]="${HOME}/Projects/dotfiles"
+    ["TIMESTAMP"]="# Timestamp: $(date "+%a - %h %d, %Y (%I:%M %p)")"
+    ["WARNING"]="# This is auto-generated file, do not modify!"
+  )
+
+  local dest="/home/cevhyruz/Projects/dotfiles/release"
+
+  for template in "${templates[@]}"; do
+    echo "$template"
+    src="$(<${template})"
+    for keyword in "${!replacements[@]}"; do
+      src="$(sed "s|{{ ${keyword} }}|${replacements[$keyword]}|g" <<< "$src")"
+    done
+
+    echo "$src" > "$dest/$(basename $template)"
+  done
+
+}
+
+
+
+configure "$@"

@@ -1,0 +1,5 @@
+# vim: set ft=dosini :
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%

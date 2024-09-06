@@ -5,6 +5,11 @@ local M = {}
 local plugname = {
   -- core plugins
   { "tomasiser/vim-code-dark" },
+  {"3rd/image.nvim"},
+
+  {"preservim/tagbar"},
+
+  { "vimwiki/vimwiki" },
 
   -- UI
   { "nvim-tree/nvim-web-devicons" },
@@ -18,10 +23,23 @@ local plugname = {
   { "nvim-tree/nvim-tree.lua" },
   { "junegunn/fzf" },
 
+
+  { "alexghergh/nvim-tmux-navigation" },
+
   -- utilities
   { "windwp/nvim-autopairs" },
   { "kylechui/nvim-surround" },
   { "numToStr/Comment.nvim" },
+
+
+
+  -- Completion
+  { "hrsh7th/nvim-cmp",
+    dependencies = {
+        "L3MON4D3/LuaSnip",
+      dependencies = { "rafamadriz/friendly-snippets" }
+    }
+  }
 
   -- LSP
 }

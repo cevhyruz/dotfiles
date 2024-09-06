@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2034
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+#
+
+# Timestamp: Sun - Jul 21, 2024 (09:07 AM)
+
+# Path to Dotfiles and Bash directory.
+export DOTFILES=""
+export DOT_BASH="/src/Bash"
+
+dotbash_git_alias_dir="/Git"
+
+
+# all plugins (uncomment to disable)
+declare -A plugins=(
+      ["android_dev"]="gradle"
+       ["annotation"]="fzf"
+        ["clipboard"]="xsel"
+["command_not_found"]=""
+          ["extract"]=""
+              ["fzf"]="fzf"
+              ["git"]="git"
+           ["golang"]="go"
+              ["grc"]="grc"
+             ["less"]=""
+              ["man"]=""
+             ["note"]="fzf"
+              ["nvm"]="nvm"
+            ["pyenv"]="pyenv"
+            ["rbenv"]="rbenv"
+               ["rm"]=""
+             ["rust"]="rush"
+              ["ssh"]=""
+            ["timer"]=""
+             ["todo"]=""
+           ["vscode"]="vscode"
+            ["which"]=""
+         ["whiptail"]="whiptail"
+       ["youtube-dl"]="youtube-dl"
+)
+
+
+dotbash_enabled_plugins=(
+  "fzf" "git" "note" "man"
+  "command_not_found"
+  "less"
+  "vscode"
+  "pyenv"
+  "nvm"
+)
+dotbash_theme="default"
+
+GIT_ALIAS="/Git"
+
+
+# initialize config
+source "${DOT_BASH}/bash_init.sh";
+
+# bashrc::init && source "/localrc/localrc.bash"
+# unset lib functions,env here...
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2034
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+#
+
+# Timestamp: Sun - Jul 21, 2024 (09:10 AM)
+
+# Path to Dotfiles and Bash directory.
+export DOTFILES=""
+export DOT_BASH="/src/Bash"
+
+dotbash_git_alias_dir="/Git"
+
+
+# all plugins (uncomment to disable)
+declare -A plugins=(
+      ["android_dev"]="gradle"
+       ["annotation"]="fzf"
+        ["clipboard"]="xsel"
+["command_not_found"]=""
+          ["extract"]=""
+              ["fzf"]="fzf"
+              ["git"]="git"
+           ["golang"]="go"
+              ["grc"]="grc"
+             ["less"]=""
+              ["man"]=""
+             ["note"]="fzf"
+              ["nvm"]="nvm"
+            ["pyenv"]="pyenv"
+            ["rbenv"]="rbenv"
+               ["rm"]=""
+             ["rust"]="rush"
+              ["ssh"]=""
+            ["timer"]=""
+             ["todo"]=""
+           ["vscode"]="vscode"
+            ["which"]=""
+         ["whiptail"]="whiptail"
+       ["youtube-dl"]="youtube-dl"
+)
+
+
+dotbash_enabled_plugins=(
+  "fzf" "git" "note" "man"
+  "command_not_found"
+  "less"
+  "vscode"
+  "pyenv"
+  "nvm"
+)
+dotbash_theme="default"
+
+GIT_ALIAS="/Git"
+
+
+# initialize config
+source "${DOT_BASH}/bash_init.sh";
+
+# bashrc::init && source "/localrc/localrc.bash"
+# unset lib functions,env here...

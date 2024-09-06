@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash disable=SC2034,SC2086,SC2145
 # vim: ft=sh fdm=marker ts=2 sw=2 et
+#
+# basic coreutil themeing
 
 function init::theme() {
   reset_bold="\e[22m"
   reset_underline="\e[24m"
   reset_reverse="\e[27m"
-  reset="\e[0m"
   resetall="\e[0m"
   bold="\e[1m";
   dim="\e[2m";
@@ -66,12 +67,14 @@ function init::theme() {
         fg ) scheme_index=8 ;;
       esac
       for (( i = 0; i < 8; i++ )); do
-        echo -en " \[48;5${colors[scheme_index]}m foobar ${reset}"
+        echo -en " \[48;5${colors[scheme_index]}m foobar ${resetall}"
       done
     done
   }
 }
 
+#TODO:
+# add command to pretty print show the color palette.
 function __make_dircolors_pallete () {
   # Strip '\e[' and 'm' from color variables.
   local -ar dircolors=(
@@ -100,3 +103,4 @@ function __make_dircolors_pallete () {
   export LS_COLORS
   unset -v entry
 }
+

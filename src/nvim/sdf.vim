@@ -210,6 +210,8 @@ endfunction
 " NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
+echo "sdf.vim"
+
 let NERDTreeMapActivateNode       = '<space>'
 let NERDTreeCascadeSingleChildDir = 1
 let NERDTreeQuitOnOpen            = 1

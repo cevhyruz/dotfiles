@@ -40,7 +40,7 @@ function _letterpress() {
   fi
 
   printf \
-    "${fgyellow=\e[38;5;221m}%-*s${reset=\e[0m}%s\n" \
+    "${fgyellow=\e[38;5;221m}%-*s${resetall=\e[0m}%s\n" \
     "${leftwidth}" \
     "${leftcol}" \
     "${rightcol}"
@@ -150,5 +150,6 @@ function glossary() {
   done
   unset func
 }
+
 
 main

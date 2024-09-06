@@ -1,4 +1,8 @@
 # vim: ft=gitconfig
+#
+#
+{{ WARNING }}
+{{ TIMESTAMP }}
 
 [user]
   name          = John Fred Fadrigalan
@@ -15,15 +19,15 @@
 	postBuffer = 157286400
 
 [core]
-  excludesfile   = "{{DOTFILES}}/Git/.gitignore"
-  attributesfile = "{{DOTFILES}}/Git/.gitattributes"
+  excludesfile   = "{{ DOTFILES }}/Git/.gitignore"
+  attributesfile = "{{ DOTFILES }}/Git/.gitattributes"
   editor         = "nvim"
   pager          = "nvim -R"
   untrackedCache = true
 
 [commit]
   gpgsign  = true
-  template = "{{DOTFILES}}/Git/.gitmessage"
+  template = "{{ DOTFILES }}/Git/.gitmessage"
 
 [color]
   status    = always
@@ -114,10 +118,14 @@
   abbrevCommit = true
 
 [format]
+  # <abbrev-commit> <message>
   pretty = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
 
 [pretty]
+  # <abbrev-commit> <message>
   little = "%C(yellow)%h%C(auto)%d %C(249)%s%Creset"
+
+  # <author> <abbrev-commit> <message> <relative-time>
   detail = "%C(white)<%an> %C(yellow)%h%C(auto)%d %C(249)%s %C(green)%ar%Creset"
 
 [alias]
@@ -206,4 +214,4 @@
 [include]
   # Local git configuration. Include all your personal credentials
   # and overrides here.
-  path = "{{DOTFILES}}/Git/.gitconfig.local"
+  path = "{{ DOTFILES }}/Git/.gitconfig.local"

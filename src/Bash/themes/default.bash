@@ -6,6 +6,7 @@
 
 function main() {
 
+  # base-16 colors (normal/bright)
   declare -a colorscheme=(
     "101" "147" "219" "247" "56"  "225" "154" "126"
     "209" "85"  "97"  "95"  "215" "208" "256" "148"
@@ -13,11 +14,11 @@ function main() {
     "216" "99"  "254" "169" "38"  "237" "196" "112"
   )
 
-  init::theme "${colorscheme[@]}"
+  init::theme "${colorscheme[@]}" # ~0.004ms
 
   __make_dircolors_pallete
 
-  _set_prompts
+ _set_prompts  # 0.040ms
 }
 
 function set_default_palette::ansi() {
@@ -53,12 +54,12 @@ function _set_prompts() {
     "\[${bold}\]\[${Bgred}\]"
 
   _make_prompt_var "return_string" \
-    "" "\[${resetall}\]\[${dim}\]\t\t[exited ${ret-}]\[${reset}\]"
+    "" "\[${resetall}\]\[${dim}\]\t\t[exited ${ret-}]\[${resetall}\]"
 
   local -a arrow=(
-    "${arrow_color}╭─\[${reset}\]"
-    "${arrow_color}├─\[${reset}\]"
-    "${arrow_color}╰─➤\[${reset}\]" )
+    "${arrow_color}╭─\[${resetall}\]"
+    "${arrow_color}├─\[${resetall}\]"
+    "${arrow_color}╰─➤\[${resetall}\]" )
 
   test -n "${SSH_TTY:-}" &&
     userhost_color="\[${Bgred}\]" ||
@@ -73,27 +74,27 @@ function _set_prompts() {
       "${arrow[1]}"
       "\[${normal}\]"
       "\[${dim}\]"
-      "${VIRTUAL_ENV//${PYENV_ROOT}/PYENV_ROOT}"
+      "$(basename " ${VIRTUAL_ENV}" )"
       "\n"
     )
   fi
 
-
   # ~6ms
   local -a prompt=(
-    "\[${reset}\]\[${normal}\]"
+    "\[${resetall}\]\[${normal}\]"
     "${arrow[0]}"
     "${userhost_color} \\\u@\H"
     "\[${Bgmagenta}\]:"
     "$( __cwd ):"
     "$( __git_ps1 "${bold}" )" # ~20ms
+    "${DIRENV_DIFF:+DIRENV}"
     "${return_string}"
     "\n"
     "${virtual_env[@]}"
     "${arrow[2]}"
-    "\[${reset}${dim}\]"
+    "\[${resetall}${dim}\]"
     " \$: "
-    "\[${reset}\]"
+    "\[${resetall}\]"
     "\[\e[38;5;216m\]" )
 
   # PROMPT_DIRTRIM=2
@@ -112,7 +113,8 @@ function _set_prompts() {
   unset -v arrow_color
   unset -v return_string
 
-  PS2="${reset}${normal}${arrow[2]}${reset}${dim} \$: ${reset}\[\e[38;5;216m\]"
+  PS2="${resetall}${normal}${arrow[2]}${resetall}${dim} \$: ${resetall}\[\e[38;5;216m\]"
+
 
   PS4='$(_ps4_callstack)'
 }

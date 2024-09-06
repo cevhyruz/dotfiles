@@ -14,15 +14,16 @@ bind-key -N "Resize the pane upward" -r 'K' { resize-pane -U }
 bind-key -N "Show messages" '~' { show-messages }
 bind-key -N "Swap the active pane with the pane above" '{' { swap-pane -U }
 bind-key -N "Swap the active pane with the pane below" '}' { swap-pane -D }
-bind-key -N "Zoom the active pane" z { resize-pane -Z }
+bind-key -N "toggle zoom on current pane" z { zoom }
 bind-key -N "Kill the active pane" x { confirm-before -p "kill-pane #P? (y/n)" kill-pane }
+bind-key -N "Kill the active pane" x { kill_current_pane }
 bind-key -N "Show a clock" t { clock-mode }
 bind-key -N "Display pane numbers" q { display-panes }
 bind-key -N "Customize options" C { customize-mode -Z }
 bind-key -N "Select the next window with an alert" M-n { next-window -a }
 bind-key -N "Select the previous window with an alert" M-p { previous-window -a }
 bind-key -N "Detach the current client" d { detach-client }
-bind-key -N "Create a new window" c { new-window }
+bind-key -N "Create a new window" c { neww }
 bind-key -N "Paste the most recent paste buffer" ] { paste-buffer -p }
 bind-key -N "Enter copy mode" [ { copy-mode }
 bind-key -N "Toggle the marked pane" m { select-pane -m }
@@ -37,23 +38,29 @@ bind-key -N "Break pane to a new window" ! { break-pane }
 bind-key -N "Select next layout" Space { next-layout }
 bind-key -N "Suspend the current client" C-z { suspend-client }
 bind-key -N "Rotate through the panes" C-o { rotate-window }
-bind-key -N "Select window 0" 0 { select-window -t:=0 }
-bind-key -N "Select window 1" 1 { select-window -t:=1 }
-bind-key -N "Select window 2" 2 { select-window -t:=2 }
-bind-key -N "Select window 3" 3 { select-window -t:=3 }
-bind-key -N "Select window 4" 4 { select-window -t:=4 }
-bind-key -N "Select window 5" 5 { select-window -t:=5 }
-bind-key -N "Select window 6" 6 { select-window -t:=6 }
-bind-key -N "Select window 7" 7 { select-window -t:=7 }
-bind-key -N "Select window 8" 8 { select-window -t:=8 }
-bind-key -N "Select window 9" 9 { select-window -t:=9 }
+
+# window navigation
+bind-key -N "select window 1" 1 { win1 }
+bind-key -N "select window 2" 2 { win2 }
+bind-key -N "select window 3" 3 { win3 }
+bind-key -N "select window 4" 4 { win4 }
+bind-key -N "select window 5" 5 { win5 }
+bind-key -N "select window 6" 6 { win6 }
+bind-key -N "select window 7" 7 { win7 }
+bind-key -N "select window 8" 8 { win8 }
+bind-key -N "select window 9" 9 { win9 }
+
+bind-key -N "reload config"      r   { reload }
+bind-key -N "split vertically"   %   { vsplit }
+bind-key -N "split horizontally" '"' { split }
+
 bind-key -N "Move the current window" . { command-prompt -T target { move-window -t '%%' } }
 bind-key -N "Describe key binding" '/' { command-prompt -kpkey  { list-keys -1N '%%' } }
 bind-key -N "Move to the previously active pane" \; { last-pane }
 bind-key -N "Choose a client from a list" D { choose-client -Z }
 bind-key -N "Spread panes out evenly" E { select-layout -E }
 bind-key -N "Switch to the last client" L { switch-client -l }
-bind-key -N "Rename current window" , { command-prompt -I'#W' { rename-window -- '%%' } }
+bind-key -N "Rename current window" , { rename-current-window }
 bind-key -N "Select the previously current window" l { last-window }
 bind-key -N "List key bindings" ? { list-keys -N }
 bind-key -N "Select the previous window" 'p' {
@@ -98,11 +105,6 @@ bind-key -N "Toggle synchronize pane for all panes in window" y {# {{{
     set-environment -hF _message "No other panes to sync"
   }
 }
-
-bind-key -N "Reload and redraw tmux" r { reload }
-
-bind-key -N "Split window horizontally" % { split-window -hc "#{pane_current_path}" }
-bind-key -N "Split window verticaly" '"' { split-window -vc "#{pane_current_path}" }
 
 # ------------------------------
 # Root keys
@@ -254,6 +256,7 @@ bind -T copy-mode-vi C-Down { send -X scroll-down }
 
 # copy-mode navigation.
 bind-key -T copy-mode-vi 'C-h' {
+  display "from copy mode"
   select-pane -L
   set-environment -hF _message ""
 }

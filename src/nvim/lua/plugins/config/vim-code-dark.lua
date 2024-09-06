@@ -2,7 +2,8 @@ local M = {}
 
 M.specs = {
   lazy = false,
-  init = function()
+  priority = 1000,
+  config = function()
     vim.cmd [[ colorscheme codedark ]]
   end
 }

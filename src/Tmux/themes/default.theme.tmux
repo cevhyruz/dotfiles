@@ -10,7 +10,7 @@ set -g status-right-length           100
 set -g status-left-style             "bg=white,fg=color238,bold"
 set -g status-right-style            "fg=colour248"
 
-# message styles
+# message stylej
 set -g message-style                 "bg=colour234,fg=cyan"
 set -g message-command-style         "bg=colour234"
 
@@ -35,15 +35,22 @@ set -g @tree-pane-active-flag        "*"
 set -g @tree-pane-active-flag-style  "fg=colour35"
 
 # components
-set -g @day-mode-style               "short"
+set -g @day-mode-style               "long"
 set -g @day-weekend-style            "bold,fg=colour203"
-set -g @day-weekday-style            "default"
+set -g @day-weekday-style            "bold,fg=red,bg=white"
 
 set -g @month-mode-style             "short"
 
-# live process icon colors
-set -g @process_enabled              "bold,fg=white"
-set -g @process_disabled             "bold,fg=colour239"
+
+# indicators (WLAN) false
+set -g @ind-wlan-0-char  "Not connected"
+set -g @ind-wlan-0-icon  "#{@fa-wifi}"
+set -g @ind-wlan-0-style "bold,fg=colour239"
+
+# indicators (WLAN) true
+set -g @ind-wlan-1-char  "Connected "
+set -g @ind-wlan-1-icon  "#{@fa-wifi}"
+set -g @ind-wlan-1-style "fg=white"
 
 set -g @status-message-style         "fg=green"
 set -g @status-message-timeout        5
@@ -53,7 +60,7 @@ set -g  status-left                  " #S "
 
 set -g  status-right                 "#{E:message}  "
 set -ag status-right                 "#{E:_pane_mode}   "
-set -ag status-right                 "#{E:wlan0_icon} "
+set -ag status-right                 "#{E:ind_wlan} "
 set -ag status-right                 "#{E:sound}"
 set -ag status-right                 "#{E:win_drive}   "
 set -ag status-right                 "#{user}@#{host_short}   "

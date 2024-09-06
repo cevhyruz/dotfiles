@@ -7,6 +7,9 @@
 # allow sudo'ing aliases.
 alias sudo="sudo "
 
+# remap capslock as additional backspace
+alias k="setxkbmap -option caps:backspace"
+
 alias today='date "+%A, %B %-d, %Y"'
 
 # show all function definitions in a script.
@@ -19,8 +22,11 @@ alias ln="ln --interactive "
 # usage: /path/where/file/is.file | scriptinfo
 alias scriptinfo="grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)'"
 
-# going home.
+# navigation that works anywhere.
 alias home='cd ${HOME}'
+alias etc="cd /etc"
+alias doc="cd ~/Documents"
+alias dl="cd ~/Downloads"
 
 # reload current shell session.
 alias reload='exec "${SHELL}"'
@@ -41,7 +47,7 @@ if ! declare -F bashopts &>/dev/null; then
 fi
 
 if [[ -x "/usr/bin/dircolors" ]]; then
-  alias dir="dir --color=always"
+  alias dircolor="dir --color=always"
   alias egrep="egrep --color=always"
   alias fgrep="fgrep --color=always"
   alias grep="grep --color=always"
@@ -60,8 +66,8 @@ alias c="clear"
 alias -- -="cd -"
 
 # sensible file listing.
-alias ls="ls --color=always --almost-all --group-directories-first"
-alias dir="dir --color=always --almost-all --group-directories-first --dereference"
+alias ls="lscolor --almost-all --group-directories-first"
+alias dir="dircolor --color=always --almost-all --group-directories-first --dereference"
 
 # engine sounds (useful for testing).
 alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'

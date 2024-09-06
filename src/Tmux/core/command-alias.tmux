@@ -19,6 +19,37 @@ set -ag command-alias split="splitw -vc '#{pane_current_path}'"
 set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
 set -ag command-alias neww="neww -c '#{pane_current_path}'"
 
+set -ag command-alias zoom="resize-pane -Z"
+
+
+#'display-popup -BE -xW -yW -h7 -w78 "whiptail --inputbox \"Rename current window to : \" 7 78"; send-keys "\C-c"'
+set -ag command-alias rename-current-window=\
+'display-popup -BE -xW -yW -h7 -w75 "dialog --no-shadow --inputbox  \"this is a message\" 7 80"'
+
+set -ag command-alias kill_current_pane=\
+' display-menu -T"#[reverse bold] #{pane_current_command} #[default]" -xW -yW '\
+' "-" "" ""'\
+' "-#[bold fg=white bg=colour233]                         #[fg=cyan]       " "" ""'\
+' "-#[bold fg=white bg=colour233]  Kill the current pane? #[fg=cyan](y/n)  " "" ""'\
+' "-#[bold fg=white bg=colour233]                         #[fg=cyan]       " "" ""'\
+' "-" "" ""'\
+' "    Yes kill current pane" "y" "kill-pane"'\
+' "    No Do not kill pane " "n" ""'\
+' "-" "" ""'\
+' "-🔻🔻🔻" "" ""'\
+
+
+# window navigation
+set -ag command-alias win1="select-window -t:=1"
+set -ag command-alias win2="select-window -t:=2"
+set -ag command-alias win3="select-window -t:=3"
+set -ag command-alias win4="select-window -t:=4"
+set -ag command-alias win5="select-window -t:=5"
+set -ag command-alias win6="select-window -t:=6"
+set -ag command-alias win7="select-window -t:=7"
+set -ag command-alias win8="select-window -t:=8"
+set -ag command-alias win9="select-window -t:=9"
+
 
 # Reload and redraw tmux,
 set -ag command-alias reload=\

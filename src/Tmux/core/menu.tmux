@@ -63,8 +63,8 @@ set -g @icon-disabled-style     "fg=colour235,bg=colour233"
 %hidden menu_help="-Press <#[push-default fg=cyan]?#[pop-default default]> for for \"help\"."
 
 # menubar
-%hidden menu_item_1="#{E:pad}New window#{E:pad}"
-%hidden menu_item_2="#{E:pad}New named window#{E:pad}"
+%hidden menu_item_1="#{E:pad}toggle statusline#{E:pad}"
+%hidden menu_item_2="#{E:pad}#[push-default fg=red]r#[pop-default default]eload configuration file#{E:pad}"
 %hidden menu_item_3="#{E:pad}Break as named pane#{E:pad}"
 %hidden menu_item_4="#{E:pad}New named session#{E:pad}"
 %hidden menu_item_5="#{E:pad}Open with Vifm#{E:pad}"
@@ -73,8 +73,8 @@ set-option -ag command-alias menubar=\
 display-menu -T"#{E:menu_title}" -x0 -y0 \
   "-" "" ""\
   "#{E:menu_help}" "" "hellow"\
-  "#{E:menu_item_1}" "" ""\
-  "#{E:menu_item_2}" "" ""\
+  "#{E:menu_item_1}" "t" "set status"\
+  "#{E:menu_item_2}" "r" "reload"\
   "#{E:menu_item_3} -->" "" "menubar_sub"\
   "-" "" ""\
   "#{E:menu_help}" "" ""\
@@ -88,6 +88,7 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "#{E:link_next_text}#{E:menu_2}" "K" serverbar\
 '
 
+# menubar_sub
 set-option -ag command-alias menubar_sub=\
 'setenv -h name "Main";\
 setenv -h menu 1;\
@@ -160,3 +161,4 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "-" "" ""\
   ""\
   "#{E:link_prev_text}#[align=right default dim]#{E:menu_2}" "J" serverbar \
+'

@@ -106,6 +106,23 @@ function _::command_exists() {
   return 1
 }
 
+# _::is_installed check if given program is installed {{{1
+# by checking if the reference variable is declared.
+# if yes, then declare another variable for reference to enable/disable 
+# the plugin given.
+function _::is_installed() {
+  local program="$1"
+  local plugin_name="$2"
+  plugin_name="__plug_${plugin_name}_installed"
+  # if the reference variable is not declared then
+  # the program required is not installed.
+  if declare -p "$varname" &>/dev/null; then
+    eval "declare -g __bash_plug_${plugin_name}_loaded=1"
+    return 0
+  fi
+  return 1
+}
+
 # _::is_func() Check if a given command is a declared function {{{1
 # Args [command]
 # Returns:

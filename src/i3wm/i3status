@@ -14,11 +14,11 @@ order += "disk /"
 # order += "run_watch DHCP"
 # order += "run_watch VPNC"
 # order += "path_exists VPN"
-order += "ethernet eth0"
-order += "battery 0"
+#order += "ethernet eth0"
+# order += "battery 0"
 # order += "cpu_temperature 0"
-order += "memory"
-order += "load"
+# order += "memory"
+# order += "load"
 order += "tztime local"
 
 volume master {
@@ -29,7 +29,7 @@ volume master {
 
 wireless wlan0 {
   # format_up = "W: (%quality at %essid, %bitrate) %ip"
-  format_up = " %essid (%bitrate)"
+  format_up = "  %essid (%bitrate)"
   format_down = ""
 }
 

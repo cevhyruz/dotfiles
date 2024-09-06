@@ -1,8 +1,11 @@
 # vi:ft=i3config
 
-# start dmenu (a program launcher
-bindsym $mod+d exec --no-startup-id dmenu_run
+# start dmenu (a program launcher)
+# bindsym $mod+d exec --no-startup-id dmenu_run
 
+# start rofi
+bindsym $mod+d exec --no-startup-id rofi -show combi -run-command "i3-msg exec '{cmd}'" -show-icons
+#
 # fzf as dmenu
 # bindsym $mod+d exec $floatterm $float_small --execute \
 #   ~/Projects/dotfiles/src/i3wm/bin/launcher.bash
@@ -23,7 +26,7 @@ bindsym $mod+space focus mode_toggle
 # different ways of launching a terminal
 bindsym $mod+Return exec  $term
 bindsym $mod+Shift+t exec $floatterm $float_normal
-
+#
 # modes
 bindsym $mod+v mode "adjust volume"
 bindsym $mod+o mode "orientation"

@@ -1,0 +1,32 @@
+# vim: set ft=dosini :
+
+[module/i3]
+type = internal/i3
+pin-workspaces = true
+;strip-wsnumbers = true
+;index-sort = true
+enable-click = true
+enable-scroll = false
+wrapping-scroll = false
+reverse-scroll = false
+fuzzy-match = false
+
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = ${colors.alert}
+
+abel-focused = %name%
+label-focused-background = ${colors.background}
+label-focused-underline = ${colors.primary}
+label-focused-padding = 1
+
+;label-unfocused = %index%: %name%
+label-unfocused = "%name%"
+label-unfocused-padding = 1
+
+;label-urgent = %index%: %name%
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+

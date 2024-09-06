@@ -6,10 +6,10 @@
 # and/or to small to be a plugin nor core functions.
 
 # Creates an archive (*.tar.gz) from given directory.
-function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+# function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
 
 # Create a ZIP archive of a file or folder.
-function makezip() { zip -r "${1%%/}.zip" "$1" ; }
+# function makezip() { zip -r "${1%%/}.zip" "$1" ; }
 
 # create directory and enter it.
 # usage: md [directory]
@@ -97,6 +97,16 @@ function note() {
 
 # terminfo test
 function terminfo() {
+
+printf "\x1b[58;2;255;0;0m\x1b[4msingle\x1b[21mdouble\x1b[60mcurly\x1b[61mdotted\x1b[62mdashed\x1b[0m"
+
+  echo
+  echo -e "\e[58;2;50;168;90m set underline color to specified true color RGB"
+
+  echo 
+  echo -e "\e[58;5;39m set underline color to palette index I (0-255)"
+
+  echo
   echo -e "\e[1mbold\e[0m"
   echo
   echo -e "\e[2mdim\e[0m"
@@ -114,13 +124,48 @@ function terminfo() {
   echo -e "\e[4:2mdouble underline"
   echo
   echo -e "\e[4:3mcurvy underline"
+
+
+
 }
+
+  # echo "========================="
+  # echo "underlines"
+  # echo "========================="
+  # echo
+  # echo -e "\e[4:2m mdouble underline"
+  # echo
+  # echo -e "\e[4:3m curvy underline"
+  # echo
+  # echo -e "\e[4:4m dotted line"
+  # echo
+  # echo -e "\e[4:5m dashed line"
 
 # pretty print and colorize value of 'LS_COLORS'.
 function lscolors() {
+  local -A dircolors="(
+    [no]='NORMAL, NORM'
+    [fi]='File'
+    [di]='DIR'
+    [ln]='SYMLINK, LINK, LNK'
+    [or]='ORPHAN'
+    [mi]='MISSING'
+    [bd]='BLOCK, BLK'
+    [cd]='CHAR, CHR'
+    [ex]='EXEC'
+    [do]='DOOR'
+    [so]='SOCK'
+    [pi]='FIFO, PIPE'
+    [sg]='SETGID'
+    [su]='SETUID'
+    [st]='STICKY'
+    [tw]='STICKY_OTHER_WRITABLE'
+    [ow]='OTHER_WRITABLE'
+  )"
   set -f;
   for item in ${LS_COLORS//:/ }; do
-    echo "${item%=*} [\e[${item#*=}m ${item#*=} \e[0m]";
+    printf "%b" "\e[0m"
+    echo " [\e[${item#*=}m  ${dircolors[${item%=*}]}  \e[0m]";
   done
   set +f;
 }
@@ -128,48 +173,53 @@ function lscolors() {
 # print current theme palette.
 function palette() {
   echo
+  echo " palette"
   for bg in 4 10; do
     for (( i = 0; i < 8; i++ )); do
-      echo -en " \e[${bg}${i}m   ${reset}"
+      echo -en " \e[${bg}${i}m   ${resetall}"
     done
     echo
   done
+  echo
+
+  echo " LS_COLORS"
+  lscolors
 }
 
 function foobar() {
-  echo "$Bgblack hellow $reset"
-  echo "$Bgred hellow $reset"
-  echo "$Bggreen hellow $reset"
-  echo "$Bgyellow hellow $reset"
-  echo "$Bgblue hellow $reset"
-  echo "$Bgmagenta hellow $reset"
-  echo "$Bgcyan hellow $reset"
-  echo "$Bgwhite hellow $reset"
+  echo "$Bgblack hellow $resetall"
+  echo "$Bgred hellow $resetall"
+  echo "$Bggreen hellow $resetall"
+  echo "$Bgyellow hellow $resetall"
+  echo "$Bgblue hellow $resetall"
+  echo "$Bgmagenta hellow $resetall"
+  echo "$Bgcyan hellow $resetall"
+  echo "$Bgwhite hellow $resetall"
   echo
-  echo "$bgblack hellow $reset"
-  echo "$bgred hellow $reset"
-  echo "$bggreen hellow $reset"
-  echo "$bgyellow hellow $reset"
-  echo "$bgblue hellow $reset"
-  echo "$bgmagenta hellow $reset"
-  echo "$bgcyan hellow $reset"
-  echo "$bgwhite hellow $reset"
+  echo "$bgblack hellow $resetall"
+  echo "$bgred hellow $resetall"
+  echo "$bggreen hellow $resetall"
+  echo "$bgyellow hellow $resetall"
+  echo "$bgblue hellow $resetall"
+  echo "$bgmagenta hellow $resetall"
+  echo "$bgcyan hellow $resetall"
+  echo "$bgwhite hellow $resetall"
   echo
-  echo "$Fgblack hellow $reset"
-  echo "$Fgred hellow $reset"
-  echo "$Fggreen hellow $reset"
-  echo "$Fgyellow hellow $reset"
-  echo "$Fgblue hellow $reset"
-  echo "$Fgmagenta hellow $reset"
-  echo "$Fgcyan hellow $reset"
-  echo "$Fgwhite hellow $reset"
+  echo "$Fgblack hellow $resetall"
+  echo "$Fgred hellow $resetall"
+  echo "$Fggreen hellow $resetall"
+  echo "$Fgyellow hellow $resetall"
+  echo "$Fgblue hellow $resetall"
+  echo "$Fgmagenta hellow $resetall"
+  echo "$Fgcyan hellow $resetall"
+  echo "$Fgwhite hellow $resetall"
   echo
-  echo "$fgblack hellow $reset"
-  echo "$fgred hellow $reset"
-  echo "$fggreen hellow $reset"
-  echo "$fgyellow hellow $reset"
-  echo "$fgblue hellow $reset"
-  echo "$fgmagenta hellow $reset"
-  echo "$fgcyan hellow $reset"
-  echo "$fgwhite hellow $reset"
+  echo "$fgblack hellow $resetall"
+  echo "$fgred hellow $resetall"
+  echo "$fggreen hellow $resetall"
+  echo "$fgyellow hellow $resetall"
+  echo "$fgblue hellow $resetall"
+  echo "$fgmagenta hellow $resetall"
+  echo "$fgcyan hellow $resetall"
+  echo "$fgwhite hellow $resetall"
 }

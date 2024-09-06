@@ -6,3 +6,9 @@ coverage/
 # localrc
 Git/.gitconfig.local
 Bash/.bashrc.local
+
+# temporarily
+
+src/nvim/lua/backup
+
+src/Bash/configure

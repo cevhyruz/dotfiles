@@ -4,6 +4,8 @@
 
 set $i3wm_home ~/Projects/dotfiles/src/i3wm
 
+exec_always --no-startup-id ~/Projects/dotfiles/src/i3wm/bin/launch_polybar.bash
+
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
@@ -12,13 +14,20 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-exec --no-startup-id feh --bg-scale ~/Pictures/Green_Grass.jpg
+
+# wallpaper
+exec --no-startup-id feh --bg-scale ~/Downloads/mountain.jpg
+
 
 exec --no-startup-id mons -s
-# exec --no-startup-id picom -b
+exec --no-startup-id picom -b
+
 
 # -- general window properties
 for_window [class="^.*"] border pixel 2
+gaps inner 20
+gaps outer 0
+
 
 
 # floating / drowndown window
@@ -62,6 +71,6 @@ set $ws8  "8"
 set $ws9  "9"
 set $ws10 "10"
 
-include $i3wm_home/i3bar
+#include $i3wm_homei3bar
 include $i3wm_home/keybindings
 include $i3wm_home/modes

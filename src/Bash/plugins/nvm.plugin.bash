@@ -4,6 +4,10 @@
 #
 # lazyload nvm
 
+if ! [[ -d "${XDG_CONFIG_HOME-}/.nvm" ]] && ! [[ -d "${HOME}/.nvm" ]] then
+  return
+fi
+
 function main() {
   if [[ -z "${XDG_CONFIG_HOME-}" ]]; then
     export NVM_DIR="${HOME}/.nvm"

@@ -9,31 +9,27 @@
 
 # shellcheck disable=SC2034
 
-# Bootstrap runtime files.
-# @TODO: write a utility function for dotfiles to print where does a certain
-# function/alias is coming from.
 
-declare -a runtime=(
-  "${DOT_BASH}"/{lib,core,plugins,completions,aliases,functions}/*
-  "$HOME/.fzf.bash"
-  "${DOT_BASH}/themes/${dotbash_theme}.bash"
-  "${DOTFILES}/localrc/localrc.bash"
-)
+source "${DOTFILES}/src/Bash/core/utils.bash"
 
-# TODO:
-# Add a runtime API so we are able to include a project from localrc.
-# eg:
-#   runtime+=(/home/devs/Projects/visual-bash/vmb_init)
-#   runtime+=(/home/devs/Projects/bash-diagnostics/init.bash)
-
-declare -a scriptnames=()
-declare -i index=1
-for config in "${runtime[@]}"; do
-  source "$config"
-  scriptnames+=("${index}: ${config}")
-  (( index++ ))
+# check if the required program for plugins are installed,
+# if yes, we'll declare a variable for reference.
+declare varname
+for prereq in "${!plugins[@]}"; do
+  [[ -z "${plugins[$prereq]}" ]] && continue
+  varname="__plug_${plugins[$prereq]}_installed"
+  if command -v "${plugins[$prereq]}" &>/dev/null; then
+    if ! declare -p "$varname" &>/dev/null; then
+      eval "declare -g __plug_${plugins[$prereq]}_installed=1"
+    fi
+  fi
 done
-unset config
+
+
+init_config
+
+unset varname
+
 
 # unset common functions
 unset -f main

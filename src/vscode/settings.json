@@ -4,7 +4,6 @@
   "vscode_custom_css.imports": ["file:///home/devs/.vscode/custom.css"],
 
   "editor.renderLineHighlightOnlyWhenFocus": true,
-  "editor.lightbulb.enabled": true,
   "terminal.integrated.gpuAcceleration": "on",
 
   "explorer.openEditors.visible": 1,
@@ -29,13 +28,12 @@
   "editor.wordWrap": "on",
   "editor.fontFamily": "'Dejavu Sans Mono for Powerline', monospace",
   "editor.renderFinalNewline": "off",
-  "editor.renderWhitespace": "trailing", "editor.occurrencesHighlight": false,
+  "editor.renderWhitespace": "trailing", "editor.occurrencesHighlight": "off",
   "editor.selectionHighlight": false,
   "editor.links": false,
   "workbench.editor.labelFormat": "medium",
   "workbench.editor.enablePreview": false,
-  "workbench.activityBar.visible": false,
-  "workbench.editor.showTabs": false,
+  "workbench.editor.showTabs": "single",
   "workbench.tree.indent": 20,
   "workbench.tree.renderIndentGuides": "always",
   "workbench.colorCustomizations": {
@@ -199,4 +197,5 @@
   "workbench.colorTheme": "Visual Studio Dark",
   "editor.minimap.enabled": false,
   "window.zoomLevel": -1,
+  "workbench.activityBar.location": "hidden",
 }

@@ -14,6 +14,7 @@ function M:setup()
   M.mappings(userconf.mappings)
   M.plugins()
   M.autocmd()
+  M.highlight()
 end
 
 local function _echo(message)
@@ -93,6 +94,21 @@ function M:options()
     for _, opts in pairs(options) do
       vim.opt[opts] = Profile.g.tabspace
     end
+  end
+end
+
+function M:highlight()
+  local hi_group = {
+    WinBar = {  guifg = '#E0E0E0', guibg = '#303030', bold = false },
+    StatusLine = {  guifg = '#E0E0E0', guibg = '#303030', bold = false },
+  }
+
+  for name, color in pairs(hi_group) do
+    vim.api.nvim_set_hl(0, name, {
+      fg = color.guifg,
+      bg = color.guibg,
+      bold = color.bold
+    })
   end
 end
 

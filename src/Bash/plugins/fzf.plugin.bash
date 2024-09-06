@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
-# vim: ft=sh fdm=marker ts=2 sw=2 et
+# vim: ft=bash fdm=marker ts=2 sw=2 et
 
 # FZF Plugin for Bash
 # Sensible settings for FZF
@@ -9,11 +9,25 @@
 # DOT_FZF_DEFAULT_CMD : defaults to Ag.
 
 # @FIXME: should not return when mocking tests.
-if [[ -z "${TEST_DIRECTORY:-}" ]]; then
-  _::command_exists "fzf" || return
-fi
+# if [[ -z "${TEST_DIRECTORY:-}" ]]; then
+#   _::is_installed "fzf" "fzf" || return
+# fi
+
+function __preview() {
+  local filetype="$1"
+
+  if [[ "${filetype}" == *.png||*.jpeg ]]; then
+    kitty icat --clear --transfer-mode=memory --stdin=no --place="${FZF_PREVIEW_COLUMNS:-}x${FZF_PREVIEW_LINES}@0x0" $filetype; seq 100;
+  else
+    batcat --style=numbers --color=always --line-range :500 "$1"
+  fi
+
+}
 
 function main() {
+  export -f __preview
+
+
   local -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
@@ -42,6 +56,7 @@ function main() {
     #"--border=horizontal"
     "--layout=reverse"
     "--preview-window=60%:hidden:border-sharp"
+    # "--preview='__preview {}'"
     "--preview='batcat --style=numbers --color=always --line-range :500 {}'"
 #    "--info='hidden'"
     "--scrollbar='▉'"
@@ -85,15 +100,15 @@ function main() {
 }
 
 function __set_fzf() {
-  local available_command="$1"
+  local preffered_command="$1"
   local ignored_dirs
   local fzf_command
 
-  case "${available_command:-ag}" in
+  case "${available_command:-find}" in
     fd) __set_fzf_as_fdfind;;
     ag) __set_fzf_as_ag ;;
     rg) __set_fzf_as_rg ;;
-    *) __set_fzf_as_find ;;
+    find) __set_fzf_as_find ;;
   esac
 
   unset dir

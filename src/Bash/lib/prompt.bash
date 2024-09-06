@@ -4,15 +4,15 @@
 
 # =========== PS4 ============
 
-# TODO:
+# TODO: if possible
 # [x] Add return status.
 # [x] Merge the same stack (tree-like view).
 # [x] Dim color for stdout.
 function _ps4_callstack() {
   set +u
   for (( i = ${#FUNCNAME[@]}; i > 0; i-- )); do
-    printf  '\e[38;5;5m%b\e[36m:%b:\e[38;5;187m%b\e[0m \e[31m>\e[0m ' \
-      "${BASH_SOURCE[i]##*/}" "${BASH_LINENO[i]}" "${FUNCNAME[i]}()"
+    printf '\e[33m%b\e[36m%b\e[38;5;187m%b\e[0m \e[1;31m>\e[0m ' \
+      "${BASH_SOURCE[i]##*/}:" "${FUNCNAME[i]:+():}" "${BASH_LINENO[i]}"
   done
   set -u
 }
@@ -26,7 +26,7 @@ function __cwd() {
     local pwd="${PWD//${HOME}/${separator_color}\~}"
     local dir_colors="\e[1;38;5;74m"       # bold blue
 
-    pwd="${reset}${pwd////${separator_color}${separator}\\e\[1;38;5;74m}${reset}"
+    pwd="${resetall}${pwd////${separator_color}${separator}\\e\[1;38;5;74m}${resetall}"
 
     printf "%b" "${pwd}"
 }
@@ -89,7 +89,7 @@ function __git_ps1() {
 
   _prompt_git_head   "${bold}${Bggreen}" "${Bgred}" "${Bgyellow}" "${Bgwhite}:" 
 
-  command git update-index --really-refresh &> /dev/null
+  command git update-index --really-refresh &> /dev/null || echo 'needs update' && return
 
   # tags ~5ms
   printf " " && command git describe --tags 2> /dev/null
