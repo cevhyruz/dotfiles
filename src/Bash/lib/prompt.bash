@@ -89,7 +89,7 @@ function __git_ps1() {
 
   _prompt_git_head   "${bold}${Bggreen}" "${Bgred}" "${Bgyellow}" "${Bgwhite}:" 
 
-  command git update-index --really-refresh &> /dev/null || echo 'needs update' && return
+  command git update-index --really-refresh &> /dev/null
 
   # tags ~5ms
   printf " " && command git describe --tags 2> /dev/null
