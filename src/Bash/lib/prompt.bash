@@ -82,7 +82,7 @@ function _is_git() {
 # show git branch and status in prompt.
 # output:  [HEAD] [status icons]
 # sample:  master +!?
-function __git_ps1() {
+function __my_git_ps1() {
   _is_git || return
 
   local status=''

@@ -86,7 +86,7 @@ function _set_prompts() {
     "${userhost_color} \\\u@\H"
     "\[${Bgmagenta}\]:"
     "$( __cwd ):"
-    "$( __git_ps1 "${bold}" )" # ~20ms
+    "$( __my_git_ps1 "${bold}" )" # ~20ms
     "${DIRENV_DIFF:+DIRENV}"
     "${return_string}"
     "\n"
