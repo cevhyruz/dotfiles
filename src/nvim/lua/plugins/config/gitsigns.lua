@@ -43,9 +43,9 @@ M.options = {
     col = 1
   },
 
-  yadm = {
-    enable = false
-  },
+  -- yadm = {
+  --   enable = false
+  -- },
 }
 
 

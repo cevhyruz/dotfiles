@@ -5,11 +5,16 @@ local M = {}
 local plugname = {
   -- core plugins
   { "tomasiser/vim-code-dark" },
+  { "ellisonleao/gruvbox.nvim" },
   {"3rd/image.nvim"},
 
-  {"preservim/tagbar"},
 
-  { "vimwiki/vimwiki" },
+  { 'antosha417/nvim-lsp-file-operations' },
+
+
+  -- {"preservim/tagbar"},
+
+  -- { "vimwiki/vimwiki" },
 
   -- UI
   { "nvim-tree/nvim-web-devicons" },
@@ -31,17 +36,16 @@ local plugname = {
   { "kylechui/nvim-surround" },
   { "numToStr/Comment.nvim" },
 
-
-
   -- Completion
-  { "hrsh7th/nvim-cmp",
-    dependencies = {
-        "L3MON4D3/LuaSnip",
-      dependencies = { "rafamadriz/friendly-snippets" }
-    }
-  }
+  { "hrsh7th/nvim-cmp" },
+
+
+  { "L3MON4D3/LuaSnip", dependencies = "rafamadriz/friendly-snippets" },
 
   -- LSP
+  { "neovim/nvim-lspconfig" },
+
+  -- { "kosayoda/nvim-lightbulb", opts = { autocmd = { enabled = true } } },
 }
 
 -- plugin specification should be in their respective config files.
@@ -65,7 +69,8 @@ end
 M.setup = function()
   local specs = {}
   for key, plugin in pairs(plugname) do
-    local config = _load_config(plugname[key][1])
+  local config = _load_config(plugname[key][1])
+
     local plugspecs = vim.tbl_deep_extend("keep",
       plugin,
       config.specs or {}
@@ -74,6 +79,8 @@ M.setup = function()
   end
   return specs
 end
+
+
 
 
 return M

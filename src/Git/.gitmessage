@@ -1,6 +1,18 @@
+
 # ╭────────────────────────────────────────────────────────────────────────╮
 # │  💡 RULE OF THE THUMB 💡                                               │
 # │                                                                        │
+#         feat(profile): Add user profile picture upload
+#            fix(login): Resolve login page redirection bug
+#    refactor(database): Simplify database connection code
+#   chore(dependencies): Update third-party libraries
+#            docs(api):  Update API documentation for v2 endpoints
+#    test(registration): Add unit test for user registration
+#        style(main.js): Fix indention in main.js
+#          perf(images): Optimize image loading for faster page rendering
+#          ci(pipeline): Update CI/CD pipeline for automatic deployments
+#       revert(profile): Revert "feat(profile): Add user picture upload"
+#
 # │   1)  Title: Summary, imperative, start upper case, no period.         │
 # │       No more than 50 characters.                                      │
 # │   2)  Single blank line between title and body.                        │

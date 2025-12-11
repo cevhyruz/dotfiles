@@ -78,7 +78,7 @@
       "activityBarBadge.background": "#0078d4",
       "activityBarBadge.foreground": "#ffffff",
 
-      "sideBar.background":                "#1C1C1C",
+      "sideBar.background":              "#1C1C1C",
 
       "sideBarSectionHeader.background":   "#1F1F1F",
       "sideBarSectionHeader.foreground":   "#0078d4",
@@ -96,16 +96,16 @@
       "minimapGutter.addedBackground": "#2ea043",
       "minimapGutter.deletedBackground": "#f85149",
       "minimapGutter.modifiedBackground": "#0078d4",
-
       "minimapSlider.activeBackground": "#1c1c1c80",
       "minimapSlider.background": "#26262680",
       "minimapSlider.hoverBackground": "#1c1c1c80",
 
 
-      "sideBarTitle.foreground":           "#FFFFFF",
+      "sideBarTitle.foreground":           "#264f78",
+      "sideBarTitle.background":           "#264f78",
 
-      "editor.background":                 "#1F1F1F",
-      "editor.lineHighlightBackground":    "#222222",
+      "editor.background":                 "#000000",
+      "editor.lineHighlightBackground":    "#111111",
       "editor.lineHighlightBorder":        "#222222",
       "editorLineNumber.foreground":       "#444444",
       "editorLineNumber.activeForeground": "#A8A8A8",
@@ -134,7 +134,7 @@
       "list.highlightForeground": "#C6C6C6",
 
       // terminal
-      "terminal.background": "#1A1A1A",
+      "terminal.background": "#101012",
       "terminal.foreground": "#cccccc",
       "terminal.inactiveSelectionBackground": "#3a3d41",
       "terminal.tab.activeBorder": "red",
@@ -143,12 +143,12 @@
       "list.inactiveSelectionBackground": "#262626",
       "tree.indentGuidesStroke": "#626262",
       "scrollbar.shadow": "#1C1C1C",
-      "editorIndentGuide.activeBackground": "red",
-      "editorIndentGuide.background": "#2E2E2E"
+      "editorIndentGuide.activeBackground1": "red",
+      "editorIndentGuide.background1": "#2E2E2E"
     }
   },
   "terminal.integrated.commandsToSkipShell": [
-    "vim.remap",
+    "vim.remap"
   ],
   "terminal.external.linuxExec": "gnome-terminal-emulator",
   "terminal.integrated.fontFamily": "'Hack','FuraCode Nerd Font', 'PowerlineSymbols', monospace",
@@ -160,7 +160,8 @@
   },
   "vscode-neovim.logLevel": "error",
   "vscode-neovim.neovimInitVimPath": "~/Projects/dotfiles/vscode/init.lua",
-  "vim.easymotion": true,
+  "vim.showmodename": false,
+  "vim.easymotion": false,
   "vim.incsearch": true,
   "vim.useSystemClipboard": true,
   "vim.useCtrlKeys": true,
@@ -194,8 +195,11 @@
     },
   ],
   "editor.experimentalWhitespaceRendering": "font",
-  "workbench.colorTheme": "Visual Studio Dark",
+  "workbench.colorTheme": "Default Light+",
   "editor.minimap.enabled": false,
   "window.zoomLevel": -1,
   "workbench.activityBar.location": "hidden",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
 }

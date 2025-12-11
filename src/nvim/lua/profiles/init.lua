@@ -3,7 +3,7 @@ local data = vim.fn.stdpath "data"
 local M = {}
 
 M.autocmd = { -- {{{1
-  ["NoQuickfixBuffers"] = { 
+  ["NoQuickfixBuffers"] = {
     events = { "FileType" },
     opts = {
       pattern = "qf",
@@ -27,6 +27,7 @@ M.g = {
   tabspace = 2,
 }
 
+-- plugin install path
 M.paths = { -- {{{1
   lazy = data .. "/lazy/lazy.nvim",
 }
@@ -71,7 +72,8 @@ M.editor = { -- {{{1
   },
 
   opts = {
-    guicursor = "cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor",
+    -- guicursor = "cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor",
+    -- guicursor = "c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor",
     winbar = "%f",
     shortmess = vim.opt.shortmess:append("W"),
     colorcolumn = { 80 },

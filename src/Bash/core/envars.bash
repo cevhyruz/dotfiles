@@ -8,7 +8,9 @@
 unset MAILCHECK
 
 # append current sessions history to the history file.
-PROMPT_COMMAND=('history -a;')
+# PROMPT_COMMAND='history -a;'
+
+# ::post_command "history -a"
 
 _::command_exists "nvim" && VISUAL="nvim"
 

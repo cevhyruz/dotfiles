@@ -109,7 +109,7 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
 '
 
 # serverbar
-%hidden server_item_1="#{E:pad}Reload tmux session#{E:pad}"
+%hidden server_item_1="#{E:pad}Reload tmux haaha#{E:pad}"
 %hidden server_item_2="#{E:pad}Quick edit a dotfile config file#{E:pad}"
 %hidden server_item_3="#{E:pad}Network connection#{E:pad}"
 %hidden server_item_4="#{E:pad}user options status#{E:pad}"
@@ -120,7 +120,7 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "-" "" ""\
   "#{E:menu_help}" "" ""\
   "-" "" ""\
-  "#{E:server_item_1}" "" ""\
+  "#{E:server_item_1}" "" "select-pane -e"\
   "#{E:menu_item_4}" "" ""\
   "-" "" ""\
   "#{E:menu_item_5}" "" ""\

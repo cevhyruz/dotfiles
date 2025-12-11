@@ -8,10 +8,19 @@ M.mappings = { -- {{{1
   },
   n = {
     [";"] = { ":",                                  "quick commandline"              },
+    ["<m-l>"] = { "8zl",                            "quick repeatable right horizontal scroll"              },
+    ["<m-h>"] = { "8zh",                            "quick repeatable left horizontal scroll"              },
+    [";w"] = { ":w<CR>",                            "quick save"              },
+    ["vv"] = { "V",                                 "visual line"              },
+    ["<m-j>"] = { "mz:m+<CR>`z",                    "move current line downward"              },
+    ["<m-k>"] = { "mz:m-2<CR>`z",                   "move current line upward"              },
+    ["<C-e>"] = { "4<C-e>",                         "quick scrolling"              },
+    ["<C-y>"] = { "4<C-y>",                         "quick scrolling"              },
     ["j"] = { "gj",                                 "move down through wrapped line" },
     ["k"] = { "gk",                                 "move up through wrapped line"   },
- ["<Leader>s<Space>"] = { ":set spell!<CR>",        "toggle spell"    },
-    ["<Space>"] = { ":set hls!<CR>",              "toggle highlight search" },
+    ["<Leader>s<Space>"] = { ":set spell!<CR>",     "toggle spell"    },
+    ["<Leader>w<Space>"] = { ":set wrap!<CR>",      "toggle wrap"    },
+    ["<Space>"] = { ":set hls!<CR>",                "toggle highlight search" },
    },
   c = { ["kj"]    = { "<Esc>",                      "switch to normal mode"   },
         ["<C-h>"] = { "<Left>",                     "move cursor to left"   },
@@ -21,10 +30,12 @@ M.mappings = { -- {{{1
   },
   v = {
     ["kj"]    = { "<Esc>",                      "switch back to normal mode"    },
+    ["<m-j>"] = { ":m'>+<cr>`<my`>mzgv`yo`z",  "move selected line downward"              },
+    ["<m-k>"] = { ":m'<-2<cr>`>my`<mzgv`yo`z", "move current line upward"              },
   },
 
   x = {
-    ["kj"]    = { "<Esc>",                      "switch to normal mode" }, 
+    ["kj"]    = { "<Esc>",                      "switch to normal mode" },
   },
 }
 
@@ -40,6 +51,7 @@ M.editor = { -- {{{1
   opts = {
     guicursor = "cr-c-ci:hor20,i-ve:ver25,r:hor20,o:hor50,n-v-sm:block,a:Cursor/lCursor",
     winbar = "%f",
+    wrap = 'nowrap',
     shortmess = vim.opt.shortmess:append("W"),
     colorcolumn = { 80 },
     laststatus = 3,
@@ -67,6 +79,7 @@ M.editor = { -- {{{1
     splitright = true,
     termguicolors = true,
     timeoutlen = 400,
+    redrawtime = 10000, -- https://github.com/prabirshrestha/vim-lsp/issues/786
     undofile = true,
     -- interval for writing swap file to disk, also used by gitsigns
     updatetime = 250,

@@ -58,7 +58,7 @@ function M:plugins()
   local freshinstall = false
   local lazypath = Profile.paths.lazy
   local plugins = require "plugins"
- 
+
   if not vim.loop.fs_stat(lazypath) then
     if M:lazy(lazypath) then
       freshinstall = true
@@ -68,7 +68,7 @@ function M:plugins()
   vim.opt.rtp:prepend(lazypath)
   require"lazy".setup(
     plugins.setup(),
-    { install = { colorscheme = { "codedark", "habamax" } }, }
+    { install = { colorscheme = { "morning", "habamax" } }, }
   )
 
   if freshinstall then
@@ -98,9 +98,26 @@ function M:options()
 end
 
 function M:highlight()
+
   local hi_group = {
     WinBar = {  guifg = '#E0E0E0', guibg = '#303030', bold = false },
     StatusLine = {  guifg = '#E0E0E0', guibg = '#303030', bold = false },
+    Folded = { guifg = '#9a9a9a', guibg = '#000000', bold = false },
+    -- change this for bg
+    Normal = { guifg = '#CBCBCB', guibg = '#000000', bold = false },
+    NormalFloat = { guifg = '#CBCBCB', guibg = '#000000', bold = false },
+    FoldColumn = { guifg = '#CBCBCB', guibg = '#000000', bold = false },
+    SignColumn = { guifg = '#CBCBCB', guibg = '#000000', bold = false },
+    WinSeparator = { guifg = '#2a2a2a', guibg = '#000000', bold = false },
+    LineNr = { guifg = '#4a4a4a', guibg = '#000000', bold = false },
+    IblIndent = { guifg = '#1a1a1a', guibg = '#000000', bold = false },
+    EndOfBuffer = { guifg = '#1a1a1a', guibg = '#000000', bold = false },
+    CursorLine = { guifg = '', guibg = '#111111', bold = false },
+    -- LSP Diagnostics
+    DiagnosticError = { guifg = '#FF5555', guibg = '', bold = false },
+    DiagnosticWarn = { guifg = '#F1FA8C', guibg = '', bold = false },
+    DiagnosticInfo = { guifg = '#8BE9FD', guibg = '', bold = false },
+    DiagnosticHint = { guifg = 'red', guibg = '', bold = false }
   }
 
   for name, color in pairs(hi_group) do

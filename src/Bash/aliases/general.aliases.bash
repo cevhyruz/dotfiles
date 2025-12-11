@@ -25,7 +25,7 @@ alias scriptinfo="grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[
 # navigation that works anywhere.
 alias home='cd ${HOME}'
 alias etc="cd /etc"
-alias doc="cd ~/Documents"
+alias docs="cd ~/Documents"
 alias dl="cd ~/Downloads"
 
 # reload current shell session.
@@ -35,7 +35,7 @@ alias reload='exec "${SHELL}"'
 alias mv="mv --interactive"
 
 # always list all matches.
-alias which="which -a"
+# alias which="which -a"
 
 # pretty print path names.
 alias path='echo "${PATH//:/\\n}"'

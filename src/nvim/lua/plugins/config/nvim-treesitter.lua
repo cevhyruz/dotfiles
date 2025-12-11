@@ -1,4 +1,7 @@
+
 local M = {}
+
+return M -- temporarily disable
 
 M.options = {
   ensure_installed = "all",

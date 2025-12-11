@@ -65,7 +65,6 @@ set-option -g @tree-pane-active-flag-style  'fg=colour35'
 # buffers
 set-option -g @buffer-sample-style 'fg=colour35'
 
-
 set-option -g @buffer-space-alignment 1
 
 # there is no way to know the size of a glyph

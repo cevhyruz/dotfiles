@@ -1,6 +1,5 @@
 local Utils = {}
 
-
 -- clean close
 Utils.close_curwin = function()
   return vim.api.nvim_buf_delete(0, { force = true })

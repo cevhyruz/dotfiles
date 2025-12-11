@@ -13,6 +13,7 @@
 #   _::is_installed "fzf" "fzf" || return
 # fi
 
+
 function __preview() {
   local filetype="$1"
 
@@ -28,12 +29,19 @@ function main() {
   export -f __preview
 
 
+  # TODO!: auto detect?
   local -ar __FZF_IGNORED_DIRS=(
     "node_modules/"
     "dist/"
     "bower_components/"
+    # github
+    ".github/"
+    # typescript
+    "out-tsc/"
+    ".angular/"
     ".git/"
-    "vendors/")
+    "vendors/"
+    ".vscode/" )
 
   local -ar __FZF_OPTS=(
     "--ansi"
@@ -53,9 +61,9 @@ function main() {
     "--separator=''"
     "--no-bold"
     #"--border-label='│ Find files │'"
-    #"--border=horizontal"
+    "--border=none"
     "--layout=reverse"
-    "--preview-window=60%:hidden:border-sharp"
+    "--preview-window=60%:hidden:border-thinblock"
     # "--preview='__preview {}'"
     "--preview='batcat --style=numbers --color=always --line-range :500 {}'"
 #    "--info='hidden'"
@@ -74,9 +82,9 @@ function main() {
     # -1 = terminal default fg/bg
 
     "--color=fg:$fg"            # Text
-    "--color=bg:$bg"           # Background
+    # "--color=bg:$bg"           # Background
     "--color=preview-fg:$prev_fg"   # Preview window text
-    "--color=preview-bg:$prev_bg"   # Preview window background
+    # "--color=preview-bg:$prev_bg"   # Preview window background
     "--color=hl:1"            # Highlighted substrings
     "--color=fg+:249"            # Text (Current line)
     "--color=bg+:#333333"          # Background (Current line)
@@ -104,7 +112,7 @@ function __set_fzf() {
   local ignored_dirs
   local fzf_command
 
-  case "${available_command:-find}" in
+  case "${preffered_command:-find}" in
     fd) __set_fzf_as_fdfind;;
     ag) __set_fzf_as_ag ;;
     rg) __set_fzf_as_rg ;;

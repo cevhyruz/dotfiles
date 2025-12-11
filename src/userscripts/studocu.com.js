@@ -14,6 +14,8 @@ window.addEventListener('load', function() {
   const prevBanner = document.querySelectorAll('._9fcb6a94a9ec._0464070431ae ');
   prevBanner.forEach(prevBanner => { prevBanner.style.display = 'none' });
 
+
+ // const bannerSideDecors = document.querySelectorAll('._60e676a00207');
  const bannerSideDecors = document.querySelectorAll('._d090be426bcb');
   bannerSideDecors.forEach(bannerSideDecors => { bannerSideDecors.style.display = 'none' })
 

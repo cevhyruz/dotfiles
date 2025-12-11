@@ -18,8 +18,8 @@ function md() {
   mkdir -p "${directory}" && cd "$_" || return 1
 }
 
-# Determine size of a file or total size of a directory
 function fs() {
+  echo "Determine size of a file or total size of a directory"
   if [[ -n "$*" ]]; then
     du -sh -- "$@";
   else
@@ -50,6 +50,10 @@ function dataurl() {
   fi
 }
 
+# =============
+# Color System
+# =============
+
 # print a nice 256colors chart
 function colormap() {
   for (( i = 0; i < 256; i++ )); do
@@ -58,6 +62,19 @@ function colormap() {
     [ ! $(( (i - 15) % 6)) -eq 0 ] && printf ' ' || printf '\n'
   done
   unset i
+}
+
+# CoreUI's color mixins translated.
+# https://github.com/coreui/coreui/blob/main/scss/functions/_color.scss
+
+# Tint a color: mix a color with white.
+function tint-color() {
+  true;
+}
+
+# Shade a color: mix a color with black.
+function shade-color() {
+true;
 }
 
 # https://gist.github.com/cevhyruz/c0a95a927d59c9690e6a2c63c038a77d
@@ -103,7 +120,7 @@ printf "\x1b[58;2;255;0;0m\x1b[4msingle\x1b[21mdouble\x1b[60mcurly\x1b[61mdotted
   echo
   echo -e "\e[58;2;50;168;90m set underline color to specified true color RGB"
 
-  echo 
+  echo
   echo -e "\e[58;5;39m set underline color to palette index I (0-255)"
 
   echo

@@ -106,9 +106,11 @@ function _::command_exists() {
   return 1
 }
 
+
+
 # _::is_installed check if given program is installed {{{1
 # by checking if the reference variable is declared.
-# if yes, then declare another variable for reference to enable/disable 
+# if yes, then declare another variable for reference to enable/disable
 # the plugin given.
 function _::is_installed() {
   local program="$1"

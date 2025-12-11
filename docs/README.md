@@ -5,6 +5,6 @@
 ![License](https://img.shields.io/github/license/cevhyruz/dotfiles)
 
 
-This repository is a collection of configurations and settings for a
-friction-free development environment.  Composed of tmux, neovim, bash, fzf,
+This repository is a collection of configurations and settings for
+10x development environment.  Composed of tmux, neovim, bash, fzf,
 and all other stuff to make development a breeze.

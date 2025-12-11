@@ -87,7 +87,7 @@ function __init_hooks() {
     done
   fi
 
-  PROMPT_COMMAND=('_exec_postcmd')
+  PROMPT_COMMAND='_exec_postcmd'
 
 }
 

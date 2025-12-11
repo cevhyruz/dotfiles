@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash disable=SC2034
 # vi:ft=sh fdm=marker ts=2 sw=2 et
-#
 
 # This is auto-generated file, do not modify!
 # Timestamp: Mon - Aug 05, 2024 (06:22 PM)

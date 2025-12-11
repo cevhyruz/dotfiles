@@ -18,7 +18,7 @@ function main() {
 
   __make_dircolors_pallete
 
- _set_prompts  # 0.040ms
+  _set_prompts  # 0.040ms
 }
 
 function set_default_palette::ansi() {
@@ -79,6 +79,11 @@ function _set_prompts() {
     )
   fi
 
+
+
+declare -r command_color=""
+
+
   # ~6ms
   local -a prompt=(
     "\[${resetall}\]\[${normal}\]"
@@ -94,8 +99,8 @@ function _set_prompts() {
     "${arrow[2]}"
     "\[${resetall}${dim}\]"
     " \$: "
-    "\[${resetall}\]"
-    "\[\e[38;5;216m\]" )
+    "\[${resetall}\]")
+    # "\[\e[38;5;255m\]" )
 
   # PROMPT_DIRTRIM=2
   PS1="$(printf "%b" "${prompt[@]}")"

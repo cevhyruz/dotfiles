@@ -19,8 +19,8 @@ set -g clock-mode-style              12
 set -g mode-style                    "bg=colour237 fg=colour250"
 
 # window status
-set -g window-status-current-style   "fg=colour248"
-set -g window-status-style           "fg=colour242"
+set -g window-status-current-style   "fg=colour234,bg=colour30,bold"
+set -g window-status-style           "fg=colour11"
 set -g window-status-separator       "#[push-default fg=colour239]│"
 
 # choose-window, session, tree
@@ -58,14 +58,14 @@ set -g @status-message-timeout        5
 # status left/right
 set -g  status-left                  " #S "
 
-set -g  status-right                 "#{E:message}  "
-set -ag status-right                 "#{E:_pane_mode}   "
-set -ag status-right                 "#{E:ind_wlan} "
+# set -g  status-right                 "#{E:message}  "
+# set -ag status-right                 "#{E:_pane_mode}   "
+# set -ag status-right                 "#{E:ind_wlan} "
 set -ag status-right                 "#{E:sound}"
 set -ag status-right                 "#{E:win_drive}   "
-set -ag status-right                 "#{user}@#{host_short}   "
-set -ag status-right                 "#{E:_date}   "
-set -ag status-right                 "#{E:_time} "
+# set -ag status-right                 "#{user}@#{host_short}   "
+# set -ag status-right                 "#{E:_date}   "
+# set -ag status-right                 "#{E:_time} "
 
 # Palette
 # status formats

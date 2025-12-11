@@ -3,6 +3,36 @@ local M = {}
 function on_attach(bufnr)
   local api = require "nvim-tree.api"
   api.config.mappings.default_on_attach(bufnr)
+
+  -- LSP Rename File Hook
+  if api.events and api.events.Event and api.events.Event.FileRenamed then
+    print('working??')
+    api.events.subscribe(api.events.Event.FileRenamed, function(data)
+      api.events.subscribe(api.events.Event.FileRenamed, function(data)
+        local old_name = data.old_name
+        local new_name = data.new_name
+
+        local params = {
+          files = {
+            {
+              oldUri = vim.uri_from_fname(old_name),
+              newUri = vim.uri_from_fname(new_name),
+            }
+          }
+        }
+
+        vim.lsp.buf_request(0, "workspace/willRenameFiles", params, function(err, res)
+          if err then
+            vim.notify("LSP Rename File error: " .. err.message, vim.log.levels.ERROR)
+            return
+          end
+          vim.lsp.util.apply_workspace_edit(res, "utf-8")
+        end)
+      end)
+    end)
+  end
+
+
   local function map_opts(desc)
     return {
       desc = "nvim-tree" .. " " .. desc,
