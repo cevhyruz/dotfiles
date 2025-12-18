@@ -58,14 +58,14 @@ set -g @status-message-timeout        5
 # status left/right
 set -g  status-left                  " #S "
 
-# set -g  status-right                 "#{E:message}  "
-# set -ag status-right                 "#{E:_pane_mode}   "
-# set -ag status-right                 "#{E:ind_wlan} "
+set -g  status-right                 "#{E:message}  "
+set -ag status-right                 "#{E:_pane_mode}   "
+set -ag status-right                 "#{E:ind_wlan} "
 set -ag status-right                 "#{E:sound}"
 set -ag status-right                 "#{E:win_drive}   "
-# set -ag status-right                 "#{user}@#{host_short}   "
-# set -ag status-right                 "#{E:_date}   "
-# set -ag status-right                 "#{E:_time} "
+set -ag status-right                 "#{user}@#{host_short}   "
+set -ag status-right                 "#{E:_date}   "
+set -ag status-right                 "#{E:_time} "
 
 # Palette
 # status formats

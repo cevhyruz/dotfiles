@@ -1,21 +1,21 @@
 # vi:ft=tmux fdm=marker
 
-set-option -g command-alias[0] split-pane="split-window -vc '#{pane_current_path}'"
-set-option -g command-alias[1] splitp="split-window -vc '#{pane_current_path}'"
-set-option -g command-alias[2] server-info="show-messages -JT"
-set-option -g command-alias[3] info="show-messages -JT"
-set-option -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
-set-option -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
+set -g command-alias[0] split-pane="split-window -vc '#{pane_current_path}'"
+set -g command-alias[1] splitp="split-window -vc '#{pane_current_path}'"
+set -g command-alias[2] server-info="show-messages -JT"
+set -g command-alias[3] info="show-messages -JT"
+set -g command-alias[4] choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
+set -g command-alias[5] choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
 
-set-option -g command-alias[6] choose-tree=\
+set -g command-alias[6] choose-tree=\
 "choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -g command-alias[7] choose-buffer=\
+set -g command-alias[7] choose-buffer=\
 "choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
 
-set-option -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"
-set-option -g command-alias[9] split="split-window -vc '#{pane_current_path}'"
-set-option -g command-alias[10] popup="display-popup -EE -d '#{pane_current_path}'"
+set -g command-alias[8] vsplit="split-window -hc '#{pane_current_path}'"
+set -g command-alias[9] split="split-window -vc '#{pane_current_path}'"
+set -g command-alias[10] popup="display-popup -EE -d '#{pane_current_path}'"
 set-option -g command-alias[11] neww="new-window -c '#{pane_current_path}'"
 
 set-option -g command-alias[12] reload="source-file ${DOT_TMUX}/tmux.conf"
@@ -31,7 +31,7 @@ set-option -g command-alias[15] set-theme=\
 '  source-file ${DOT_TMUX}/tmux.conf;'\
 '}'
 
-set-option -g command-alias[16] current-command="display-message '#{pane_current_command}'"
+set -g command-alias[16] current-command="display-message '#{pane_current_command}'"
 
 #-----------------------------------------------------------------------------
 # config.tmux

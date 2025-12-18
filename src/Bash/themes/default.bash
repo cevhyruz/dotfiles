@@ -71,10 +71,11 @@ function _set_prompts() {
 
   if [[ -n "${VIRTUAL_ENV:-}" ]]; then
     local -a virtual_env=(
-      "${arrow[1]}"
       "\[${normal}\]"
+      "\[\uE606\] " # 
       "\[${dim}\]"
       "$(basename " ${VIRTUAL_ENV}" )"
+      "\[${resetall}\]"
       "\n"
     )
   fi
@@ -95,7 +96,7 @@ declare -r command_color=""
     "${DIRENV_DIFF:+DIRENV}"
     "${return_string}"
     "\n"
-    "${virtual_env[@]}"
+    "${virtual_env[@]}" # python env
     "${arrow[2]}"
     "\[${resetall}${dim}\]"
     " \$: "

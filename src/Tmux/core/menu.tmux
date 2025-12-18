@@ -2,26 +2,26 @@
 #
 # 3-tab menu using tmux 'display-popup' command
 #
-#  ┌──│ Main │ <Session> │ Server │──┐
-#  │                                 │
-#  │  Menu short description         │
-#  │                                 │
-#  │  Group 1 description            │
-#  │      Item 1                    │
-#  │      Item 2                    │
-#  │      Item 3                    │
-#  │                                 │
-#  │  Group 2 description            │
-#  │      Action 1                  │
-#  │      Action 2                  │
-#  │      Action 3                  │
-#  │                                 │
-#  │  Press <?> for "help"           │
-#  │                                 │
-#  ├─────────────────────────────────┤
-#  │ Prev Menu              Main (<) │
-#  │ Next Menu            Server (>) │
-#  └─────────────────────────────────┘
+#  ┌──│ Server │ Session | Window | Pane │──┐
+#  │                                        │
+#  │  Menu short description                │
+#  │                                        │
+#  │  Group 1 description                   │
+#  │      Item 1                           │
+#  │      Item 2                           │
+#  │      Item 3                           │
+#  │                                        │
+#  │  Group 2 description                   │
+#  │      Action 1                         │
+#  │      Action 2                         │
+#  │      Action 3                         │
+#  │                                        │
+#  │  Press <?> for "help"                  │
+#  │                                        │
+#  ├────────────────────────────────────────┤
+#  │ Prev Menu                     Main (<) │
+#  │ Next Menu                   Server (>) │
+#  └────────────────────────────────────────┘
 #
 # User options:
 #  @menu-position [x,y]
@@ -36,43 +36,55 @@ set -g @menu-title-style        "bold,fg=colour244,bg=colour234"
 set -g @icon-style              "fg=cyan"
 set -g @icon-disabled-style     "fg=colour235,bg=colour233"
 
-%hidden menu_1="#{E:pad}Main#{E:pad}"
-%hidden menu_2="#{E:pad}Session#{E:pad}"
-%hidden menu_3="#{E:pad}Server#{E:pad}"
+# ------------
+#  Tab Names
+# ------------
+# default tabs
+%hidden Tab_1="#{E:pad}Server#{E:pad}"
+%hidden Tab_2="#{E:pad}Session#{E:pad}"
+%hidden Tab_3="#{E:pad}Window#{E:pad}"
+%hidden Tab_4="#{E:pad}Pane#{E:pad}"
 
+# We need to declare this to be able to add styles to the tab separator
+# without cluttering style properties everywhere.
+%hidden _="#[push-default #{@menu-separator-style}]#{@menu-separator}#[pop-default default]"
 
-%hidden menu_sep="#[push-default #{@menu-separator-style}]#{@menu-separator}#[pop-default default]"
-
-# menu header that shows current tab
+# ----------
+#  Tab Bar
+# ----------
 # user options:
 #   @menu-title-active-style  [style]
 #   @menu-title-style         [style]
-%hidden menu_title=\
-"#{E:menu_sep}#[push-default]#{?#{==:#{name},Main},"\
-"#[#{@menu-title-active-style}]#{E:menu_1},"\
-"#[#{@menu-title-style}]#{E:menu_1}}#[pop-default default]#{E:menu_sep}"\
-"#[push-default]#{?#{==:#{name},Server},#[#{@menu-title-active-style}]#{E:menu_2},#[#{@menu-title-style}]#{E:menu_2}}#[pop-default default]#{E:menu_sep}"\
-"#[push-default]#{?#{==:#{name},Session},#[#{@menu-title-active-style}]#{E:menu_3},#[#{@menu-title-style}]#{E:menu_3}}#[pop-default default]#{E:menu_sep}"
+%hidden Tab_bar=\
+"#{E:_}#[push-default]#{?#{==:#{name},Main},#[#{@menu-title-active-style}]#{E:Tab_1},#[#{@menu-title-style}]#{E:Tab_1}}#[pop-default default]#{E:_}"\
+"#[push-default]#{?#{==:#{name},Server},#[#{@menu-title-active-style}]#{E:Tab_2},#[#{@menu-title-style}]#{E:Tab_2}}#[pop-default default]#{E:_}"\
+"#[push-default]#{?#{==:#{name},Session},#[#{@menu-title-active-style}]#{E:Tab_3},#[#{@menu-title-style}]#{E:Tab_3}}#[pop-default default]#{E:_}"\
+"#[push-default]#{?#{==:#{name},Pane},#[#{@menu-title-active-style}]#{E:Tab_4},#[#{@menu-title-style}]#{E:Tab_4}}#[pop-default default]#{E:_}"
 
-%hidden link_next_text="#[push-default #{@menu-link-style}]Next menu"
-%hidden link_prev_text="#[push-default #{@menu-link-style}]Prev menu"
+%hidden link_next_text="#[push-default #{@menu-link-style}]Next"
+%hidden link_prev_text="#[push-default #{@menu-link-style}]Prev"
 %hidden link_path="#[pop-deafult dim]testigo"
 # --------------------------------------------------------
 
 
+
+# ----------------
+#  Tab 1 (Server) {{{1
+# ----------------
+
 %hidden menu_help="-Press <#[push-default fg=cyan]?#[pop-default default]> for for \"help\"."
 
 # menubar
-%hidden menu_item_1="#{E:pad}toggle statusline#{E:pad}"
+%hidden menu_item_1="#{E:pad}Toggle statusline#{E:pad}"
 %hidden menu_item_2="#{E:pad}#[push-default fg=red]r#[pop-default default]eload configuration file#{E:pad}"
 %hidden menu_item_3="#{E:pad}Break as named pane#{E:pad}"
 %hidden menu_item_4="#{E:pad}New named session#{E:pad}"
 %hidden menu_item_5="#{E:pad}Open with Vifm#{E:pad}"
 set-option -ag command-alias menubar=\
 'setenv -h name "Main";\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
+display-menu -T"#{E:Tab_bar}" -x0 -y0 \
   "-" "" ""\
-  "#{E:menu_help}" "" "hellow"\
+  "#{S:- #S#{?session_attached}}" "" "set status"\
   "#{E:menu_item_1}" "t" "set status"\
   "#{E:menu_item_2}" "r" "reload"\
   "#{E:menu_item_3} -->" "" "menubar_sub"\
@@ -85,17 +97,22 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "#{E:menu_item_4}" "" ""\
   "-" "" ""\
   ""\
-  "#{E:link_next_text}#{E:menu_2}" "K" serverbar\
+  "#{E:link_next_text}#{E:Tab_2}" "K" serverbar\
 '
+
+# ----------------
+#  Tab 1 (Server -> )
+# ----------------
 
 # menubar_sub
 set-option -ag command-alias menubar_sub=\
 'setenv -h name "Main";\
 setenv -h menu 1;\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
+display-menu -T"#{E:Tab_bar}" -x0 -y0 \
   "-" "" ""\
   "-#[push-default default fg=red normal bright]Break as named Pane" "" ""\
   "-" "" ""\
+  "#{E:menu_help}" "" ""\
   "#{E:menu_item_1}" "" ""\
   "#{E:menu_item_2}" "" ""\
   "#{E:menu_item_3}" "" ""\
@@ -103,12 +120,16 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "#{E:menu_item_4}" "" ""\
   "-" "" ""\
   ""\
-  "#{E:link_prev_text}#{E:menu_1}" "J" menubar\
+  "#{E:link_prev_text}#{E:Tab_1}" "J" menubar\
   ""\
   "Help" "?" serverbar\
 '
 
-# serverbar
+# -----------------
+#  Tab 2 (Session) {{{1
+# -----------------
+
+# Session Tab
 %hidden server_item_1="#{E:pad}Reload tmux haaha#{E:pad}"
 %hidden server_item_2="#{E:pad}Quick edit a dotfile config file#{E:pad}"
 %hidden server_item_3="#{E:pad}Network connection#{E:pad}"
@@ -116,7 +137,7 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
 %hidden server_item_5="#{E:pad}Theme styles#{E:pad}"
 set-option -ag command-alias serverbar=\
 'setenv -h name "Server";\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
+display-menu -T"#{E:Tab_bar}" -x0 -y0 \
   "-" "" ""\
   "#{E:menu_help}" "" ""\
   "-" "" ""\
@@ -137,8 +158,8 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "#{E:server_item_3}" "" ""\
   "-" "" ""\
   ""\
-  "#{E:link_prev_text}#{E:menu_1}" "J" menubar \
-  "#{E:link_next_text}#{E:menu_3}" "K" sessionbar \
+  "#{E:link_prev_text}#{E:Tab_1}" "J" menubar \
+  "#{E:link_next_text}#{E:Tab_3}" "K" sessionbar \
 '
 # sessionbar
 %hidden session_item_1="#{E:pad}Session keybindings#{E:pad}"
@@ -148,7 +169,7 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
 %hidden session_item_5="#{E:pad}Man Pages#{E:pad}"
 set-option -ag command-alias sessionbar=\
 'setenv -h name "Session";\
-display-menu -T"#{E:menu_title}" -x0 -y0 \
+display-menu -T"#{E:Tab_bar}" -x0 -y0 \
   "-" "" ""\
   "#{E:menu_help}" "" ""\
   "-" "" ""\
@@ -160,5 +181,6 @@ display-menu -T"#{E:menu_title}" -x0 -y0 \
   "#{E:session_item_5}" "" ""\
   "-" "" ""\
   ""\
-  "#{E:link_prev_text}#[align=right default dim]#{E:menu_2}" "J" serverbar \
+  "#{E:link_prev_text}#[align=right default dim]#{E:Tab_2}" "J" serverbar \
+  "#{E:link_next_text}#{E:Tab_3}" "K" sessionbar \
 '

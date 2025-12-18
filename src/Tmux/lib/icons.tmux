@@ -1,5 +1,9 @@
 # vi:ft=tmux
 
+# -------------
+# FontAwesome
+# -------------
+
 set-option -g @icon-disable "fg=colour234,bold"
 
 set-option -g @fa-no-wifi "#[#{@icon-disable}] "

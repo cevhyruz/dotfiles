@@ -8,7 +8,7 @@ if _::command_exists "tig"; then
   test
 fi
 
-alias t='tmux'
+# alias t='tmux'
 
 alias g='git'
 
@@ -19,11 +19,10 @@ alias gap='git add --patch'
 
 alias lola="g status -s"
 
-# branch
-alias gb='git branch'
-alias gbD='git branch --delete --force'
-alias gba='git branch --all'
+# branching
 alias gbd='git branch --delete'
+alias gbD='git branch --delete --force'
+
+alias gba='git branch --all'
 alias gbm='git branch --move'
 alias gbt='git branch --track'
-

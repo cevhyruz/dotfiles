@@ -1,5 +1,6 @@
 # vi:ft=tmux fdm=marker
 
+# reset global command-aliases quietly
 set -ugq command-alias
 
 set -ag command-alias split-pane="splitw -vc '#{pane_current_path}'"
@@ -8,8 +9,7 @@ set -ag command-alias info="showmsgs -JT"
 set -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
 set -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
 
-set -ag command-alias choose-tree=\
-"choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
+set -ag command-alias choose-tree="choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
 
 set -ag command-alias choose-buffer=\
 "choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
