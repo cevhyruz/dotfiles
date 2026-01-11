@@ -25,3 +25,8 @@ HISTFILESIZE=$HISTSIZE
 
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL='ignorespace:erasedups';
+
+# Force UTF-8 locale for all programs.
+# Prevents broken unicode symbols.
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
