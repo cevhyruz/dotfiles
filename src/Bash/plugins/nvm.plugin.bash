@@ -5,26 +5,28 @@
 # lazyload nvm
 
 if ! [[ -d "${XDG_CONFIG_HOME-}/.nvm" ]] && ! [[ -d "${HOME}/.nvm" ]] then
-  return
+  return;
 fi
 
 function main() {
-  if [[ -z "${XDG_CONFIG_HOME-}" ]]; then
+  if [[ -d "${XDG_CONFIG_HOME}/.nvm" ]]; then
+    export NVM_DIR="${XDG_CONFIG_HOME-}/.nvm"
+  fi
+
+  if [[ -d "${HOME}/.nvm" ]]; then
     export NVM_DIR="${HOME}/.nvm"
-  else
-    export NVM_DIR="${XDG_CONFIG_HOME-}/nvm"
   fi
 
   local default
   read default < "${NVM_DIR}/alias/default"
+
   if [[ -d "${NVM_DIR}" ]]; then
     _::add_to_path "${NVM_DIR}/versions/node/v${default}"*"/bin"
   fi
 }
 
 function nvm() {
-  source "${NVM_DIR}"/nvm.sh &&
-    nvm "$@";
+  source "${NVM_DIR}"/nvm.sh && nvm "$@";
 }
 
 main
