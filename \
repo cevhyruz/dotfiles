@@ -1,0 +1,41 @@
+
+
+# Tmux Mode States
+
+
+[/] 1.) Client Key Table
+[] 2.) Selection
+[/] 3.) Pane Mode (copy-mode only)
+[/] 4.) Pane Syncronized
+[/] 5.) Window Zoomed
+[/] 6.) Read-Only
+
+
+# Modes that should fill the statusbar
+
+1.) Client Key Table (except for root)
+   - prefix (status-fill)
+   - layout-mode (window-status)
+   - resize-mode (pane-borders)
+   - navigation-mode (status-fill)
+   ...
+
+2.) selection
+3.) Pane Mode (except for normal copy-mode only)
+   - copy-mode ()
+     - clock-mode
+   - view-mode (run-shell)
+   -----------------
+   - tree-mode (choose-tree)
+   - buffer-mode (choose-buffer)
+   - client-mode (choose-client)
+4.) Pane Syncronized
+5.) Window Zoomed
+6.) Readonly
+
+if pane is:
+  zoomed, client-key-table, copy-mode, sync-on, readonly
+
+  client-key-table, copy-mode
+
+

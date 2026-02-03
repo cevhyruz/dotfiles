@@ -25,7 +25,7 @@
 	"editor.guides.highlightActiveIndentation": false,
   "editor.matchBrackets": "never",
   "editor.minimap.scale": 1,
-  "editor.wordWrap": "on",
+  "editor.wordWrap": "off",
   "editor.fontFamily": "'Dejavu Sans Mono for Powerline', monospace",
   "editor.renderFinalNewline": "off",
   "editor.renderWhitespace": "trailing", "editor.occurrencesHighlight": "off",
@@ -195,11 +195,12 @@
     },
   ],
   "editor.experimentalWhitespaceRendering": "font",
-  "workbench.colorTheme": "Default Light+",
+  "workbench.colorTheme": "Visual Studio Dark",
   "editor.minimap.enabled": false,
   "window.zoomLevel": -1,
   "workbench.activityBar.location": "hidden",
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
+  "git.openRepositoryInParentFolders": "always",
 }

@@ -29,11 +29,10 @@ set bell-style none
 set show-mode-in-prompt on
 
 # Set REPL prompt for various applications.
-set vi-ins-mode-string "\1\e[5 q\2"
-set vi-cmd-mode-string "\1\e[0 q\e[2 q\2"
+set vi-ins-mode-string "\1\e[3 q\2"
+set vi-cmd-mode-string "\1\e[2 q\2"
 
 # === keybindings ===
-
 
 
 $if mode=vi

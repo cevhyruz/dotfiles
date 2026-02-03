@@ -20,7 +20,7 @@ export EDITOR="$VISUAL"
 _::command_exists "google-chrome" && export BROWSER="/usr/bin/google-chrome"
 
 # larger history (default: 500)
-HISTSIZE=100000
+HISTSIZE=100000j
 HISTFILESIZE=$HISTSIZE
 
 # don't put duplicate lines or lines starting with space in the history.

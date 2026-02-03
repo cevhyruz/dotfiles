@@ -25,19 +25,24 @@ set-option -g display-panes-time 20000
 set-option -g history-limit 20000
 set-option -g message-limit 10000
 
+setw -g aggressive-resize on
+
+set-option -g cursor-style "blinking-underline"
+
 set-option -g mouse on
 
 set-option -g repeat-time 4000
 set-option -g set-titles on
-set-option -g set-titles-string "#S(#W:#P)"
+
+set-option -g monitor-activity on
 
 set-option -g status-interval 1
 set-option -g status-keys vi
 set-window-option -g mode-keys vi
 
-set-option -g status-position bottom
+set-option -g status-position top
 
-set-option -g visual-activity off
+set-option -g visual-activity on
 set-option -g visual-bell off
 set-option -g visual-silence off
 set-option -g word-separators '-_@'

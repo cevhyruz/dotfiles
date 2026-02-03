@@ -15,17 +15,9 @@ set -g @theme-background "dark"
 #
 # roles
 #
-set -g @color-primary-emphasis "colour14"
 set -g @color-primary          "colour6"
-set -g @color-primary-subtle   "colour30"
-# =======================================
-
-set -g window-status-current-style              "bg=#{@color-primary-subtle},fg=default bold"
-set -g @window-status-current-prefix-mode-style "bg=#{@color-primary-emphasis},fg=colour166"
-set -g @window-status-current-layout-mode-style "bg=red,fg=#{@color-primary-emphasis}"
-
-set -g window-status-style           "bg=colour232,fg=colour245 bold"
-set -g @window-status-index-style    "fg=colour6 bold"
+set -g @color-primary-emphasis "colour14"
+set -g @color-primary-subtle   "colour23"
 
 # below this is for checking.
 # ===============================
@@ -39,7 +31,7 @@ set -g @color-light     "colour0"
 set -g @color-dark      "colour15"
 
 
-set -gF @color-mode-prefix-style   ""
+set -gF @color-mode-prefix-style   "bg=#{@color-accent},fg=colour166"
 
 set -g  @color-accent     "colour14"
 set -gF @color-accent-prefix ""
@@ -116,14 +108,16 @@ set -g clock-mode-colour "colour234"
 set -g mode-style                    "bg=colour14,fg=colour234"
 
 # window status
-#
+# bg=accent
 # set -gF window-status-current-style       "bg=#{@color_secondary},fg=#{@color-accent} bold"
+set -gF window-status-current-style       "bg=colour3,fg=blue"
 set -g @window-status-current-index-style ""
 
+# bg=secondary
+set -g window-status-style           "bg=colour232,fg=colour245 bold"
+set -g @window-status-index-style    "fg=colour6 none"
 
-
-# set -g status-style                  "bg=colour0,fg=white"
-set -g window-status-separator       ""
+set -g window-status-separator       "#[fg=red]|"
 
 # choose-window, session, tree
 set -g @tree-window-style            "fg=orange"
@@ -159,33 +153,32 @@ set -g @status-message-timeout        5
 
 # status left/right
 set -g status-left-style             "fg=colour14 bold"
-set -g  status-left                  " #[push-default] #[pop-default default] #S "
-# set -g  status-left                  "#{?#{pane_mode}, #{pane_mode} , normal }"
+# set -g  status-left                  " #[push-default] #[pop-default default] #S "
+set -g  status-left                  "#{?#{pane_mode}, #{pane_mode} , normal }"
 
 
 # Status right
-# set -g  status-right-style            "fg=#{@color-primary-subtle}"
+set -g  status-right-style            "fg=colour14"
 set -g  status-right                 "#{@message-log}  "
 # set -agF status-right                 "#[push-default fg=colour45]#{pane_modes} #[] │ "
-set -agF status-right                 "#{ind_wlan} "
-set -agF status-right                 "#{sound} │"
+# set -agF status-right                 "#{ind_wlan} │"
+# set -agF status-right                 "#{sound}"
 # set -agF status-right                 "#{win_drive}  │ "
 # set -agF status-right                 "($TMUX_PANE_ACTIVE)"
-set -ag status-right                 "#{user}@#{host_short} │"
+# set -ag status-right                 "#{user}@#{host_short}  │ "
 
-# set -ag status-right                 "(#{client_key_table}) │ "
-set -ag status-right                 " #{E:_selection}"
-set -ag status-right                 "#{E:_date} │ "
+set -ag status-right                 "(#{client_key_table}) │ "
+set -ag status-right                 "#{E:_selection}"
+set -ag status-right                 "#{E:_date}  │ "
 set -ag status-right                 "#{E:_time} "
-# set -ag status-right "#{E:__client_key_table_styles}"
 
 # -------------
 #  Modes State
 # -------------
-# set -ag status-right                 "#{?window_zoomed_flag,zoomed,}"
-# set -ag status-right                 "#{?pane_synchronized,synced-on,}"
-# set -ag status-right                 "#{?client_readonly,read-only,}"
-# set -ag status-right                 "#{?#{pane_mode},#{p-12:pane_mode},normal}"
+set -ag status-right                 "#{?window_zoomed_flag,zoomed,}"
+set -ag status-right                 "#{?pane_synchronized,synced-on,}"
+set -ag status-right                 "#{?client_readonly,read-only,}"
+set -ag status-right                 "#{?#{pane_mode},#{p-12:pane_mode},normal}"
 
 
 # Style for active pane

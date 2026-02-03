@@ -22,7 +22,8 @@ function _ps4_callstack() {
 # Display current working directory full path.
 function __cwd() { 
     local separator='/'
-    local separator_color="\e[1;38;5;130m" # bold orange
+    # local separator_color="\e[1;38;5;130m" # bold orange
+    local separator_color="\e[0;1m" # red
     local pwd="${PWD//${HOME}/${separator_color}\~}"
     local dir_colors="\e[1;38;5;74m"       # bold blue
 

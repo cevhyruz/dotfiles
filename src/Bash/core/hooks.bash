@@ -8,6 +8,7 @@
 # PRE_COMMAND  : commands to be run before the command.
 # POST_COMMAND : commands to be run after the command.
 
+
 function _exec_precmd() {
   [[ -z "${AT_PROMPT:-}" ]] && return 1
   unset AT_PROMPT

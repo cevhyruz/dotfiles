@@ -81,9 +81,7 @@ function _set_prompts() {
   fi
 
 
-
-declare -r command_color=""
-
+  declare -r command_color=""
 
   # ~6ms
   local -a prompt=(

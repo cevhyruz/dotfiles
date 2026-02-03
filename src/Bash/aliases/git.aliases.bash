@@ -26,3 +26,6 @@ alias gbD='git branch --delete --force'
 alias gba='git branch --all'
 alias gbm='git branch --move'
 alias gbt='git branch --track'
+
+# delete a remote branch
+alias gpod="git push origin --delete"

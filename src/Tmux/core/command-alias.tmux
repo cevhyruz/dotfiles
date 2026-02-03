@@ -1,31 +1,28 @@
 # vi:ft=tmux fdm=marker
 
-# reset global command-aliases quietly
+# reset all global command-aliases quietly including tmux defaults
 set -ugq command-alias
 
-set -ag command-alias split-pane="splitw -vc '#{pane_current_path}'"
-set -ag command-alias splitp="splitw -vc '#{pane_current_path}'"
-set -ag command-alias info="showmsgs -JT"
-set -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
-set -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
+# Unsets default indexed command-alias so we can override later on.
+set -ugq command-alias[0] # split-pane
+set -ugq command-alias[1] # splitp
 
-set -ag command-alias choose-tree="choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
+# ------
+# Pane {{{1
+# ------
 
-set -ag command-alias choose-buffer=\
-"choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
+# display-menu -TTestigo -x5 -y5 'name' 'c' 'select-window'
 
-set -ag command-alias vsplit="splitw -hc '#{pane_current_path}'"
+# spliting panes should always use the current location.
+set -ag command-alias split-pane="splitw -vc '#{pane_current_path}' -e \"OLDPWD=~/Downloads/\""
+set -ag command-alias splitp="splitw -vc '#{pane_current_path}' -e \"OLDPWD='~/Downloads\""
 set -ag command-alias split="splitw -vc '#{pane_current_path}'"
-set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
-set -ag command-alias neww="neww -c '#{pane_current_path}'"
+set -ag command-alias vsplit="splitw -hc '#{pane_current_path}'"
 
+# zoom a pane
 set -ag command-alias zoom="resize-pane -Z"
 
-
-#'display-popup -BE -xW -yW -h7 -w78 "whiptail --inputbox \"Rename current window to : \" 7 78"; send-keys "\C-c"'
-set -ag command-alias rename-current-window=\
-'display-popup -BE -xW -yW -h7 -w75 "dialog --no-shadow --inputbox  \"this is a message\" 7 80"'
-
+# kill current pane
 set -ag command-alias kill_current_pane=\
 ' display-menu -T"#[reverse bold] #{pane_current_command} #[default]" -xW -yW '\
 ' "-" "" ""'\
@@ -39,31 +36,148 @@ set -ag command-alias kill_current_pane=\
 ' "-🔻🔻🔻" "" ""'\
 
 
-# window navigation
-set -ag command-alias win1="select-window -t:=1"
-set -ag command-alias win2="select-window -t:=2"
-set -ag command-alias win3="select-window -t:=3"
-set -ag command-alias win4="select-window -t:=4"
-set -ag command-alias win5="select-window -t:=5"
-set -ag command-alias win6="select-window -t:=6"
-set -ag command-alias win7="select-window -t:=7"
-set -ag command-alias win8="select-window -t:=8"
-set -ag command-alias win9="select-window -t:=9"
+# set -ag command-alias colormap="run-shell 'for ((i=0; i<256; i++)) do printf \"\e[48;5;\${i}m%s\" \"\$i\"; printf '\e[0m';  [ ! \$(( (i-15) % 6 )) -eq 0 ] && printf ' ' || printf '\n'; done; unset i; '"
+#
 
+
+set -ag command-alias colormap="run-shell 'bash -c \"for ((i=0; i<256; i++)) do printf \\\"\e[48;5;\\\$im%s\\\" \\\"\\\$i    \n \\\" ; done\"' "
+
+
+# ------
+# Tree {{{1
+# ------
+# choose-* commands should always at fullscreen.
+set -ag command-alias choose-tree="choose-tree -F'#{E:_window_tree_format}' -K'#{E:_window_tree_key_format}' -Z"
+set -ag command-alias choose-window="choose-tree -F'#{E:_window_tree_format}' -wZ"
+set -ag command-alias choose-session="choose-tree -F'#{E:_window_tree_format}' -sZ"
+set -ag command-alias choose-buffer="choose-buffer -F'#{E:_window_buffer_format}' -K'#{E:_window_tree_key_format}' -Z"
+
+# ---------
+# terminal {{{1
+# ---------
+# set -ag command-alias info="showmsgs -JT"
+set -ag command-alias fulbar=\
+'setenv -h name "Session";\
+display-menu -T"#{E:menu_title}" -xC -yC \
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Tmux" "" ""\
+  "-#[none]   Command Alias              #[push-default fg=colour6]#{E:current_path}" "" ""\
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Host" "" ""\
+  "-#[none]    WiFi Status               #[push-default fg=colour6]#{E:ind_wlan}" "" ""\
+  "-#[none]    Battery Status            #[push-default fg=colour6]#{E:ind_wlan}" "" ""\
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Server" "" ""\
+  "-#[none]    Server User               #[fg=colour6]#{user}@#{host}" "" ""\
+  "-#[none]    Server Config File/s      #[us=colour202 underscore fg=colour6]#{config_files}" "" ""\
+  "-#[none]    Server Sessions           #[fg=colour6]#{server_sessions}" "" ""\
+  "-#[none]    Server UID                #[fg=colour6]#{uid}" "" ""\
+  "-#[none]    Server Socket Path        #[fg=colour6]#{socket_path}" "" ""\
+  "-#[none]    Start Time                #[fg=colour6]#{t:start_time}" "" ""\
+  "-#[none]    Server Version            #[fg=colour6]#{version}" "" ""\
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Session" "" ""\
+  "-#[none]    Session Name              #[fg=colour6]#S" "" ""\
+  "-#[none]    Session Current Path      #[push-default us=colour202 underscore fg=colour6]#{E:current_path}" "" ""\
+  "-#[none]    Session Windows           #[fg=colour6]#{session_windows}" "" ""\
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Window" "" ""\
+  "-#[none]    Active Window             #[fg=colour6]#{window_name}" "" ""\
+  "-#[none]    Window Panes              #[fg=colour45]#{window_panes}" "" ""\
+  "-#[none]    Window Linked Session/s   #[fg=colour6]#{window_linked_sessions} (#{window_linked_sessions_list})" "" ""\
+  "-#[none]    Window Active Session/s   #[fg=colour6]#{window_active_sessions} (#{window_active_sessions_list})" "" ""\
+  "-#[none]    Window Active Client/s    #[fg=colour6]#{window_active_clients} (#{window_active_clients_list})" "" ""\
+  "-#[none]    Window Last Activity      #[fg=colour6]#{t:window_activity}" "" ""\
+  ""\
+  "Copy" "" ""\
+  "Close" "" ""
+'
+
+# Visual Test for terminfo
+
+%hidden placeholder="The Brown Fox Jumps Over The Lazy Dog"
+set -ag command-alias terminfo=\
+'setenv -h name "Session";\
+display-menu -T"#{E:menu_title}" -xC -yC \
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Tmux" "" ""\
+  "-#[none]    acs                 #[push-default fg=colour6 acs]#{placeholder}" "" ""\
+  "-#[none]    bright (or bold)    #[push-default fg=colour6 bold]#{placeholder}" "" ""\
+  "-#[none]    dim                 #[push-default fg=colour6 dim]#{placeholder}" "" ""\
+  "-#[none]    underscore          #[push-default fg=colour6 underscore]#{placeholder}" "" ""\
+  "-#[none]    blink               #[push-default fg=colour6 blink]#{placeholder}" "" ""\
+  "-#[none]    reverse             #[push-default fg=colour6 reverse]#{placeholder}" "" ""\
+  "-#[none]    hidden              #[push-default fg=colour6 hidden]#{placeholder}" "" ""\
+  "-#[none]    italics             #[push-default fg=colour6 italics]#{placeholder}" "" ""\
+  "-#[none]    overline            #[push-default fg=colour6 overline]#{placeholder}" "" ""\
+  "-#[none]    strikethrough       #[push-default fg=colour6 strikethrough]#{placeholder}" "" ""\
+  "-#[none]    double-underscore   #[push-default fg=colour6 double-underscore]#{placeholder}" "" ""\
+  "-#[none]    curly-underscore    #[push-default fg=colour6 curly-underscore]#{placeholder}" "" ""\
+  "-#[none]    dotted-underscore   #[push-default fg=colour6 dotted-underscore]#{placeholder}" "" ""\
+  "-#[none]    dashed-underscore   #[push-default fg=colour6 dashed-underscore]#{placeholder}" "" ""\
+  "-" "" ""\
+  "-#[push-default none bold fg=colour45]Extended Underline (OSC 58 / 24-bit underline color)" "" ""\
+  "-#[none]    overline            #[push-default us=color202 fg=colour6 overline]#{placeholder}" "" ""\
+  "-#[none]    strikethrough       #[push-default us=color202 fg=colour6 strikethrough]#{placeholder}" "" ""\
+  "-#[none]    underscore          #[push-default us=color202 fg=colour6 underscore]#{placeholder}" "" ""\
+  "-#[none]    double-underscore   #[push-default us=color202 fg=colour6 double-underscore]#{placeholder}" "" ""\
+  "-#[none]    curly-underscore    #[push-default us=colour202 fg=colour6 curly-underscore]#{placeholder}" "" ""\
+  "-#[none]    dotted-underscore   #[push-default us=colour202 fg=colour6 dotted-underscore]#{placeholder}" "" ""\
+  "-#[none]    dashed-underscore   #[push-default us=color202 fg=colour6 dashed-underscore]#{placeholder}" "" ""\
+'
+
+
+# ---------
+# popup {{{1
+# ---------
+set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
+
+# ---------
+# window {{{1
+# ---------
+# new window
+set -ag command-alias neww="neww -c '#{pane_current_path}'"
+
+# rename current window
+set -ag command-alias rename-current-window=\
+'display-popup -BE -xW -yW -h7 -w78 "whiptail --inputbox \"Rename current window to : \" 7 78 #{window_name}"; send-keys "\C-c"'
+
+
+set-option -g @message-log "";
+
+set -ag command-alias clear-message-log=" refresh-client -S; set-option -ugq @message-log;"
 
 # Reload and redraw tmux,
 set -ag command-alias reload=\
 ' refresh-client -S; '\
 ' source-file "${DOT_TMUX}/tmux.conf"; '\
-' set-environment -hF _message "config file reloaded!"'\
+' set-option -ag @message-log "config file reloaded!"'\
+
+# set -ag command-alias reload=\
+# ' refresh-client -S; '\
+# ' source-file "${DOT_TMUX}/tmux.conf"; '\
+# ' set-environment -hF _message "config file reloaded!"'\
 
 set -ag command-alias version='display "#{version}"'
 
+# set -ag command-alias set-theme=\
+# ' command-prompt -p "(theme):" {      '\
+# '   set -sg @theme "%%";              '\
+# '   source-file ${DOT_TMUX}/tmux.conf '\
+# ' }'
+
+  # "#[push-default none bold fg=colour45]  █" "" ""\
+  # "#[push-default none bold fg=colour45]  █" "" ""\
+
 set -ag command-alias set-theme=\
-' command-prompt -p "(theme):" {      '\
-'   set -sg @theme "%%";              '\
-'   source-file ${DOT_TMUX}/tmux.conf '\
-' }'
+'setenv -h name "Session";\
+display-menu -T"#{E:menu_title}" -x0 -y0 \
+  "-" "" ""\
+  "Default  #[push-default none bold fg=colour45 align=right] ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇" "" "set -sg @theme default; source-file ${DOT_TMUX}/tmux.conf"\
+  "Base16   #[push-default none bold fg=colour45 align=right] ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇" "" "set -sg @theme default; source-file ${DOT_TMUX}/tmux.conf"\
+  "Powerline#[push-default none bold fg=colour45 align=right] ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇ ▇▇▇" "" "set -sg @theme powerline; source-file ${DOT_TMUX}/tmux.conf"\
+'
+
 
 set -ag command-alias current-command="display-message '#{pane_current_command}'"
 

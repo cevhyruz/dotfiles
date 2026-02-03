@@ -6,11 +6,86 @@ unbind -aT prefix
 %endif
 
 # Prefix keys
-bind-key -N "Send the prefix key" ` { send-prefix }
-bind-key -N "Resize the pane to right" -r '>' { resize-pane -R }
-bind-key -N "Resize the pane to left" -r '<' { resize-pane -L }
-bind-key -N "Resize the pane downward" -r 'J' { resize-pane -D }
-bind-key -N "Resize the pane upward" -r 'K' { resize-pane -U }
+bind-key -N "Send the prefix key" ` {
+  refresh-client -S;
+  set-option -ug @message-log
+  send-prefix
+}
+# bind-key -N "Resize the pane to right" -r '>' { resize-pane -R }
+# bind-key -N "Resize the pane to left" -r '<' { resize-pane -L }
+
+
+# vimium-style navigation
+#
+# previously:
+# bind-key -N "Resize the pane downward" -r 'J' { resize-pane -D }
+# bind-key -N "Resize the pane upward" -r 'K' { resize-pane -U }
+bind-key -N "Enter Resize Mode" . { switch-client -T resize-mode }
+bind-key -T resize-mode -N "Resize the pane to right" -r '>' { resize-pane -R }
+bind-key -T resize-mode -N "Resize the pane to left" -r '<' { resize-pane -L }
+#
+# exit resize-mode
+bind-key -T resize-mode Enter { switch-client -T root }
+bind-key -T resize-mode q     { switch-client -T root }
+bind-key -T resize-mode C-c   { switch-client -T root }
+
+
+# -------------------------------
+# Navigation Mode (vimium style)
+# -------------------------------
+#
+bind-key -N "Resize the pane downward" -r 'K' {
+  if-shell -F "#{==:#{window_end_flag},0}" {
+    next-window
+  }
+}
+bind-key -N "Resize the pane upward" -r 'J' { previous-window }
+
+
+# --------------------------
+#  Layout Mode
+# --------------------------
+# FIXME: window flags are messed up after a swap.
+#
+# Enter layout-mode
+bind-key -N "Enter Layout Mode" '>' { switch-client -T layout-mode }
+bind-key -N "Move Status Window Left" '<' { switch-client -T layout-mode }
+# Swap current window to the next window
+bind-key -T layout-mode -N "Swap to the next window" -r '>' {
+    if-shell -F "#{==:#{window_end_flag},0}" {
+      swap-window -t +1 -d
+    } {
+      # display 'Already the last window'
+    }
+}
+# Swap current window to the previous window
+bind-key -T layout-mode -N "Swap to the previous window" -r '<' {
+    if-shell -F "#{!=:#{window_index},1}" {
+      swap-window -t -1 -d
+    } {
+      # display 'Already the first window'
+    }
+}
+# Swap current window to the last window
+bind-key -T layout-mode -N "Swap current window to the last window" -r '$' {
+  if-shell -F "#{e|<:#{window_index},#{last_window_index}}" {
+  # if-shell -F "#{==:#{window_index},#{last_window_index}}" {
+    run-shell "tmux swap-window -t #{last_window_index} -d"
+  }
+}
+# Swap current window to the first window
+bind-key -T layout-mode -N "Swap current window the the first window" -r ^ {
+  if-shell -F "#{e|>:#{window_index},1}" {
+    swap-window -t 1 -d
+  }
+}
+
+
+# exit layout-mode
+bind-key -T layout-mode Enter { switch-client -T root }
+bind-key -T layout-mode q     { switch-client -T root }
+bind-key -T layout-mode C-c   { switch-client -T root }
+
 bind-key -N "Show messages" '~' { show-messages }
 bind-key -N "Swap the active pane with the pane above" '{' { swap-pane -U }
 bind-key -N "Swap the active pane with the pane below" '}' { swap-pane -D }
@@ -19,7 +94,7 @@ bind-key -N "Kill the active pane" x { confirm-before -p "kill-pane #P? (y/n)" k
 bind-key -N "Kill the active pane" x { kill_current_pane }
 bind-key -N "Show a clock" t { clock-mode }
 bind-key -N "Display pane numbers" q { display-panes }
-bind-key -N "Customize options" C { customize-mode -Z }
+bind-key -N "Customize oresptions" C { customize-mode -Z }
 bind-key -N "Select the next window with an alert" M-n { next-window -a }
 bind-key -N "Select the previous window with an alert" M-p { previous-window -a }
 bind-key -N "Detach the current client" d { detach-client }
@@ -40,21 +115,22 @@ bind-key -N "Suspend the current client" C-z { suspend-client }
 bind-key -N "Rotate through the panes" C-o { rotate-window }
 
 # window navigation
-bind-key -N "select window 1" 1 { win1 }
-bind-key -N "select window 2" 2 { win2 }
-bind-key -N "select window 3" 3 { win3 }
-bind-key -N "select window 4" 4 { win4 }
-bind-key -N "select window 5" 5 { win5 }
-bind-key -N "select window 6" 6 { win6 }
-bind-key -N "select window 7" 7 { win7 }
-bind-key -N "select window 8" 8 { win8 }
-bind-key -N "select window 9" 9 { win9 }
+bind-key -N "select window 1" 1 { select-window -t:=1 }
+bind-key -N "select window 2" 2 { select-window -t:=2 }
+bind-key -N "select window 3" 3 { select-window -t:=3 }
+bind-key -N "select window 4" 4 { select-window -t:=4 }
+bind-key -N "select window 5" 5 { select-window -t:=5 }
+bind-key -N "select window 6" 6 { select-window -t:=6 }
+bind-key -N "select window 7" 7 { select-window -t:=7 }
+bind-key -N "select window 8" 8 { select-window -t:=8 }
+bind-key -N "select window 9" 9 { select-window -t:=9 }
 
 bind-key -N "reload config"      r   { reload }
 bind-key -N "split vertically"   %   { vsplit }
 bind-key -N "split horizontally" '"' { split }
 
-bind-key -N "Move the current window" . { command-prompt -T target { move-window -t '%%' } }
+# bind-key -N "Move the current window" . { command-prompt -T target { move-window -t '%%' } }
+
 bind-key -N "Describe key binding" '/' { command-prompt -kpkey  { list-keys -1N '%%' } }
 bind-key -N "Move to the previously active pane" \; { last-pane }
 bind-key -N "Choose a client from a list" D { choose-client -Z }
@@ -82,7 +158,7 @@ bind-key -N "Select the next window" n {
   }
 }
 
-bind-key -N "Prompt for a command" : {
+bind-key -N "Prompt for a command" ':' {
   command-prompt -p ":"
 }
 
@@ -154,13 +230,14 @@ bind-key -N "Go to upper pane" -T root C-k {
 }
 
 bind-key -N "Go to right pane" -T root C-l {
-  refresh-client -S
+  # refresh-client -S
   if-shell -F "#{E:IS_VIM}" {
     send-keys C-l
   } {
     select-pane -R
   }
-  set-environment -hF _message ""
+  # set-environment -hF _message ""
+  set-option -ug @message-log
 }
 
 bind-key -N "Go to previous pane" -T root C-\\ {

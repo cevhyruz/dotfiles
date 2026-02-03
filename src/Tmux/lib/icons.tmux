@@ -4,7 +4,7 @@
 # FontAwesome
 # -------------
 
-set-option -g @icon-disable "fg=colour234,bold"
+set-option -g @icon-disable "fg=red,bold"
 
 set-option -g @fa-no-wifi "#[#{@icon-disable}] "
 set-option -g @fa-wifi " "

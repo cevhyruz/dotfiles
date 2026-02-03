@@ -1,0 +1,1962 @@
+[32mabyss[0m/kali-rolling 2.3.10-1+b1 amd64
+  de novo, parallel, sequence assembler for short reads
+
+[32maerc[0m/kali-rolling 0.21.0-1+b1 amd64
+  Pretty Good Email Client
+
+[32mananta[0m/kali-rolling 1.1.5-1 all
+  parallel SSH command execution tool
+
+[32mantimony[0m/kali-rolling 0.9.3-2.1 amd64
+  Computer-aided design CAD tool
+
+[32margon2[0m/kali-rolling 0~20190702+dfsg-5 amd64
+  memory-hard hashing function - utility
+
+[32masl-doc[0m/kali-rolling 0.1.7-5 all
+  documentation for ASL
+
+[32masl-tools[0m/kali-rolling 0.1.7-5+b1 amd64
+  command-line tools for ASL
+
+[32matropos[0m/kali-rolling 1.1.32+dfsg-2+b3 amd64
+  NGS read trimming tool that is specific, sensitive, and speedy
+
+[32mava[0m/kali-rolling 5.3.1+dfsg+~cs46.3.10-5 all
+  Futuristic test runner 🚀
+
+[32mb3sum[0m/kali-rolling 1.8.2-1+b1 amd64
+  Command line tool for calculating BLAKE3 hash
+
+[32mbackup-manager[0m/kali-rolling 0.7.14-3 all
+  command-line backup tool
+
+[32mbackuppc[0m/kali-rolling 4.4.0-11 amd64
+  high-performance, enterprise-grade system for backing up PCs
+
+[32mbackuppc-rsync[0m/kali-rolling 3.1.3.0-5 amd64
+  patched rsync for BackupPC version 4
+
+[32mbagel[0m/kali-rolling 1.2.2-8 amd64
+  Computational Chemistry Package
+
+[32mbart[0m/kali-rolling 0.9.00-3 amd64
+  tools for computational magnetic resonance imaging
+
+[32mbcalm[0m/kali-rolling 2.2.3-6 amd64
+  de Bruijn compaction in low memory
+
+[32mbifrost[0m/kali-rolling 1.3.5-2 amd64
+  parallel construction, indexing and querying of de Bruijn graphs
+
+[32mbinaryen[0m/kali-rolling 120-4 amd64
+  compiler and toolchain infrastructure library for WebAssembly
+
+[32mbiobambam2[0m/kali-rolling 2.0.185+ds-2 amd64
+  tools for early stage alignment file processing
+
+[32mbmt[0m/kali-rolling 0.6-2 all
+  software analysis benchmarking toolkit
+
+[32mcapistrano[0m/kali-rolling 3.19.2-1 all
+  tool to execute commands in parallel on multiple servers
+
+[32mcl-lparallel[0m/kali-rolling 20160825-1.1 all
+  parallel programming in Common Lisp
+
+[32mclinfo[0m/kali-rolling 3.0.25.02.14-1 amd64
+  Query OpenCL system information
+
+[32mclustershell[0m/kali-rolling 1.9.3-1 all
+  Distributed shell that provides an efficient Python interface
+
+[32mcoinor-csdp[0m/kali-rolling 6.2.0-6 amd64
+  Software package for semidefinite programming (binaries)
+
+[32mcoinor-csdp-doc[0m/kali-rolling 6.2.0-6 all
+  Software package for semidefinite programming (documentation)
+
+[32mcondor[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system
+
+[32mcondor-annex-ec2[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - single node configuration
+
+[32mcondor-dev[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - development files
+
+[32mcondor-doc[0m/kali-rolling 23.9.6+dfsg-2.1 all
+  distributed workload management system - documentation
+
+[32mcondor-kbdd[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - single node configuration
+
+[32mcondor-test[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - single node configuration
+
+[32mcondor-upgrade-checks[0m/kali-rolling 23.9.6+dfsg-2.1 all
+  distributed workload management system - single node configuration
+
+[32mcondor-vm-gahp[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - single node configuration
+
+[32mcoop-computing-tools[0m/kali-rolling 1:7.15.9-1+b1 amd64
+  cooperative computing tools
+
+[32mcp2k[0m/kali-rolling 2025.1-1.1 amd64
+  Ab Initio Molecular Dynamics
+
+[32mcp2k-data[0m/kali-rolling 2025.1-1.1 all
+  Ab Initio Molecular Dynamics (data files)
+
+[32mcpptraj[0m/kali-rolling 5.1.0+dfsg-5 amd64
+  fast, parallelized molecular dynamics trajectory data analysis
+
+[32mctdb[0m/kali-rolling 2:4.23.4+dfsg-1 amd64
+  clustered database to store temporary data
+
+[32mctorrent[0m/kali-rolling 1.3.4.dnh3.3.2-7 amd64
+  BitTorrent Client written in C++
+
+[32mcumin[0m/kali-rolling 5.1.1-1 all
+  Automation and orchestration framework written in Python
+
+[32mcvise[0m/kali-rolling 2.12.0-2 amd64
+  super-parallel Python port of the C-Reduce project
+
+[32mdazzdb[0m/kali-rolling 1.0+git20250217.a3eefd4-1 amd64
+  manage nucleotide sequencing read data
+
+[32mdbus-user-session[0m/kali-rolling,now 1.16.2-2 amd64 [installed]
+  simple interprocess messaging system (systemd --user integration)
+
+[32mdeap-doc[0m/kali-rolling 1.4.1-3 all
+  Distributed Evolutionary Algorithms in Python (docs)
+
+[32mdelly[0m/kali-rolling 1.7.2-1 amd64
+  Structural variant discovery by read analysis
+
+[32mdh-fortran[0m/kali-rolling 0.60 amd64
+  debhelper add-ons for packaging software written in Fortran
+
+[32mdimbl[0m/kali-rolling 0.17-3 amd64
+  Distributed Memory Based Learner
+
+[32mdish[0m/kali-rolling 1.19.1-2 all
+  diligence/distributed shell for parallel sysadmin
+
+[32mdmidecode[0m/kali-rolling,now 3.6-2 amd64 [installed]
+  SMBIOS/DMI table decoder
+
+[32mdsdp[0m/kali-rolling 5.8-12 amd64
+  Software for Semidefinite Programming
+
+[32mdsdp-doc[0m/kali-rolling 5.8-12 all
+  Software for Semidefinite Programming
+
+[32mdsh[0m/kali-rolling 0.25.10-2 amd64
+  dancer's shell, or distributed shell
+
+[32me-mem[0m/kali-rolling 1.0.1-5 amd64
+  Efficient computation of Maximal Exact Matches for very large genomes
+
+[32melk-lapw[0m/kali-rolling 10.4.9-1 amd64
+  All-Electron Density-Functional Electronic Structure Code
+
+[32merlang-luerl[0m/kali-rolling 1:1.2.3-1+b1 amd64
+  implementation of Lua in Erlang
+
+[32mesys-particle[0m/kali-rolling 2.3.5+dfsg2-12 amd64
+  Software for particle-based numerical modelling (MPI version)
+
+[32metsf-io[0m/kali-rolling 1.0.4-6 amd64
+  Binary tools to check, merge and read ETSF files
+
+[32mexaml[0m/kali-rolling 3.0.22-7 amd64
+  Exascale Maximum Likelihood (ExaML) code for phylogenetic inference
+
+[32mfabric[0m/kali-rolling 3.2.2-1 all
+  Simple Pythonic remote deployment tool
+
+[32mfastlink[0m/kali-rolling 4.1P-fix100+dfsg-6 amd64
+  faster version of pedigree programs of Linkage
+
+[32mfastlink-doc[0m/kali-rolling 4.1P-fix100+dfsg-6 all
+  Some papers about fastlink
+
+[32mfasttree[0m/kali-rolling 2.1.11-2 amd64
+  phylogenetic trees from alignments of nucleotide or protein sequences
+
+[32mfd-find[0m/kali-rolling 10.3.0-2+b1 amd64
+  Simple, fast and user-friendly alternative to find
+
+[32mfeenox[0m/kali-rolling 1.2-1 amd64
+  cloud-first free no-X uniX-like finite-element(ish) tool
+
+[32mfenicsx-performance-tests[0m/kali-rolling 0.9.0-2+b3 amd64
+  Performance test codes for FEniCS/DOLFIN-X (binaries)
+
+[32mfenicsx-performance-tests-source[0m/kali-rolling 0.9.0-2 all
+  Performance test codes for FEniCS/DOLFIN-X (source)
+
+[32mflashprog[0m/kali-rolling 1.4-1+b1 amd64
+  Identify, read, write, erase, and verify BIOS/ROM/flash chips
+
+[32mflashrom[0m/kali-rolling,now 1.6.0-2 amd64 [installed,automatic]
+  Identify, read, write, erase, and verify BIOS/ROM/flash chips
+
+[32mflent[0m/kali-rolling 2.2.0-2 all
+  FLExible Network Tester for bufferbloat testing and more
+
+[32mfuthark[0m/kali-rolling 0.25.32-2 amd64
+  optimising compiler for Futhark programming language
+
+[32mfuthark-doc[0m/kali-rolling 0.25.32-2 all
+  Futhark User's Guide
+
+[32mg10k[0m/kali-rolling 0.9.10-1.1+b3 amd64
+  Puppet environment and module deployment
+
+[32mgdu[0m/kali-rolling 5.25.0-1+b9 amd64
+  Pretty fast disk usage analyzer
+
+[32mgearman[0m/kali-rolling 1.1.21+ds-1 all
+  Distributed job queue
+
+[32mgearman-job-server[0m/kali-rolling 1.1.21+ds-1 amd64
+  Job server for the Gearman distributed job queue
+
+[32mgearman-server[0m/kali-rolling 1.130.1-5 all
+  Gearman distributed job server and Perl interface
+
+[32mgearman-tools[0m/kali-rolling 1.1.21+ds-1 amd64
+  Tools for the Gearman distributed job queue
+
+[32mgerris[0m/kali-rolling 20131206+dfsg-21+b4 amd64
+  Fluid Flow Solver
+
+[32mgivaro-dev-doc[0m/kali-rolling 4.2.1-1 all
+  Developer Documentation for Givaro (obsolete)
+
+[32mgivaro-user-doc[0m/kali-rolling 4.2.1-1 all
+  User Documentation for Givaro (obsolete)
+
+[32mglusterfs-cli[0m/kali-rolling 11.1-6+b1 amd64
+  clustered file-system (cli package)
+
+[32mglusterfs-client[0m/kali-rolling 11.1-6+b1 amd64
+  clustered file-system (client package)
+
+[32mglusterfs-common[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS common libraries and translator modules
+
+[32mglusterfs-server[0m/kali-rolling 11.1-6+b1 amd64
+  clustered file-system (server package)
+
+[32mgnustep-performance-doc[0m/kali-rolling 0.6.0-6 all
+  GNUstep performance library (documentation)
+
+[32mgo-internal[0m/kali-rolling 1.14.1-1 amd64
+  Selected Go-internal packages factored out from the standard library (binaries)
+
+[32mgolang-github-adrianmo-go-nmea-dev[0m/kali-rolling 1.10.0-1 all
+  Go library for the NMEA 0183 protocol
+
+[32mgolang-github-biogo-biogo-dev[0m/kali-rolling 1.0.4-1 all
+  biogo is a bioinformatics library for Go (library)
+
+[32mgolang-github-biogo-hts-dev[0m/kali-rolling 1.4.5+dfsg1-2 all
+  biogo high throughput sequencing repository
+
+[32mgolang-github-bradenaw-juniper-dev[0m/kali-rolling 0.15.3-1 all
+  extension to the Go standard library (library)
+
+[32mgolang-github-brentp-irelate-dev[0m/kali-rolling 0.0.1+ds-2 all
+  Streaming relation testing of sorted files of intervals
+
+[32mgolang-github-charlievieth-fastwalk-dev[0m/kali-rolling 1.0.14-1 all
+  Fast directory traversal for Golang (library)
+
+[32mgolang-github-cloudflare-tableflip-dev[0m/kali-rolling 1.2.1~git20200514.4baec98-4 all
+  Graceful process restarts in Go (library)
+
+[32mgolang-github-crossdock-crossdock-go-dev[0m/kali-rolling 0.0~git20160816.049aabb-3 all
+  Go client for Crossdock
+
+[32mgolang-github-graph-gophers-graphql-go-dev[0m/kali-rolling 1.8.0-1 all
+  GraphQL server with a focus on ease of use
+
+[32mgolang-github-htcat-htcat-dev[0m/kali-rolling 1.0.2-1.1 all
+  Parallel and Pipelined HTTP GET Utility for golang
+
+[32mgolang-github-jedib0t-go-pretty-dev[0m/kali-rolling 6.5.9-1 all
+  Pretty print tables, lists, progress-bars and text
+
+[32mgolang-github-klauspost-pgzip-dev[0m/kali-rolling 1.2.6-1 all
+  parallel gzip (de)compression library for Go
+
+[32mgolang-github-kotakanbe-go-pingscanner-dev[0m/kali-rolling 0.1.0+git20160420.1.58e188a-3.1 all
+  Go library to scan live hosts by ping command
+
+[32mgolang-github-maruel-panicparse-dev[0m/kali-rolling 2.3.1-3 all
+  Crash your app in style (Go library)
+
+[32mgolang-github-michaeltjones-walk-dev[0m/kali-rolling 0.0~git20161122.4748e29-3 all
+  Fast parallel version of golang filepath.Walk()
+
+[32mgolang-github-minio-blake2b-simd-dev[0m/kali-rolling 0.0~git20160723.3f5f724-3 all
+  Fast hashing using pure Go implementation of BLAKE2b with SIMD instructions
+
+[32mgolang-github-nebulouslabs-fastrand-dev[0m/kali-rolling 0.0~git20181203.6fb6489-4 all
+  10x faster than crypto/rand
+
+[32mgolang-github-pointlander-compress-dev[0m/kali-rolling 1.1.0-6 all
+  parallelized modular compression library
+
+[32mgolang-github-poy-onpar-dev[0m/kali-rolling 0.3.3-1.1 all
+  Parallel testing framework for Go (library)
+
+[32mgolang-github-quobyte-api-dev[0m/kali-rolling 0.0~git20160913.0.bf713b5-2 all
+  Quobyte API client for Go
+
+[32mgolang-github-rogpeppe-go-internal-dev[0m/kali-rolling 1.14.1-1 all
+  Selected Go-internal packages factored out from the standard library
+
+[32mgolang-github-saracen-walker-dev[0m/kali-rolling 0.1.2-1 all
+  walker is a faster, parallel version, of filepath.Walk
+
+[32mgolang-github-sjoerdsimons-ostree-go-dev[0m/kali-rolling 0.0~git20201014.8fae757-2 all
+  Golang bindings for OSTree
+
+[32mgolang-github-t3rm1n4l-go-mega-dev[0m/kali-rolling 0.0~git20230228.a01a2cd-2 all
+  Client library in go for mega.co.nz storage service (library)
+
+[32mgolang-github-tideland-golib-dev[0m/kali-rolling 4.24.2-2 all
+  collection of misc Go packages
+
+[32mgolang-github-twotwotwo-sorts-dev[0m/kali-rolling 0.0~git20160814.bf5c1f2-3 all
+  Parallel and radix sorting in Go
+
+[32mgolang-github-vividcortex-gohistogram-dev[0m/kali-rolling 1.0.0-2 all
+  Streaming approximate histograms in Go (library)
+
+[32mgolang-starlark-dev[0m/kali-rolling 0.0~git20240725.42030a7-1 all
+  Interpreter for the Starlark configuration language
+
+[32mgoldeneye[0m/kali-rolling 1.2.0+git20191230-2 all
+  HTTP DoS test tool
+
+[32mgospider[0m/kali-rolling 1.1.0-0kali1 amd64
+  Fast web spider written in Go
+
+[32mgox[0m/kali-rolling 1.0.1+ds-1+b5 amd64
+  simple cross compilation tool for Go
+
+[32mgradle-completion[0m/kali-rolling 1.3.1-1.1 all
+  Bash and Zsh completion support for Gradle
+
+[32mgraphicsmagick[0m/kali-rolling 1.4+really1.3.45+hg17696-1+b1 amd64
+  collection of image processing tools
+
+[32mgroops[0m/kali-rolling 0+git20250907+ds-1 amd64
+  software toolkit for gravity field recovery and GNSS processing
+
+[32mgroops-gui[0m/kali-rolling 0+git20250907+ds-1 amd64
+  software toolkit for gravity field recovery and GNSS processing (GUI)
+
+[32mgrub-coreboot-bin[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (Coreboot modules)
+
+[32mgrub-efi-amd64-bin[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (EFI-AMD64 modules)
+
+[32mgrub-efi-amd64-unsigned[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (EFI-AMD64 images)
+
+[32mgrub-efi-ia32-bin[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (EFI-IA32 modules)
+
+[32mgrub-efi-ia32-unsigned[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (EFI-IA32 images)
+
+[32mgrub-ieee1275-bin[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (Open Firmware modules)
+
+[32mgrub-pc-bin[0m/kali-rolling,now 2.12-9+kali1 amd64 [installed,automatic]
+  GRand Unified Bootloader, version 2 (PC/BIOS modules)
+
+[32mgrub-xen-bin[0m/kali-rolling 2.12-9+kali1 amd64
+  GRand Unified Bootloader, version 2 (Xen modules)
+
+[32mguess-concurrency[0m/kali-rolling 0+20250305 all
+  utility for estimating a suitable level of build parallelism
+
+[32mguymager[0m/kali-rolling,now 0.8.13-2+b1 amd64 [installed]
+  Forensic imaging tool based on Qt
+
+[32mgyoto[0m/kali-rolling 2.0.2-7 all
+  General relativistic geodesic integration and ray-tracing
+
+[32mgyoto-bin[0m/kali-rolling 2.0.2-7+b2 amd64
+  General relativistic ray-tracing command-line interface
+
+[32mhdf5-helpers[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - Helper tools
+
+[32mhdf5-tools[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - Runtime tools
+
+[32mhellfire[0m/kali-rolling 0.0~git20180708.bf3c390-1+b30 amd64
+  PATHspider Effects List Resolver
+
+[32mherisvm[0m/kali-rolling 0.9.0-2 all
+  machine learning tools for classification algorithms
+
+[32mhighs[0m/kali-rolling 1.12.0+ds1-2 amd64
+  High performance linear optimization software
+
+[32mhydra[0m/kali-rolling 9.6-3 amd64 [upgradable from: 9.6-1]
+  very fast network logon cracker
+
+[32mhydra-gtk[0m/now 9.5-1 amd64 [installed,local]
+  very fast network logon cracker - GTK+ based GUI
+
+[32mhyphy-common[0m/kali-rolling 2.5.69+dfsg-2 all
+  Hypothesis testing using Phylogenies (common files)
+
+[32mhyphy-mpi[0m/kali-rolling 2.5.69+dfsg-2 amd64
+  Hypothesis testing using Phylogenies (MPI version)
+
+[32mhyphy-pt[0m/kali-rolling 2.5.69+dfsg-2 amd64
+  Hypothesis testing using Phylogenies (pthreads version)
+
+[32micecc[0m/kali-rolling 1.4-1+b3 amd64
+  distributed compiler (client and server)
+
+[32mifenslave[0m/kali-rolling,now 2.14 all [installed]
+  configure network interfaces for parallel routing (bonding)
+
+[32mip2host[0m/kali-rolling 1.13-2.1 all
+  Resolve IPs to hostnames in web server logs
+
+[32mispc[0m/kali-rolling 1.28.2-1+b1 amd64
+  Intel Implicit SPMD Program Compiler
+
+[32mjam[0m/kali-rolling 2.6.1-2.1 amd64
+  Software-build tool, replacement for make
+
+[32mjellyfish[0m/kali-rolling 2.3.1-5+b1 amd64
+  count k-mers in DNA sequences
+
+[32mjellyfish-examples[0m/kali-rolling 2.3.1-5 all
+  count k-mers in DNA sequences (examples for testing)
+
+[32mjellyfish1[0m/kali-rolling 1.1.11-10 amd64
+  count k-mers in DNA sequences
+
+[32mjigit[0m/kali-rolling 1.22-4+b2 amd64
+  tools for working with jigdo files
+
+[32mjruby[0m/kali-rolling 9.4.8.0+ds-3 all
+  100% pure-Java implementation of Ruby
+
+[32mkanif[0m/kali-rolling 1.2.2-4 all
+  cluster management and administration swiss army knife
+
+[32mkvazaar[0m/kali-rolling 2.3.2-1 amd64
+  HEVC encoder - application
+
+[32mkvazaar-doc[0m/kali-rolling 2.3.2-1 all
+  HEVC encoder - documentation
+
+[32mlam-runtime[0m/kali-rolling 7.1.4-8 amd64
+  LAM runtime environment for executing parallel programs
+
+[32mlam4-dev[0m/kali-rolling 7.1.4-8 amd64
+  Development of parallel programs using LAM
+
+[32mlammps[0m/kali-rolling 20251210+dfsg-1 amd64
+  Molecular Dynamics Simulator
+
+[32mlammps-data[0m/kali-rolling 20251210+dfsg-1 all
+  Molecular Dynamics Simulator. Data (potentials)
+
+[32mlammps-doc[0m/kali-rolling 20251210+dfsg-1 all
+  Molecular Dynamics Simulator (documentation)
+
+[32mlammps-examples[0m/kali-rolling 20251210+dfsg-1 all
+  Molecular Dynamics Simulator (examples)
+
+[32mlibaccinj64-12.4[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA ACCINJ Library (64-bit)
+
+[32mlibany-template-processdir-perl[0m/kali-rolling 0.08-4 all
+  Perl module for processing a directory of templates
+
+[32mlibanyevent-dbi-perl[0m/kali-rolling 3.04-1.1 all
+  module supporting asynchronous DBI access
+
+[32mlibanyevent-forkmanager-perl[0m/kali-rolling 0.07-3 all
+  simple parallel processing fork manager with AnyEvent
+
+[32mlibargon2-1[0m/kali-rolling,now 0~20190702+dfsg-5 amd64 [installed]
+  memory-hard hashing function - runtime library
+
+[32mlibargon2-dev[0m/kali-rolling 0~20190702+dfsg-5 amd64
+  memory-hard hashing function - development files
+
+[32mlibasl-dev[0m/kali-rolling 0.1.7-5+b1 amd64
+  development files for ASL
+
+[32mlibasl0t64[0m/kali-rolling 0.1.7-5+b1 amd64
+  multiphysics simulation software
+
+[32mlibasync-mergepoint-perl[0m/kali-rolling 0.04-4 all
+  Perl module to resynchronize multiple control flows
+
+[32mlibatomicbitvector-dev[0m/kali-rolling 0.0+git20200519.e295358-4 all
+  atomic bitset/bitvector with size determined at runtime
+
+[32mlibb2-1[0m/kali-rolling,now 0.98.1-1.1+b2 amd64 [installed,automatic]
+  BLAKE2 family of hash functions
+
+[32mlibb2-dev[0m/kali-rolling 0.98.1-1.1+b2 amd64
+  BLAKE2 family of hash functions -- development files
+
+[32mlibbifrost0[0m/kali-rolling 1.3.5-2 amd64
+  library for parallel construction, indexing and querying of de Bruijn graphs
+
+[32mlibbiojava1.9-java[0m/kali-rolling 1:1.9.7+dfsg-2 all
+  Java API to biological data and applications (version 1.9)
+
+[32mlibboost-graph-parallel-dev[0m/kali-rolling 1.83.0.2+b2 amd64
+  generic graph components and algorithms in C++ (default version)
+
+[32mlibboost-graph-parallel1.83-dev[0m/kali-rolling 1.83.0-5+b1 amd64
+  generic graph components and algorithms in C++
+
+[32mlibboost-graph-parallel1.83.0[0m/kali-rolling 1.83.0-5+b1 amd64
+  generic graph components and algorithms in C++
+
+[32mlibboost-graph-parallel1.88-dev[0m/kali-rolling 1.88.0-1.4+b1 amd64
+  generic graph components and algorithms in C++
+
+[32mlibboost-graph-parallel1.88.0[0m/kali-rolling 1.88.0-1.4+b1 amd64
+  generic graph components and algorithms in C++
+
+[32mlibcolt-free-java[0m/kali-rolling 1.2.0+dfsg-8 all
+  scalable scientific and technical computing in Java
+
+[32mlibcolt-free-java-doc[0m/kali-rolling 1.2.0+dfsg-8 all
+  scalable scientific and technical computing in Java (doc)
+
+[32mlibcombblas-dev[0m/kali-rolling 2.0.0-7 amd64
+  an extensible parallel graph library for graph analytics
+
+[32mlibcombblas-docs[0m/kali-rolling 2.0.0-7 all
+  an extensible parallel graph library for graph analytics (docs)
+
+[32mlibcombblas2.0.0t64[0m/kali-rolling 2.0.0-7 amd64
+  an extensible parallel graph library for graph analytics
+
+[32mlibcoro-perl[0m/kali-rolling 6.570-4 amd64
+  Perl framework implementing coroutines
+
+[32mlibcrypto-mb11[0m/kali-rolling 2021.12.1-1 amd64
+  Intel® Integrated Performance Primitives Cryptography Multi-buffer
+
+[32mlibcub-dev[0m/kali-rolling 2.5.0-1 all
+  reusable software components for the CUDA programming model
+
+[32mlibcubature-dev[0m/kali-rolling 1.0.4+ds-3 amd64
+  Multi-dimensional adaptive integration (cubature) in C
+
+[32mlibcubature0[0m/kali-rolling 1.0.4+ds-3 amd64
+  Multi-dimensional adaptive integration (cubature) in C (shared lib)
+
+[32mlibcublas12[0m/kali-rolling 12.4.5.8~12.4.1-5 amd64
+  NVIDIA cuBLAS Library
+
+[32mlibcublaslt12[0m/kali-rolling 12.4.5.8~12.4.1-5 amd64
+  NVIDIA cuBLASLt Library
+
+[32mlibcuda1[0m/kali-rolling,now 550.163.01-4 amd64 [installed,automatic]
+  NVIDIA CUDA Driver Library
+
+[32mlibcudadebugger1[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA CUDA Debugger Library
+
+[32mlibcudart12[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA CUDA Runtime Library
+
+[32mlibcufft11[0m/kali-rolling 11.2.1.3~12.4.1-5 amd64
+  NVIDIA cuFFT Library
+
+[32mlibcufftw11[0m/kali-rolling 11.2.1.3~12.4.1-5 amd64
+  NVIDIA cuFFTW Library
+
+[32mlibcuinj64-12.4[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA CUINJ Library (64-bit)
+
+[32mlibcurand10[0m/kali-rolling 11.1.1+~10.3.5.147~12.4.1-5 amd64
+  NVIDIA cuRAND Library
+
+[32mlibcusparse12[0m/kali-rolling 12.3.1.170~12.4.1-5 amd64
+  NVIDIA cuSPARSE Library
+
+[32mlibcutlass-dev[0m/kali-rolling 3.4.1+ds-2 all
+  CUDA Templates for Linear Algebra Subroutines
+
+[32mlibdbcsr-dev[0m/kali-rolling 2.8.0-3 amd64
+  Distributed Block Compressed Sparse Row matrix library
+
+[32mlibdsdp-5.8t64[0m/kali-rolling 5.8-12 amd64
+  Software for Semidefinite Programming
+
+[32mlibdsdp-dev[0m/kali-rolling 5.8-12 amd64
+  Software for Semidefinite Programming
+
+[32mlibdune-uggrid-dev[0m/kali-rolling 2.10.0-1+b1 amd64
+  software framework for finite element methods (development files)
+
+[32mlibduppy-ocaml[0m/kali-rolling 0.9.5-2+b3 amd64
+  Advanced scheduler for OCaml (Runtime library)
+
+[32mlibduppy-ocaml-dev[0m/kali-rolling 0.9.5-2+b3 amd64
+  Advanced scheduler for OCaml (Development package)
+
+[32mlibdvbcsa-dev[0m/kali-rolling 1.1.0-4+b2 amd64
+  free implementation of the DVB/CSA (development files)
+
+[32mlibdvbcsa1[0m/kali-rolling 1.1.0-4+b2 amd64
+  free implementation of the DVB/CSA
+
+[32mlibexodusii-dev[0m/kali-rolling 6.02.dfsg.1-12 amd64
+  exodusII datamodel for finite element analysis
+
+[32mlibfennec-lite-perl[0m/kali-rolling 0.4-4 all
+  minimalist Fennec implementation
+
+[32mlibfennec-perl[0m/kali-rolling 2.018-2 all
+  Perl module providing RSPEC, Workflows, Parallelization, and Encapsulation
+
+[32mlibflashprog-dev[0m/kali-rolling 1.4-1+b1 amd64
+  Identify, read, write, erase, and verify BIOS/ROM/flash chips - development
+
+[32mlibflashprog1[0m/kali-rolling 1.4-1+b1 amd64
+  Identify, read, write, erase, and verify BIOS/ROM/flash chips - library
+
+[32mlibflashrom-dev[0m/kali-rolling 1.6.0-2 amd64
+  BIOS/ROM/flash chips - development files
+
+[32mlibflashrom1[0m/kali-rolling,now 1.6.0-2 amd64 [installed,automatic]
+  Identify, read, write, erase, and verify BIOS/ROM/flash chips - library
+
+[32mlibgearman-client-perl[0m/kali-rolling 2.004.015-3 all
+  client for the Gearman distributed job system
+
+[32mlibgearman-dev[0m/kali-rolling 1.1.21+ds-1 amd64
+  Development files for the Gearman Library
+
+[32mlibgearman-doc[0m/kali-rolling 1.1.21+ds-1 all
+  API Documentation for the Gearman Library
+
+[32mlibgearman8t64[0m/kali-rolling 1.1.21+ds-1 amd64
+  Library providing Gearman client and worker functions
+
+[32mlibgfapi0[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS gfapi shared library
+
+[32mlibgfchangelog0[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS gfchangelog shared library
+
+[32mlibgfrpc0[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS libgfrpc shared library
+
+[32mlibgfxdr0[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS libgfxdr shared library
+
+[32mlibghc-abstract-par-dev[0m/kali-rolling 0.3.3-13+b1 amd64
+  abstract parallelization interface
+
+[32mlibghc-abstract-par-doc[0m/kali-rolling 0.3.3-13 all
+  abstract parallelization interface; documentation
+
+[32mlibghc-abstract-par-prof[0m/kali-rolling 0.3.3-13+b1 amd64
+  abstract parallelization interface; profiling libraries
+
+[32mlibghc-acid-state-dev[0m/kali-rolling 0.16.1.3-2+b1 amd64
+  Haskell database library with ACID guarantees - GHC libraries
+
+[32mlibghc-acid-state-doc[0m/kali-rolling 0.16.1.3-2 all
+  Haskell database library with ACID guarantees - documentation; documentation
+
+[32mlibghc-acid-state-prof[0m/kali-rolling 0.16.1.3-2+b1 amd64
+  Haskell database library with ACID guarantees - GHC profiling libraries; profiling libraries
+
+[32mlibghc-doctest-parallel-dev[0m/kali-rolling 0.3.1.1-1+b2 amd64
+  Test interactive Haskell examples
+
+[32mlibghc-doctest-parallel-doc[0m/kali-rolling 0.3.1.1-1 all
+  Test interactive Haskell examples; documentation
+
+[32mlibghc-doctest-parallel-prof[0m/kali-rolling 0.3.1.1-1+b2 amd64
+  Test interactive Haskell examples; profiling libraries
+
+[32mlibghc-futhark-dev[0m/kali-rolling 0.25.32-2 amd64
+  library files for for Futhark programming language
+
+[32mlibghc-futhark-doc[0m/kali-rolling 0.25.32-2 all
+  library files for for Futhark programming language; documentation
+
+[32mlibghc-futhark-prof[0m/kali-rolling 0.25.32-2 amd64
+  library files for for Futhark programming language; profiling libraries
+
+[32mlibghc-monad-par-dev[0m/kali-rolling 0.3.6-2+b1 amd64
+  parallel programming based on a monad
+
+[32mlibghc-monad-par-doc[0m/kali-rolling 0.3.6-2 all
+  parallel programming based on a monad; documentation
+
+[32mlibghc-monad-par-extras-dev[0m/kali-rolling 0.3.3-14+b1 amd64
+  Combinators and extra features for Par monads
+
+[32mlibghc-monad-par-extras-doc[0m/kali-rolling 0.3.3-14 all
+  Combinators and extra features for Par monads; documentation
+
+[32mlibghc-monad-par-extras-prof[0m/kali-rolling 0.3.3-14+b1 amd64
+  Combinators and extra features for Par monads; profiling libraries
+
+[32mlibghc-monad-par-prof[0m/kali-rolling 0.3.6-2+b1 amd64
+  parallel programming based on a monad; profiling libraries
+
+[32mlibghc-mutable-containers-dev[0m/kali-rolling 0.3.4.1-3+b1 amd64
+  abstactions and concrete implementations of mutable containers
+
+[32mlibghc-mutable-containers-doc[0m/kali-rolling 0.3.4.1-3 all
+  abstactions and concrete implementations of mutable containers; documentation
+
+[32mlibghc-mutable-containers-prof[0m/kali-rolling 0.3.4.1-3+b1 amd64
+  abstactions and concrete implementations of mutable containers; profiling libraries
+
+[32mlibghc-parallel-dev[0m/kali-rolling 3.2.2.0-6+b1 amd64
+  Haskell parallel programming library for GHC
+
+[32mlibghc-parallel-doc[0m/kali-rolling 3.2.2.0-6 all
+  Haskell parallel programming library for GHC; documentation
+
+[32mlibghc-parallel-prof[0m/kali-rolling 3.2.2.0-6+b1 amd64
+  Haskell parallel programming library for GHC; profiling libraries
+
+[32mlibghc-shake-data[0m/kali-rolling 0.19.8-1 all
+  Haskell library for writing build systems; data files
+
+[32mlibghc-shake-dev[0m/kali-rolling 0.19.8-1+b1 amd64
+  Haskell library for writing build systems
+
+[32mlibghc-shake-doc[0m/kali-rolling 0.19.8-1 all
+  Haskell library for writing build systems; documentation
+
+[32mlibghc-shake-prof[0m/kali-rolling 0.19.8-1+b1 amd64
+  Haskell library for writing build systems; profiling libraries
+
+[32mlibghc-test-framework-dev[0m/kali-rolling 0.8.2.0-10+b1 amd64
+  Framework for running and organising tests
+
+[32mlibghc-test-framework-doc[0m/kali-rolling 0.8.2.0-10 all
+  Framework for running and organising tests; documentation
+
+[32mlibghc-test-framework-prof[0m/kali-rolling 0.8.2.0-10+b1 amd64
+  Framework for running and organising tests; profiling libraries
+
+[32mlibgivaro-dev[0m/kali-rolling 4.2.1-1 amd64
+  arithmetic and algebraic computations - development files
+
+[32mlibgivaro-doc[0m/kali-rolling 4.2.1-1 all
+  Documentation for Givaro
+
+[32mlibgivaro9[0m/kali-rolling 4.2.1-1 amd64
+  arithmetic and algebraic computations
+
+[32mlibglobalarrays-dev[0m/kali-rolling 5.9.2-2 amd64
+  Distributed Shared-Memory Programming Environment (development)
+
+[32mlibglusterfs-dev[0m/kali-rolling 11.1-6+b1 amd64
+  Development files for GlusterFS libraries
+
+[32mlibglusterfs0[0m/kali-rolling 11.1-6+b1 amd64
+  GlusterFS shared library
+
+[32mlibguess-dev[0m/kali-rolling 1.2+git20150609.b44a240-1 amd64
+  high-speed character set detection library (development)
+
+[32mlibguess1[0m/kali-rolling 1.2+git20150609.b44a240-1 amd64
+  high-speed character set detection library
+
+[32mlibgyoto9t64[0m/kali-rolling 2.0.2-7+b2 amd64
+  Gyoto framework main library an standard plug-in
+
+[32mlibhdf5-310[0m/kali-rolling,now 1.14.5+repack-4 amd64 [installed,automatic]
+  HDF5 C runtime files - serial version
+
+[32mlibhdf5-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - C++ runtime files - serial version
+
+[32mlibhdf5-dev[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - development files - serial version
+
+[32mlibhdf5-doc[0m/kali-rolling 1.14.5+repack-4 all
+  HDF5 - Documentation
+
+[32mlibhdf5-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 Fortran runtime files - serial version
+
+[32mlibhdf5-hl-310[0m/kali-rolling,now 1.14.5+repack-4 amd64 [installed,automatic]
+  HDF5 High Level runtime files - serial version
+
+[32mlibhdf5-hl-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level C++ runtime files - serial version
+
+[32mlibhdf5-hl-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level Fortran runtime files - serial version
+
+[32mlibhdf5-java[0m/kali-rolling 1.14.5+repack-4 all
+  HDF5 - Java Wrapper Library
+
+[32mlibhdf5-mpi-dev[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - development files - default MPI version
+
+[32mlibhdf5-mpich-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - C runtime files - MPICH2 version
+
+[32mlibhdf5-mpich-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - C++ runtime files - MPICH2 version - unsupported
+
+[32mlibhdf5-mpich-dev[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - development files - MPICH2 version
+
+[32mlibhdf5-mpich-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 Fortran runtime files - MPICH2 version
+
+[32mlibhdf5-mpich-hl-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level runtime files - MPICH2 version
+
+[32mlibhdf5-mpich-hl-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level C++ runtime files - MPICH2 version - unsupported
+
+[32mlibhdf5-mpich-hl-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level Fortran runtime files - MPICH2 version
+
+[32mlibhdf5-openmpi-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - C runtime files - OpenMPI version
+
+[32mlibhdf5-openmpi-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - C++ runtime files - OpenMPI version - unsupported
+
+[32mlibhdf5-openmpi-dev[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 - development files - OpenMPI version
+
+[32mlibhdf5-openmpi-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 Fortran runtime files - OpenMPI version
+
+[32mlibhdf5-openmpi-hl-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level runtime files - OpenMPI version
+
+[32mlibhdf5-openmpi-hl-cpp-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level C++ runtime files - OpenMPI version - unsupported
+
+[32mlibhdf5-openmpi-hl-fortran-310[0m/kali-rolling 1.14.5+repack-4 amd64
+  HDF5 High Level Fortran runtime files - OpenMPI version
+
+[32mlibhighs-dev[0m/kali-rolling 1.12.0+ds1-2 amd64
+  High performance linear optimization software (development files)
+
+[32mlibhighs1[0m/kali-rolling 1.12.0+ds1-2 amd64
+  High performance linear optimization software (shared library)
+
+[32mlibhighwayhash-dev[0m/kali-rolling 0~git20200803.9490b14-4.1+b1 amd64
+  Fast strong hash functions: SipHash/HighwayHash (development)
+
+[32mlibhighwayhash0t64[0m/kali-rolling 0~git20200803.9490b14-4.1+b1 amd64
+  Fast strong hash functions: SipHash/HighwayHash (library)
+
+[32mlibhipcub-dev[0m/kali-rolling 6.4.3-2 all
+  portable interface for GPU parallel primitives - headers
+
+[32mlibhipcub-tests[0m/kali-rolling 6.4.3-2 amd64
+  portable interface for GPU parallel primitives - tests
+
+[32mlibhmsbeagle-dev[0m/kali-rolling 4.0.1+dfsg-4 amd64
+  High-performance lib for Bayesian and Maximum Likelihood phylogenetics (devel)
+
+[32mlibhmsbeagle-java[0m/kali-rolling 4.0.1+dfsg-4 amd64
+  High-performance lib for Bayesian and Maximum Likelihood phylogenetics (java)
+
+[32mlibhmsbeagle1v5[0m/kali-rolling 4.0.1+dfsg-4 amd64
+  High-performance lib for Bayesian and Maximum Likelihood phylogenetics
+
+[32mlibhpptools-dev[0m/kali-rolling 1.1.1-5 all
+  various C++ header tools
+
+[32mlibhttp-async-perl[0m/kali-rolling 0.33-3 all
+  module for parallel non-blocking processing of multiple HTTP requests
+
+[32mlibieee1284-3-dev[0m/kali-rolling 0.2.11-14.1+b1 amd64
+  cross-platform library for parallel port access [development files]
+
+[32mlibieee1284-3t64[0m/kali-rolling,now 0.2.11-14.1+b1 amd64 [installed,automatic]
+  cross-platform library for parallel port access
+
+[32mlibinklevel-dev[0m/kali-rolling 0.9.7-2 amd64
+  development files for libinklevel5
+
+[32mlibinklevel5[0m/kali-rolling 0.9.7-2 amd64
+  library for checking the ink level of your local printer
+
+[32mlibio-aio-perl[0m/kali-rolling 4.81-1+b2 amd64
+  asynchronous IO module for Perl
+
+[32mlibips4o-dev[0m/kali-rolling 0.0+git20190618.2206938-2 all
+  In-place Parallel Super Scalar Samplesort
+
+[32mlibispcrt-dev[0m/kali-rolling 1.28.2-1+b1 amd64
+  Intel Implicit SPMD Program Compiler runtime library development files
+
+[32mlibispcrt1[0m/kali-rolling 1.28.2-1+b1 amd64
+  Intel Implicit SPMD Program Compiler runtime library
+
+[32mlibjellyfish-2.0-2[0m/kali-rolling 2.3.1-5+b1 amd64
+  count k-mers in DNA sequences (dynamic library of jellyfish)
+
+[32mlibjellyfish-2.0-dev[0m/kali-rolling 2.3.1-5+b1 amd64
+  count k-mers in DNA sequences (development files of jellyfish)
+
+[32mlibjellyfish-perl[0m/kali-rolling 2.3.1-5+b1 amd64
+  count k-mers in DNA sequences (Perl bindings of jellyfish)
+
+[32mlibjs-headjs[0m/kali-rolling 1.0.3+dfsg.1-5 all
+  javascript libraryt for resource loading
+
+[32mlibjs-queue-async[0m/kali-rolling 1.0.7-3 all
+  asynchronous helper library for JavaScript
+
+[32mlibjsr166y-java[0m/kali-rolling 1.7.0-3 all
+  Parallel computation framework for Java
+
+[32mlibjsr166y-java-doc[0m/kali-rolling 1.7.0-3 all
+  Documentation for libjsr166y-java
+
+[32mlibjung-free-java[0m/kali-rolling 2.1.1-3 all
+  Java Universal Network/Graph Framework
+
+[32mlibjung-free-java-doc[0m/kali-rolling 2.1.1-3 all
+  Java Universal Network/Graph Framework (documentation)
+
+[32mlibkvazaar-dev[0m/kali-rolling 2.3.2-1 amd64
+  HEVC encoder - development files
+
+[32mlibkvazaar7[0m/kali-rolling 2.3.2-1 amd64
+  HEVC encoder - shared library
+
+[32mliblam4t64[0m/kali-rolling 7.1.4-8 amd64
+  Shared libraries used by LAM parallel programs
+
+[32mliblammps-dev[0m/kali-rolling 20251210+dfsg-1 amd64
+  Molecular Dynamics Simulator (dev files)
+
+[32mliblammps0t64[0m/kali-rolling 20251210+dfsg-1 amd64
+  Molecular Dynamics Simulator (shared library)
+
+[32mliblgooddatepicker-java[0m/kali-rolling 11.2.1+ds-1 all
+  Java Swing Date Picker library
+
+[32mliblgooddatepicker-java-doc[0m/kali-rolling 11.2.1+ds-1 all
+  documentation for the LGoodDatePicker library
+
+[32mlibmadness-dev[0m/kali-rolling 0.10.1+git20200818.eee5fd9f-4 amd64
+  Numerical Environment for Scientific Simulation (development files)
+
+[32mlibmasonx-processdir-perl[0m/kali-rolling 0.02-3 all
+  Perl module to process a directory of Mason 2 templates
+
+[32mlibmbtserver-dev[0m/kali-rolling 0.17-2 amd64
+  Server extensions for Timbl - development
+
+[32mlibmbtserver2[0m/kali-rolling 0.17-2 amd64
+  Server extensions for Timbl - runtime
+
+[32mlibmce-perl[0m/kali-rolling 1.902-1 all
+  Many-Core Engine for Perl providing parallel processing capabilities
+
+[32mlibmeep-dev[0m/kali-rolling 1.29.0-2 amd64
+  development library for using meep
+
+[32mlibmeep-mpi-default-dev[0m/kali-rolling 1.29.0-2 amd64
+  development library for using parallel version of meep
+
+[32mlibmeep-mpi-default33[0m/kali-rolling 1.29.0-2 amd64
+  library for using parallel version of meep
+
+[32mlibmeep33[0m/kali-rolling 1.29.0-2 amd64
+  library for using meep
+
+[32mlibmfem-dev[0m/kali-rolling 4.9+ds-2 amd64
+  C++ library for finite element methods - development files
+
+[32mlibmfem4.9[0m/kali-rolling 4.9+ds-2 amd64
+  Lightweight, general, scalable C++ library for finite element methods
+
+[32mlibmgl-mpi8t64[0m/kali-rolling 8.0.3-2 amd64
+  library for scientific graphs (mpi enhanced runtime library)
+
+[32mlibminion-perl[0m/kali-rolling 10.31+dfsg-2 all
+  job queue for Mojolicious
+
+[32mlibmkl-full-dev[0m/kali-rolling 2020.4.304-6 amd64
+  Intel® Math Kernel Library (Intel® MKL) (Full Version Dev)
+
+[32mlibmmmulti-dev[0m/kali-rolling 0.1-4 all
+  header only library for mmmulti
+
+[32mlibmojo-ioloop-readwriteprocess-perl[0m/kali-rolling 1.1.0-1 all
+  module to execute external programs or internal code blocks as separate process
+
+[32mlibmpich-dev[0m/kali-rolling 4.3.2-2+b1 amd64
+  Development files for MPICH
+
+[32mlibmpich12[0m/kali-rolling 4.3.2-2+b1 amd64
+  Shared libraries for MPICH
+
+[32mlibmpj-java[0m/kali-rolling 0.44+dfsg-4 all
+  Java library for parallel applications for multicore processors and clusters
+
+[32mlibmumps-5.7[0m/kali-rolling 5.7.3-3+b1 amd64
+  Direct linear systems solver - parallel shared libraries
+
+[32mlibmumps-5.8[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver - parallel shared libraries
+
+[32mlibmumps-64pord-5.7[0m/kali-rolling 5.7.3-3+b1 amd64
+  Direct linear systems solver (64 bit) - parallel shared libraries
+
+[32mlibmumps-64pord-5.8[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver (64 bit) - parallel shared libraries
+
+[32mlibmumps-64pord-seq-5.8[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver (64 bit) - non-parallel shared libraries
+
+[32mlibmumps-dev[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver - parallel development files
+
+[32mlibmumps-seq-5.8[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver - non-parallel shared libraries
+
+[32mlibmumps-seq-dev[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver - non-parallel development files
+
+[32mlibmumps64-dev[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver (64 bit) - parallel development files
+
+[32mlibmumps64-seq-dev[0m/kali-rolling 5.8.1-2 amd64
+  Direct linear systems solver (64 bit) - non-parallel development files
+
+[32mlibmusic-dev[0m/kali-rolling 1.2.1-0.7 amd64
+  Multi-Simulation Coordinator for MPI -- Development files
+
+[32mlibmusic1t64[0m/kali-rolling 1.2.1-0.7 amd64
+  Multi-Simulation Coordinator for MPI -- Runtime library
+
+[32mlibnemesis3[0m/kali-rolling 6.02.dfsg.1-12 amd64
+  Parallel extension to the EXODUSII datamodel
+
+[32mlibnet-openssh-parallel-perl[0m/kali-rolling 0.14-1 all
+  run SSH jobs in parallel
+
+[32mlibnet-oping-perl[0m/kali-rolling 1.10.0-1.21-5+b5 amd64
+  module for ICMP latency measurement
+
+[32mlibnet-rblclient-perl[0m/kali-rolling 0.5-4 all
+  module to query multiple Realtime Blackhole Lists in parallel
+
+[32mlibnginx-mod-http-echo[0m/kali-rolling 1:0.64-1+b1 amd64
+  Bring echo and more shell style goodies to Nginx
+
+[32mlibnproc-ocaml-dev[0m/kali-rolling 0.5.1-5+b11 amd64
+  process pool implementation for OCaml
+
+[32mlibnvblas12[0m/kali-rolling 12.4.5.8~12.4.1-5 amd64
+  NVBLAS runtime library
+
+[32mlibnvcuvid1[0m/kali-rolling,now 550.163.01-4 amd64 [installed,automatic]
+  NVIDIA CUDA Video Decoder runtime library
+
+[32mlibnvfatbin12[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA compiler library for fatbin interaction
+
+[32mlibnvidia-nvvm4[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA NVVM Compiler library
+
+[32mlibnvidia-pkcs11-openssl3[0m/kali-rolling,now 550.163.01-4 amd64 [installed,automatic]
+  NVIDIA PKCS #11 Library (OpenSSL 3)
+
+[32mlibnvidia-ptxjitcompiler1[0m/kali-rolling,now 550.163.01-4 amd64 [installed,automatic]
+  NVIDIA PTX JIT Compiler library
+
+[32mlibnvidia-tesla-535-cuda1[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA CUDA Driver Library (Tesla 535 version)
+
+[32mlibnvidia-tesla-535-cudadebugger1[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA CUDA Debugger Library (Tesla 535 version)
+
+[32mlibnvidia-tesla-535-nvcuvid1[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA CUDA Video Decoder runtime library (Tesla 535 version)
+
+[32mlibnvidia-tesla-535-nvvm4[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA NVVM Compiler library (Tesla 535 version)
+
+[32mlibnvidia-tesla-535-pkcs11-openssl3[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA PKCS #11 Library (OpenSSL 3) (Tesla 535 version)
+
+[32mlibnvidia-tesla-535-ptxjitcompiler1[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA PTX JIT Compiler library (Tesla 535 version)
+
+[32mlibomp-jonathonl-dev[0m/kali-rolling 1.0.0-1 amd64
+  parallel programming library
+
+[32mlibopen3d-dev[0m/kali-rolling 0.19.0-5+b1 amd64
+  Library for 3D data processing - development headers
+
+[32mlibopen3d0.19[0m/kali-rolling 0.19.0-5+b1 amd64
+  Library for 3D data processing
+
+[32mliboping-dev[0m/kali-rolling 1.10.0-5+b5 amd64
+  C/C++ library to generate ICMP ECHO_REQUESTs (development files)
+
+[32mliboping0[0m/kali-rolling 1.10.0-5+b5 amd64
+  C/C++ library to generate ICMP ECHO_REQUESTs
+
+[32mlibopm-grid[0m/kali-rolling 2025.10+ds-1+b3 amd64
+  DUNE grid implementations for reservoir simulation -- library
+
+[32mlibopm-grid-bin[0m/kali-rolling 2025.10+ds-1+b3 amd64
+  corner point grid utility programs
+
+[32mlibopm-grid-dev[0m/kali-rolling 2025.10+ds-1+b3 amd64
+  DUNE grid implementations for reservoir simulation -- development files
+
+[32mlibopm-grid-doc[0m/kali-rolling 2025.10+ds-1 all
+  DUNE grid implementations for reservoir simulation -- documentation
+
+[32mlibopm-simulators-bin[0m/kali-rolling 2025.10+ds-4+b1 amd64
+  Parallel porous media / reservoir simulators -- applications
+
+[32mlibopm-simulators-dev[0m/kali-rolling 2025.10+ds-4+b1 amd64
+  Parallel porous media / reservoir simulators -- development files
+
+[32mlibosd-dev[0m/kali-rolling 3.6.0-3 amd64
+  high performance subdivision surface (subdiv) library - development
+
+[32mlibosd-doc[0m/kali-rolling 3.6.0-3 all
+  high performance subdivision surface (subdiv) library - documentation
+
+[32mlibosdcpu3.6.0[0m/kali-rolling 3.6.0-3 amd64
+  high performance subdivision surface (subdiv) library - CPU runtime
+
+[32mlibosdgpu3.6.0[0m/kali-rolling 3.6.0-3 amd64
+  high performance subdivision surface (subdiv) library - GPU runtime
+
+[32mlibostree-1-1[0m/kali-rolling 2025.7-1 amd64 [upgradable from: 2025.6-1]
+  content-addressed filesystem for operating system binaries (library)
+
+[32mlibostree-dev[0m/kali-rolling 2025.7-1 amd64
+  Development files for the libostree library
+
+[32mlibp4est-2.3[0m/kali-rolling 2.3.6-2+b1 amd64
+  Algorithms for Parallel Adaptive Mesh Refinement - shared library
+
+[32mlibp4est-dev[0m/kali-rolling 2.3.6-2+b1 amd64
+  Algorithms for Parallel Adaptive Mesh Refinement - development files
+
+[32mlibp4est-sc-2.3[0m/kali-rolling 2.3.6-2+b1 amd64
+  Algorithms for Parallel Adaptive Mesh Refinement - support library
+
+[32mlibpagmo-dev[0m/kali-rolling 2.19.1-1 amd64
+  library for massively parallel optimisation (development files)
+
+[32mlibpagmo9t64[0m/kali-rolling 2.19.1-1 amd64
+  library for massively parallel optimisation (shared library)
+
+[32mlibpapilo-clusol0d[0m/kali-rolling 2.4.4+ds-1 amd64
+  Parallel Presolve for Integer and Linear Optimization (LUSOL library)
+
+[32mlibpapilo-core0d[0m/kali-rolling 2.4.4+ds-1 amd64
+  Parallel Presolve for Integer and Linear Optimization (core library)
+
+[32mlibpapilo-dev[0m/kali-rolling 2.4.4+ds-1 amd64
+  Parallel Presolve for Integer and Linear Optimization (development files)
+
+[32mlibparallel-forkmanager-perl[0m/kali-rolling 2.04-1 all
+  simple parallel processing fork manager for Perl
+
+[32mlibparallel-hashmap-dev[0m/kali-rolling 1.4.1+ds-3 all
+  header-only hash map implementation
+
+[32mlibparallel-iterator-perl[0m/kali-rolling 1.002-1 all
+  module for simple parallel execution
+
+[32mlibparallel-prefork-perl[0m/kali-rolling 0.18-1 all
+  simple prefork server framework
+
+[32mlibparallel-runner-perl[0m/kali-rolling 0.014-1 all
+  Perl module to manage running things in parallel processes
+
+[32mlibparany-ocaml[0m/kali-rolling 14.0.1-1+b4 amd64
+  Generalized map reduce for parallel computers (runtime)
+
+[32mlibparany-ocaml-dev[0m/kali-rolling 14.0.1-1+b4 amd64
+  Generalized map reduce for parallel computers (development)
+
+[32mlibparpack2-dev[0m/kali-rolling 3.9.1-6 amd64
+  Parallel subroutines to solve large scale eigenvalue problems (development)
+
+[32mlibparpack2t64[0m/kali-rolling 3.9.1-6 amd64
+  Parallel subroutines to solve large scale eigenvalue problems
+
+[32mlibparu1[0m/kali-rolling 1:7.12.1+dfsg-1 amd64
+  unsymmetric multifrontal multithreaded sparse LU factorization
+
+[32mlibparyfor-dev[0m/kali-rolling 0.1-9 amd64
+  Parallel_for implementation based on atomic queues
+
+[32mlibperformance-dev[0m/kali-rolling 0.6.0-6 amd64
+  GNUstep performance library (development files)
+
+[32mlibperformance0.6[0m/kali-rolling 0.6.0-6 amd64
+  GNUstep performance library (runtime library)
+
+[32mlibpetsc-complex-dev[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Virtual package depending on latest PETSc development package
+
+[32mlibpetsc-complex3.22[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Shared libraries for version 3.22 of PETSc with Complex Numbers
+
+[32mlibpetsc-complex3.22-dbg[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Debugging libraries for PETSc
+
+[32mlibpetsc-complex3.22-dev[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Static libraries, shared links, header files for PETSc
+
+[32mlibpetsc-real-dev[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Virtual package depending on latest PETSc development package
+
+[32mlibpetsc-real3.22[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Shared libraries for version 3.22 of PETSc
+
+[32mlibpetsc-real3.22-dbg[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Debugging libraries for PETSc
+
+[32mlibpetsc-real3.22-dev[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Static libraries, shared links, header files for PETSc
+
+[32mlibpetsc3.22-dev-common[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Common header and support dev files for PETSc
+
+[32mlibpetsc3.22-dev-examples[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Static libraries, shared links, header files for PETSc
+
+[32mlibpetsc64-complex-dev[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Latest 64-bit PETSc development package with complex numbers
+
+[32mlibpetsc64-complex3.22[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Shared libraries for version 3.22 of 64-bit PETSc with Complex Numbers
+
+[32mlibpetsc64-complex3.22-dbg[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Debugging libraries for 64-bit PETSc with Complex Numbers
+
+[32mlibpetsc64-complex3.22-dev[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Development files for 64-bit PETSc with complex numbers
+
+[32mlibpetsc64-real-dev[0m/kali-rolling 3.22.5+dfsg1-2 all
+  Virtual package depending on latest 64-bit PETSc development package
+
+[32mlibpetsc64-real3.22[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Shared libraries for version 3.22 of 64-bit PETSc
+
+[32mlibpetsc64-real3.22-dbg[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Debugging libraries for PETSc
+
+[32mlibpetsc64-real3.22-dev[0m/kali-rolling 3.22.5+dfsg1-2+b2 amd64
+  Static libraries, shared links, header files for 64-bit PETSc
+
+[32mlibphdi-dev[0m/kali-rolling 20240307-0kali2+b1 amd64
+  library to access the Parallels Hard Disk image (PHDI) -- development files
+
+[32mlibphdi1[0m/kali-rolling 20240307-0kali2+b1 amd64
+  library to access the Parallels Hard Disk image (PHDI)
+
+[32mlibpillowfight0[0m/kali-rolling 0.3.1-2.1+b1 amd64
+  Various image processing algorithms library
+
+[32mlibpj-java[0m/kali-rolling 0.0~20150107+dfsg-5 all
+  API and middleware for parallel programming in Java
+
+[32mlibpll-dev[0m/kali-rolling 0.3.2-5+b1 amd64
+  Phylogenetic Likelihood Library (development)
+
+[32mlibpll0[0m/kali-rolling 0.3.2-5+b1 amd64
+  Phylogenetic Likelihood Library
+
+[32mlibpnetcdf-dev[0m/kali-rolling 1.14.1-2 amd64
+  Development files for the parallel netCDF library
+
+[32mlibpnetcdf7[0m/kali-rolling 1.14.1-2 amd64
+  Libraryfor reading and writing parallel NetCDF files
+
+[32mlibpoe-component-client-http-perl[0m/kali-rolling 0.949-4 all
+  POE Component for running asynchronous HTTP transactions
+
+[32mlibproc-queue-perl[0m/kali-rolling 1.23-1.1 all
+  Perl module to limit the number of child processes
+
+[32mlibpsm-infinipath1[0m/kali-rolling 3.3+20.604758e7-6.4 amd64
+  PSM Messaging library for Intel Truescale adapters
+
+[32mlibpsm-infinipath1-dbg[0m/kali-rolling 3.3+20.604758e7-6.4 amd64
+  Debugging symbols for libpsm-infinipath1
+
+[32mlibpsm-infinipath1-dev[0m/kali-rolling 3.3+20.604758e7-6.4 amd64
+  Development files for libpsm-infinipath1
+
+[32mlibpsm2-2[0m/kali-rolling 11.2.185-2.1 amd64
+  Intel PSM2 library
+
+[32mlibpsm2-dev[0m/kali-rolling 11.2.185-2.1 amd64
+  Development files for Intel PSM2 library
+
+[32mlibpthreadpool-dev[0m/kali-rolling 0.0~git20240616.560c60d-1 amd64
+  pthread-based thread pool for C/C++ (development)
+
+[32mlibpthreadpool0[0m/kali-rolling,now 0.0~git20240616.560c60d-1 amd64 [installed,automatic]
+  pthread-based thread pool for C/C++ (shared object)
+
+[32mlibptl-dev[0m/kali-rolling 2.3.3-2.1+b3 amd64
+  parallel tasking library - development files
+
+[32mlibptl2t64[0m/kali-rolling 2.3.3-2.1+b3 amd64
+  parallel tasking library
+
+[32mlibqcheck-lin-ocaml-dev[0m/kali-rolling 0.11-1+b2 amd64
+  QCheck module testing sequential consistency
+
+[32mlibqcheck-stm-ocaml-dev[0m/kali-rolling 0.11-1+b2 amd64
+  QCheck module testing parallel state-machines
+
+[32mlibquantum-superpositions-perl[0m/kali-rolling 2.03-2 all
+  Quantum Mechanic-like superpositions for Perl
+
+[32mlibrandom123-dev[0m/kali-rolling 1.14.0+dfsg-6 all
+  parallel random numbers library
+
+[32mlibrandom123-doc[0m/kali-rolling 1.14.0+dfsg-6 all
+  documentation and examples of parallel random numbers library
+
+[32mlibrocprim-dev[0m/kali-rolling 6.4.3-2 all
+  parallel primitives for GPU-accelerated code - headers
+
+[32mlibrocprim-tests[0m/kali-rolling 6.4.3-2 amd64
+  parallel primitives for GPU-accelerated code - tests
+
+[32mlibrocthrust-dev[0m/kali-rolling 6.4.4-1 all
+  ROCm parallel algorithms library - headers
+
+[32mlibrocthrust-tests[0m/kali-rolling 6.4.4-1 amd64
+  ROCm parallel algorithms library - tests
+
+[32mlibrsb-dev[0m/kali-rolling 1.3.0.2+dfsg-8 amd64
+  shared-memory Sparse BLAS library using the RSB matrix format (development)
+
+[32mlibrsb-doc[0m/kali-rolling 1.3.0.2+dfsg-8 all
+  shared-memory Sparse BLAS library using the RSB matrix format (documentation)
+
+[32mlibrsb-tools[0m/kali-rolling 1.3.0.2+dfsg-8 amd64
+  shared-memory Sparse BLAS library using the RSB matrix format (tools)
+
+[32mlibrsb0t64[0m/kali-rolling 1.3.0.2+dfsg-8 amd64
+  shared-memory Sparse BLAS library using the RSB matrix format
+
+[32mlibrust-crossbeam-dev[0m/kali-rolling 0.8.4-1 amd64
+  Support for concurrent and parallel programming - Rust source code
+
+[32mlibrust-easy-parallel-dev[0m/kali-rolling 3.3.1-3 all
+  run closures in parallel - Rust source code
+
+[32mlibrust-jwalk-dev[0m/kali-rolling 0.8.1-1+b3 amd64
+  Filesystem walk performed in parallel - Rust source code
+
+[32mlibrust-matrixmultiply-dev[0m/kali-rolling 0.3.9-1 amd64
+  General matrix multiplication for f32 and f64 matrices - Rust source code
+
+[32mlibrust-piz-dev[0m/kali-rolling 0.5.1-4 amd64
+  Piz (a Parallel Implementation of Zip) - rust source code
+
+[32mlibrust-pmac-dev[0m/kali-rolling 0.7.1-1+b3 amd64
+  Generic implementation of Parallelizable Message Authentication Code - Rust source code
+
+[32mlibrust-rayon-cond-dev[0m/kali-rolling 0.4.0-1 amd64
+  Experimental iterator wrapper that is conditionally parallel or serial - Rust source code
+
+[32mlibrust-rayon-dev[0m/kali-rolling 1.11.0-1 amd64
+  Simple work-stealing parallelism for Rust - Rust source code
+
+[32mlibrust-tracing-durations-export-dev[0m/kali-rolling 0.3.0-2 amd64
+  Record and visualize parallelism of tracing spans - Rust source code
+
+[32mlibrxtx-java[0m/kali-rolling 2.2.0+dfsg-3.1 amd64
+  Full Java CommAPI implementation
+
+[32mlibsaturn-ocaml-dev[0m/kali-rolling 1.0.0-2+b3 amd64
+  parallelism-safe data structures for multicore OCaml
+
+[32mlibsbig-dev[0m/kali-rolling 4.9.9-7 amd64
+  SBIG Universal Library Driver - development files
+
+[32mlibsbig4t64[0m/kali-rolling 4.9.9-7 amd64
+  Santa Barbra Instrument Group (SBIG) Universal Library Driver
+
+[32mlibscalapack-mpi-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - Dev files for MPI
+
+[32mlibscalapack-mpich-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - Dev files for MPICH
+
+[32mlibscalapack-mpich2.2[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - Shared libs for MPICH
+
+[32mlibscalapack-openmpi-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - Dev files for OpenMPI
+
+[32mlibscalapack-openmpi2.2[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - Shared libs for OpenMPI
+
+[32mlibscalapack64-mpi-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - 64-bit Dev files for MPI
+
+[32mlibscalapack64-mpich-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - 64-bit Dev files for MPICH
+
+[32mlibscalapack64-mpich2.2[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - 64-bit Shared libs for MPICH
+
+[32mlibscalapack64-openmpi-dev[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - 64-bit Dev files for OpenMPI
+
+[32mlibscalapack64-openmpi2.2[0m/kali-rolling 2.2.2-5 amd64
+  Scalable Linear Algebra Package - 64-bit Shared libs for OpenMPI
+
+[32mlibscamperfile0-dev[0m/kali-rolling 20211212-1.2+b1 amd64
+  development headers for scamper's binary dump file access library
+
+[32mlibscamperfile0t64[0m/kali-rolling 20211212-1.2+b1 amd64
+  file access library for scamper's binary dump format
+
+[32mlibscotchparmetis-64-dev[0m/kali-rolling 7.0.10-7 amd64
+  programs and libraries for graph, mesh and hypergraph partitioning
+
+[32mlibscotchparmetis-64i-dev[0m/kali-rolling 7.0.10-7 amd64
+  programs and libraries for graph, mesh and hypergraph partitioning
+
+[32mlibscotchparmetis-dev[0m/kali-rolling 7.0.10-7 amd64
+  programs and libraries for graph, mesh and hypergraph partitioning
+
+[32mlibsdp-dev[0m/kali-rolling 6.2.0-6 amd64
+  Software package for semidefinite programming (development)
+
+[32mlibsdp0[0m/kali-rolling 6.2.0-6 amd64
+  Software package for semidefinite programming (library)
+
+[32mlibsilo-bin[0m/kali-rolling 4.11-6.1+b4 amd64
+  Utilities to manipulate libsilo files
+
+[32mlibsilo-dev[0m/kali-rolling 4.11-6.1+b4 amd64
+  Development files for SILO Scientific I/O library from LLNL
+
+[32mlibsiloh5-0t64[0m/kali-rolling 4.11-6.1+b4 amd64
+  SILO Science I/O library from LLNL
+
+[32mlibsimdjson-dev[0m/kali-rolling 4.2.4-1 amd64
+  Parsing gigabytes of JSON per second (development)
+
+[32mlibsimdjson29[0m/kali-rolling 4.2.4-1 amd64
+  Parsing gigabytes of JSON per second (shared object)
+
+[32mlibslepc-complex-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc-complex3.22[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc-complex3.22-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc-real-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc-real3.22[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc-real3.22-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc3.22-dev-examples[0m/kali-rolling 3.22.2+dfsg1-1 all
+  Scalable Library for Eigenvalue Problem Computations
+
+[32mlibslepc64-complex-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslepc64-complex3.22[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslepc64-complex3.22-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslepc64-real-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslepc64-real3.22[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslepc64-real3.22-dev[0m/kali-rolling 3.22.2+dfsg1-1+b1 amd64
+  Scalable Library for Eigenvalue Problem Computations (64-bit)
+
+[32mlibslow5-0t64[0m/kali-rolling 1.3.1+dfsg-1+b1 amd64
+  library for reading & writing SLOW5 files
+
+[32mlibslow5-dev[0m/kali-rolling 1.3.1+dfsg-1+b1 amd64
+  header and static library for reading & writing SLOW5 files
+
+[32mlibsprng2[0m/kali-rolling 2.0a-16 amd64
+  SPRNG Scalable Parallel RNG library -- library package
+
+[32mlibsprng2-dev[0m/kali-rolling 2.0a-16 amd64
+  SPRNG Scalable Parallel RNG library -- development package
+
+[32mlibsprng2-doc[0m/kali-rolling 2.0a-16 all
+  SPRNG Scalable Parallel RNG library -- documentation package
+
+[32mlibssw-dev[0m/kali-rolling 1.1-15+b2 amd64
+  Development headers and static libraries for libssw
+
+[32mlibssw-java[0m/kali-rolling 1.1-15+b2 amd64
+  Java bindings for libssw
+
+[32mlibssw0[0m/kali-rolling 1.1-15+b2 amd64
+  fast SIMD parallelized implementation of the Smith-Waterman algorithm
+
+[32mlibstdgpu-cuda-dev[0m/kali-rolling 1.3.0+git20220507.32e0517-3 amd64
+  Efficient STL-like Data Structures on the GPU (CUDA development headers)
+
+[32mlibstdgpu-cuda0d[0m/kali-rolling 1.3.0+git20220507.32e0517-3 amd64
+  Efficient STL-like Data Structures on the GPU (CUDA backend)
+
+[32mlibstopt-dev[0m/kali-rolling 6.1+dfsg-1 amd64
+  library for stochastic optimization problems (development package)
+
+[32mlibstopt5t64[0m/kali-rolling 6.1+dfsg-1 amd64
+  library for stochastic optimization problems (shared library)
+
+[32mlibsundials-nvecparallel-hypre7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  HYPRE vector operations library (SUNDIALS library)
+
+[32mlibsundials-nvecparallel-mpi7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  MPI vector operations library (SUNDIALS library)
+
+[32mlibsundials-nvecparallel-openmp7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  OpenMP vector operations library (SUNDIALS library)
+
+[32mlibsundials-nvecparallel-petsc7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  PETSc vector operations library (SUNDIALS library)
+
+[32mlibsundials-nvecparallel-pthread7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  Pthread vector operations library (SUNDIALS library)
+
+[32mlibsundials-nvecserial7[0m/kali-rolling 7.1.1+dfsg1-10 amd64
+  Non-parallel vector operations library (SUNDIALS library)
+
+[32mlibsuperlu-dist-dev[0m/kali-rolling 9.2.1+dfsg1-1 amd64
+  Highly distributed solution of sparse linear equations
+
+[32mlibsuperlu-dist-examples[0m/kali-rolling 9.2.1+dfsg1-1 amd64
+  Highly distributed solution of sparse linear equations
+
+[32mlibsuperlu-dist8[0m/kali-rolling 8.2.1+dfsg1-5.1 amd64
+  Highly distributed solution of sparse linear equations
+
+[32mlibsuperlu-dist9[0m/kali-rolling 9.2.1+dfsg1-1 amd64
+  Highly distributed solution of sparse linear equations
+
+[32mlibswish-api-common-perl[0m/kali-rolling 0.04-3 all
+  Perl interface to the SWISH index engine
+
+[32mlibtachyon-dev-common[0m/kali-rolling 0.99~b6+dsx-16 all
+  Parallel/Multiprocessor Ray Tracing Library - development - common material
+
+[32mlibtachyon-mpi-dev[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - development - default MPI flavour
+
+[32mlibtachyon-mpich-0[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - runtime - MPICH flavour
+
+[32mlibtachyon-mpich-0-dev[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - development - MPICH flavour
+
+[32mlibtachyon-mt-0[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - runtime - MT flavour
+
+[32mlibtachyon-mt-0-dev[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - development - MT flavour
+
+[32mlibtachyon-openmpi-0[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - runtime - OpenMPI flavour
+
+[32mlibtachyon-openmpi-0-dev[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - development - OpenMPI flavour
+
+[32mlibtachyon-serial-0[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - runtime - serial flavour
+
+[32mlibtachyon-serial-0-dev[0m/kali-rolling 0.99~b6+dsx-16 amd64
+  Parallel/Multiprocessor Ray Tracing Library - development - serial flavour
+
+[32mlibtaktuk-1-dev[0m/kali-rolling 3.7.8-1 amd64
+  C bindings for taktuk (development files)
+
+[32mlibtaktuk-perl[0m/kali-rolling 3.7.8-1 all
+  Perl bindings for taktuk
+
+[32mlibtaktuk3t64[0m/kali-rolling 3.7.8-1 amd64
+  C bindings for taktuk
+
+[32mlibtaskflow-cpp-dev[0m/kali-rolling 3.9.0+ds-1+b1 amd64
+  Parallel and Heterogeneous Task Programming System for C++ (header files)
+
+[32mlibtasmaniandream8[0m/kali-rolling 8.1-5 amd64
+  Tasmanian module for drawing samples from an arbitrary probability distribution
+
+[32mlibtbb-dev[0m/kali-rolling 2022.3.0-1 amd64
+  parallelism library for C++ - development files
+
+[32mlibtbb-doc[0m/kali-rolling 2022.3.0-1 all
+  parallelism library for C++ - documentation
+
+[32mlibtbb12[0m/kali-rolling 2022.3.0-1 amd64 [upgradable from: 2022.1.0-3]
+  parallelism library for C++ - runtime files
+
+[32mlibtbbbind-2-5[0m/kali-rolling 2022.3.0-1 amd64 [upgradable from: 2022.1.0-3]
+  parallelism library for C++ - runtime files
+
+[32mlibtbbmalloc2[0m/kali-rolling 2022.3.0-1 amd64 [upgradable from: 2022.1.0-3]
+  parallelism helper library for C++ - runtime files
+
+[32mlibtest-sharedfork-perl[0m/kali-rolling 0.35-3 all
+  module to run tests in multiple processes and merge results
+
+[32mlibtest-tempdir-perl[0m/kali-rolling 0.11-2 all
+  Perl module that creates temporary files for testing
+
+[32mlibthread-table-ocaml-dev[0m/kali-rolling 1.0.0-1+b4 amd64
+  lock-free thread-safe integer keyed hash table
+
+[32mlibthrust-dev[0m/kali-rolling 2.5.0-1 all
+  Thrust - Parallel Algorithms Library
+
+[32mlibtrilinos-epetra-16.1[0m/kali-rolling 16.1.0-4 amd64
+  basis package for linear algebra - runtime files
+
+[32mlibtrilinos-epetra-dev[0m/kali-rolling 16.1.0-4 amd64
+  basis package for linear algebra - development files
+
+[32mlibtrilinos-isorropia-16.1[0m/kali-rolling 16.1.0-4 amd64
+  partitioning, load balancing, coloring of sparse matrices - runtime files
+
+[32mlibtrilinos-isorropia-dev[0m/kali-rolling 16.1.0-4 amd64
+  partitioning, load balancing, coloring of sparse matrices - development files
+
+[32mlibtrilinos-kokkos-16.1[0m/kali-rolling 16.1.0-4 amd64
+  Trilinos Kokkos programming model - runtime files
+
+[32mlibtrilinos-kokkos-dev[0m/kali-rolling 16.1.0-4 amd64
+  Trilinos Kokkos programming model - development files
+
+[32mlibtrilinos-kokkos-kernels-16.1[0m/kali-rolling 16.1.0-4 amd64
+  Kokkos local computational kernels - runtime files
+
+[32mlibtrilinos-kokkos-kernels-dev[0m/kali-rolling 16.1.0-4 amd64
+  Kokkos local computational kernels - development files
+
+[32mlibtrilinos-pamgen-16.1[0m/kali-rolling 16.1.0-4 amd64
+  hexahedral and quadrilateral mesh generator - runtime files
+
+[32mlibtrilinos-pamgen-dev[0m/kali-rolling 16.1.0-4 amd64
+  hexahedral and quadrilateral mesh generator - development files
+
+[32mlibtrilinos-pliris-16.1[0m/kali-rolling 16.1.0-4 amd64
+  Trilinos dense solvers package - runtime files
+
+[32mlibtrilinos-pliris-dev[0m/kali-rolling 16.1.0-4 amd64
+  Trilinos dense solvers package - development files
+
+[32mlibtrilinos-zoltan-16.1[0m/kali-rolling 16.1.0-4 amd64
+  parallel dynamic load balancing - runtime files
+
+[32mlibtrilinos-zoltan-dev[0m/kali-rolling 16.1.0-4 amd64
+  parallel dynamic load balancing - development files
+
+[32mlibwavpack-dev[0m/kali-rolling 5.8.1-1 amd64
+  audio codec (lossy and lossless) - development files
+
+[32mlibwavpack1[0m/kali-rolling,now 5.8.1-1 amd64 [installed,automatic]
+  audio codec (lossy and lossless) - library
+
+[32mlibworkflow-dev[0m/kali-rolling 0.11.11-1 amd64
+  Parallel computing and asynchronous web server engine development files
+
+[32mlibworkflow0t64[0m/kali-rolling 0.11.11-1 amd64
+  Parallel computing and asynchronous web server engine
+
+[32mlibxgboost-predictor-java[0m/kali-rolling 0.3.1+dfsg-3 all
+  Java implementation of XGBoost predictor for online prediction tasks
+
+[32mlibxmpi4[0m/kali-rolling 2.2.3b8-14+b2 amd64
+  Graphical user interface for MPI program development
+
+[32mlibxmpi4-dev[0m/kali-rolling 2.2.3b8-14+b2 amd64
+  Graphical user interface for MPI program development
+
+[32mlibzfp-dev[0m/kali-rolling 1.0.1-4+b7 amd64
+  Fixed-Rate Compressed Floating-Point Arrays (Development files)
+
+[32mlibzfp1t64[0m/kali-rolling 1.0.1-4+b7 amd64
+  Fixed-Rate Compressed Floating-Point Arrays
+
+[32mlighter[0m/kali-rolling 1.1.3-1 amd64
+  fast and memory-efficient sequencing error corrector
+
+[32mlinuxcnc-uspace[0m/kali-rolling 1:2.9.7-1 amd64
+  motion controller for CNC machines and robots
+
+[32mlinuxcnc-uspace-dev[0m/kali-rolling 1:2.9.7-1 amd64
+  PC based motion controller for real-time Linux
+
+[32mluma.oled-doc[0m/kali-rolling 3.14.0-1 all
+  doc for library interfacing OLED matrix displays
+
+[32mlxqt-core[0m/kali-rolling 33.2 all
+  Metapackage for the LXQt core
+
+[32mmakeparallel[0m/kali-rolling 1:10.0.0+r36-1.1 amd64
+  Command line tool for communication with the GNU make jobserver
+
+[32mmaria[0m/kali-rolling 1.3.5-6 amd64
+  reachability analyzer for Algebraic System Nets
+
+[32mmbtserver[0m/kali-rolling 0.17-2 amd64
+  Server extensions for the MBT tagger
+
+[32mmcstas-clusterscripts[0m/kali-rolling 3.5+3.5.19+ds5-2 amd64
+  Neutron ray-trace simulation - parallelization scripts
+
+[32mmcxtrace-clusterscripts[0m/kali-rolling 3.5+3.5.19+ds5-2 amd64
+  X-ray ray-trace simulation - parallelization scripts
+
+[32mmdm[0m/kali-rolling 0.1.3-3 amd64
+  Utilities for single-host parallel shell scripting
+
+[32mmedusa[0m/kali-rolling 2.3-3 amd64
+  fast, parallel, modular, login brute-forcer for network services
+
+[32mmeep[0m/kali-rolling 1.29.0-2 amd64
+  software package for FDTD simulation
+
+[32mmeep-mpi-default[0m/kali-rolling 1.29.0-2 amd64
+  software package for FDTD simulation, parallel version
+
+[32mminicondor[0m/kali-rolling 23.9.6+dfsg-2.1+b7 amd64
+  distributed workload management system - single node configuration
+
+[32mmistral-api[0m/kali-rolling 21.0.0-5 all
+  OpenStack Workflow service - API
+
+[32mmistral-common[0m/kali-rolling 21.0.0-5 all
+  OpenStack Workflow service - common files
+
+[32mmistral-engine[0m/kali-rolling 21.0.0-5 all
+  OpenStack Workflow service - Engine
+
+[32mmistral-event-engine[0m/kali-rolling 21.0.0-5 all
+  OpenStack Workflow service - Event Engine
+
+[32mmistral-executor[0m/kali-rolling 21.0.0-5 all
+  OpenStack Workflow service - Executor
+
+[32mmistral-extra[0m/kali-rolling 15.1.0-1 all
+  OpenStack Workflow Service - extra functionalities
+
+[32mmoarvm[0m/kali-rolling 2024.09+dfsg-5 amd64
+  virtual machine for Rakudo Perl 6 and NQP
+
+[32mmoreutils[0m/kali-rolling 0.69-1 amd64
+  additional Unix utilities
+
+[32mmpb[0m/kali-rolling 1.12.0-1 amd64
+  MIT Photonic-Bands
+
+[32mmpb-dev[0m/kali-rolling 1.12.0-1 amd64
+  MIT Photonic-Bands development files
+
+[32mmpb-doc[0m/kali-rolling 1.12.0-1 all
+  MIT Photonic-Bands documentation
+
+[32mmpb-mpi[0m/kali-rolling 1.12.0-1 amd64
+  MIT Photonic-Bands, parallel (mpich) version
+
+[32mmpb-scm[0m/kali-rolling 1.12.0-1 all
+  MIT Photonic-Bands initialisation files
+
+[32mmpgrafic[0m/kali-rolling 0.3.19-1+b5 amd64
+  MPI version of N-body initial conditions grafic package
+
+[32mmpich[0m/kali-rolling 4.3.2-2+b1 amd64
+  Implementation of the MPI Message Passing Interface standard
+
+[32mmpich-doc[0m/kali-rolling 4.3.2-2 all
+  Documentation for MPICH
+
+[32mmplrs[0m/kali-rolling 0.73-4 amd64
+  package to enumerate vertices and extreme rays of a convex polyhedron (parallel binary)
+
+[32mmpop[0m/kali-rolling 1.4.21-1 amd64
+  POP3 mail retriever
+
+[32mmrbayes-mpi[0m/kali-rolling 3.2.7a-7+b1 amd64
+  Bayesian Inference of Phylogeny - mpi version
+
+[32mmurasaki[0m/kali-rolling 1.68.6-16 amd64
+  homology detection tool across multiple large genomes
+
+[32mmurasaki-common[0m/kali-rolling 1.68.6-16 all
+  homology detection tool across multiple large genomes (common files)
+
+[32mmurasaki-mpi[0m/kali-rolling 1.68.6-16 amd64
+  homology detection tool across multiple large genomes (MPI-version)
+
+[32mmusescore[0m/kali-rolling 2.3.2+dfsg4-17 amd64
+  cross-platform multi-lingual music composition and notation, v2
+
+[32mmusescore3[0m/kali-rolling 3.2.3+dfsg2-21 amd64
+  cross-platform multi-lingual music composition and notation, v3
+
+[32mmusic-bin[0m/kali-rolling 1.2.1-0.7 amd64
+  Multi-Simulation Coordinator for MPI -- Utilities
+
+[32mmusic-doc[0m/kali-rolling 1.2.1-0.7 all
+  Multi-Simulation Coordinator for MPI -- Manual
+
+[32mmyrepos[0m/kali-rolling 1.20180726 all
+  tool to manage all your version control repos
+
+[32mnetpipe-lam[0m/kali-rolling 3.7.2-9.1+b1 amd64
+  Network performance tool using LAM MPI
+
+[32mnetpipe-mpich2[0m/kali-rolling 3.7.2-9.1+b1 amd64
+  Network performance tool using MPICH2 MPI
+
+[32mnetpipe-openmpi[0m/kali-rolling 3.7.2-9.1+b1 amd64
+  Network performance tool using OpenMPI
+
+[32mnetselect[0m/kali-rolling 0.3.ds1-31 amd64
+  speed tester for choosing a fast network server
+
+[32mnode-async[0m/kali-rolling 3.2.6+dfsg-3 all
+  functions and patterns for asynchronous code - Node.js
+
+[32mnode-async-each[0m/kali-rolling 1.0.3-3 all
+  async parallel forEach / map function for JavaScript
+
+[32mnode-batch[0m/kali-rolling 0.6.1-4 all
+  batch with concurrency control and progress events - Node.js module
+
+[32mnode-d3-array[0m/kali-rolling 3.2.4+~cs5.2.5-1 all
+  Array manipulation, ordering, searching, summarizing, etc
+
+[32mnode-d3-queue[0m/kali-rolling 3.0.7-13 all
+  Evaluate asynchronous tasks with configurable concurrency
+
+[32mnode-jest-worker[0m/kali-rolling 29.6.2~ds1+~cs73.45.28-9 all
+  Nodejs module for executing heavy tasks under forked processes in parallel
+
+[32mnode-ordered-read-streams[0m/kali-rolling 1.0.1-6 all
+  combines array of streams into one read stream in strict order
+
+[32mnode-parallel-transform[0m/kali-rolling 1.2.0+~1.1.1-1 all
+  Runs transforms in parallel
+
+[32mnode-pend[0m/kali-rolling 1.2.0-7 all
+  simple parallel async callback helper - Node.js module
+
+[32mnode-prismjs[0m/kali-rolling 1.30.0+dfsg+~1.26.5-1 all
+  Lightweight, robust, elegant syntax highlighting
+
+[32mnode-queue-async[0m/kali-rolling 1.0.7-3 all
+  asynchronous helper library for JavaScript - NodeJS
+
+[32mnode-seq[0m/kali-rolling 0.3.5-3 all
+  Chainable asynchronous flow control
+
+[32mnode-step[0m/kali-rolling 1.0.0-1 all
+  simple control-flow library for Node
+
+[32mnode-vows[0m/kali-rolling 0.8.3-8 all
+  asynchronous BDD & continuous integration for Node
+
+[32mnvidia-cuda-dev[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA CUDA development files
+
+[32mnvidia-cuda-gdb[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA CUDA Debugger (GDB)
+
+[32mnvidia-cuda-mps[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA CUDA Multi Process Service (MPS)
+
+[32mnvidia-cuda-toolkit[0m/kali-rolling 12.4.131~12.4.1-5 amd64
+  NVIDIA CUDA development toolkit
+
+[32mnvidia-cuda-toolkit-doc[0m/kali-rolling 12.4.1-5 all
+  NVIDIA CUDA and OpenCL documentation
+
+[32mnvidia-cuda-toolkit-gcc[0m/kali-rolling 12.4.1-5 amd64
+  NVIDIA CUDA development toolkit (GCC compatibility)
+
+[32mnvidia-libopencl1[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA OpenCL ICD Loader library
+
+[32mnvidia-opencl-common[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA OpenCL driver - common files
+
+[32mnvidia-opencl-dev[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA OpenCL development files
+
+[32mnvidia-opencl-icd[0m/kali-rolling 550.163.01-4 amd64
+  NVIDIA OpenCL installable client driver (ICD)
+
+[32mnvidia-profiler[0m/kali-rolling 12.4.127~12.4.1-5 amd64
+  NVIDIA Profiler for CUDA and OpenCL
+
+[32mnvidia-tesla-535-opencl-icd[0m/kali-rolling 535.274.02-1 amd64
+  NVIDIA OpenCL installable client driver (ICD) (Tesla 535 version)
+
+[32mnwchem[0m/kali-rolling 7.3.1-1 all
+  High-performance computational chemistry software (default MPI)
+
+[32mnwchem-data[0m/kali-rolling 7.3.1-1 all
+  High-performance computational chemistry software (data files)
+

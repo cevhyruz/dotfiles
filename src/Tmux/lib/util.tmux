@@ -1,5 +1,10 @@
 # vi:ft=tmux
 
+# Variables
+#
+# Menu options should follow the `@component-state-property` formula for
+# consistent naming. Ex: @menu-session-attached-active.
+
 # set padding depending on '@menu-item-padding' value.
 # @FIXME: expand this without using 'set-option'
 # user options:
@@ -16,6 +21,8 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 
 # show playing song.
 %hidden mpris_title="#(playerctl metadata title)"
+
+%hidden commands="#(tmux show-option command-alias | grep -c '^command-alias\[')"
 
 # wlan0 ssid name.
 %hidden wlan0_ssid="#(iw wlan0 link | grep 'SSID' | awk '{ print $2 }')"
@@ -42,26 +49,161 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 "#{?#{==:#{@month-mode-style},long},%B,}"\
 "-%d"
 
-%hidden _window_status_format=\
-"#{p2:}#I #W#{?#F,#F, }#{p2:}"
 
+
+# " #{?#{m:-,#{window_flags}},#[fg=red],#[fg=red]}#{window_flags}#{p2:}"
+
+
+# %hidden _window_status_format=\
+# "#{p2:}"\
+# "#[push-default #{?#{m:-,#{window_flags}},bg=#{@color_secondary} fg=#{@color-accent},#F}] #{window_name}"\
+# "#{p2:}"
 
 # Show pane mode
-# readonly
-# prefix
-# tree-mode
-# buffer-mode
-# view-mode
-# copy-mode
-%hidden _pane_mode=\
+# normal | readonly | prefix | tree-mode | buffer-mode | view-mode | copy-mode | sync-on
+# clock-mode
+# user options:
+#   @pane-mode-important-style [style]
+#     - style for important modes (readonly|sync-on)
+#   @pane-mode-style [style]
+%hidden pane_modes=\
+"#{?client_prefix, prefix ,#{_message}}"\
+"#{?client_readonly, read-only ,}"\
+"#{?pane_synchronized, sync-on ,}"\
+"#{?pane_in_mode,#{pane_mode},}"\
+"#{?window_zoomed_flag,zoomed,}"
+
+# -------------- 
+# Pane Modes
+# -------------- 
+# 0.) normal
+# 1.) copy-mode
+# 2.) clock-mode
+# 4.) view-mode (run-shell)
+# 3.) tree-mode  (choose-tree)
+# 5.) buffer-mode (choose-buffer)
+# 6.) client-mode (choose-client)
+
+
+# prefix, read-only, sync-on, view-mode, zoomed
+
+# mode first
+# overriden by prefix
+
+
+
+
+# read-only, sync-on, prefix,
+
+# "#{?client_readonly,"\
+# "#[push-default #{@pane-mode-important-style}] read-only #[pop-default default],"\
+
+# "#[push-default #{@pane-mode-important-style}]"\
+# "#{?pane_synchronized, sync-on ,}#[pop-default default]"\
+# "#[push-default #{@pane-mode-style}]#{?client_prefix,"\
+# " prefix ,"\
+# "#{?pane_in_mode,"\
+# " #{pane_mode} ,"\
+# "}}#[pop-default default]}"
+
+# embeddable pane mode style for stateful config status fill
+# eg:
+#  set -g @status-fill "#{pane_mode_bg}"
+%hidden color_mode_bg=\
 "#{?client_readonly,"\
-"#{@fa-lock} readonly,"\
-"#[push-default fg=color203]"\
-"#{?pane_synchronized,sync-on,}#[pop-default default] #{?client_prefix,"\
-"prefix,"\
+"#[push-default #{@color-mode-readonly}] read-only #[pop-default default],"\
+"#[push-default #{@pane-mode-important-style}]"\
+"#{?pane_synchronized, sync-on ,}#[pop-default default]"\
+"#[push-default #{@pane-mode-style}]#{?client_prefix,"\
+" prefix ,"\
 "#{?pane_in_mode,"\
-"#{pane_mode},"\
-"normal}}}"
+" #{pane_mode} ,"\
+"}}#[pop-default default]}"
+
+
+# client key table styles
+#
+%hidden __client_key_table_styles=\
+"#{?#{==:#{client_key_table},layout-mode},layout-activated,"\
+"#{?#{==:#{client_key_table},resize-mode},resize-activated,false}"\
+"}"
+
+
+
+# window status styles
+#
+# Set the status line style for the all windows.
+#
+# options:
+#   @window-status-current-prefix-mode-style [style]
+#     - Set the style for current window when client prefix has been pressed.
+#   @window-status-current-layout-mode-style [style]
+#     - Set the style for current window when layout-mode is activated.
+#
+# 
+%hidden _window_status_styles=\
+"#{?#{!=:#{E:window-status-current-style},default},"\
+"#{?#{==:#{client_key_table},layout-mode},#{E:@window-status-current-layout-mode-style},"\
+"#{?client_prefix,#{E:@window-status-current-prefix-mode-style},#{E:window-status-current-style}}},"\
+"#{E:window-status-style},"\
+"#{E:window-status-style}}"
+
+# window status index
+#
+# Set the status line style for all window's index.
+#
+%hidden _window_status_index_format=\
+"#{?#{==:#{client_key_table},layout-mode},"\
+"#{?#{e|==:#{window_index},#{e|+:#{active_window_index},1}},#[push-default fg=red]>#[pop-default default],}"\
+"#{?#{e|==:#{window_index},#{e|-:#{active_window_index},1}},#[push-default fg=red]<#[pop-default default],}"\
+"#{?#{e|==:#{window_index},#{last_window_index}},#[push-default fg=red]$#[pop-default default],}"\
+"#{?#{e|==:#{window_index},1},#[push-default fg=red]^#[pop-default default],}"\
+"#[push-default #{?client_prefix,fg=#{@color-primary-emphasis},fg=#{@color-primary}}]"\
+"#I#[pop-default default] "\
+","\
+"#[push-default #{?client_prefix,fg=#{@color-primary-emphasis} bold,fg=colour30}]"\
+" #I#[pop-default default] }"\
+
+
+# last, first, next, prev
+
+# if layout-mode {
+#
+#   if index == first { '^' }
+#   if index == last  { '$' }
+#   if index == next  { '>' }
+#   if index == prev  { '<' }
+#
+# } else {
+#   #{window_index}
+# }
+#
+
+# if active index === next index {
+#   display '>'
+# } else {
+#   display window index
+# }
+
+# if active index === previous index {
+#   display '<'
+# } else {
+#   display window index
+# }
+
+
+# "#{?#{e|==:#{window_index},#{e|+:#{active_window_index},1}},>,}"\
+# "#{?#{e|==:#{window_index},#{e|-:#{active_window_index},1}},<,}"\
+
+
+
+# format for window status
+# user options:
+#   @window-status-index-style         [style] 
+#   @window-status-current-index-style [style]
+%hidden _window_status_format=\
+"#{E:_window_status_index_format}#{window_name}"\
+"#{window_flags}#{p1:}" 
 
 
 
@@ -96,9 +238,7 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 "#{T:window-status-format}#[pop-default]#[norange default]"\
 "#{?window_end_flag,,#{window-status-separator}},"\
 "#[range=window|#{window_index} list=focus "\
-"#{?#{!=:#{E:window-status-current-style},default},"\
-"#{E:window-status-current-style},"\
-"#{E:window-status-style}}"\
+"#{E:_window_status_styles}"\
 "#{?#{&&:#{window_last_flag},"\
 "#{!=:#{E:window-status-last-style},default}}, "\
 "#{E:window-status-last-style},}"\
@@ -193,11 +333,11 @@ set-option -gF @_padding "##{#{p#{@menu-item-padding}:}#}"
 "#{e|+:#{?#{e|<:#{selection_end_y},#{selection_start_y}}"\
 ",#{e|-:#{selection_start_y},#{selection_end_y}}"\
 ",#{e|-:#{selection_end_y},#{selection_start_y}}"\
-"},#{selection_active}} line,"\
+"},#{selection_active}} lines,"\
 "#{e|+:#{?#{e|<:#{selection_end_x},#{selection_start_x}}"\
 ",#{e|-:#{selection_start_x},#{selection_end_x}}"\
 ",#{e|-:#{selection_end_x},#{selection_start_x}}"\
-"},#{selection_active}} char}/s,}"
+"},#{selection_active}} char},}"
 
 %hidden foobar=\
 "#{?#{@visual-line},true,false}"
