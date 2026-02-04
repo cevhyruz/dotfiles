@@ -34,8 +34,6 @@ function main() {
     "node_modules/"
     "dist/"
     "bower_components/"
-    # github
-    ".github/"
     # typescript
     "out-tsc/"
     ".angular/"
