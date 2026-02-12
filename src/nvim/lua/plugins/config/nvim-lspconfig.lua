@@ -1,9 +1,11 @@
+-- For a complete list of LSP's see
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+
 local M = {}
 
 M.specs = {
   config = function()
 
-    -- LSP Capabilities for nvim-cmp
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     -- Diagnostics UI
@@ -67,6 +69,9 @@ M.specs = {
     })
 
     vim.lsp.enable("ts_ls")
+
+    -- Emmet
+    vim.lsp.enable("emmet_ls")
 
   end,
 }

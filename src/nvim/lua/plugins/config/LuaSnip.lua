@@ -1,7 +1,10 @@
 local M = {}
 
 M.specs = {
-  dependencies = "rafamadriz/friendly-snippets",
+  dependencies = {
+   "rafamadriz/friendly-snippets",
+   "mattn/emmet-vim",
+  }
   config = function()
     local luasnip = require("luasnip")
     -- Load friendly snippets
