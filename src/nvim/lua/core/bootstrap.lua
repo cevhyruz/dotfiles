@@ -122,7 +122,19 @@ function M:highlight()
     DiagnosticError = { guifg = '#FF5555', guibg = '', bold = false },
     DiagnosticWarn = { guifg = '#F1FA8C', guibg = '', bold = false },
     DiagnosticInfo = { guifg = '#8BE9FD', guibg = '', bold = false },
-    DiagnosticHint = { guifg = 'red', guibg = '', bold = false }
+    DiagnosticHint = { guifg = 'red', guibg = '', bold = false },
+    -- nvim-cmp
+    --
+    -- border
+    CmpBorder = { guifg='#7AA2F7', guibg='', bold = false },
+    Pmenu = { guifg = '#DCD7BA', guibg = '#1E1E2E', bold = false },
+    PmenuSel = { guifg = '#1E1E2E', guibg='#7AA2F7', bold = false },
+    PmenuThumb = { guifg = '', guibg='#7AA2F7', bold = false },
+    -- cmp items
+    CmpItemAbbr = { guifg='#DCD7BA', guibg='', bold = false },
+    CmpItemAbbrMatch = { guifg='#7AA2F7', guibg='', bold = true },
+    CmpItemKind = { guifg='#C678DD', guibg='', bold = false },
+    CmpItemMenu = { guifg='#7E9CD8', guibg='', bold = false },
   }
 
   for name, color in pairs(hi_group) do
