@@ -16,9 +16,6 @@ M.autocmd = { -- {{{1
 
 M.freshinstall = { -- {{{1
   autoclose = true, -- autoclose lazy installer when done.
-  messages = {
-    "[ All done! Enjoy! ]",
-  }
 }
 
 M.g = {

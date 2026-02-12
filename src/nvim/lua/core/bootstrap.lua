@@ -19,7 +19,7 @@ end
 
 local function _echo(message)
   vim.api.nvim_command [[ redraw ]]
-  vim.api.nvim_echo({{ message, "bold"}}, true, {})
+  vim.api.nvim_echo({{ message, "bold" }}, true, {})
 end
 
 function M:lazy(lazypath)
@@ -66,14 +66,19 @@ function M:plugins()
   end
 
   vim.opt.rtp:prepend(lazypath)
+
   require"lazy".setup(
     plugins.setup(),
-    { install = { colorscheme = { "morning", "habamax" } }, }
+    { 
+      install = {
+        colorscheme = { "morning", "habamax" }
+      },
+    }
   )
 
   if freshinstall then
     vim.api.nvim_buf_delete(0, { force = true })
-    _echo(Profile.freshinstall.messages[1])
+    _echo("[ All done! Enjoy! ]")
   end
 end
 
