@@ -1,5 +1,4 @@
 local M = {}
-return M
 
 M.specs = {
   config = function()
