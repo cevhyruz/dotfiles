@@ -8,9 +8,7 @@ local plugname = {
   { "ellisonleao/gruvbox.nvim" },
   {"3rd/image.nvim"},
 
-
   { 'antosha417/nvim-lsp-file-operations' },
-
 
   -- {"preservim/tagbar"},
 
@@ -79,8 +77,5 @@ M.setup = function()
   end
   return specs
 end
-
-
-
 
 return M

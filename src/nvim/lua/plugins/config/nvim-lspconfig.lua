@@ -3,29 +3,11 @@ return M
 
 M.specs = {
   config = function()
-    local lspconfig = require("lspconfig")
 
     -- LSP Capabilities for nvim-cmp
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem = {
-      documentationFormat = { "markdown", "plaintext" },
-      snippetSupport = true,
-      preselectSupport = true,
-      insertReplaceSupport = true,
-      labelDetailsSupport = true,
-      deprecatedSupport = true,
-      commitCharactersSupport = true,
-      tagSupport = { valueSet = { 1 } },
-      resolveSupport = {
-        properties = {
-          "documentation",
-          "detail",
-          "additionalTextEdits",
-        },
-      },
-    }
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-    -- Global diagnostics setup
+    -- Diagnostics UI
     vim.diagnostic.config({
       virtual_text = false,
       signs = true,
@@ -34,14 +16,7 @@ M.specs = {
       severity_sort = true,
     })
 
-    -- show hover on cursor hold
-    -- vim.api.nvim_create_autocmd("CursorHold", {
-    --   callback = function()
-    --     vim.diagnostic.open_float(nil, { focus = false, border = "rounded" })
-    --   end,
-    -- })
-
-    -- Common on_attach function
+    -- on_attach
     local on_attach = function(_, bufnr)
       local opts = { buffer = bufnr, silent = true }
       vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
@@ -52,8 +27,10 @@ M.specs = {
       end, opts)
     end
 
-    -- ✅ Lua LSP Setup
-    lspconfig.lua_ls.setup({
+    ------------------------------------------------------------------
+    -- ✅ Lua LSP
+    ------------------------------------------------------------------
+    vim.lsp.config("lua_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = {
@@ -73,25 +50,25 @@ M.specs = {
       },
     })
 
-    -- ✅ TypeScript LSP Setup (modern)
-    local util = require("lspconfig.util")
+    vim.lsp.enable("lua_ls")
 
-    lspconfig.ts_ls.setup({
-      root_dir = util.root_pattern("tsconfig.base.json", "tsconfig.json", "package.json", ".git", "tsconfig.app.json"),
+    ------------------------------------------------------------------
+    -- ✅ TypeScript LSP
+    ------------------------------------------------------------------
+    vim.lsp.config("ts_ls", {
+      root_markers = {
+        "tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.app.json",
+        "package.json",
+        ".git",
+      },
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- lspconfig.ts_ls.setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
+    vim.lsp.enable("ts_ls")
 
-    -- ✅ Angular LSP Setup (disabled)
-    -- lspconfig.angularls.setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
   end,
 }
 
