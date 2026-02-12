@@ -4,9 +4,6 @@ M.specs = {
   dependencies = "rafamadriz/friendly-snippets",
   config = function()
     local luasnip = require("luasnip")
-
-    print("LuaSnip Config Loaded")
-
     -- Load friendly snippets
     require("luasnip.loaders.from_vscode").lazy_load()
 
