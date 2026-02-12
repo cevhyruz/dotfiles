@@ -8,24 +8,52 @@ if _::command_exists "tig"; then
   test
 fi
 
-# alias t='tmux'
+alias g='command git'
+alias git="g"
 
-alias g='git'
+# status
+alias gss='g status --short --branch --show-stash'
+alias gs='gss'
+alias gsl='g status --long --show-stash'
 
-# add
-alias ga='git add'
-alias gall='git add --all'
-alias gap='git add --patch'
+# log
+alias gl="g log"
+alias glg="gl --decorate --graph --all -$(tput lines) | less"
+alias glga="gl --decorate --graph --all --format=detail"
 
-alias lola="g status -s"
+# fetching
+alias gf='g fetch'
+alias gfo='gf origin'
+alias gfop='gf --prune'
 
-# branching
-alias gbd='git branch --delete'
-alias gbD='git branch --delete --force'
+# staging
+alias ga='g add'
+alias ga.='ga --all; gss'
 
-alias gba='git branch --all'
-alias gbm='git branch --move'
-alias gbt='git branch --track'
+# push
+alias gp='g push'
+alias gpom="g origin master"
 
-# delete a remote branch
-alias gpod="git push origin --delete"
+# pull
+alias gpl='g pull'
+
+# reset (danger)
+alias grs='g reset'
+alias grsh='gr HEAD'
+alias grsh1='gr HEAD~1'
+
+# remote
+alias grv="g remote --verbose"
+
+# branch
+alias gb='g branch'
+alias gbd='gb --delete'
+alias gba='gb --all'
+alias gbvv="gb -vv"
+
+# checkout
+alias gco="g checkout"
+alias gcob="gco -b"
+alias gco-="gco -"
+alias gcom="gco main 2>/dev/null || g checkout master"
+alias gcod="gco develop"

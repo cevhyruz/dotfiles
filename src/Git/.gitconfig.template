@@ -137,9 +137,6 @@
 
   dif = difftool -t nvimdiff
   # s = status --short --branch --show-stash --ahead-behind --renames
-  br = branch --all
-  lg = log --decorate --graph --all -10
-  lga = log --decorate --graph --all --format=detail
   contrib = shortlog --summary --numbered
 
   # amend = "!f() { \
