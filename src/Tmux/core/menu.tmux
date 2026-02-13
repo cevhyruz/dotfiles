@@ -205,12 +205,11 @@ set -gF @foobar "#{E:@testigo}"
 %hidden menu_item_4="#{E:pad} New named session#{E:pad}"
 %hidden menu_item_5="#{E:pad}  Open with Vifm#{E:pad}"
 
-
 set-option -ag command-alias menubar=\
 'setenv -h name "Main";\
 display-menu -T"#{E:Tab_bar}" -xW -yW \
   "-" "" ""\
-  "#[push-default #{@menu-item-icon-style}] #[default]  New Window " "N" "neww"\
+  "#[push-default #{@menu-item-icon-style}] #[default]  New Window " "N" "command-prompt -p \"(new-window -c)\" { neww -c '%%' } "\
   "#[push-default #{@menu-item-icon-style}]#[default]   New Window After #{window_name}" "n" ""\
   "#[push-default #{@menu-item-icon-style}]#[default]   New Window Before" "b" ""\
   ""\
@@ -311,6 +310,8 @@ display-menu -T"#{E:Tab_bar}" -xW -yW \
   "Window Active Session/s  #[#{@menu-item-right-style}]#{window_active_sessions} (#{window_active_sessions_list})" "" ""\
   "Window Active Client/s   #[#{@menu-item-right-style}]#{window_active_clients} (#{window_active_clients_list})" "" ""\
   "Window Last Activity     #[#{@menu-item-right-style}]#{t:window_activity}" "" ""\
+  "-" "" ""\
+  "Rename Window" "r" "command-prompt -I'#W' { renamew -- '%%' } "\
   "-" "" ""\
   "#{E:session_item_1}" "" ""\
   "#{E:session_item_2}" "" ""\
