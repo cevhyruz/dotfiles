@@ -48,6 +48,9 @@ nvim_cmp.specs = {
         require('luasnip').lsp_expand(args.body)
       end,
     },
+    experimental = {
+      ghost_text = true
+    },
     window = {
       completion = cmp.config.window.bordered({
         border = "rounded"
