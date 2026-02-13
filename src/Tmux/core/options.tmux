@@ -34,7 +34,7 @@ set-option -g mouse on
 set-option -g repeat-time 4000
 set-option -g set-titles on
 
-set-option -g monitor-activity on
+set-option -g monitor-activity off
 
 set-option -g status-interval 1
 set-option -g status-keys vi
@@ -42,7 +42,7 @@ set-window-option -g mode-keys vi
 
 set-option -g status-position top
 
-set-option -g visual-activity on
+set-option -g visual-activity off
 set-option -g visual-bell off
 set-option -g visual-silence off
 set-option -g word-separators '-_@'
