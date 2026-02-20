@@ -38,7 +38,7 @@ function main() {
     "out-tsc/"
     ".angular/"
     ".git/"
-    "vendors/"
+    # "vendors/"
     ".vscode/" )
 
   local -ar __FZF_OPTS=(
