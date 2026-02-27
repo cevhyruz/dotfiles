@@ -6,7 +6,10 @@ local plugname = {
   -- core plugins
   { "tomasiser/vim-code-dark" },
   { "ellisonleao/gruvbox.nvim" },
-  {"3rd/image.nvim"},
+  { "3rd/image.nvim" },
+
+  -- Notes
+  { "obsidian-nvim/obsidian.nvim" },
 
   { 'antosha417/nvim-lsp-file-operations' },
 
@@ -68,7 +71,6 @@ M.setup = function()
   local specs = {}
   for key, plugin in pairs(plugname) do
   local config = _load_config(plugname[key][1])
-
     local plugspecs = vim.tbl_deep_extend("keep",
       plugin,
       config.specs or {}

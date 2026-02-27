@@ -132,6 +132,9 @@ display-menu -T"#{E:menu_title}" -xC -yC \
 # ---------
 set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
 
+# Open my notes
+set -ag command-alias note="display-popup -EE -d \"~/Documents/notes\" \"find -maxdepth 1 -type f -exec basename {} ';' | fzf | xargs -r \"\$EDITOR\" "
+
 # ---------
 # window {{{1
 # ---------
