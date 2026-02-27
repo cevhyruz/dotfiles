@@ -132,10 +132,14 @@ display-menu -T"#{E:menu_title}" -xC -yC \
 # ---------
 set -ag command-alias popup="popup -EE -d '#{pane_current_path}'"
 
-# Open my notes
-set -ag command-alias note="display-popup -EE -d \"~/Documents/notes\" \"find -maxdepth 1 -type f -exec basename {} ';' | fzf | xargs -r \"\$EDITOR\" "
+# Open my notes sorted by last edited
+set -ag command-alias note=\
+"display-popup -EE -d \"~/Documents/notes\" \"find -maxdepth 1 -type f -printf '%T@ %f\\n' | sort -nr | cut -d' ' -f2- | fzf | xargs -r \"\$EDITOR\" "
 
-# ---------
+
+set -ag command-alias tig="display-popup -EE -d '#{pane_current_path}' \"tig\""
+
+# --------j
 # window {{{1
 # ---------
 # new window
@@ -144,6 +148,7 @@ set -ag command-alias neww="neww -c '#{pane_current_path}'"
 # rename current window
 set -ag command-alias rename-current-window=\
 'display-popup -BE -xW -yW -h7 -w78 "whiptail --inputbox \"Rename current window to : \" 7 78 #{window_name}"; send-keys "\C-c"'
+
 
 
 set-option -g @message-log "";

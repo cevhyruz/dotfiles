@@ -30,57 +30,6 @@
 #
 # styles and formats do not have properties
 
-# Properties
-# style
-# format
-#
-# padding
-# separator
-
-
-# buffer,
-# client,
-# tree
-# history
-# prompt
-# mode
-# menu (added by me)
-# command
-# pop-up
-# pane
-# window
-# session
-# server
-# key
-# layout
-# shell
-# environment
-# hooks
-# message
-# options
-
-
-# StatusBar
-# Toggle Status Bar Visibility
-# Add New Status Bar
-
-
-# @tree-session-attached-format
-# @tree-session-attached-style
-# @tree-session-attached-style
-
-# Menu-menuitem-padding
-
-# style
-# format
-
-# style configuration
-
-
-#
-
-
-
 
 # -----------
 # Menu Items
@@ -158,8 +107,8 @@ set -g @icon-disabled-style     "fg=colour235,bg=colour233"
 
 
 
-set -g @tab-server-menu-item-1-label   "  Toggle status bar visibility"
-set -g @tab-server-menu-item-1-command "set status"
+set -g @tab-server-menu-item-1-label   "  Command tig"
+set -g @tab-server-menu-item-1-command "tig"
 
 set -g @tab-server-menu-item-2 "label two"
 set -g @tab-server-menu-item-3 "label three"
@@ -168,8 +117,6 @@ set -g @tab-server-menu-item-3 "label three"
 # [/] double expansion
 # [/] dynamic expansion
 # [x] iteration expansion
-
-
 
 
 %hidden menu_index=0
@@ -210,7 +157,7 @@ set-option -ag command-alias menubar=\
 display-menu -T"#{E:Tab_bar}" -xW -yW \
   "-" "" ""\
   "#[push-default #{@menu-item-icon-style}] #[default]  New Window " "N" "command-prompt -p \"(new-window -c)\" { neww -c '%%' } "\
-  "#[push-default #{@menu-item-icon-style}]#[default]   New Window After #{window_name}" "n" ""\
+  "#[push-default #{@menu-item-icon-style}]#[default]   Browse and Open Notes" "n" "note"\
   "#[push-default #{@menu-item-icon-style}]#[default]   New Window Before" "b" ""\
   ""\
   "#[push-default #{@menu-item-icon-style}]#[default fg=colour203]   Kill Current Window #[default align=right fg=colour6] #{window_name}" "" ""\
@@ -218,7 +165,7 @@ display-menu -T"#{E:Tab_bar}" -xW -yW \
   "#[push-default #{@menu-item-icon-style}] #[default]  Move Window To Right      #[default fg=colour6 align=right] " ">" ""\
   "#[push-default #{@menu-item-icon-style}] #[default]  Move Window To Left      #[fg=colour6]#{}" "<" ""\
   ""\
-  "#[push-default #{@menu-item-icon-style}] #[default]#{E:@tab-server-menu-item-1-label}" "t" "set status"\
+  "#[push-default #{@menu-item-icon-style}] #[default]#{E:@tab-server-menu-item-1-label}" "t" "tig"\
   "#[push-default #{@menu-item-icon-style}]#[default] #{E:menu_item_4}" "" ""\
   "#[push-default #{@menu-item-icon-style}] #[pop-default default]  Show/Hide All Statusbar   #[push-default align=right fg=colour6] #[pop-default default]" "h" "set status"\
   "-" "" ""\
@@ -265,9 +212,10 @@ set-option -ag command-alias serverbar=\
 'setenv -h name "Server";\
 display-menu -T"#{E:Tab_bar}" -xW -yW \
   "-" "" ""\
-  "-    Session Name               #[fg=colour6]#S" "" ""\
-  "-    Session Path               #[fg=colour6]#{session_path}" "" ""\
-  "-    Session Windows            #[fg=colour6]#{session_windows}" "" ""\
+  "-Recently" "" ""\
+  "   Session Name               #[fg=colour6 reverse]#S" "" ""\
+  "   Session Path               #[fg=colour6]#{session_path}" "" ""\
+  "   Session Windows            #[fg=colour6]#{session_windows}" "" ""\
   "-" "" ""\
   "#{E:server_item_1}" "" "select-pane -e"\
   "#{E:menu_item_4}" "" ""\

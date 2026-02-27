@@ -71,7 +71,7 @@ set -g menu-selected-style       "bg=colour14,fg=colour234"
 set -g @menu-item-left-style     ""
 set -g @menu-item-right-style    "fg=colour202"
 set -g @menu-item-icon-style     "fg=colour239"
-set -g menu-border-style         "bg=colour234"
+set -g menu-border-style         "bg=colour234, fg=colour236"
 set -g menu-border-lines         "double"
 
 
@@ -166,7 +166,7 @@ set -g  status-left                  " #[push-default] #[pop-default default]
 # Status right
 # set -g  status-right-style            "fg=#{@color-primary-subtle}"
 set -g  status-right                 "#{@message-log}  "
-# set -agF status-right                 "#[push-default fg=colour45]#{pane_modes} #[] │ "
+set -agF status-right                 "#[push-default fg=colour45]#{pane_modes} #[] │ "
 set -agF status-right                 "#{ind_wlan} "
 set -agF status-right                 "#{sound} │"
 # set -agF status-right                 "#{win_drive}  │ "
