@@ -96,7 +96,7 @@ set -g @color-mode-readonly "red"
 
 # status
 set -g status                        on
-set -g status-position               bottom
+set -g status-position               top
 set -g status-style                  "bg=colour0,fg=white"
 set -g status-bg                     "#212631"
 set -g status-fg                     "white"
