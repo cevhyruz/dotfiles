@@ -7,6 +7,10 @@
 # disable mailcheck.
 unset MAILCHECK
 
+# IDEA:
+# create small history file for every command (eg: git, fzf);
+# for larger but not resource consuming history tracking
+#
 # append current sessions history to the history file.
 # PROMPT_COMMAND='history -a;'
 
