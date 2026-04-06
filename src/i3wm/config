@@ -2,6 +2,7 @@
 # i3 config file (v4.22)
 # see https://i3wm.org/docs/userguide.html for a complete reference!
 
+
 set $i3wm_home ~/Projects/dotfiles/src/i3wm
 
 # start polybar
@@ -17,13 +18,15 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 
 # wallpaper
-# exec --no-startup-id feh --bg-scale ~/Downloads/mountain.jpg
+exec --no-startup-id feh --bg-scale ~/Pictures/mountain.jpg
 
-# just a black desktop background
-# exec --no-startup-id feh --image-bg black
+font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+font pango:JetBrainsMono 11
+font pango:DejaVu Sans Mono, Terminus Bold Semi-Condensed 12
+font pango:Terminus 12px
 
-exec_always --no-startup-id xsetroot -solid "#343434"
-
+# set a solid color background instead of an image
+# exec_always --no-startup-id xsetroot -solid "#FFF"
 
 # Note this will disable --bg-color in feh
 exec --no-startup-id mons -s
@@ -40,16 +43,17 @@ for_window [class="figma"] focus
 #   dimensions:    1366x768 pixels (361x203 millimeters)
 #
 # border indicator
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 5
 
 # gaps (with 1 polybar, and a damaged bottom screen)
 # gaps top 35
 
+# gaps inner 10
+
 gaps inner 10
-gaps outer 5
+gaps outer 10
 
-gaps bottom 70
-
+gaps bottom 80
 
 # map the corners, considers the damaged part of my monitor.
 # this will be used for better tiling later.
@@ -118,6 +122,8 @@ set $float_large  --geometry 90x40
 
 # floating gnome-terminal
 set $floatterm    --no-startup-id gnome-terminal --title floating_term
+
+bindsym $mod+a focus parent
 
 # focus, movement and resize directions
 set $left  h
