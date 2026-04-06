@@ -13,20 +13,28 @@ fuzzy-match = false
 
 label-mode = %mode%
 label-mode-padding = 2
-label-mode-background = ${colors.alert}
+label-mode-background = ${colors.primary}
+label-mode-foreground = ${colors.alert}
 
-abel-focused = %name%
+show-scratchpad = true
+
+# Define how it looks
+label-scratchpad = 
+; label-scratchpad-padding = 2
+; label-scratchpad-foreground = #fba922
+; label-scratchpad-background = #3f3f3f
+
+label-focused = %name%
 label-focused-background = ${colors.background}
 label-focused-underline = ${colors.primary}
-label-focused-padding = 1
+label-focused-padding = 2
 
 ;label-unfocused = %index%: %name%
-label-unfocused = "%name%"
-label-unfocused-padding = 1
+label-unfocused = %name%
+label-unfocused-padding = 2
 
 ;label-urgent = %index%: %name%
 label-urgent = %name%
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 1
-
 

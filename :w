@@ -3,45 +3,20 @@
 # start dmenu (a program launcher)
 # bindsym $mod+d exec --no-startup-id dmenu_run
 
+# start rofi
+bindsym $mod+d exec --no-startup-id rofi -show combi -run-command "i3-msg exec '{cmd}'" -show-icons
 
-# this is working
-# bindsym $mod+f exec --no-startup-id rofi -show filebrowser
-
-# show all windows
-bindsym $mod+w exec --no-startup-id rofi -show window
-
-
-set $floating_term_small --no-startup-id st -c 'float--center' -e bash -c
-
-#===================================
-
-
-# rofi (safe fallback)
-bindsym $mod+f exec --no-startup-id rofi -show combi -run-command "i3-msg exec '{cmd}'"
-
-# [/] Working d-menu
-bindsym $mod+d exec $floating_term_small "~/Projects/dotfiles/src/i3wm/bin/launcher.bash"
-
-
-#===================================
-# open my notes
-bindsym $mod+Shift+n exec $floating_term_small "~/Projects/dotfiles/src/i3wm/bin/notes-launcher.bash"
-
+# fzf as dmenu
+# bindsym $mod+d exec $floatterm $float_small --execute ~/Projects/dotfiles/src/i3wm/bin/launcher.bash
 
 # enter fullscreen mode for the focused container
-bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
-# the classic alt+tab behavior
+# the native alt+tab behavior
 bindsym $mod+Tab workspace back_and_forth
-
-set $layout_mode "layout: j=next k=prev Esc=exit"
-
-# toggling layout
-bindsym $mod+t layout toggle stacking tabbed
-bindsym $mod+e layout toggle split
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -61,6 +36,12 @@ bindsym $mod+r mode "resize"
 bindsym $mod+g mode "toggle gaps"
 bindsym $mod+m mode "move window"
 bindsym $mod+s mode "scroll"
+
+# default mode esc keys (does nothing unless you are in a mode)
+# bindsym Return mode "default"
+# bindsym Escape mode "default"
+# bindsym q      mode "default"
+# bindsym ctrl+c mode "default"
 
 bindsym $mod+1  $switch $ws1
 bindsym $mod+2  $switch $ws2
@@ -112,14 +93,9 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 
+set $exitmsg You pressed the exit shortcut. Do you really want to exit i3?
+
 # exit i3 (logs you out of your X session)
-# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Quit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m '$exitmsg' -B 'Yes, exit i3' 'i3-msg exit'"
 
-set $exit_mode exit: [e] confirm, [Escape] cancel
 
-bindsym $mod+Shift+e mode "$exit_mode"
-
-mode "$exit_mode" {
-  bindsym e exec i3-msg exit
-  bindsym Escape mode "default"
-}

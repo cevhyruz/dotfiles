@@ -81,6 +81,18 @@ M.specs = {
     -- Emmet
     vim.lsp.enable("emmet_ls")
 
+    vim.lsp.config("cssls", {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        css = { validate = true },
+        scss = { validate = true },
+        less = { validate = true },
+      },
+    })
+
+    vim.lsp.enable("cssls")
+
   end,
 }
 

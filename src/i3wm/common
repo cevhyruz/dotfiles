@@ -1,0 +1,8 @@
+# vi:ft=i3config
+
+# these keys does nothing unless we are in a mode,
+# which resets the mode back to default.
+bindsym Return mode "default"
+bindsym Escape mode "default"
+bindsym q      mode "default"
+bindsym ctrl+c mode "default"

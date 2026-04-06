@@ -1,0 +1,8 @@
+# vim: set ft=dosini :
+
+[module/scratchpad]
+type = custom/script
+exec = ~/Projects/dotfiles/src/polybar/bin/scratchpad.bash
+format-foreground = #fba922
+click-left = i3-msg 'scratchpad show'
+tail = true

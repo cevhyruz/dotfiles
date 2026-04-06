@@ -259,7 +259,7 @@ display-menu -T"#{E:Tab_bar}" -xW -yW \
   "Window Active Client/s   #[#{@menu-item-right-style}]#{window_active_clients} (#{window_active_clients_list})" "" ""\
   "Window Last Activity     #[#{@menu-item-right-style}]#{t:window_activity}" "" ""\
   "-" "" ""\
-  "Rename Window" "r" "command-prompt -I\"#{current_path}\" { renamew -- '%%' } "\
+  "Rename Window" "r" "command-prompt -I\"#{b:pane_current_path}\" { renamew -- '%%' } "\
   "-" "" ""\
   "#{E:session_item_1}" "" ""\
   "#{E:session_item_2}" "" ""\
@@ -272,6 +272,7 @@ display-menu -T"#{E:Tab_bar}" -xW -yW \
   "#[push-default fg=colour14 bold] Next Menu #[align=right] Pane" "K" panetab \
   "#[push-default] Prev Menu " "J" serverbar \
 '
+
 
 # -----------------
 #  Tab 4 (Session) {{{1

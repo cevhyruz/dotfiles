@@ -3,7 +3,7 @@
 [module/pulseaudio]
 type = internal/pulseaudio
 
-format-volume-prefix = "VOL "
+format-volume-prefix = "  "
 format-volume-prefix-foreground = ${colors.primary}
 format-volume = <label-volume>
 

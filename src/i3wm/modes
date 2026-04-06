@@ -4,26 +4,31 @@
 mode "adjust volume" {
   set $refresh_i3status killall -SIGUSR1 i3status
 
-  set $volUp      XF86AudioRaiseVolume
-  set $volDown    XF86AudioLowerVolume
-  set $volMute    XF86AudioMute
-  set $volMicMute XF86AudioMicMute
-
   set $volume  pactl set-sink-volume @DEFAULT_SINK@
   set $mute    pactl set-sink-mute   @DEFAULT_SINK@   toggle
   set $micMute pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
+  # adjustment
   bindsym $up         exec --no-startup-id $volume +2% && $refresh_i3status
   bindsym $down       exec --no-startup-id $volume -2% && $refresh_i3status
+  
+  # faster volumn adjustment
   bindsym Shift+$up   exec --no-startup-id $volume +4% && $refresh_i3status
   bindsym Shift+$down exec --no-startup-id $volume -4% && $refresh_i3status
 
+  # mute
   bindsym m mode "default" exec --no-startup-id $mute && $refresh_i3status
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-  bindsym q      mode "default"
-  bindsym ctrl+c mode "default"
+  # toggle mode
+  bindsym $mod+v mode "default"
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
 }
 
 # move window to a workspace and toggle focus
@@ -39,26 +44,64 @@ mode "move window" {
   bindsym  9 mode "default" $move $ws9  $switch $ws9
   bindsym 10 mode "default" $move $ws10 $switch $ws10
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-  bindsym q      mode "default"
-  bindsym ctrl+c mode "default"
+  # toggle mode
+  bindsym $mod+m mode "default"
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
 }
 
 # split window orientation
 mode "orientation" {
-  bindsym v split v mode "default" exec --no-startup-id dmenu_run floating
-  bindsym h split h mode "default" exec --no-startup-id dmenu_run
-  bindsym f split h mode "default" exec --no-startup-id dmenu_run
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-  bindsym q      mode "default"
-  bindsym ctrl+c mode "default"
+  bindsym v split v mode "default"
+  bindsym h split h mode "default"
+  bindsym f split h mode "default"
+
+  # toggle mode
+  bindsym $mod+o mode "default"
+
+
+  # escape mode
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
 }
+
+
+# scrolling 
+  # TODO: add scroll to bottom/top
+mode "scroll" {
+  bindsym j exec --no-startup-id xdotool click 5
+  bindsym k exec --no-startup-id xdotool click 4
+
+  bindsym $mod+Tab mode "default"; workspace back_and_forth
+
+  # toggle mode
+  bindsym $mod+s mode "default"
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
+}
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
+
+  bindsym $mod+space mode "resize > float"
+
   # hjkl
   bindsym $left  resize shrink width 2 px or 2 ppt
   bindsym $down  resize shrink height 2 px or 2 ppt
@@ -71,20 +114,47 @@ mode "resize" {
   bindsym Right resize grow width 10 px or 10 ppt
 
   # quit mode
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-  bindsym q      mode "default"
-  bindsym ctrl+c mode "default"
+  bindsym $mod+r mode "default"
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
+}
+
+# resize floats
+mode "resize > float" {
+  # cycle through predefined sizes
+  bindsym Shift+k exec --no-startup-id "~/Projects/dotfiles/src/i3wm/bin/window_resizer.bash 'up'"
+  bindsym Shift+j exec --no-startup-id "~/Projects/dotfiles/src/i3wm/bin/window_resizer.bash 'down'"
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
 }
 
 # toggle gaps
 mode "toggle gaps" {
-  bindsym $up         mode "default" gaps inner current set 10; gaps outer current set 0
-  bindsym Shift+$up   mode "default" gaps inner current set 10; gaps outer current set 40
-  bindsym Shift+$down mode "default" gaps inner current set 0; gaps outer current set 0
+  bindsym $up         gaps inner current set 10; gaps outer current set 50
+  bindsym $down       gaps inner current set 5; gaps outer current set 0
+  bindsym Shift+$up   gaps inner current set 10; gaps outer current set 40
+  bindsym Shift+$down gaps inner current set 0; gaps outer current set 0
 
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-  bindsym q      mode "default"
-  bindsym ctrl+c mode "default"
+  # toggle mode
+  bindsym $mod+g mode "default" 
+
+  # escape mode
+  bindsym Return           mode "default"
+  bindsym ctrl+m           mode "default"
+  bindsym Escape           mode "default"
+  bindsym q                mode "default"
+  bindsym ctrl+c           mode "default"
+  bindsym ctrl+bracketleft mode "default"
 }

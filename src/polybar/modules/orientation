@@ -1,0 +1,6 @@
+# vim: set ft=dosini :
+
+[module/orientation]
+type = custom/script
+exec = ~/Projects/dotfiles/src/i3wm/bin/orientation.bash
+tail = true

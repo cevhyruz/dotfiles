@@ -19,14 +19,18 @@ alias scriptinfo="grep -Eow 'function[[:space:]]+[[:alnum:]_]+'"
 alias ln="ln --interactive "
 
 # print functions declaration in a script.
-# usage: /path/where/file/is.file | scriptinfo
+# usage: scriptinfo /path/where/file/is.file
 alias scriptinfo="grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)'"
 
-# navigation that works anywhere.
-alias home='cd ${HOME}'
+# quick navigation that works anywhere.
+alias home="cd ${HOME}"
 alias etc="cd /etc"
-alias docs="cd ~/Documents"
-alias dl="cd ~/Downloads"
+alias docs="cd ${HOME}/Documents"
+alias dl="cd ${HOME}/Downloads"
+# custom directory quick navigation
+alias notes="cd notes"
+alias projects="cd ${HOME}/Projects"
+alias cloned='cd projects/cloned-repo'
 
 # reload current shell session.
 alias reload='exec "${SHELL}"'

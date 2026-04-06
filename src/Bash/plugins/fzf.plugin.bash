@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
 
-# FZF Plugin for Bash
+# FZF Plugin for bash shell
 # Sensible settings for FZF
 #
 # Globals:
@@ -13,7 +13,6 @@
 #   _::is_installed "fzf" "fzf" || return
 # fi
 
-
 function __preview() {
   local filetype="$1"
 
@@ -22,12 +21,10 @@ function __preview() {
   else
     batcat --style=numbers --color=always --line-range :500 "$1"
   fi
-
 }
 
 function main() {
   export -f __preview
-
 
   # TODO!: auto detect?
   local -ar __FZF_IGNORED_DIRS=(
@@ -42,30 +39,35 @@ function main() {
     ".vscode/" )
 
   local -ar __FZF_OPTS=(
-    "--ansi"
+
+    # common options
     "--bind='ctrl-e:preview-down+preview-down'"
     "--bind='ctrl-y:preview-up+preview-up'"
     "--bind='ctrl-space:accept'"
-    #"--bind='ctrl-o:clear-selection'"
     "--bind='ctrl-s:toggle-sort'"
-    "--bind='^:beginning-of-line'"
     "--bind='ctrl-/:toggle-preview'"
+    "--bind='^:beginning-of-line'"
     "--bind='?:jump-accept'"
+    "--scrollbar='▉'"
+
+    "--ansi"
     "--multi"
+    "--prompt=' ~/Projects/dotfiles: '"
     "--pointer=' '"
-    #"--prompt=' ~/Projects/dotfiles: '"
     "--height=25"
     "--marker='✸ '"
-    "--separator=''"
+    "--separator='-'"
     "--no-bold"
-    #"--border-label='│ Find files │'"
     "--border=none"
     "--layout=reverse"
     "--preview-window=60%:hidden:border-thinblock"
-    # "--preview='__preview {}'"
     "--preview='batcat --style=numbers --color=always --line-range :500 {}'"
-#    "--info='hidden'"
-    "--scrollbar='▉'"
+    "--border-label='│ Find files │'"
+
+    #"--bind='ctrl-o:clear-selection'"
+    # "--preview='__preview {}'"
+    # "--info='hidden'"
+
     "--header='========================================================================' ")
 
   local bg="#1E1E1E"
@@ -105,11 +107,13 @@ function main() {
   cleanup
 }
 
+
 function __set_fzf() {
   local preffered_command="$1"
-  local ignored_dirs
-  local fzf_command
+  local ignored_dirs fzf_command
 
+  # TODO: configure this as separate plugins
+  # instead of configuring here
   case "${preffered_command:-find}" in
     fd) __set_fzf_as_fdfind;;
     ag) __set_fzf_as_ag ;;

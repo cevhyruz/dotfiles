@@ -4,7 +4,9 @@
 
 set $i3wm_home ~/Projects/dotfiles/src/i3wm
 
+# start polybar
 exec_always --no-startup-id ~/Projects/dotfiles/src/i3wm/bin/launch_polybar.bash
+
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
@@ -14,28 +16,91 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-
 # wallpaper
-exec --no-startup-id feh --bg-scale ~/Downloads/mountain.jpg
+# exec --no-startup-id feh --bg-scale ~/Downloads/mountain.jpg
+
+# just a black desktop background
+# exec --no-startup-id feh --image-bg black
+
+exec_always --no-startup-id xsetroot -solid "#343434"
 
 
+# Note this will disable --bg-color in feh
 exec --no-startup-id mons -s
 exec --no-startup-id picom -b
 
 
-# -- general window properties
+# make sure figma is always focus, in preparation for scroll
+for_window [class="figma"] focus
+
+
+# Windows config for my Asus Monitor with cracked bottom part
+#
+#   $: xdpyinfo | grep dimension
+#   dimensions:    1366x768 pixels (361x203 millimeters)
+#
+# border indicator
 for_window [class="^.*"] border pixel 2
-gaps inner 20
-gaps outer 0
+
+# gaps (with 1 polybar, and a damaged bottom screen)
+# gaps top 35
+
+gaps inner 10
+gaps outer 5
+
+gaps bottom 70
 
 
+# map the corners, considers the damaged part of my monitor.
+# this will be used for better tiling later.
+set $XStart 0px
+set $XEnd   684px
+set $YStart 35px
+set $YEnd   368px
 
-# floating / drowndown window
-for_window [title="floating_term"] floating enable
-for_window [title="floating_term"] resize set 625 400
-for_window [title="floating_term"] move scratchpad
+# predetermined window sizes
+set $window-sm resize set width 
 
-bindsym $mod+u [title="floating_term"] scratchpad show [title="floating_term"] move position center
+# left boundary 1364px -  2 general window border
+# bottom boundary 697px - including the 35px from polybar
+for_window [class="^float"] floating enable, border pixel 5
+for_window [class="^float"] resize set width 682px height 339px
+#
+# Float Sizes
+for_window [class="^float--xxs"]  resize set width 350px height 140px
+for_window [class="^float--xs"]   resize set width 450px height 220px
+for_window [class="^float--sm"]   resize set width 682px height 339px
+for_window [class="^float--md"]   resize set width 910px height 480px
+for_window [class="^float--lg"]   resize set width 1160px height 570px
+for_window [class="^float--xl"]   resize set width 1326px height 630px
+for_window [class="^float--full"] resize set width 1364px height 662px
+#
+# Float Position (x, y)
+for_window [class="float--xxs--center"]   move position 510px 303px
+for_window [class="float--xs--center"]   move position 458px 260px
+for_window [class="float--sm--center"]   move position 341px 201px
+for_window [class="float--md--center"]   move position 227px 125px
+for_window [class="float--lg--center"]   move position 103px 84px
+for_window [class="float--xl--center"]   move position 21px 55px
+for_window [class="float--full--center"]   move position 0px 35px
+#
+# snap
+
+for_window [class="^float--topleft"]  move position 0px 35px
+for_window [class="^float--topright"] move position 684px 35px
+for_window [class="^float--botleft"]  move position 0px 368px
+for_window [class="^float--botright"]  move position 684px 368px
+# #
+# #
+# for_window [class="^float--bottom"] move position 0px 298px
+# for_window [class="float--bottom--sm"] resize set 225px 400px
+# for_window [class="float--bottom--md"] resize set 625px 400px
+
+# size: small, medium, large
+# position: topleft, topcenter, topright, center, bottomleft, bottomcenter, bottomright
+
+bindsym $mod+i move scratchpad
+bindsym $mod+shift+i scratchpad show
 
 
 set $mod Mod1
