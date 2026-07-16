@@ -1,11 +1,27 @@
 # vim: set ft=dosini :
 
+; [module/date]
+; type = internal/date
+; interval = 1
+;
+; date = %H:%M
+; date-alt = %Y-%m-%d %H:%M:%S
+;
+; label =   %date%
+; label-foreground = ${colors.primary}
+
 [module/date]
 type = internal/date
-interval = 1
+interval = 5
 
-date = %H:%M
-date-alt = %Y-%m-%d %H:%M:%S
+date =
+date-alt = " %Y-%m-%d"
 
-label =   %date%
-label-foreground = ${colors.primary}
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+
+label = %date% %time%

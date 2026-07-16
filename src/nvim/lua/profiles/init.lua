@@ -19,7 +19,7 @@ M.freshinstall = { -- {{{1
 }
 
 M.g = {
-  mapleader = ",",
+  mapleader = "\\",
   scrollspeed = 3,  -- mouse and keyboard scrollspeed
   tabspace = 2,
 }

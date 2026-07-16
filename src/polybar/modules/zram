@@ -1,0 +1,9 @@
+# vim: set ft=dosini :
+
+[module/zram]
+type = custom/script
+exec = awk '$1=="/dev/zram0" {printf " %s", $4}' /proc/swaps
+interval = 5
+format-prefix = "󰾆 zRAM"
+format-prefix-foreground = ${colors.primary}
+label = %output%

@@ -1,6 +1,6 @@
 # vi:ft=tmux fdm=marker
 #
-# 3-tab menu using tmux 'display-popup' command
+# 3-tab menu using tmux 'display-menu' command
 #
 #  ┌──│ Server │ Session | Window | Pane │──┐
 #  │                                        │
@@ -156,7 +156,7 @@ set-option -ag command-alias menubar=\
 'setenv -h name "Main";\
 display-menu -T"#{E:Tab_bar}" -xW -yW \
   "-" "" ""\
-  "#[push-default #{@menu-item-icon-style}] #[default]  New Window " "N" "command-prompt -p \"(new-window -c)\" { neww -c '%%' } "\
+  "#[push-default #{@menu-item-icon-style}] #[default]  New Window " "N" "command-prompt -p \"(New Window)\" { neww -c '%%' } "\
   "#[push-default #{@menu-item-icon-style}]#[default]   Browse and Open Notes" "n" "note"\
   "#[push-default #{@menu-item-icon-style}]#[default]   New Window Before" "b" ""\
   ""\
@@ -282,7 +282,7 @@ display-menu -T"#{E:Tab_bar}" -xW -yW \
 %hidden session_item_1="#{E:pad}Session keybindings#{E:pad}"
 %hidden session_item_2="#{E:pad}Session Overrides#{E:pad}"
 %hidden session_item_3="#{E:pad}Formatting styles#{E:pad}"
-%hidden session_item_4="#{E:pad}Style persisten per Session#{E:pad}"
+%hidden session_item_4="#{E:pad}Style persistent per Session#{E:pad}"
 %hidden session_item_5="#{E:pad}Man Pages#{E:pad}"
 set-option -ag command-alias panetab=\
 'setenv -h name "Pane";\

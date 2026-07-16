@@ -1,0 +1,19 @@
+# vim: set ft=dosini :
+
+[module/backlight]
+type = internal/backlight
+
+; Use the card name you found in Step 1
+card = intel_backlight
+
+; Enable scroll actions to adjust brightness (requires xbacklight or brightnessctl)
+enable-scroll = true
+
+; Format for showing percentage
+format = <ramp> <label>
+label =   %percentage%%
+
+; Icons for different brightness levels
+ramp-0 =   
+ramp-1 =   
+ramp-2 =   

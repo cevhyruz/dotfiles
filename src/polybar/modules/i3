@@ -3,8 +3,8 @@
 [module/i3]
 type = internal/i3
 pin-workspaces = true
-;strip-wsnumbers = true
-;index-sort = true
+strip-wsnumbers = true
+index-sort = true
 enable-click = true
 enable-scroll = false
 wrapping-scroll = false
@@ -25,7 +25,7 @@ label-scratchpad = 
 ; label-scratchpad-background = #3f3f3f
 
 label-focused = %name%
-label-focused-background = ${colors.background}
+label-focused-background = ${colors.alert}
 label-focused-underline = ${colors.primary}
 label-focused-padding = 2
 
@@ -36,5 +36,5 @@ label-unfocused-padding = 2
 ;label-urgent = %index%: %name%
 label-urgent = %name%
 label-urgent-background = ${colors.alert}
-label-urgent-padding = 1
+label-urgent-padding = 2
 

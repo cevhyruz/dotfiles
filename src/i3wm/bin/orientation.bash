@@ -13,15 +13,15 @@ get_layout() {
     focused as $f
     | parent_of($f) as $p
     | if $f.floating == "user_on" or $f.floating == "auto_on" then
-        "floating"
+        "Floating"
       elif $p.layout == "tabbed" then
-        "tabbed (" + (($p.nodes | length)|tostring) + ")"
+        "Tabbed (" + (($p.nodes | length)|tostring) + ")"
       elif $p.layout == "stacked" then
         "stacked (" + (($p.nodes | length)|tostring) + ")"
       elif $p.layout == "splith" then
-        "split H (" + (($p.nodes | length)|tostring) + ")"
+        "Split H (" + (($p.nodes | length)|tostring) + ")"
       elif $p.layout == "splitv" then
-        "split V (" + (($p.nodes | length)|tostring) + ")"
+        "Split V (" + (($p.nodes | length)|tostring) + ")"
       else
         "unknown"
       end

@@ -27,7 +27,8 @@ set-option -g message-limit 10000
 
 setw -g aggressive-resize on
 
-set-option -g cursor-style "blinking-underline"
+set-option -g cursor-style "block"
+set-option -g prompt-cursor-style "blinking-underline"
 
 set-option -g mouse on
 

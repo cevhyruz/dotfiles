@@ -2,9 +2,20 @@
 
 [colors]
 background = #282A2E
-background-alt = #373B41
 foreground = #C5C8C6
-primary = #F0C674
-secondary = #8ABEB7
+background-alt = #373B41
 alert = #A54242
 disabled = #707880
+
+
+primary = #F0C674
+secondary = #8ABEB7
+
+success = #000
+danger = #000
+warning = #000
+info = #000
+
+light = #000
+dark = #000
+

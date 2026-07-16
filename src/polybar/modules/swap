@@ -1,0 +1,9 @@
+# vim: set ft=dosini :
+
+[module/diskswap]
+type = custom/script
+interval = 10
+exec = swapon --show --bytes | grep '/dev/sda5' | awk '{ sum=$4/1024/1024/1024; printf "SWAP: %.1fG\\n", sum }'
+format-prefix = "󰓡 "
+format-prefix-foreground = ${colors.primary}
+label = %output%

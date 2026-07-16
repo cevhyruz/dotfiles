@@ -28,6 +28,10 @@ bindsym $mod+d exec $floating_term_small "~/Projects/dotfiles/src/i3wm/bin/launc
 bindsym $mod+Shift+n exec $floating_term_small "~/Projects/dotfiles/src/i3wm/bin/notes-launcher.bash"
 
 
+# Adjust screen brightness
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+
 # enter fullscreen mode for the focused container
 bindsym $mod+Shift+f fullscreen toggle
 
@@ -51,7 +55,8 @@ bindsym $mod+space focus mode_toggle
 # bindsym $mod+d focus child
 
 # different ways of launching a terminal
-bindsym $mod+Return exec  $term
+set $term gnome-terminal
+bindsym $mod+Return exec $term
 bindsym $mod+Shift+t exec $floatterm $float_normal
 #
 # modes

@@ -123,6 +123,16 @@ function M:highlight()
     DiagnosticWarn = { guifg = '#F1FA8C', guibg = '', bold = false },
     DiagnosticInfo = { guifg = '#8BE9FD', guibg = '', bold = false },
     DiagnosticHint = { guifg = 'red', guibg = '', bold = false },
+
+    -- Typescript
+    typescriptDocComment = { guifg = '#5A5A5A', guibg = '', bold = false },
+    Comment = { guifg = '#5A5A5A', guibg = '', bold = false },
+
+-- typescriptDocComment xxx ctermfg=43 guifg=#4ec9b0
+-- Comment        xxx ctermfg=65 guifg=#6a9955
+-- LineNr         xxx guifg=#4a4a4a guibg=#000000
+-- WinSeparator   xxx guifg=#2a2a2a guibg=#000000
+
     -- nvim-cmp
     --
     -- border

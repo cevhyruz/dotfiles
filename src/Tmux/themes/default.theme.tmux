@@ -190,7 +190,7 @@ set -ag status-right                 "#{E:_time} "
 
 # Style for active pane
 set -gw window-active-style "bg=#060600"
-set -gw window-style        "bg=colour232,fg=colour238"
+set -gw window-style        "bg=colour232,fg=white"
 
 
 set -g @pane-mode-style           "bg=colour45,fg=red"
