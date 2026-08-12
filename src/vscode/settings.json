@@ -203,4 +203,5 @@
     "asvetliakov.vscode-neovim": 1
   },
   "git.openRepositoryInParentFolders": "always",
+  "chat.disableAIFeatures": true,
 }

@@ -48,6 +48,4 @@ function build_templates() {
 
 }
 
-
-
 configure "$@"

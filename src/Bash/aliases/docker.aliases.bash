@@ -1,5 +1,3 @@
-
-
 # for ntc5 delete me after your ojt
 
 

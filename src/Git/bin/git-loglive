@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck shell=bash
-# vi:ft=bats fdm=marker ts=2 sw=2 et
+# vi:ft=bash fdm=marker ts=2 sw=2 et
 
 while :
 do
