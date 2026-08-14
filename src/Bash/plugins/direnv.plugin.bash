@@ -8,4 +8,6 @@ function _direnv_hook() {
   return $previous_exit_status;
 }
 
-::post_command _direnv_hook
+if [[ -d /usr/bin/direnv ]]; then
+  ::post_command _direnv_hook
+fi
