@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+#
+# Minimal sane defaults for bash.
+
+# --- PATH: bare minimum to keep own tools reachable ---
+[[ -d "$HOME/.local/bin" ]] && PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+export PATH
+
+# --- History ---
+export HISTCONTROL=ignoreboth
+export HISTSIZE=1000
+export HISTFILESIZE=2000
+shopt -s histappend
+shopt -s checkwinsize
+
+# --- less: friendlier for non-text input, if lesspipe is present ---
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# --- Color support for common commands, if the terminal supports it ---
+if [[ -x /usr/bin/dircolors ]]; then
+  eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+fi
+
+# --- plain but easy for eyes prompt
+PS1='\[\033[0m\]\n\u@\h:\w\n\[\033[01;32m\]\$\[\033[0m\] \[\033[90m\]'
+PS0='\[\033[0m\]'
+
+# --- A handful of everyday aliases ---
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+printf 'Warning: bash config failed to initialize\n' >&2
+printf 'Running in minimal fallback mode\n' >&2
