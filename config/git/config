@@ -1,12 +1,12 @@
 # vim: ft=gitconfig
 #
 #
-{{ WARNING }}
-{{ TIMESTAMP }}
+# This is auto-generated file, do not modify!
+# Timestamp: Tue - Jul 23, 2024 (10:32 AM)
 
 [user]
-  name          = John Fred Fadrigalan
-  email         = johnfred.fadrigalan@hotmail.com
+	name = John Fred Fadrigalan
+	email = johnfred.fadrigalan@hotmail.com
   signingkey    = 4C23960F72FC911F # Kali Linux (Personal Laptop)
 
 [init]
@@ -19,15 +19,15 @@
 	postBuffer = 157286400
 
 [core]
-  excludesfile   = "{{ DOTFILES }}/Git/.gitignore"
-  attributesfile = "{{ DOTFILES }}/Git/.gitattributes"
+  excludesfile   = "/home/cevhyruz/Projects/dotfiles/src/Git/.gitignore"
+  attributesfile = "/home/cevhyruz/Projects/dotfiles/src/Git/.gitattributes"
   editor         = "nvim"
   pager          = "nvim -R"
   untrackedCache = true
 
 [commit]
-  gpgsign  = true
-  template = "{{ DOTFILES }}/Git/.gitmessage"
+  ; gpgsign  = true
+  template = "~/.config/git/message"
 
 [color]
   status    = always
@@ -41,6 +41,9 @@
   current = 35  # green
   local   = 248 # dimgrey
   remote  = 203 # red
+
+[color "head"]
+
 
 [color "diff"]
   meta   = 241
@@ -136,18 +139,21 @@
   # }; f"
 
   dif = difftool -t nvimdiff
-  # s = status --short --branch --show-stash --ahead-behind --renames
+  s = status --short --branch --show-stash --ahead-behind --renames
+  br = branch --all
+  lg = log --decorate --graph --all -10
+  lga = log --decorate --graph --all --format=detail
   contrib = shortlog --summary --numbered
 
-  # amend = "!f() { \
-  #   git commit --amend --no-edit; \
-  #   git s; \
-  # }; f"
+  amend = "!f() { \
+    git commit --amend --no-edit; \
+    git s; \
+  }; f"
 
-  # typo = "!f() { \
-  #   git commit --amend; \
-  #   git s; \
-  # }; f"
+  typo = "!f() { \
+    git commit --amend; \
+    git s; \
+  }; f"
 
   a = "!f() { \
     git add "$@" && git s; \
@@ -211,4 +217,6 @@
 [include]
   # Local git configuration. Include all your personal credentials
   # and overrides here.
-  path = "{{ DOTFILES }}/Git/.gitconfig.local"
+  path = "/home/cevhyruz/Projects/dotfiles/Git/.gitconfig.local"
+[credential]
+	helper = cache --timeout=3600
