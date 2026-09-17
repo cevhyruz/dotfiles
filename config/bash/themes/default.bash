@@ -105,9 +105,6 @@ function _set_prompts() {
 
   # PS1 does not reset the final escape sequence of the prompt string,
   # we need to normalize after reading and before executing the command.
-  PS0='$(printf "${normal}")'
-  # PS0="${normal}"$'\n'
-  # PS0="${arrow_color}"'\n'
   PS0='\n'"${normal}"
 
   # Re-evaluate PS1 so we can get return status.
