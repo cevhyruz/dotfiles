@@ -4,33 +4,32 @@
 #
 # Set up shell variables for Bash
 
-# disable mailcheck.
-unset MAILCHECK
 
-# IDEA:
-# create small history file for every command (eg: git, fzf);
-# for larger but not resource consuming history tracking
-#
-# append current sessions history to the history file.
-# PROMPT_COMMAND='history -a;'
+# Bash readline
+export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
-# ::post_command "history -a"
-
-_::command_exists "nvim" && VISUAL="nvim"
-
-export EDITOR="$VISUAL"
-
-# default browser
-_::command_exists "google-chrome" && export BROWSER="/usr/bin/google-chrome"
-
-# larger history (default: 500)
-HISTSIZE=100000
+# Bash history
+HISTFILE="${XDG_STATE_HOME}/bash/history"
+HISTSIZE=100000 
 HISTFILESIZE=$HISTSIZE
+HISTCONTROL='ignorespace:erasedups';  # No dups and ignore commands that starts with a space
 
-# don't put duplicate lines or lines starting with space in the history.
-HISTCONTROL='ignorespace:erasedups';
+# --- Common tool overrides that respect XDG once told to ---
+export LESSHISTFILE="$XDG_STATE_HOME/less/history"
+export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 
-# Force UTF-8 locale for all programs.
-# Prevents broken unicode symbols.
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# Ensure directories for tool-specific overrides exist too, since some
+# tools (bash history, less) won't create their parent dir automatically
+# TODO: bootstrap this on setup
+# mkdir -p "$(dirname "$HISTFILE")" "$(dirname "$LESSHISTFILE")" 2>/dev/null
+
+
+__util::command_exists "nvim" && VISUAL="nvim"
+export EDITOR="$VISUAL"
+__util::command_exists "less" && export PAGER="less"
+__util::command_exists "google-chrome" && export BROWSER="google-chrome"

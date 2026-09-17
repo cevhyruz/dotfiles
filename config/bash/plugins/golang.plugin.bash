@@ -4,6 +4,8 @@
 
 # https://go.dev/doc/install
 
+__util::command_exists "go" || return 0
+
 export GO111MODULE=on
 
 # external packages go here.

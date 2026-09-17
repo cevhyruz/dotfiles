@@ -102,7 +102,7 @@ function main() {
     "--color=spinner:196"      # Streaming input indicator
     "--color=header:$fg")       # Header
 
-  __set_fzf "ag"
+  __set_fzf "find"
   __set_fzf_aliases
   cleanup
 }

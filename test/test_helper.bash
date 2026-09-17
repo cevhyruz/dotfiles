@@ -7,7 +7,6 @@
 # Usage:
 #   load "${TEST_DIRECTORY}/test_helper.bash"
 
-set -o nounset
 
 # helpers
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
@@ -15,8 +14,9 @@ load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
 
 # utilities
-load "${DOT_BASH}/lib/util.bash"
-load "${DOT_BASH}/lib/apidoc.bash"
+load "${BASH_CONFIG_DIR}/lib/utils.bash"
+# load "${DOT_BASH}/lib/apidoc.bash"
+
 
 if [[ -t 0 ]]; then
   TEST_FILE="$(printf "\e[1m[%s]\e[0m\n" "${BATS_TEST_FILENAME##*/}")"
@@ -32,7 +32,7 @@ function fixtures() {
 
 function setup() {
   # usage: LOCAL_DEP="fzf"
-  if ! _::command_exists "${LOCAL_DEP:-}" && [[ -n ${LOCAL_DEP:-} ]]; then
+  if ! __util::command_exists "${LOCAL_DEP:-}" && [[ -n ${LOCAL_DEP:-} ]]; then
     skip "Missing Dependency: ${LOCAL_DEP:-}"
   fi
 

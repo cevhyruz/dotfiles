@@ -3,9 +3,6 @@
 # and `info rluserman' for more information.
 # ----------------------------------------------------------------------
 
-{{ WARNING }}
-{{ TIMESTAMP }}
-
 set editing-mode vi
 
 # allow UTF-8 input and output instead of showing
@@ -14,14 +11,14 @@ set editing-mode vi
 # Enable 8bit input
 set meta-flag  on
 set input-meta on
-#
+ 
 # Turns off 8th bit stripping
-set convert-meta Off
-#
+set convert-meta off
+ 
 # Keep the 8th bit for display
-set output-meta On
+set output-meta on
 
-# (none|visible|audible)
+# No bell. No ^G in output
 set bell-style none
 
 # plugins
@@ -33,7 +30,6 @@ set vi-ins-mode-string "\1\e[3 q\2"
 set vi-cmd-mode-string "\1\e[2 q\2"
 
 # === keybindings ===
-
 
 $if mode=vi
 # switch to command mode
@@ -64,7 +60,8 @@ $if Bash
 $endif
 
 # surround with ease
-$include {{ DOTFILES }}/src/readline/surround
+# FIXME: This will fail if we change the value of XDG_CONFIG_HOME
+$include ~/.config/readline/surround
 
 # anchored undo
 "\C-x\C-u": vi-undo
@@ -96,11 +93,16 @@ $include {{ DOTFILES }}/src/readline/surround
 
 # === completion ====
 
-set completion-display-width 1
+# Don't query user about viewing the number of possible completions
+set completion-query-items -1
+
+# Print each completion on its own line
+set completion-display-width 0
+
 set completion-prefix-display-length 3
 
 # Make sure we don't output everything on the 1 line
-set horizontal-scroll-mode Off
+set horizontal-scroll-mode off
 
 # append slash for completed names which are symlink to directories.
 set mark-symlinked-directories on
@@ -121,9 +123,13 @@ set completion-map-case on
 # ~/src/mozillail", but to "cd ~/src/mozilla".
 set skip-completed-text on
 
-# easier tab completion
+# Press TAB once (instead of twice) to auto-complete
 set show-all-if-ambiguous on
+
 set visible-stats on
+
+
+# Don't use pager when showing completions
 set page-completions off
 
 # display common completion prefix using the value of LS_COLORS

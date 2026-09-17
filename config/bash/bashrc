@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+
+
+if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
+  echo "Error: This config requires bash >= 5 (found: ${BASH_VERSION:-unknown})" >&2
+  return 51
+fi
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config/bash}"
+config_file="${config_dir}/init.bash"
+
+# initialize
+if [[ -f "${config_file}" ]]; then
+  source "${config_file}" || echo "Warning: failed to initialize config file" >&2
+else
+  minimal_config="${config_dir}/bashrc-minimal.bash"
+  [[ -f "${minimal_config}" ]] && source "${minimal_config}"
+  unset minimal_config
+fi
+
+# local config file
+echo "config_dir"
+local_bashrc="${config_dir}/bashrc.local"
+if [[ -f "${local_bashrc}" ]]; then
+  source "${local_bashrc}" || echo "Warning: ${local_bashrc} failed to load" >&2
+fi
+unset local_bashrc
+
+unset config_dir config_file

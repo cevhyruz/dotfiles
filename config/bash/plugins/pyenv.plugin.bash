@@ -2,8 +2,8 @@
 # shellcheck shell=bash
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 
-about-plugin 'Load pyenv, if it is installed.'
-plugin-group 'wrappers'
+# about-plugin 'Load pyenv, if it is installed.'
+# plugin-group 'wrappers'
 
 # setup pyenv if './pyenv' directory exists.
 export PYENV_ROOT="${HOME}/.pyenv"

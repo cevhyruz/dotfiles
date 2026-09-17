@@ -18,7 +18,7 @@ function man() {
     command man $manual
     return
   fi
-  if _::command_exists "fzf"; then
+  if __util::command_exists "fzf"; then
     command man "$(apropos . | awk '{ print $1 $2 }' \
       | fzf --preview='man {}')"
   fi

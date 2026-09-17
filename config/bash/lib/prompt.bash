@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
 # Library functions for building bash prompts.
-
 # =========== PS4 ============
 
 # TODO: if possible

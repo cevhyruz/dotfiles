@@ -4,7 +4,7 @@
 
 # custom functions utilizing FZF.
 
-_::command_exists "fzf" || return 0
+__util::command_exists "fzf" || return 0
 
 # fshow - git commit browser
 fshow() {

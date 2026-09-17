@@ -4,6 +4,8 @@
 #
 # Sane clipboard configuration
 
+__util::command_exists "xsel" || return 0
+
 alias pbcopy="xsel --clipboard"
 alias pbpaste="xsel --clipboard"
 

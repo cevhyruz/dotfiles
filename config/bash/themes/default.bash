@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2034,SC2154,SC2016
-# vi: ft=sh fdm=marker ts=2 sw=2 et
+# shellcheck shell=bash disable=SC2034,SC2154,SC2016 vi: ft=sh fdm=marker ts=2 sw=2 et
 #
 # Default bash theme when BASH_PROMPT_THEME is not set or is empty.
 
@@ -107,6 +106,9 @@ function _set_prompts() {
   # PS1 does not reset the final escape sequence of the prompt string,
   # we need to normalize after reading and before executing the command.
   PS0='$(printf "${normal}")'
+  # PS0="${normal}"$'\n'
+  # PS0="${arrow_color}"'\n'
+  PS0='\n'"${normal}"
 
   # Re-evaluate PS1 so we can get return status.
   ::post_command "${FUNCNAME[0]}"

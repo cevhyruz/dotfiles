@@ -1,8 +1,21 @@
-#!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2034,SC2086,SC2145
+#!/bin/sh
+# shellcheck shell=sh
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
-# basic coreutil themeing
+# build colors for theming
+
+# determines if the terminal supports 256 colors
+__TERM_COLORS_COUNT="$(tput colors 2>/dev/null || echo 0)"
+
+# terminal colors state
+__TERM_COLORS_SUPPORT=false
+
+__util::supports_color
+
+# base 16 colors
+# 256colors
+# 24-bit truecolors
+
 
 function init::theme() {
   reset_bold="\e[22m"
@@ -103,4 +116,3 @@ function __make_dircolors_pallete () {
   export LS_COLORS
   unset -v entry
 }
-

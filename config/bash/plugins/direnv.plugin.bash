@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 function _direnv_hook() {
   export DIRENV_LOG_FORMAT=""

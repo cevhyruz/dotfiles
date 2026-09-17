@@ -2,7 +2,7 @@
 # shellcheck shell=bash disable=SC2294,SC2206
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
-# Test runner for dotfiles.
+# Test runner for the scripts and bash config.
 #
 # Usage:
 #   ./test/run [test_file]
@@ -11,30 +11,36 @@
 #   Run all test files located in 'test' directory
 #   if no [test_file] is supplied.
 
-test_directory="$(cd "$(dirname "$0")" && pwd)"
-bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
+declare -rx TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+declare -rx TEST_DEPS_DIR="${TEST_DIR}/../test_lib"
+
+declare -rx BASH_CONFIG_DIR="$(cd "$TEST_DIR/../config/bash" && pwd)"
+
+bats_executable="${TEST_DIR}/../test_lib/bats-core/bin/bats"
+
+# constants / metadata
 
 # locate ourselves for easy reference.
-export DOTFILES="${test_directory}/../"
-export DOT_BASH="${test_directory}/../src/Bash"
-export TEST_DIRECTORY="$test_directory"
-export TEST_DEPS_DIR="${test_directory}/../test_lib"
+# export DOTFILES="${TEST_DIR}/../"
+# export DOT_BASH="${TEST_DIR}/../config/bash"
+# export TEST_DEPS_DIR="${TEST_DIR}/../test_lib"
 
-# make sure BATS is available:
+# make sure BATS is available and is updated
 git submodule init && git submodule update
 
 # which tests do we run?
 if [[ $# -eq 0 ]]; then
-	test_dirs=("${test_directory}"/Bash)
+	TEST_DIRs=("${TEST_DIR}"/Bash)
 else
-	test_dirs=("$@")
+	TEST_DIRs=("$@")
 fi
+
 
 # Make sure that the `parallel` command is installed,
 # AND that it is the GNU version of `parallel`.
 # If that is the case, try to guess the number of CPU cores,
 # so we can run `bats` in parallel processing mode, which is a lot faster.
-if command -v parallel &> /dev/null \
+if command -v parallel &> /dev/null 2>&1 \
 	&& parallel -V &> /dev/null \
 	&& { parallel -V 2> /dev/null | grep -q '^GNU\>'; }; then
 	# Expect to run at least on a dual-core CPU; slightly degraded performance
@@ -53,8 +59,11 @@ if command -v parallel &> /dev/null \
 		fi
 	)"
 	exec "$bats_executable" "${CI:+--tap}" --jobs "${test_jobs_effective}" \
-		--no-parallelize-within-files "${test_dirs[@]}"
+		--no-parallelize-within-files "${TEST_DIRs[@]}"
 else
 	# Run `bats` in single-threaded mode.
-	exec "$bats_executable" "${CI:+--tap}" "${test_dirs[@]}"
+	# exec "$bats_executable" "${CI:+--tap}" "${TEST_DIRs[@]}"
+  # echo "${TEST_DIRs[@]}/autopairs-core.test.bats"
+  exec "${bats_executable}" "${CI:+--tap}" "${TEST_DIR[@]}/bash"
+
 fi

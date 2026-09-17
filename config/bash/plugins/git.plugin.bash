@@ -3,7 +3,7 @@
 #
 # A Git wrapper so illegal, it should be awesome!
 
-_::command_exists "git" || return 0
+__util::command_exists "git" || return 0
 
 function git() {
   local method="${1:-}"

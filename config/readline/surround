@@ -88,7 +88,7 @@
 "ca`":  "mtlF`cf`"
 "ca*":  "mtlF*cf*"
 "ca(":  "mtlF(cf)"
-"ca)":  "ca)"
+"ca)":  "ca("
 "ca[":  "mtlF[cf]"
 "ca]":  "ca["
 "ca{":  "mtlF{cf}"
@@ -264,7 +264,7 @@
 "cs>[":  "mtF<a\C-h[ \C-f>\e[C\C-h ]\e`t"
 "cs>]":  "mtF<a\C-h[\C-f>\e[C\C-h]\e`t"
 "cs>{":  "mtF<a\C-h{ \C-f>\e[C\C-h }\e`t"
-"cs>}"   "mtF<a\C-h{\C-f>\e[C\C-h}\e`t"
+"cs>}":   "mtF<a\C-h{\C-f>\e[C\C-h}\e`t"
 "cs><":  "mtF<a\C-h< \C-f>\e[C\C-h >\e`t"
 
 # yi  {{{1
@@ -570,7 +570,7 @@
 # ysa"  {{{2
 "ysa\"  ": "lmtF\"i \C-f\"\e[C \e`t"
 "ysa\"'":  "lmtF\"i'\C-f\"\e[C'\e`t"
-"ysa\"\"": "ysi\"\"'"
+"ysa\"\"": "ysi\"\""
 "ysa\"`":  "lmtF\"i`\C-f\"\e[C`\e`t"
 "ysa\"*":  "lmtF\"i*\C-f\"\e[C*\e`t"
 "ysa\"(":  "lmtF\"i( \C-f\"\e[C )\e`t"

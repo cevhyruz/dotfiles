@@ -4,7 +4,7 @@
 #
 # generic colouriser
 
-_::command_exists "grc" || return
+__util::command_exists "grc" || return 0
 
 if [[ "$TERM" != dumb ]]; then
     alias colourify="command grc --stderr --stdout --colour=auto"

@@ -1,0 +1,322 @@
+#!/usr/bin/env bash
+
+
+
+# ---------------------------------------------------------------------------
+# Execution context — must be first, before set -e/traps/anything else,
+# since the bash-version guard below needs to know whether to `exit` or
+# `return` if the check fails.
+# ---------------------------------------------------------------------------
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    __SOURCED=0
+else
+    __SOURCED=1
+fi
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# ---------------------------------------------------------------------------
+# Bash version guard
+# ---------------------------------------------------------------------------
+if (( ${BASH_VERSINFO[0]:-0} < 4 )); then
+    printf 'Error: this script requires bash >= 4 (found: %s)\n' \
+        "${BASH_VERSION:-unknown}" >&2
+    if [[ "$__SOURCED" -eq 1 ]]; then
+        return 1
+    else
+        exit 1
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# Constants / metadata
+# ---------------------------------------------------------------------------
+readonly SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+readonly SCRIPT_VERSION="0.1.0"
+
+# Exit codes — customize/extend for your script. Keeping them named and
+# centralized makes it easy for another script calling this one (e.g. in
+# --plumbing mode) to branch on why it failed rather than just pass/fail.
+readonly EXIT_OK=0
+readonly EXIT_ERROR=1
+readonly EXIT_NOT_FOUND=2
+# 130/143 (128+SIGINT/128+SIGTERM) are used by the signal handlers below,
+# per the conventional shell exit-code-for-signal scheme.
+
+# Runtime flags/state — populated by main(); declared here (not `local`) so
+# any top-level action_* function can see them without threading params
+# through every call.
+PLUMBING=0
+VERBOSE=0
+DRY_RUN=0
+ACTION=""
+TARGET=""
+TMP_DIR=""
+
+# ---------------------------------------------------------------------------
+# Logging helpers
+#
+# Colors are decided inside main() (they depend on --plumbing, which isn't
+# known until args are parsed) but the log_* functions themselves are
+# defined here so they're available to every function, sourced or not.
+# ---------------------------------------------------------------------------
+C_RED="" C_GREEN="" C_YELLOW="" C_BLUE="" C_RESET=""
+
+log_info()  { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[INFO]%s  %s\n'  "$C_BLUE"  "$C_RESET" "$*"; }
+log_ok()    { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[ OK ]%s  %s\n'  "$C_GREEN" "$C_RESET" "$*"; }
+log_warn()  { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[WARN]%s  %s\n' "$C_YELLOW" "$C_RESET" "$*" >&2; }
+log_error() { printf '%s[FAIL]%s  %s\n' "$C_RED"    "$C_RESET" "$*" >&2; }
+log_debug() { [[ "$VERBOSE" -eq 1 ]] && printf '%s[DBG ]%s  %s\n' "$C_BLUE" "$C_RESET" "$*" >&2 || true; }
+
+die() {
+    log_error "$1"
+    exit "${2:-$EXIT_ERROR}"
+}
+
+# ---------------------------------------------------------------------------
+# Dependency checking
+# ---------------------------------------------------------------------------
+require_cmd() {
+    local cmd="$1" hint="${2:-}"
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        local msg="Missing required command: $cmd"
+        [[ -n "$hint" ]] && msg="$msg ($hint)"
+        die "$msg"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Temp dir + cleanup
+#
+# A single lazily-created temp dir rather than tracking individual temp
+# files — scales cleanly if more than one thing ever needs scratch space,
+# and cleanup is just one rm -rf.
+# ---------------------------------------------------------------------------
+ensure_tmp_dir() {
+    if [[ -z "$TMP_DIR" ]]; then
+        TMP_DIR="$(mktemp -d)"
+        log_debug "Created temp dir: $TMP_DIR"
+    fi
+}
+
+cleanup_tmp() {
+    if [[ -n "$TMP_DIR" && -d "$TMP_DIR" ]]; then
+        rm -rf -- "$TMP_DIR"
+    fi
+}
+
+# Normal exit path (includes falling off the end of the script, `exit N`
+# from anywhere, and `die`). Runs cleanup once, then re-exits with
+# whatever status was already in flight.
+on_exit() {
+    local status=$?
+    cleanup_tmp
+    exit "$status"
+}
+
+# Ctrl-C / termination path — separated from on_exit so an interrupt gets
+# its own message and the conventional 128+signum exit code, rather than
+# being folded into a generic exit-1 the way `die` handles ordinary errors.
+on_interrupt() {
+    local sig="$1"
+    trap - EXIT INT TERM   # avoid on_exit firing again after this handler
+    log_warn "Interrupted (SIG$sig), cleaning up..."
+    cleanup_tmp
+    case "$sig" in
+        INT)  exit 130 ;;
+        TERM) exit 143 ;;
+        *)    exit "$EXIT_ERROR" ;;
+    esac
+}
+
+# ---------------------------------------------------------------------------
+# Help / usage
+# ---------------------------------------------------------------------------
+usage() {
+    cat <<EOF
+${C_GREEN}${SCRIPT_NAME}${C_RESET} v${SCRIPT_VERSION}
+One-line description of what this script does.
+
+${C_YELLOW}USAGE${C_RESET}
+    $SCRIPT_NAME [OPTIONS] [TARGET]
+
+${C_YELLOW}ACTIONS${C_RESET} (choose one — replace with your own)
+    -x, --example TARGET    Placeholder action; replace with real subcommands
+    -h, --help               Show this help and exit
+        --version             Show version and exit
+
+${C_YELLOW}OPTIONS${C_RESET}
+    -n, --dry-run            Show what would happen, don't do it
+    -v, --verbose             Print debug info
+    -p, --plumbing            Machine-readable mode for use by other scripts:
+                              no colors, no decorative log lines, silent
+                              success (see EXIT CODES)
+
+${C_YELLOW}EXAMPLES${C_RESET}
+    $SCRIPT_NAME -x some-target
+    $SCRIPT_NAME -x some-target --dry-run --verbose
+    $SCRIPT_NAME -p -x some-target || echo "failed: \$?"
+
+${C_YELLOW}EXIT CODES${C_RESET}
+    0    success
+    1    general error (bad args, missing dependency, ...)
+    2    not found (customize per your script's meaning)
+    130  interrupted (SIGINT / Ctrl-C)
+    143  terminated (SIGTERM)
+EOF
+}
+
+version() {
+    printf '%s %s\n' "$SCRIPT_NAME" "$SCRIPT_VERSION"
+}
+
+# ---------------------------------------------------------------------------
+# ACTIONS
+#
+# Replace action_example with your real logic. Keep the pattern:
+#   - validate inputs first, die() with a clear message on bad input
+#   - respect DRY_RUN before anything destructive
+#   - respect PLUMBING for what you print to stdout (log_* already do this
+#     for you; only worry about it for direct printf/echo data output)
+#   - return/exit with a meaningful code (EXIT_OK / EXIT_ERROR / EXIT_NOT_FOUND
+#     or your own), not just 0/1
+# ---------------------------------------------------------------------------
+action_example() {
+    [[ -n "$TARGET" ]] || die "No target given. Use: $SCRIPT_NAME -x TARGET"
+
+    log_debug "Running example action on: $TARGET"
+
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+        log_info "[dry-run] would process: $TARGET"
+        return "$EXIT_OK"
+    fi
+
+    # --- your real logic goes here ---
+    log_ok "Processed: $TARGET"
+    return "$EXIT_OK"
+}
+
+# ---------------------------------------------------------------------------
+# main() — parses args and dispatches. Only called at the bottom of this
+# file when the script is executed directly, not when sourced.
+# ---------------------------------------------------------------------------
+main() {
+    # --- Pre-scan for -p/--plumbing so colors can be decided before any
+    # logging happens (colors are read-only globals, set once). ---
+    for __arg in "$@"; do
+        case "$__arg" in
+            -p|--plumbing) PLUMBING=1 ;;
+        esac
+    done
+    unset __arg
+
+    if [[ -t 1 && "$PLUMBING" -eq 0 ]]; then
+        C_RED=$'\033[0;31m'
+        C_GREEN=$'\033[0;32m'
+        C_YELLOW=$'\033[0;33m'
+        C_BLUE=$'\033[0;34m'
+        C_RESET=$'\033[0m'
+    fi
+
+    # --- Traps: set up only once we're actually running, not on source ---
+    trap on_exit EXIT
+    trap 'on_interrupt INT'  INT
+    trap 'on_interrupt TERM' TERM
+
+    # --- Dependency checks. Add whatever external commands your real
+    # logic needs; keep them here so failures surface immediately with a
+    # clear message instead of partway through doing real work. ---
+    # require_cmd jq
+    # require_cmd curl
+
+    # --- Normalize --opt=value into --opt value so the parser stays simple ---
+    local args=() arg key val
+    for arg in "$@"; do
+        case "$arg" in
+            --*=*)
+                key="${arg%%=*}"
+                val="${arg#*=}"
+                args+=("$key" "$val")
+                ;;
+            *)
+                args+=("$arg")
+                ;;
+        esac
+    done
+    set -- "${args[@]}"
+
+    # --- Option parsing (long + short, no external getopt dependency) ---
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -x|--example)
+                ACTION="example"
+                TARGET="${2:-}"
+                [[ -n "$TARGET" ]] && shift
+                ;;
+            # --- add your own options here, following the same pattern ---
+            # -o|--output)
+            #     OUTPUT_PATH="${2:-}"; shift
+            #     ;;
+            -n|--dry-run)
+                DRY_RUN=1
+                ;;
+            -v|--verbose)
+                VERBOSE=1
+                ;;
+            -p|--plumbing)
+                PLUMBING=1
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            --version)
+                version
+                exit 0
+                ;;
+            --)
+                shift
+                break
+                ;;
+            -*)
+                die "Unknown option: $1 (see --help)"
+                ;;
+            *)
+                # bare positional arg = target, if action not already set
+                if [[ -z "$TARGET" ]]; then
+                    TARGET="$1"
+                    [[ -z "$ACTION" ]] && ACTION="example"
+                else
+                    die "Unexpected extra argument: $1"
+                fi
+                ;;
+        esac
+        shift
+    done
+
+    if [[ -z "$ACTION" ]]; then
+        usage
+        exit 1
+    fi
+
+    log_debug "Action:   $ACTION"
+    log_debug "Target:   ${TARGET:-<none>}"
+    log_debug "Dry run:  $DRY_RUN"
+
+    case "$ACTION" in
+        example) action_example ;;
+        *)       die "Unhandled action: $ACTION" ;;
+    esac
+}
+
+# ---------------------------------------------------------------------------
+# Entry point — only runs when executed directly. Sourcing this file loads
+# functions/constants without side effects (no trap setup, no arg parsing,
+# nothing runs) so another script can `source` it and call individual
+# functions on its own terms.
+# ---------------------------------------------------------------------------
+if [[ "$__SOURCED" -eq 0 ]]; then
+    main "$@"
+fi

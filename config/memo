@@ -1,0 +1,69 @@
+
+-----------------------------------------------------
+My Netrw Issues:
+----------------------------------------------------
+
+[ ] when opening file in a horizontal split, open it not in the netrw window
+[ ] 'p' to scroll preview while also not leaving netrw buffer
+[ ] create a file without opening a buffer
+[ ] manually passing working directory should change the default working directory
+
+-----------------------------------------------------
+My Bufferlist issues
+----------------------------------------------------
+
+[ ] Buffer list toggling
+[ ] Mapping to open in split/vsplit
+[ ] Support preview without leaving the buffer list
+[ ] preserve cursor position
+
+-----------------------
+Netrw CRUD Operations
+-----------------------
+
+------------------
+Create
+------------------
+d - Make a dir
+% - Make a file (Opens a buffer)
+
+
+------------------
+* Read
+------------------
+ | Preview |
+ p - Preview the file
+ ctrl+w, z - Close the preview
+ ctrl+w, P - Jump to preview
+
+ x - View file with associated program
+ qf - Display file information
+ a - cycle between
+
+------------------
+  opening file
+------------------
+ v - open the file in vertical split
+ o - open the file in a horizontal split
+ t - open the file in a new tab
+
+
+
+------------------
+Update
+------------------
+ R - Rename file/dir
+
+  
+
+------------------
+Delete
+------------------
+ D - delete file/dir (enter for file, y + enter for dir)
+
+
+-----------------------
+File operations
+-----------------------
+gp - change file permission
+

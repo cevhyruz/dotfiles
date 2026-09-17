@@ -3,9 +3,8 @@
 # vi: ft=sh fdm=marker ts=2 sw=2 et
 #
 
-
 # list files with TODO: and FIXME: notation
-if _::is_installed "fzf" "annotation"; then
+if __util::command_exists "fzf" "annotation"; then
 
   function todo() {
     nvim $(grep --color=always --recursive "TOD[O]" | fzf)

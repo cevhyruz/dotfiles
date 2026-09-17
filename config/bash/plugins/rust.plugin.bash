@@ -5,4 +5,4 @@
 export RUSTUP_HOME="${HOME}/.rustup"
 export CARGO_HOME="${HOME}/.cargo"
 
-_::add_to_path "${CARGO_HOME}/bin"
+__util::add_to_path "${CARGO_HOME}/bin"

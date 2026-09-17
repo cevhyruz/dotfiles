@@ -2,9 +2,9 @@
 #
 # Bash aliases for Git.
 
-_::command_exists "git" || return 0
+__util::command_exists "git" || return 0
 
-if _::command_exists "tig"; then
+if __util::command_exists "tig"; then
   test
 fi
 
