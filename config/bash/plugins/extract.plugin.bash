@@ -44,12 +44,11 @@ function extract() {
       continue
     fi
 
-    local -r filename=$(basename -- $1)
-    local -r dirname=$(dirname -- $1)
+    local -r filename=$(basename -- "$1")
+    local -r dirname=$(dirname -- "$1")
     local dest=$(\
       sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\|\.nupkg$\|\.zip$\|\.war$\|\.jar$\)//g' \
-      <<< $filename
-    )
+      <<< "$filename" )
 
     local -r destpath="${dirname}/${dest}"
 
@@ -60,29 +59,31 @@ function extract() {
       command mkdir -v "$dirname/$dest"
     fi
 
-    if [ -f "$1" ]; then
+    if [[ -f "$1" ]]; then
       case "$1" in
-           *.tar.bz2|*.tbz|*.tbz2) tar "x${verbose}jf" "$1" -C "${destpath}" ;;
-                   *.tar.xz|*.txz) tar "x${verbose}Jf" "$1" -C "${destpath}" ;;
-                   *.tar.gz|*.tgz) tar "x${verbose}zf" "$1" -C "${destpath}" ;;
-                          *.tar.Z) tar "x${verbose}Zf" "$1" -C "${destpath}" ;;
-                            *.bz2) bunzip2 "$1" ;;
-                            *.deb) dpkg-deb -x${verbose} "$1" "${1:0:-4}" ;;
-                         *.pax.gz) gunzip "$1"; set -- "$@" "${1:0:-3}" ;;
-                             *.gz) gunzip "$1" ;;
-                            *.pax) pax -r -f "$1" ;;
-                            *.pkg) pkgutil --expand "$1" "${1:0:-4}" ;;
-                            *.rar) unrar x "$1" ;;
-                            *.rpm) rpm2cpio "$1" | cpio -idm${verbose} ;;
-                            *.tar) tar "x${verbose}f" "$1" -C "${destpath}" ;;
-                             *.xz) xz --decompress "$1" ;;
-        *.zip|*.war|*.jar|*.nupkg) unzip "$1" -d "${destpath}" ;;
-                              *.Z) uncompress "$1" ;;
-                              .7z) 7za x -o"${destpath}" "$1" ;;
+
+       *.tar.bz2|*.tbz|*.tbz2)        tar "x${verbose}jf" "$1" -C "${destpath}" ;;
+               *.tar.xz|*.txz)        tar "x${verbose}Jf" "$1" -C "${destpath}" ;;
+               *.tar.gz|*.tgz)        tar "x${verbose}zf" "$1" -C "${destpath}" ;;
+                      *.tar.Z)        tar "x${verbose}Zf" "$1" -C "${destpath}" ;;
+                        *.bz2)    bunzip2 "$1" ;;
+                        *.deb)   dpkg-deb -x${verbose} "$1" "${1:0:-4}" ;;
+                     *.pax.gz)     gunzip "$1"; set -- "$@" "${1:0:-3}" ;;
+                         *.gz)     gunzip "$1" ;;
+                        *.pax)        pax -r -f "$1" ;;
+                        *.pkg)    pkgutil --expand "$1" "${1:0:-4}" ;;
+                        *.rar)      unrar x "$1" ;;
+                        *.rpm)   rpm2cpio "$1" | cpio -idm${verbose} ;;
+                        *.tar)        tar "x${verbose}f" "$1" -C "${destpath}" ;;
+                         *.xz)         xz --decompress "$1" ;;
+    *.zip|*.war|*.jar|*.nupkg)      unzip "$1" -d "${destpath}" ;;
+                          *.Z) uncompress "$1" ;;
+                         *.7z) 7za x      -o"${destpath}" "$1" ;;
+
         *) echo "'$1' cannot be extracted via extract" >&2 ;;
+
       esac
     fi
     shift
   done
 }
-
