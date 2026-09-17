@@ -24,8 +24,7 @@ else
 fi
 
 # local config file
-echo "config_dir"
-local_bashrc="${config_dir}/bashrc.local"
+local_bashrc="${config_dir}/localrc/bashrc.local"
 if [[ -f "${local_bashrc}" ]]; then
   source "${local_bashrc}" || echo "Warning: ${local_bashrc} failed to load" >&2
 fi

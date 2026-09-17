@@ -1,7 +1,12 @@
 localrc/*
 
+# bash
+config/bash/localrc/*
+!localrc/.gitkeep
+
 # Code coverage reports
 coverage/
+
 
 # localrc
 Git/.gitconfig.local
