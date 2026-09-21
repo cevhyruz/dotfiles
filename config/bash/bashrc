@@ -11,7 +11,7 @@ fi
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-config_dir="${XDG_CONFIG_HOME:-$HOME/.config/bash}"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
 config_file="${config_dir}/init.bash"
 
 # initialize
