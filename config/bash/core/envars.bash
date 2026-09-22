@@ -9,10 +9,11 @@
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
 # Bash history
-HISTFILE="${XDG_STATE_HOME}/bash/history"
-HISTSIZE=100000 
-HISTFILESIZE=$HISTSIZE
-HISTCONTROL='ignorespace:erasedups';  # No dups and ignore commands that starts with a space
+# Exported so 'bash --norc' wont create the history file at $HOME
+export HISTFILE="${XDG_STATE_HOME}/bash/history"
+export HISTSIZE=100000 
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL='ignorespace:erasedups';  # No dups and ignore commands that starts with a space
 
 # --- Common tool overrides that respect XDG once told to ---
 export LESSHISTFILE="$XDG_STATE_HOME/less/history"
