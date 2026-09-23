@@ -2,7 +2,6 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
-
 if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
   echo "Error: This config requires bash >= 5 (found: ${BASH_VERSION:-unknown})" >&2
   return 51
@@ -21,6 +20,7 @@ else
   minimal_config="${config_dir}/bashrc-minimal.bash"
   [[ -f "${minimal_config}" ]] && source "${minimal_config}"
   unset minimal_config
+  return 1
 fi
 
 # local config file
