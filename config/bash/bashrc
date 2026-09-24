@@ -20,8 +20,8 @@ else
   minimal_config="${config_dir}/bashrc-minimal.bash"
   [[ -f "${minimal_config}" ]] && source "${minimal_config}"
   unset minimal_config
-  return 1
 fi
+return 1
 
 # local config file
 local_bashrc="${config_dir}/localrc/bashrc.local"

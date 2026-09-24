@@ -9,6 +9,7 @@ bats_require_minimum_version 1.5.0
 
 local_setup() {
   TEST_CONFIG_DIR="$(mktemp -d)"
+  export config_file="${TEST_CONFIG_DIR}/init.bash"
   cp "${BASH_CONFIG_DIR}/bashrc" "${TEST_CONFIG_DIR}/bashrc"
 }
 
@@ -17,7 +18,7 @@ local_teardown() {
 }
 
 @test "bashrc returns silently when non-interactive" { # {{{
-  run --separate-stderr bash --norc --noprofile -c "set -x; source '$BASH_CONFIG_DIR/bashrc'"
+  run --separate-stderr bash --norc --noprofile -c "set -x; source '$TEST_CONFIG_DIR/bashrc'"
 
   [[ "$status" -eq 0 ]]
   [[ -z "$output" ]]
@@ -26,7 +27,7 @@ local_teardown() {
 }
 
 
-@test "loads bashrc-minimal config when init config is cannot be sourced" { # {{{1
+@test "loads bashrc-minimal config when init config cannot be sourced" { # {{{1
   mkdir -p "$TEST_CONFIG_DIR/bash"
   cat > "$TEST_CONFIG_DIR/bash/bashrc-minimal.bash" <<'EOF'
 MINIMAL_CONFIG_LOADED=1
@@ -41,4 +42,20 @@ EOF
 
   [[ "$status" -eq 0 ]]
   [[ "$output" == "1:1" ]]
+}
+
+@test "warns when init config fails to source" {
+  mkdir -p "$TEST_CONFIG_DIR/bash"
+  echo 'return 1' > "$TEST_CONFIG_DIR/bash/init.bash"
+
+  run --separate-stderr bash --norc --noprofile -i -c "
+    export XDG_CONFIG_HOME='$TEST_CONFIG_DIR'
+    source '$TEST_CONFIG_DIR/bashrc'
+    rc=\$?
+    printf '%s' \"\$rc\"
+  "
+
+  [[ "$status" -eq 0 ]]
+  [[ "$output" == "1" ]]
+  [[ "$stderr" == *"Warning: failed to initialize config file"* ]]
 }
