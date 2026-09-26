@@ -1,69 +1,57 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2294,SC2206
+# shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
 # Test runner for the scripts and bash config.
 #
 # Usage:
-#   ./test/run [test_file]
+#   ./test/run [test_file_or_dir ...]
 #
-# Description:
-#   Run all test files located in 'test' directory
-#   if no [test_file] is supplied.
+# Runs every .bats file in test/bash when no arguments are given.
+#
+# Environment:
+#   TEST_JOBS  parallel jobs (default: detect via nproc; 1 forces serial)
+#   CI         when set, emit TAP output
 
-declare -rx TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
-declare -rx TEST_DEPS_DIR="${TEST_DIR}/../test_lib"
+set -euo pipefail
 
-declare -rx BASH_CONFIG_DIR="$(cd "$TEST_DIR/../config/bash" && pwd)"
+TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+TEST_DEPS_DIR="${TEST_DIR}/../test_lib"
+BASH_CONFIG_DIR="$(cd "${TEST_DIR}/../config/bash" && pwd)"
+export TEST_DIR TEST_DEPS_DIR BASH_CONFIG_DIR
 
-bats_executable="${TEST_DIR}/../test_lib/bats-core/bin/bats"
+bats_executable="${TEST_DEPS_DIR}/bats-core/bin/bats"
 
-# constants / metadata
+# Fetch bats only if it isn't checked out yet.
+if [[ ! -x $bats_executable ]]; then
+  git submodule update --init --recursive
+fi
 
-# locate ourselves for easy reference.
-# export DOTFILES="${TEST_DIR}/../"
-# export DOT_BASH="${TEST_DIR}/../config/bash"
-# export TEST_DEPS_DIR="${TEST_DIR}/../test_lib"
-
-# make sure BATS is available and is updated
-git submodule init && git submodule update
-
-# which tests do we run?
+# Which tests do we run?
 if [[ $# -eq 0 ]]; then
-	TEST_DIRs=("${TEST_DIR}"/Bash)
+  test_targets=("${TEST_DIR}/bash")
 else
-	TEST_DIRs=("$@")
+  test_targets=("$@")
 fi
 
-
-# Make sure that the `parallel` command is installed,
-# AND that it is the GNU version of `parallel`.
-# If that is the case, try to guess the number of CPU cores,
-# so we can run `bats` in parallel processing mode, which is a lot faster.
-if command -v parallel &> /dev/null 2>&1 \
-	&& parallel -V &> /dev/null \
-	&& { parallel -V 2> /dev/null | grep -q '^GNU\>'; }; then
-	# Expect to run at least on a dual-core CPU; slightly degraded performance
-	# shouldn't matter otherwise.
-	declare -i -r test_jobs_default=2
-	# shellcheck disable=SC2155
-	declare -i -r test_jobs_effective="$(
-		if [[ "${TEST_JOBS:-detect}" = "detect" ]] \
-			&& command -v nproc &> /dev/null; then
-			nproc
-		elif [[ -n "${TEST_JOBS}" ]] \
-			&& [[ "${TEST_JOBS}" != "detect" ]]; then
-			echo "${TEST_JOBS}"
-		else
-			echo "${test_jobs_default}"
-		fi
-	)"
-	exec "$bats_executable" "${CI:+--tap}" --jobs "${test_jobs_effective}" \
-		--no-parallelize-within-files "${TEST_DIRs[@]}"
-else
-	# Run `bats` in single-threaded mode.
-	# exec "$bats_executable" "${CI:+--tap}" "${TEST_DIRs[@]}"
-  # echo "${TEST_DIRs[@]}/autopairs-core.test.bats"
-  exec "${bats_executable}" "${CI:+--tap}" "${TEST_DIR[@]}/bash"
-
+bats_args=(--abort)
+if [[ -n ${CI:-} ]]; then
+  bats_args+=(--tap)
 fi
+
+# bats only supports --jobs with GNU parallel (not moreutils' parallel).
+has_gnu_parallel() {
+  command -v parallel &> /dev/null \
+    && [[ "$(parallel --version 2> /dev/null | head -n 1)" == "GNU parallel"* ]]
+}
+
+test_jobs="${TEST_JOBS:-detect}"
+if [[ $test_jobs == detect ]]; then
+  test_jobs="$(nproc 2> /dev/null || echo 2)"
+fi
+
+if (( test_jobs > 1 )) && has_gnu_parallel; then
+  bats_args+=(--jobs "$test_jobs" --no-parallelize-within-files)
+fi
+
+exec "$bats_executable" "${bats_args[@]}" "${test_targets[@]}"
