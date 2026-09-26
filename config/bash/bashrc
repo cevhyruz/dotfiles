@@ -8,7 +8,7 @@ if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
 fi
 
 # If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+[[ $- != *i* ]] && return 1
 
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
 config_file="${config_dir}/init.bash"
@@ -17,17 +17,16 @@ config_file="${config_dir}/init.bash"
 if [[ -f "${config_file}" ]]; then
   source "${config_file}" || echo "Warning: failed to initialize config file" >&2
 else
-  minimal_config="${config_dir}/bashrc-minimal.bash"
-  [[ -f "${minimal_config}" ]] && source "${minimal_config}"
-  unset minimal_config
+  echo "Warning: using minimal config" >&2
+  source "${config_dir}/bashrc-minimal.bash" || echo "Warning: failed to load minimal config" >&2
 fi
-return 1
 
 # local config file
 local_bashrc="${config_dir}/localrc/bashrc.local"
 if [[ -f "${local_bashrc}" ]]; then
-  source "${local_bashrc}" || echo "Warning: ${local_bashrc} failed to load" >&2
+  source "${local_bashrc}" || echo "Warning: bashrc.local failed to load" >&2
 fi
 unset local_bashrc
 
-unset config_dir config_file
+unset config_dir
+unset config_file
