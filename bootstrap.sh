@@ -2,30 +2,36 @@
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
 #
-# Clone the dotfiles and symlink their local/ pieces into ~/.local.
+# Bootstrap script for my dotfiles
 #
-# <dotfiles>/local/bin/dotfiles      -> /home/cevhyruz/.local/bin/dotfiles
-# <dotfiles>/local/share/bashlib/    -> /home/cevhyruz/.local/share/bashlib
-# <dotfiles>/local/libexec/dotfiles/ -> /home/cevhyruz/.local/libexec/dotfiles
+# This will:
 #
-# Options:
-#   -n, --dry-run   Show what would happen without changing anything
-#   -v, --verbose   Show resolved paths and the decision behind each step
-#   -h, --help      Show this help and exit
+#  Download the dotfiles tarball (no git needed) and extract it into your location of choice
+#  Symlink the file <dotfiles>/local/bin/dotfiles into '~/.local/bin/dotfiles'
+#  Symlink the dir <dotfiles>/local/share/bashlib/ into '~/.local/share/bashlib/'
+#  Symlink the dir <dotfiles>/local/libexec/dotfiles/ into '~/.local/libexec/dotfiles/'
+#  Symlink the dir <dotfiles>/config/bash/ into '~/.config/bash/'
+#  Symlink the file ~/.config/bash/bashrc into '~/.bashrc'
+#
+# Run with --help for usage, --dry-run to preview without changing anything,
+# or --teardown to undo the symlinks (restoring any backups it made), remove
+# the libexec directory if it ends up empty, and delete the extracted dotfiles.
 
 
 set -euo pipefail
 
-REPO_URL="${DOTFILES_REPO:-https://github.com/cevhyruz/dotfiles.git}"
+DOTFILES_BRANCH="${DOTFILES_BRANCH:-master}"
+TARBALL_URL="${DOTFILES_TARBALL:-https://github.com/cevhyruz/dotfiles/archive/refs/heads/$DOTFILES_BRANCH.tar.gz}"
 DEFAULT_DIR="$HOME/.dotfiles" # Projects/Personal/Dotfiles
 
 BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
 DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
-PROFILE="$HOME/.profile"
 
 DRY_RUN=0
 VERBOSE=0
+TEARDOWN=0
 
 # helpers {{{
 
@@ -45,44 +51,73 @@ usage() {
   cat <<EOF
 Usage: bootstrap.sh [options]
 
-Clone the dotfiles and symlink their local/ pieces into ~/.local.
+Download the dotfiles tarball and symlink their pieces into place.
+Requires only curl and tar (no git).
 
 Options:
+  -t, --teardown  Remove the symlinks this script created, restore backups,
+                  remove ~/.local/libexec if it ends up empty, and delete
+                  the extracted dotfiles (asks first)
   -n, --dry-run   Show what would happen without changing anything
   -v, --verbose   Show resolved paths and the decision behind each step
   -h, --help      Show this help and exit
 
 Environment:
-  DOTFILES_DIR    Where to clone the dotfiles (skips the prompt)
-  DOTFILES_REPO   Repository URL (default: $REPO_URL)
-  XDG_BIN_HOME    Where the dispatcher is linked (default: ~/.local/bin)
-  XDG_DATA_HOME   Where bashlib is linked (default: ~/.local/share)
+  DOTFILES_DIR     Where to extract the dotfiles (skips the prompt)
+  DOTFILES_BRANCH  Branch to download (default: master)
+  DOTFILES_TARBALL Full tarball URL (overrides DOTFILES_BRANCH)
+  XDG_BIN_HOME     Where the dispatcher is linked (default: ~/.local/bin)
+  XDG_DATA_HOME    Where bashlib is linked (default: ~/.local/share)
+  XDG_CONFIG_HOME  Where the bash config is linked (default: ~/.config)
 
 Links created:
   <dotfiles>/local/bin/dotfiles            -> $BIN_DIR/dotfiles
   <dotfiles>/local/share/bashlib/          -> $DATA_DIR/bashlib
   <dotfiles>/local/libexec/dotfiles/       -> $LIBEXEC_DIR/dotfiles
+  <dotfiles>/config/bash/                  -> $CONFIG_DIR/bash
+  <config>/bash/bashrc                     -> $HOME/.bashrc
 
 Examples:
   ./bootstrap.sh --dry-run
   ./bootstrap.sh --dry-run --verbose
+  ./bootstrap.sh --teardown --dry-run
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
   curl -fsSL <url>/bootstrap.sh | bash -s -- --dry-run
 
 In dry-run mode every prompt is answered 'yes' so the full plan is shown;
-nothing is cloned, created, moved, linked, or written.
+nothing is downloaded, created, moved, linked, or written.
+
+Teardown only removes symlinks that point where this script put them. It
+then offers to delete the extracted dotfiles directory, but never a git
+repository. Short flags can be combined (for example -nv or -nt).
 EOF
 }
 
 parse_args() {
+  local args=() arg i
+
+  # Split bundled short flags: -nv becomes -n -v.
+  for arg in "$@"; do
+    if [[ "$arg" =~ ^-[A-Za-z]{2,}$ ]]; then
+      for (( i = 1; i < ${#arg}; i++ )); do
+        args+=("-${arg:i:1}")
+      done
+    else
+      args+=("$arg")
+    fi
+  done
+
+  set -- ${args[@]+"${args[@]}"}
+
   while (( $# )); do
     case "$1" in
-      -n|--dry-run) DRY_RUN=1 ;;
-      -v|--verbose) VERBOSE=1 ;;
-      -nv|-vn)      DRY_RUN=1; VERBOSE=1 ;;
-      -h|--help)    usage; exit 0 ;;
-      *)            warn "unknown option: $1"; usage >&2; exit 1 ;;
+      -n|--dry-run)  DRY_RUN=1 ;;
+      -v|--verbose)  VERBOSE=1 ;;
+      -t|--teardown) TEARDOWN=1 ;;
+      -h|--help)     usage; exit 0 ;;
+      *)             warn "unknown option: $1"; usage >&2; exit 1 ;;
     esac
+
     shift
   done
 }
@@ -137,48 +172,86 @@ ask_dir() {
   printf '%s\n' "${ans%/}"
 }
 
-in_path() {
-  case ":$PATH:" in
-    *":$1:"*) return 0 ;;
-    *)        return 1 ;;
-  esac
-}
-
 # }}}
 
-# 1. clone {{{
+# 1. download {{{
 
 # DOTFILES_DIR from the environment skips the prompt (useful for automation).
 choose_dir() {
+  local prompt="${1:-Where should the dotfiles be extracted?}"
+
   if [[ -n "${DOTFILES_DIR:-}" ]]; then
     info "Using DOTFILES_DIR from environment: $DOTFILES_DIR"
   else
-    DOTFILES_DIR="$(ask_dir "Where should the dotfiles be cloned?" "$DEFAULT_DIR")"
+    DOTFILES_DIR="$(ask_dir "$prompt" "$DEFAULT_DIR")"
   fi
 }
 
-clone_repo() {
-  command -v git >/dev/null 2>&1 || die "git is required but not installed"
+# Download the tarball and extract it into DOTFILES_DIR.
+#
+# Everything is staged in a temp directory first, so DOTFILES_DIR only
+# appears once the download and extraction have both succeeded.
+fetch_tarball() {
+  command -v curl >/dev/null 2>&1 || die "curl is required but not installed"
+  command -v tar  >/dev/null 2>&1 || die "tar is required but not installed"
 
-  if [[ -d "$DOTFILES_DIR/.git" ]]; then
-    debug "$DOTFILES_DIR/.git exists"
-    info "Repository already present at $DOTFILES_DIR, skipping clone"
-  elif [[ -d "$DOTFILES_DIR" && -z "$(ls -A "$DOTFILES_DIR")" ]]; then
-    debug "$DOTFILES_DIR exists and is empty"
-    info "Cloning $REPO_URL into existing empty directory $DOTFILES_DIR"
-    run git clone "$REPO_URL" "$DOTFILES_DIR"
-  elif [[ -e "$DOTFILES_DIR" ]]; then
-    die "$DOTFILES_DIR exists and is not an empty directory or a git repository"
-  else
-    debug "$DOTFILES_DIR does not exist"
-    info "Cloning $REPO_URL into $DOTFILES_DIR"
+  if (( DRY_RUN )); then
+    run curl -fsSL "$TARBALL_URL" -o "<tmp>/dotfiles.tar.gz"
+    run tar -xzf "<tmp>/dotfiles.tar.gz" --strip-components=1 -C "<tmp>/src"
     run mkdir -p "$(dirname "$DOTFILES_DIR")"
-    run git clone "$REPO_URL" "$DOTFILES_DIR"
+    run mv "<tmp>/src" "$DOTFILES_DIR"
+    return 0
   fi
 
-  # Nothing was cloned in dry-run mode, so there is nothing to validate yet.
-  if (( DRY_RUN )) && [[ ! -d "$DOTFILES_DIR/.git" ]]; then
-    info "[dry-run] skipping source checks: repository not cloned"
+  local tmp
+  tmp="$(mktemp -d)"
+  mkdir "$tmp/src"
+
+  debug "staging in $tmp"
+
+  if ! curl -fsSL "$TARBALL_URL" -o "$tmp/dotfiles.tar.gz"; then
+    rm -rf "$tmp"
+    die "download failed: $TARBALL_URL"
+  fi
+
+  # --strip-components=1 drops GitHub's wrapper folder (dotfiles-<branch>/).
+  if ! tar -xzf "$tmp/dotfiles.tar.gz" --strip-components=1 -C "$tmp/src"; then
+    rm -rf "$tmp"
+    die "could not extract the tarball"
+  fi
+
+  mkdir -p "$(dirname "$DOTFILES_DIR")"
+
+  # An existing empty directory would make mv nest inside it.
+  if [[ -d "$DOTFILES_DIR" ]]; then
+    rmdir "$DOTFILES_DIR"
+  fi
+
+  mv "$tmp/src" "$DOTFILES_DIR"
+  rm -rf "$tmp"
+}
+
+fetch_dotfiles() {
+  if [[ -d "$DOTFILES_DIR/.git" ]]; then
+    debug "$DOTFILES_DIR/.git exists"
+    info "Repository already present at $DOTFILES_DIR, skipping download"
+
+  elif [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
+    debug "$DOTFILES_DIR/local/bin/dotfiles exists (previous tarball extract)"
+    info "Dotfiles already present at $DOTFILES_DIR, skipping download"
+
+  elif [[ -d "$DOTFILES_DIR" && -n "$(ls -A "$DOTFILES_DIR")" ]]; then
+    die "$DOTFILES_DIR exists and is not empty (and doesn't look like these dotfiles)"
+
+  else
+    debug "$DOTFILES_DIR is missing or empty"
+    info "Downloading $TARBALL_URL into $DOTFILES_DIR"
+    fetch_tarball
+  fi
+
+  # Nothing was downloaded in dry-run mode, so there is nothing to validate yet.
+  if (( DRY_RUN )) && [[ ! -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
+    info "[dry-run] skipping source checks: dotfiles not downloaded"
     return 0
   fi
 
@@ -188,12 +261,17 @@ clone_repo() {
     || die "bashlib not found at $DOTFILES_DIR/local/share/bashlib"
   [[ -d "$DOTFILES_DIR/local/libexec/dotfiles" ]] \
     || die "libexec not found at $DOTFILES_DIR/local/libexec/dotfiles"
-  debug "source check passed: local/bin/dotfiles, local/share/bashlib, local/libexec/dotfiles"
+  [[ -d "$DOTFILES_DIR/config/bash" ]] \
+    || die "bash config not found at $DOTFILES_DIR/config/bash"
+  [[ -f "$DOTFILES_DIR/config/bash/bashrc" ]] \
+    || die "bashrc not found at $DOTFILES_DIR/config/bash/bashrc"
+
+  debug "source check passed: local/bin/dotfiles, local/share/bashlib, local/libexec/dotfiles, config/bash, config/bash/bashrc"
 }
 
 # }}}
 
-# 2. directories and PATH {{{
+# 2. directories {{{
 
 # Make sure a directory exists, asking before creating it.
 # Returns 1 if it is missing and the user declined.
@@ -211,39 +289,6 @@ ensure_dir() {
   else
     warn "skipping: $dir was not created"
     return 1
-  fi
-}
-
-ensure_in_path() {
-  if in_path "$BIN_DIR"; then
-    debug "$BIN_DIR is already in PATH"
-    return 0
-  fi
-
-  echo
-  warn "$BIN_DIR is not in your current PATH"
-
-  # Already configured in the profile? Then it only needs a new login.
-  if [[ -f "$PROFILE" ]] && grep -qF "$BIN_DIR" "$PROFILE"; then
-    info "$PROFILE already references $BIN_DIR; log out and back in to pick it up"
-    return 0
-  fi
-
-  if confirm "Append a PATH entry for $BIN_DIR to $PROFILE?"; then
-    if (( DRY_RUN )); then
-      info "[dry-run] would append a PATH entry for $BIN_DIR to $PROFILE"
-    else
-      {
-        printf '\n# added by dotfiles bootstrap\n'
-        # shellcheck disable=SC2016
-        printf 'case ":$PATH:" in *":%s:"*) ;; *) PATH="%s:$PATH" ;; esac\n' \
-          "$BIN_DIR" "$BIN_DIR"
-        printf 'export PATH\n'
-      } >> "$PROFILE"
-      info "Updated $PROFILE (log out and back in, or run: export PATH=\"$BIN_DIR:\$PATH\")"
-    fi
-  else
-    info "Add it yourself: export PATH=\"$BIN_DIR:\$PATH\""
   fi
 }
 
@@ -302,7 +347,224 @@ link_libexec() {
   link_path "$DOTFILES_DIR/local/libexec/dotfiles" "$LIBEXEC_DIR/dotfiles"
 }
 
+link_bash_config() {
+  link_path "$DOTFILES_DIR/config/bash" "$CONFIG_DIR/bash"
+}
+
+link_bashrc() {
+  local src="$CONFIG_DIR/bash/bashrc"
+
+  # The target is reached through the config/bash link, so that link must be
+  # in place first (in dry-run it was only printed, not made).
+  if (( ! DRY_RUN )) && [[ ! -e "$src" ]]; then
+    warn "$src not found (is the config/bash link in place?)"
+    return 1
+  fi
+
+  link_path "$src" "$HOME/.bashrc"
+}
+
 # }}}
+
+# 4. teardown {{{
+
+# Print the newest "<path>.bak.<timestamp>" backup next to PATH, if any.
+find_backup() {
+  local path="$1"
+
+  find "$(dirname "$path")" -maxdepth 1 -name "$(basename "$path").bak.*" 2>/dev/null \
+    | sort | tail -n 1
+}
+
+
+# Inverse of link_path: remove DEST if it is a symlink to SRC, then restore
+# the newest backup link_path made, if there is one. Anything that is not
+# exactly our symlink is left alone. Returns 1 if DEST was left alone.
+unlink_path() {
+  local src="${1%/}" dest="${2%/}"
+
+  debug "unlink: $dest (expected -> $src)"
+
+  if [[ ! -e "$dest" && ! -L "$dest" ]]; then
+    info "Not present: $dest"
+    return 0
+  fi
+
+  if [[ ! -L "$dest" ]]; then
+    warn "$dest is not a symlink, leaving it alone"
+    return 1
+  fi
+
+  local target rdest rsrc ours=0
+  target="$(readlink "$dest")"
+  rdest="$(readlink -f "$dest" 2>/dev/null || true)"
+  rsrc="$(readlink -f "$src" 2>/dev/null || true)"
+
+  # Literal match also covers a dangling link (dotfiles directory already gone).
+  if [[ "$target" == "$src" ]]; then
+    ours=1
+  elif [[ -n "$rdest" && "$rdest" == "$rsrc" ]]; then
+    ours=1
+  fi
+
+  if (( ! ours )); then
+    warn "$dest points to $target, not $src; leaving it alone"
+    return 1
+  fi
+
+  run rm -- "$dest"
+  (( DRY_RUN )) || info "Removed: $dest"
+
+  local backup
+  backup="$(find_backup "$dest" || true)"
+
+  if [[ -n "$backup" ]]; then
+    debug "newest backup: $backup"
+    run mv -- "$backup" "$dest"
+    (( DRY_RUN )) || info "Restored backup: $backup -> $dest"
+  fi
+}
+
+
+# Remove DIR (non-recursively, so it can never delete content) if nothing is
+# left in it. In dry-run the links were only reported as removed, so IGNORE
+# names the one entry that would be gone by now.
+remove_dir_if_empty() {
+  local dir="${1%/}" ignore="" remaining
+
+  if [[ ! -d "$dir" || -L "$dir" ]]; then
+    return 0
+  fi
+
+  if (( DRY_RUN )); then
+    ignore="${2:-}"
+  fi
+
+  remaining="$(find "$dir" -mindepth 1 -maxdepth 1 ! -name "$ignore" 2>/dev/null | head -n 1)"
+
+  if [[ -n "$remaining" ]]; then
+    debug "$dir is not empty (found $remaining), leaving it"
+    return 0
+  fi
+
+  run rmdir -- "$dir"
+  (( DRY_RUN )) || info "Removed empty directory: $dir"
+}
+
+
+unlink_bashrc() {
+  unlink_path "$CONFIG_DIR/bash/bashrc" "$HOME/.bashrc"
+}
+
+
+unlink_bash_config() {
+  unlink_path "$DOTFILES_DIR/config/bash" "$CONFIG_DIR/bash"
+}
+
+
+# Also removes the libexec directory itself, but only if nothing else is in it.
+unlink_libexec() {
+  local rc=0
+
+  unlink_path "$DOTFILES_DIR/local/libexec/dotfiles" "$LIBEXEC_DIR/dotfiles" || rc=$?
+
+  # rc 0: our link is gone (or was never there). rc 1: something was left in its place.
+  if (( rc == 0 )); then
+    remove_dir_if_empty "$LIBEXEC_DIR" "dotfiles"
+  else
+    remove_dir_if_empty "$LIBEXEC_DIR"
+  fi
+
+  return "$rc"
+}
+
+
+unlink_bashlib() {
+  unlink_path "$DOTFILES_DIR/local/share/bashlib" "$DATA_DIR/bashlib"
+}
+
+
+unlink_dispatcher() {
+  unlink_path "$DOTFILES_DIR/local/bin/dotfiles" "$BIN_DIR/dotfiles"
+}
+
+
+# Delete the extracted dotfiles directory. Meant for a tarball extract only:
+# it refuses a git repository (history, unpushed work), a symlink, anything
+# that doesn't look like these dotfiles, and any path that contains $HOME.
+# Returns 1 if the directory was kept.
+remove_dotfiles_dir() {
+  local dir="${DOTFILES_DIR%/}" real
+
+  if [[ ! -e "$dir" && ! -L "$dir" ]]; then
+    info "Not present: $dir"
+    return 0
+  fi
+
+  if [[ -L "$dir" ]]; then
+    warn "$dir is a symlink; not deleting it"
+    return 1
+  fi
+
+  if [[ -d "$dir/.git" ]]; then
+    warn "$dir is a git repository, not a tarball extract; not deleting it"
+    return 1
+  fi
+
+  if [[ ! -f "$dir/local/bin/dotfiles" ]]; then
+    warn "$dir doesn't look like these dotfiles; not deleting it"
+    return 1
+  fi
+
+  real="$(readlink -f "$dir" 2>/dev/null || true)"
+
+  if [[ -z "$real" || "$real" == "/" || "$HOME" == "$real" || "$HOME" == "$real"/* ]]; then
+    warn "refusing to delete $dir (resolves to '$real')"
+    return 1
+  fi
+
+  confirm "Delete $dir? Any local edits in it will be lost." || return 1
+
+  run rm -rf -- "$dir"
+  (( DRY_RUN )) || info "Deleted: $dir"
+}
+
+
+# Reverse order of install: ~/.bashrc points through the config/bash link,
+# so it has to go first.
+teardown() {
+  choose_dir "Where are the dotfiles?"
+  echo
+
+  unlink_bashrc || true
+  echo
+
+  unlink_bash_config || true
+  echo
+
+  unlink_libexec || true
+  echo
+
+  unlink_bashlib || true
+  echo
+
+  unlink_dispatcher || true
+  echo
+
+  if ! remove_dotfiles_dir; then
+    info "Left in place: $DOTFILES_DIR"
+  fi
+  echo
+
+  if (( DRY_RUN )); then
+    info "Dry run complete. Nothing was changed."
+  else
+    info "Teardown complete."
+  fi
+}
+
+# }}}
+
 
 main() {
   parse_args "$@"
@@ -313,11 +575,11 @@ main() {
   fi
 
   if (( VERBOSE )); then
-    debug "REPO_URL=$REPO_URL"
+    debug "TARBALL_URL=$TARBALL_URL"
     debug "BIN_DIR=$BIN_DIR"
     debug "DATA_DIR=$DATA_DIR"
+    debug "CONFIG_DIR=$CONFIG_DIR"
     debug "LIBEXEC_DIR=$LIBEXEC_DIR"
-    debug "PROFILE=$PROFILE"
     if has_tty; then
       debug "interactive terminal: yes"
     else
@@ -326,21 +588,30 @@ main() {
     echo >&2
   fi
 
+  if (( TEARDOWN )); then
+    teardown
+    return 0
+  fi
+
   choose_dir
   echo
 
-  clone_repo
+  fetch_dotfiles
   echo
 
-  if link_dispatcher; then
-    ensure_in_path
-  fi
+  link_dispatcher || true
   echo
 
   link_bashlib || true
   echo
 
   link_libexec || true
+  echo
+
+  link_bash_config || true
+  echo
+
+  link_bashrc || true
   echo
 
   if (( DRY_RUN )); then
