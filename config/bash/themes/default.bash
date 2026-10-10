@@ -1,125 +1,158 @@
-#!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2034,SC2154,SC2016 vi: ft=sh fdm=marker ts=2 sw=2 et
+# themes/default.bash - muted, low-contrast theme with dark and light variants
 #
-# Default bash theme when BASH_PROMPT_THEME is not set or is empty.
+# Palette slots: 0 black 1 red 2 green 3 yellow 4 blue 5 magenta 6 cyan 7 white
+#                8-15 the bright versions (8 is used for muted/comment text)
+# Colors are RRGGBB without '#'. These are starting values: tune to taste.
 
-function main() {
 
-  # base-16 colors (normal/bright)
-  declare -a colorscheme=(
-    "101" "147" "219" "247" "56"  "225" "154" "126"
-    "209" "85"  "97"  "95"  "215" "208" "256" "148"
-    "71"  "18"  "130" "216" "28"  "226" "246" "246"
-    "216" "99"  "254" "169" "38"  "237" "196" "112"
-  )
+THEME_DEFAULT_LOADED=0
 
-  init::theme "${colorscheme[@]}" # ~0.004ms
+# ---- dark -------------------------------------------------------------------
+THEME_DARK_BG=2b303b
+THEME_DARK_FG=c0c5ce
+THEME_DARK_CURSOR=454b57
+THEME_DARK_PALETTE=(
+  2b303b bf616a a3be8c ebcb8b 81a1c1 b48ead 88c0d0 c0c5ce   # 0-7
+  5f6b78 c9737b b5cea0 f0d9a0 93b3d1 c39dbd 9ccfd8 dfe1e8   # 8-15
+)
 
-  __make_dircolors_pallete
+# ---- light ------------------------------------------------------------------
+THEME_LIGHT_BG=f5f2eb
+THEME_LIGHT_FG=4c566a
+THEME_LIGHT_CURSOR=c5c0b6
+THEME_LIGHT_PALETTE=(
+  3b4252 b0485a 5f8a4b a67c1e 4a6fa5 8a5a99 3a8a94 d5d0c4   # 0-7
+  8a90a0 c25f6f 6f9c5b b58d2e 5b83b8 9b6bab 4a9ba6 fbf8f1   # 8-15
+)
 
-  _set_prompts  # 0.040ms
+# TODO: add typed command color palette
+
+
+# ---- roles (role -> ANSI slot) -----------------------------------------------
+# Same for both variants: the palette changes, the roles don't.
+THEME_ROLE=(
+  [user]=2  [path]=4    [git]=5 [error]=1 [ok]=2     [warn]=3 [health]=1
+  [muted]=8 [heading]=4 [arg]=6 [stash]=6 [python]=3 [node]=2
+)
+
+
+# man/less colors, expressed as ANSI slots so they follow the theme.
+__theme::export_env_handle() {
+
+  export LESS_TERMCAP_mb=$'\e[1m'${THEME_SGR[error]-}     # blink start
+  export LESS_TERMCAP_md=$'\e[1m'${THEME_SGR[heading]-}   # bold: headings
+  export LESS_TERMCAP_me=$'\e[0m'
+  export LESS_TERMCAP_so=$'\e[7m'                         # standout: status/search
+  export LESS_TERMCAP_se=$'\e[0m'
+  export LESS_TERMCAP_us=${THEME_SGR[arg]-}$'\e[4m'       # underline: arguments
+  export LESS_TERMCAP_ue=$'\e[0m'
+  export GROFF_NO_SGR=1                                   # make man use termcap
+
 }
 
-function set_default_palette::ansi() {
-  if has_truecolors; then
-    for style in Bg bg Fg fg; do
-      local scheme_index=
-      case $style in
-        Bg) scheme_index=16 ;;
-        bg) scheme_index=0 ;;
-        Fg) scheme_index=24 ;;
-        fg) scheme_index=8 ;;
-      esac
-      if (( scheme_index > 8 )); then
-        prefix="38;5;"
-      else
-        prefix="48;5;"
+# Runs before every prompt. Must be first in PROMPT_COMMAND so $? is still the
+# exit status of the command you just ran; it hands $? on unchanged.
+__theme::prompt_handle() {
+# TODO: Add self benchmark using EPOCHREALTIME and log it when it exceed a budget.
+
+    local ret=$?
+    THEME_ARROW=${THEME_RL[ok]}
+    THEME_EXIT_SEG=
+
+    if (( ret )); then
+      THEME_ARROW=${THEME_RL[error]}
+      if [[ ${THEME_EXIT:-1} == 1 ]]; then
+        local mark='✗'
+        (( TERM_IS_CONSOLE )) && mark='x'
+        THEME_EXIT_SEG=" ${THEME_RL[error]}${mark}${ret}${THEME_RL[reset]}"
       fi
-      for (( i = 0; i < ${#palette[@]}; i++ )); do
-        eval "${style}${palette[i]}=\"\e[${prefix}${colors[scheme_index]}m\""
-        (( scheme_index++ ))
-      done
-    done
-    unset style
-  else
-    test
-  fi
+    fi
+
+    if __common::command_exists "git"; then
+      __prompt::git
+      THEME_GIT_SEG=$REPLY
+    fi
+
+    __prompt::python
+    THEME_PY_SEG=$REPLY
+
+    __prompt::errlog
+    THEME_ERRLOG_SEG=$REPLY
+
+    __prompt::node
+    THEME_NODE_SEG=$REPLY
+
+    __prompt::shlvl
+    THEME_SHLVL_SEG=$REPLY
+
+    return "$ret"
 }
 
-function _set_prompts() {
 
-  _make_prompt_var "arrow_color" \
-    "\[${bold}\]\[${Bggreen}\]" \
-    "\[${bold}\]\[${Bgred}\]"
 
-  _make_prompt_var "return_string" \
-    "" "\[${resetall}\]\[${dim}\]\t\t[exited ${ret-}]\[${resetall}\]"
 
-  local -a arrow=(
-    "${arrow_color}╭─\[${resetall}\]"
-    "${arrow_color}├─\[${resetall}\]"
-    "${arrow_color}╰─➤\[${resetall}\]" )
+# TODO: if possible
+# [x] Add return status.
+# [x] Merge the same stack (tree-like view).
+# [x] Dim color for stdout.
+function _ps4_callstack() {
+  # set +u
+  for (( i = ${#FUNCNAME[@]}; i > 0; i-- )); do
+    printf '\e[33m%b\e[36m%b\e[38;5;187m%b\e[0m \e[1;31m>\e[0m ' \
+      "${BASH_SOURCE[i]##*/}:" "${FUNCNAME[i]:+():}" "${BASH_LINENO[i]}"
+  done
+  # set -u
+}
 
-  test -n "${SSH_TTY:-}" &&
-    userhost_color="\[${Bgred}\]" ||
-    userhost_color="\[${Bgwhite}\]"
+# ---- prompt -------------------------------------------------------------------
+# Call after __theme::init and after sourcing lib/prompt.bash.
+# PS1 is static; the git segment and arrow color come from variables that
+# __theme::prompt refreshes before each prompt.
+# needs 'promptvars' options to be enabled
+__theme::main_handle() {
+  __theme::prompt_hook
 
-   [[ "${USER}" == 'root' ]] &&
-    userhost_color="\[${Bgred}\]" ||
-    userhost_color="\[${Bgwhite}\]"
-
-  if [[ -n "${VIRTUAL_ENV:-}" ]]; then
-    local -a virtual_env=(
-      "\[${normal}\]"
-      "\[\uE606\] " # 
-      "\[${dim}\]"
-      "$(basename " ${VIRTUAL_ENV}" )"
-      "\[${resetall}\]"
-      "\n"
-    )
+  # TODO: Basic prompt when colors are not supported. Move this in init
+  if (( TERM_COLORS < 8 )); then
+      PS1='\u@\h:\w${THEME_PY_SEG}${THEME_NODE_SEG}${THEME_GIT_SEG}${THEME_EXIT_SEG}${THEME_ERRLOG_SEG} \$ '
+      return
   fi
 
+  # nice symbols
+  local r=${THEME_PS1[reset]} m=${THEME_PS1[muted]}
+  local top='╭─' bot='╰─➤' title=
 
-  declare -r command_color=""
+  # TODO: ASCII symbols for linux console. Move this in init
+  if (( TERM_IS_CONSOLE )); then
+      top='┌─' bot='└─>'
+  fi
 
-  # ~6ms
-  local -a prompt=(
-    "\[${resetall}\]\[${normal}\]"
-    "${arrow[0]}"
-    "${userhost_color} \\\u@\H"
-    "\[${Bgmagenta}\]:"
-    "$( __cwd ):"
-    "$( __my_git_ps1 "${bold}" )" # ~20ms
-    "${DIRENV_DIFF:+DIRENV}"
-    "${return_string}"
-    "\n"
-    "${virtual_env[@]}" # python env
-    "${arrow[2]}"
-    "\[${resetall}${dim}\]"
-    " \$: "
-    "\[${resetall}\]")
-    # "\[\e[38;5;255m\]" )
+  if [[ $THEME_DEFAULT_LOADED -eq 1 ]]; then
+    echo 'reset ps1'
+    PS1=
+  fi
 
-  # PROMPT_DIRTRIM=2
-  PS1="$(printf "%b" "${prompt[@]}")"
+  # if (( THEME_APPLIED )); then
+  #   echo 'theme is applied'
+  #   PS1=
+  # fi
+
+  # PS1=
+
+  PS1+="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}:${THEME_PS1[path]}\w${r}"
+  PS1+='${THEME_SHLVL_SEG}${THEME_PY_SEG}${THEME_NODE_SEG}${THEME_GIT_SEG}${THEME_EXIT_SEG}${THEME_ERRLOG_SEG}'
+  PS1+="\n"'${THEME_ARROW}'"${bot}${r} \\\$ "
 
   # PS1 does not reset the final escape sequence of the prompt string,
   # we need to normalize after reading and before executing the command.
-  PS0='\n'"${normal}"
-
-  # Re-evaluate PS1 so we can get return status.
-  ::post_command "${FUNCNAME[0]}"
+  PS0='\n\e[0m'
 
   # Print newline after every command.
   ::post_command "printf '\n'"
 
-  unset -v arrow_color
-  unset -v return_string
-
-  PS2="${resetall}${normal}${arrow[2]}${resetall}${dim} \$: ${resetall}\[\e[38;5;216m\]"
+  # PS4='$(_ps4_callstack)'
 
 
-  PS4='$(_ps4_callstack)'
+  # [?] ErrLog at the right-most with auto-adjust on resize of the terminal (1 of 2)
+  # trap '__theme::errlog_winch' WINCH
 }
-
-main

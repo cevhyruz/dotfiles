@@ -1,69 +1,74 @@
 
------------------------------------------------------
-My Netrw Issues:
-----------------------------------------------------
+function
 
-[ ] when opening file in a horizontal split, open it not in the netrw window
-[ ] 'p' to scroll preview while also not leaving netrw buffer
-[ ] create a file without opening a buffer
-[ ] manually passing working directory should change the default working directory
-
------------------------------------------------------
-My Bufferlist issues
-----------------------------------------------------
-
-[ ] Buffer list toggling
-[ ] Mapping to open in split/vsplit
-[ ] Support preview without leaving the buffer list
-[ ] preserve cursor position
-
------------------------
-Netrw CRUD Operations
------------------------
-
-------------------
-Create
-------------------
-d - Make a dir
-% - Make a file (Opens a buffer)
+executable
+ - portability
+ - stateless
 
 
-------------------
-* Read
-------------------
- | Preview |
- p - Preview the file
- ctrl+w, z - Close the preview
- ctrl+w, P - Jump to preview
+plugin or executable?
 
- x - View file with associated program
- qf - Display file information
- a - cycle between
-
-------------------
-  opening file
-------------------
- v - open the file in vertical split
- o - open the file in a horizontal split
- t - open the file in a new tab
+plugin:
+  pros: 
 
 
+when to executable:
+ - for a script-type that has multiple dependencies, that is not crucial
+   for bash loading/startup (ex: listing of todo with fzf/nvim)
 
-------------------
-Update
-------------------
- R - Rename file/dir
-
-  
-
-------------------
-Delete
-------------------
- D - delete file/dir (enter for file, y + enter for dir)
+when to plugin:
+ - for a single, specific type, like extending fzf, bash history
 
 
------------------------
-File operations
------------------------
-gp - change file permission
+The only thing that should have state are:
+  - rc/config files
+  - app-like scripts
 
+
+aliases/     - personal
+completions/ - personal
+
+lib/       - for dependency-free library files (flat)
+
+functions/ - for a composed-lib dependent of library files (make use of lib) (plumbing functions)
+           - for writing my other scripts/command
+           - if two unrelated tools would want this, then it goes here..
+
+core/      - foundational non-negotiable features, sensible defaults (make use of lib, functions)
+
+plugins/   - (make use of functions, lib)
+           - shell session improvement
+           - sourced into live shell. whatever needs to change shell experience
+             that doesn't look like an standalone app itself.         
+           - plugins can be too personal,
+             * can be small utility or wrapper
+
+bin/       - too personal scripts that relies on lib/functions (make use of functions, lib)
+           - large
+
+
+
+# types of scripts
+
+1.) Stateful
+    - this is something that changes a shell variable, create/load a functions,
+    and anything that modifies the current shell
+
+
+2.) Stateless
+    - Something that has nothing to do with the current shell session. like
+      a script for downloading songs, uploading files and/or installing apps
+    - This sometimes can be called tools
+
+
+# Category of scripts
+
+1.) Library
+    - A script that provides readily-made functions to abstract and/or simplify
+      an otherwise complex task, for example: a spinner library that provides
+      _show_spinner() function that runs a cmd in the background and monitor the pid
+      of the background cmd to show a spinner until it's done.
+
+2.) Normal 
+    - a normal script, can be using functions or just flat bare control flow,
+      to achieve something. like the bashrc and/or profile

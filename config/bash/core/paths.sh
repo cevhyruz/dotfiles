@@ -6,9 +6,12 @@
 # core/path.bash — bootstrap PATH construction; depends on lib/utils.bash's add_to_path()
 
 
-# set PATH so it includes user's private bin if it exists
-bin_home="${XDG_BIN_HOME:-$HOME/.local/bin}"
-if [ -d "${bin_home}" ] ; then
-   export PATH="$bin_home:$PATH"
-fi
-unset bin_home
+core_paths=(
+ "${HOME}/.local/experimental/bin"     # experimental scripts
+ "${XDG_BIN_HOME:-${HOME}/.local/bin}" # my private bin
+)
+
+__path_prepend "${core_paths[@]}"
+export PATH
+
+unset core_paths

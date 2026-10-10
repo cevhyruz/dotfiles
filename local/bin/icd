@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+paths=(/etc /usr/share /tmp "$HOME")
+sel=0
+
+# Text shown at the top of the screen. Change it to whatever you like.
+prompt="Pick a directory  (j/k: move, Enter: select, q: cancel)"
+
+exec 3>/dev/tty            # all drawing goes to fd 3, never stdout
+
+enter() {
+  printf '\e[?1049h\e[?25l' >&3; stty -echo -icanon < /dev/tty;
+}
+
+leave() {
+  stty sane < /dev/tty; printf '\e[?25h\e[?1049l' >&3;
+}
+trap leave EXIT
+enter
+# Draws a one-line status bar on the last row of the screen.
+statusline() {
+  local rows cols left right text
+
+  # `stty size` prints "ROWS COLS". Read both into variables.
+  read -r rows cols < <(stty size < /dev/tty)
+
+  # Left side: which item is highlighted. Right side: position and key hints.
+  left=" ${paths[sel]}"
+  right="$((sel + 1))/${#paths[@]}  j/k:move  Enter:select  q:cancel "
+
+  # Pad the gap between left and right with spaces so the bar fills the row.
+  # ${#left} is the length of $left. The gap is never allowed below 1.
+  local gap=$((cols - ${#left} - ${#right}))
+  ((gap < 1)) && gap=1
+  printf -v text '%s%*s%s' "$left" "$gap" '' "$right"
+
+  # \e[ROW;1H : move the cursor to the last row, column 1.
+  # \e[7m     : reverse video, so the bar stands out.
+  # %.*s      : truncate to $cols characters so it never wraps.
+  # \e[0m     : reset attributes.
+  # No trailing newline: a newline on the last row would scroll the screen.
+  printf '\e[%d;1H\e[7m%.*s\e[0m' "$rows" "$cols" "$text" >&3
+}
+
+draw() {
+  # \e[H  : move cursor to top-left.
+  # \e[2J : clear the whole screen.
+  printf '\e[H\e[2J' >&3
+
+  # \e[1m : bold on. \e[0m : reset attributes.
+  # The extra \n leaves a blank line between the prompt and the list.
+  printf '\e[1m%s\e[0m\n\n' "$prompt" >&3
+
+  for i in "${!paths[@]}"; do
+    if ((i == sel)); then
+      # \e[7m : reverse video (highlight the selected item).
+      printf '\e[7m> %s\e[0m\n' "${paths[i]}" >&3
+    else
+      printf '  %s\n' "${paths[i]}" >&3
+    fi
+  done
+}
+
+while draw; do
+  IFS= read -rsn1 k < /dev/tty
+  case $k in
+    j) ((sel < ${#paths[@]}-1)) && ((sel++)) ;;
+    k) ((sel > 0)) && ((sel--)) ;;
+    q) exit 1 ;;                            # cancel: no output, non-zero exit
+    '') result=${paths[sel]}; break ;;      # Enter
+  esac
+done
+
+leave; trap - EXIT
+echo "$result"                              # only this reaches stdout

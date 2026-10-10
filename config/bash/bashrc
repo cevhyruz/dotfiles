@@ -2,6 +2,8 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
+{
+
 if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
   echo "Error: This config requires bash >= 5 (found: ${BASH_VERSION:-unknown})" >&2
   return 51
@@ -11,15 +13,19 @@ fi
 [[ $- != *i* ]] && return 1
 
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
-config_file="${config_dir}/init.bash"
 
 # initialize
+config_file="${config_dir}/init.bash"
+
 if [[ -f "${config_file}" ]]; then
   source "${config_file}" || echo "Warning: failed to initialize config file" >&2
 else
   echo "Warning: using minimal config" >&2
   source "${config_dir}/bashrc-minimal.bash" || echo "Warning: failed to load minimal config" >&2
 fi
+unset config_file
+
+source "${config_dir}/bash_completion" || echo "Warning: failed to load bash-completion" >&2
 
 # local config file
 local_bashrc="${config_dir}/localrc/bashrc.local"
@@ -29,4 +35,5 @@ fi
 unset local_bashrc
 
 unset config_dir
-unset config_file
+
+} 2> /tmp/errors.log

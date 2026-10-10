@@ -1,3 +1,0 @@
-# Double tap Alt (Mod1) → send Escape
-alt; alt
-    xdotool key Escape

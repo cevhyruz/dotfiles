@@ -6,10 +6,7 @@
 
 # @TODO: press ] will jump to next
 # if pairs has no content and has spaced pairs remove spaced pairs
-
-__pairs=( "''" '""' '()' '[]' '{}')
-
-function __smart_space() {
+autopairs_smart_space() { # {{{1
   AT_PROMPT=1
   local previous_char="${READLINE_LINE:READLINE_POINT-1:1}"
   local cursor_char="${READLINE_LINE:READLINE_POINT:1}"
@@ -33,7 +30,7 @@ function __smart_space() {
   (( READLINE_POINT++ ))
 }
 
-function __autopair() {
+autopairs() { # {{{1
 
   # FIXME: Hack for hooks triggering on 'bind -x'
   AT_PROMPT=1
@@ -73,7 +70,7 @@ function __autopair() {
   (( READLINE_POINT++ ))
 }
 
-function __depair() {
+__depair() { # {{{1
 
   # FIXME: Hack for hooks triggering on 'bind -x'
   AT_PROMPT=1
@@ -133,36 +130,32 @@ function __depair() {
   (( READLINE_POINT-- ))
 }
 
-function _pair() {
-  BASH_AUTOPAIR_BACKSPACE=1
+BASH_AUTOPAIR_BACKSPACE=1
 
-  # Show where the matching open paren is when inserting a closing one. Disabling
-  # as it hijacks the `)`, `]` and `}` characters to enable blinking.
-  bind "set blink-matching-paren off"
+# Show where the matching open paren is when inserting a closing one. Disabling
+# as it hijacks the `)`, `]` and `}` characters to enable blinking.
+bind "set blink-matching-paren off"
 
-  for pair in "${__pairs[@]}"; do
-    # ", '
-    bind -m vi-insert -x \
-      "\"\\${pair:0:1}\": __autopair \\${pair:0:1} \\${pair:0:1} \\${pair:1:1}"
-    # (), {}, []
-    if [[ "${pair:0:1}" != "${pair:1:1}" ]]; then
-      bind -m vi-insert -x \
-        "\"${pair:1:1}\": __autopair \\${pair:1:1} \\${pair:0:1} \\${pair:1:1}"
+  for pair in "''" '""' '()' '[]' '{}'; do
+    open=${pair:0:1} close=${pair:1:1}
+    printf -v qo '%q' "$open"
+    printf -v qc '%q' "$close"
+
+    key=$open
+    [[ $open == '"' ]] && key='\"'
+    bind -m vi-insert -x "\"$key\": autopairs $qo $qo $qc"
+
+    if [[ $open != "$close" ]]; then
+      bind -m vi-insert -x "\"$close\": autopairs $qc $qo $qc"
     fi
   done
-  unset pair
 
-  bind -m vi-insert -x '" ": __smart_space'
-  bind -m vi-insert -x '"\C-h": __depair'
 
-  if [[ -v BASH_AUTOPAIR_BACKSPACE ]]; then
-    # https://lists.gnu.org/archive/html/bug-bash/2019-11/msg00129.html
-    bind 'set bind-tty-special-chars off'
-    bind -m vi-insert -x '"\C-?": __depair'
-  fi
-}
+bind -m vi-insert -x '" ": autopairs_smart_space'
+bind -m vi-insert -x '"\C-h": __depair'
 
-# don't bind when we are mocking tests.
-if [[ -z "${TEST_DIRECTORY:-}" ]]; then
-  _pair
+if [[ -v BASH_AUTOPAIR_BACKSPACE ]]; then
+  # https://lists.gnu.org/archive/html/bug-bash/2019-11/msg00129.html
+  bind 'set bind-tty-special-chars off'
+  bind -m vi-insert -x '"\C-?": __depair'
 fi

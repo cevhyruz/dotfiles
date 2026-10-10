@@ -1,8 +1,0 @@
-# vim: set ft=dosini :
-
-[module/cpu]
-type = internal/cpu
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.primary}
-label = %percentage:2%%

@@ -1,0 +1,42 @@
+# shellcheck shell=bash
+# vim: ft=bash fdm=marker ts=2 sw=2 et
+
+[[ ${BASH_COMPLETION_VERSINFO-} ]] && return 0
+
+# To override a completion for a specific command, you can install your own completion
+# file for the command into an appropriate place.
+# User-specific completion files defaults to '$XDG_DATA_HOME/bash-completion'
+# or '~/.local/share/bash-completion'
+BASH_COMPLETION_USER_DIR="${config_dir}"
+
+# default ~/.bash_completion
+# BASH_COMPLETION_USER_FILE="${config_dir}/bash_completion"
+
+_bashcomp_main=
+
+if [[ ! ${BASH_COMPLETION_VERSINFO:-} && -f /usr/share/bash-completion/bash_completion ]]; then
+  true
+fi
+
+for _f in \
+  /mnt/5edb692f-316d-428b-b10d-43b9b9ad2988/Projects/reference/bash-completion/bash_completion \
+  /usr/share/bash-completion/bash_completion \
+  /etc/bash_completion
+do
+  if [[ -r $_f ]]; then
+    _bashcomp_main=$_f
+    break
+  fi
+done
+unset _f
+
+if [[ -z $_bashcomp_main ]]; then
+  echo "bash-completion: not installed (install the 'bash-completion' package)" >&2
+  unset _bashcomp_main
+  return 0
+fi
+
+# TODO: Some completions produce errors with 'nounset' enabled, I can maybe
+# just turn if off around here and just re-enable after.
+source "$_bashcomp_main" || echo "bash-completion: failed to source $_bashcomp_main" >&2
+unset _bashcomp_main

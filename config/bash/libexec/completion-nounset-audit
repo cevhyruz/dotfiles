@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# nounset-audit.sh
+source /usr/share/bash-completion/bash_completion
+
+for f in /usr/share/bash-completion/completions/*; do
+  cmd=${f##*/}
+  for cur in "" "-"; do
+    (
+      set -u
+      _completion_loader "$cmd" 2>/dev/null
+      spec=$(complete -p "$cmd" 2>/dev/null) || exit 0
+      [[ $spec =~ -F[[:space:]]+([^[:space:]]+) ]] || exit 0
+      fn=${BASH_REMATCH[1]}
+
+      COMP_WORDS=("$cmd" "$cur"); COMP_CWORD=1
+      COMP_LINE="$cmd $cur";      COMP_POINT=${#COMP_LINE}
+      COMPREPLY=()
+      "$fn" "$cmd" "$cur" "$cmd"
+    ) 2>&1 >/dev/null \
+      | grep -m1 'unbound variable' \
+      | sed "s/^/$cmd [${cur:-<empty>}]: /" \
+      | grep -m1 'unbound variable' \
+      | while IFS= read -r line; do
+          [[ $line =~ (/[^:]+):\ line ]] && file=${BASH_REMATCH[1]} || file=
+          if [[ -z $file ]]; then
+            owner="no file (generated, e.g. source <(tool completion bash))"
+          else
+            owner=$(dpkg -S "$file" 2>/dev/null | cut -d: -f1)   # rpm -qf "$file" on Fedora/RHEL
+            [[ -z $owner ]] && owner="unowned (local/user file)"
+          fi
+          echo "$cmd [${cur:-<empty>}] -> $file | $owner"
+        done
+  done
+done

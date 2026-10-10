@@ -3,6 +3,7 @@ localrc/*
 # bash
 config/bash/localrc/*
 !localrc/.gitkeep
+config/bash/bashrc_local
 
 # Code coverage reports
 coverage/

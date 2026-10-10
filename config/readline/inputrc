@@ -97,9 +97,9 @@ $include ~/.config/readline/surround
 set completion-query-items -1
 
 # Print each completion on its own line
-set completion-display-width 0
+set completion-display-width -1
 
-set completion-prefix-display-length 3
+set completion-prefix-display-length 0
 
 # Make sure we don't output everything on the 1 line
 set horizontal-scroll-mode off

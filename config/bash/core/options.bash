@@ -15,6 +15,7 @@ set +o functrace  # disable trap DEBUG on subshells.
 
 # enabled options
 
+shopt -s promptvars              # expand prompt values.
 shopt -s no_empty_cmd_completion # no auto-completion on empty line.
 shopt -s autocd                  # allow omitting `cd` to directory names.
 shopt -s cdspell                 # auto-correct typos in path names.
