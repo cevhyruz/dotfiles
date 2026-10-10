@@ -24,7 +24,9 @@ export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 
-[[ -f "$XDG_CONFIG_HOME/wget/wgetrc" ]] && export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+if [[ -f "$XDG_CONFIG_HOME/wget/wgetrc" ]]; then
+  export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+fi
 
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
