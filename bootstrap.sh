@@ -31,7 +31,6 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
 
 DRY_RUN=0
-VERBOSE=0
 TEARDOWN=0
 LINK_DIR=""
 
@@ -40,14 +39,6 @@ LINK_DIR=""
 info() { printf '==> %s\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
 die()  { printf 'error: %s\n' "$*" >&2; exit 1; }
-
-# Extra detail, only with --verbose. Uses `if` so a quiet run never returns
-# non-zero (which would trip `set -e` in the caller).
-debug() {
-  if (( VERBOSE )); then
-    printf '  [verbose] %s\n' "$*" >&2
-  fi
-}
 
 usage() {
   cat <<EOF
@@ -62,7 +53,6 @@ Options:
                   remove ~/.local/libexec if it ends up empty, and delete
                   the extracted dotfiles (asks first)
   -n, --dry-run   Show what would happen without changing anything
-  -v, --verbose   Show resolved paths and the decision behind each step
   -h, --help      Show this help and exit
 
 Environment:
@@ -82,7 +72,6 @@ Links created:
 
 Examples:
   ./bootstrap.sh --dry-run
-  ./bootstrap.sh --dry-run --verbose
   ./bootstrap.sh --teardown --dry-run
   ./bootstrap.sh --link ~/Projects/Personal/Dotfiles --dry-run
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
@@ -93,7 +82,7 @@ nothing is downloaded, created, moved, linked, or written.
 
 Teardown only removes symlinks that point where this script put them. It
 then offers to delete the extracted dotfiles directory, but never a git
-repository. Short flags can be combined (for example -nv or -nt).
+repository. Short flags can be combined (for example -nt or -nl DIR).
 
 --link overrides DOTFILES_DIR, and can't be combined with --teardown.
 EOF
@@ -102,7 +91,7 @@ EOF
 parse_args() {
   local args=() arg i
 
-  # Split bundled short flags: -nv becomes -n -v.
+  # Split bundled short flags: -nt becomes -n -t.
   for arg in "$@"; do
     if [[ "$arg" =~ ^-[A-Za-z]{2,}$ ]]; then
       for (( i = 1; i < ${#arg}; i++ )); do
@@ -118,7 +107,6 @@ parse_args() {
   while (( $# )); do
     case "$1" in
       -n|--dry-run)  DRY_RUN=1 ;;
-      -v|--verbose)  VERBOSE=1 ;;
       -t|--teardown) TEARDOWN=1 ;;
       -l|--link)
         if (( $# < 2 )) || [[ "$2" == -* ]]; then
@@ -144,7 +132,6 @@ run() {
   if (( DRY_RUN )); then
     printf '[dry-run] %s\n' "$*"
   else
-    debug "run: $*"
     "$@"
   fi
 }
@@ -230,8 +217,6 @@ fetch_tarball() {
   tmp="$(mktemp -d)"
   mkdir "$tmp/src"
 
-  debug "staging in $tmp"
-
   if ! curl -fsSL "$TARBALL_URL" -o "$tmp/dotfiles.tar.gz"; then
     rm -rf "$tmp"
     die "download failed: $TARBALL_URL"
@@ -266,24 +251,19 @@ check_source() {
     || die "bash config not found at $DOTFILES_DIR/config/bash"
   [[ -f "$DOTFILES_DIR/config/bash/bashrc" ]] \
     || die "bashrc not found at $DOTFILES_DIR/config/bash/bashrc"
-
-  debug "source check passed: local/bin/dotfiles, local/share/bashlib, local/libexec/dotfiles, config/bash, config/bash/bashrc"
 }
 
 fetch_dotfiles() {
   if [[ -d "$DOTFILES_DIR/.git" ]]; then
-    debug "$DOTFILES_DIR/.git exists"
     info "Repository already present at $DOTFILES_DIR, skipping download"
 
   elif [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
-    debug "$DOTFILES_DIR/local/bin/dotfiles exists (previous tarball extract)"
     info "Dotfiles already present at $DOTFILES_DIR, skipping download"
 
   elif [[ -d "$DOTFILES_DIR" && -n "$(ls -A "$DOTFILES_DIR")" ]]; then
     die "$DOTFILES_DIR exists and is not empty (and doesn't look like these dotfiles)"
 
   else
-    debug "$DOTFILES_DIR is missing or empty"
     info "Downloading $TARBALL_URL into $DOTFILES_DIR"
     fetch_tarball
   fi
@@ -307,7 +287,6 @@ ensure_dir() {
   local dir="$1"
 
   if [[ -d "$dir" ]]; then
-    debug "directory exists: $dir"
     return 0
   fi
 
@@ -332,11 +311,9 @@ ensure_dir() {
 link_path() {
   local src="${1%/}" dest="${2%/}"
 
-  debug "link: $dest -> $src"
   ensure_dir "$(dirname "$dest")" || return 1
 
   if [[ -L "$dest" ]]; then
-    debug "$dest is a symlink (currently -> $(readlink "$dest"))"
     if [[ "$(readlink -f "$dest")" == "$(readlink -f "$src")" ]]; then
       info "Already linked: $dest"
       return 0
@@ -345,7 +322,6 @@ link_path() {
     confirm "Replace it with a link to $src?" \
       || { info "Left $dest unchanged"; return 1; }
   elif [[ -e "$dest" ]]; then
-    debug "$dest exists as a regular file or directory"
     local backup
     backup="$dest.bak.$(date +%s)"
     warn "$dest exists and is not a symlink"
@@ -355,9 +331,6 @@ link_path() {
     (( DRY_RUN )) || info "Moved $dest -> $backup"
   fi
 
-  if [[ ! -e "$dest" && ! -L "$dest" ]]; then
-    debug "$dest does not exist yet"
-  fi
   run ln -sfn -- "$src" "$dest"
   (( DRY_RUN )) || info "Linked: $dest -> $src"
 }
@@ -411,8 +384,6 @@ find_backup() {
 unlink_path() {
   local src="${1%/}" dest="${2%/}"
 
-  debug "unlink: $dest (expected -> $src)"
-
   if [[ ! -e "$dest" && ! -L "$dest" ]]; then
     info "Not present: $dest"
     return 0
@@ -447,7 +418,6 @@ unlink_path() {
   backup="$(find_backup "$dest" || true)"
 
   if [[ -n "$backup" ]]; then
-    debug "newest backup: $backup"
     run mv -- "$backup" "$dest"
     (( DRY_RUN )) || info "Restored backup: $backup -> $dest"
   fi
@@ -471,7 +441,6 @@ remove_dir_if_empty() {
   remaining="$(find "$dir" -mindepth 1 -maxdepth 1 ! -name "$ignore" 2>/dev/null | head -n 1)"
 
   if [[ -n "$remaining" ]]; then
-    debug "$dir is not empty (found $remaining), leaving it"
     return 0
   fi
 
@@ -600,21 +569,6 @@ main() {
   if (( DRY_RUN )); then
     info "Dry run: no changes will be made"
     echo
-  fi
-
-  if (( VERBOSE )); then
-    debug "TARBALL_URL=$TARBALL_URL"
-    debug "BIN_DIR=$BIN_DIR"
-    debug "DATA_DIR=$DATA_DIR"
-    debug "CONFIG_DIR=$CONFIG_DIR"
-    debug "LIBEXEC_DIR=$LIBEXEC_DIR"
-    debug "LINK_DIR=${LINK_DIR:-<none>}"
-    if has_tty; then
-      debug "interactive terminal: yes"
-    else
-      debug "interactive terminal: no (prompts default to 'no')"
-    fi
-    echo >&2
   fi
 
   if (( TEARDOWN )); then
