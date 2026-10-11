@@ -7,6 +7,7 @@
 # This will:
 #
 #  Download the dotfiles tarball (no git needed) and extract it into your location of choice
+#  (or, with --link DIR, skip the download and use dotfiles you already have at DIR)
 #  Symlink the file <dotfiles>/local/bin/dotfiles into '~/.local/bin/dotfiles'
 #  Symlink the dir <dotfiles>/local/share/bashlib/ into '~/.local/share/bashlib/'
 #  Symlink the dir <dotfiles>/local/libexec/dotfiles/ into '~/.local/libexec/dotfiles/'
@@ -32,6 +33,7 @@ LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
 DRY_RUN=0
 VERBOSE=0
 TEARDOWN=0
+LINK_DIR=""
 
 # helpers {{{
 
@@ -55,6 +57,7 @@ Download the dotfiles tarball and symlink their pieces into place.
 Requires only curl and tar (no git).
 
 Options:
+  -l, --link DIR  Don't download anything; link the dotfiles already at DIR
   -t, --teardown  Remove the symlinks this script created, restore backups,
                   remove ~/.local/libexec if it ends up empty, and delete
                   the extracted dotfiles (asks first)
@@ -81,6 +84,7 @@ Examples:
   ./bootstrap.sh --dry-run
   ./bootstrap.sh --dry-run --verbose
   ./bootstrap.sh --teardown --dry-run
+  ./bootstrap.sh --link ~/Projects/Personal/Dotfiles --dry-run
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
   curl -fsSL <url>/bootstrap.sh | bash -s -- --dry-run
 
@@ -90,6 +94,8 @@ nothing is downloaded, created, moved, linked, or written.
 Teardown only removes symlinks that point where this script put them. It
 then offers to delete the extracted dotfiles directory, but never a git
 repository. Short flags can be combined (for example -nv or -nt).
+
+--link overrides DOTFILES_DIR, and can't be combined with --teardown.
 EOF
 }
 
@@ -114,6 +120,17 @@ parse_args() {
       -n|--dry-run)  DRY_RUN=1 ;;
       -v|--verbose)  VERBOSE=1 ;;
       -t|--teardown) TEARDOWN=1 ;;
+      -l|--link)
+        if (( $# < 2 )) || [[ "$2" == -* ]]; then
+          die "$1 requires a directory"
+        fi
+        LINK_DIR="$2"
+        shift
+        ;;
+      --link=*)
+        LINK_DIR="${1#--link=}"
+        [[ -n "$LINK_DIR" ]] || die "--link requires a directory"
+        ;;
       -h|--help)     usage; exit 0 ;;
       *)             warn "unknown option: $1"; usage >&2; exit 1 ;;
     esac
@@ -153,6 +170,20 @@ confirm() {
   [[ "$ans" =~ ^[Yy]$ ]]
 }
 
+# Expand a leading ~ and make relative paths absolute (no trailing slash).
+abs_path() {
+  local p="$1"
+
+  case "$p" in
+    "~")    p="$HOME" ;;
+    "~/"*)  p="$HOME/${p#"~/"}" ;;
+    /*)     ;;
+    *)      p="$PWD/$p" ;;
+  esac
+
+  printf '%s\n' "${p%/}"
+}
+
 # Ask for a directory, showing a default. Empty answer (or no terminal)
 # returns the default. Expands a leading ~ and makes relative paths absolute.
 ask_dir() {
@@ -160,16 +191,8 @@ ask_dir() {
   if has_tty; then
     read -r -p "$prompt [$default] " ans < /dev/tty || true
   fi
-  ans="${ans:-$default}"
 
-  case "$ans" in
-    "~")    ans="$HOME" ;;
-    "~/"*)  ans="$HOME/${ans#"~/"}" ;;
-    /*)     ;;
-    *)      ans="$PWD/$ans" ;;
-  esac
-
-  printf '%s\n' "${ans%/}"
+  abs_path "${ans:-$default}"
 }
 
 # }}}
@@ -231,6 +254,22 @@ fetch_tarball() {
   rm -rf "$tmp"
 }
 
+# Make sure DOTFILES_DIR has everything the linking steps need.
+check_source() {
+  [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]] \
+    || die "dispatcher not found at $DOTFILES_DIR/local/bin/dotfiles"
+  [[ -d "$DOTFILES_DIR/local/share/bashlib" ]] \
+    || die "bashlib not found at $DOTFILES_DIR/local/share/bashlib"
+  [[ -d "$DOTFILES_DIR/local/libexec/dotfiles" ]] \
+    || die "libexec not found at $DOTFILES_DIR/local/libexec/dotfiles"
+  [[ -d "$DOTFILES_DIR/config/bash" ]] \
+    || die "bash config not found at $DOTFILES_DIR/config/bash"
+  [[ -f "$DOTFILES_DIR/config/bash/bashrc" ]] \
+    || die "bashrc not found at $DOTFILES_DIR/config/bash/bashrc"
+
+  debug "source check passed: local/bin/dotfiles, local/share/bashlib, local/libexec/dotfiles, config/bash, config/bash/bashrc"
+}
+
 fetch_dotfiles() {
   if [[ -d "$DOTFILES_DIR/.git" ]]; then
     debug "$DOTFILES_DIR/.git exists"
@@ -255,18 +294,7 @@ fetch_dotfiles() {
     return 0
   fi
 
-  [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]] \
-    || die "dispatcher not found at $DOTFILES_DIR/local/bin/dotfiles"
-  [[ -d "$DOTFILES_DIR/local/share/bashlib" ]] \
-    || die "bashlib not found at $DOTFILES_DIR/local/share/bashlib"
-  [[ -d "$DOTFILES_DIR/local/libexec/dotfiles" ]] \
-    || die "libexec not found at $DOTFILES_DIR/local/libexec/dotfiles"
-  [[ -d "$DOTFILES_DIR/config/bash" ]] \
-    || die "bash config not found at $DOTFILES_DIR/config/bash"
-  [[ -f "$DOTFILES_DIR/config/bash/bashrc" ]] \
-    || die "bashrc not found at $DOTFILES_DIR/config/bash/bashrc"
-
-  debug "source check passed: local/bin/dotfiles, local/share/bashlib, local/libexec/dotfiles, config/bash, config/bash/bashrc"
+  check_source
 }
 
 # }}}
@@ -580,6 +608,7 @@ main() {
     debug "DATA_DIR=$DATA_DIR"
     debug "CONFIG_DIR=$CONFIG_DIR"
     debug "LIBEXEC_DIR=$LIBEXEC_DIR"
+    debug "LINK_DIR=${LINK_DIR:-<none>}"
     if has_tty; then
       debug "interactive terminal: yes"
     else
@@ -589,14 +618,22 @@ main() {
   fi
 
   if (( TEARDOWN )); then
+    [[ -z "$LINK_DIR" ]] || die "--link and --teardown can't be combined"
     teardown
     return 0
   fi
 
-  choose_dir
-  echo
+  if [[ -n "$LINK_DIR" ]]; then
+    DOTFILES_DIR="$(abs_path "$LINK_DIR")"
+    [[ -d "$DOTFILES_DIR" ]] || die "not a directory: $DOTFILES_DIR"
+    info "Linking from $DOTFILES_DIR (no download)"
+    check_source
+  else
+    choose_dir
+    echo
 
-  fetch_dotfiles
+    fetch_dotfiles
+  fi
   echo
 
   link_dispatcher || true
