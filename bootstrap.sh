@@ -14,9 +14,9 @@
 #  Symlink the dir <dotfiles>/config/bash/ into '~/.config/bash/'
 #  Symlink the file ~/.config/bash/bashrc into '~/.bashrc'
 #
-# Run with --help for usage, --dry-run to preview without changing anything,
-# or --teardown to undo the symlinks (restoring any backups it made), remove
-# the libexec directory if it ends up empty, and delete the extracted dotfiles.
+# Run with --help for usage, or --teardown to undo the symlinks (restoring any
+# backups it made), remove the libexec directory if it ends up empty, and
+# delete the extracted dotfiles.
 
 
 set -euo pipefail
@@ -30,7 +30,6 @@ DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
 
-DRY_RUN=0
 TEARDOWN=0
 LINK_DIR=""
 
@@ -52,7 +51,6 @@ Options:
   -t, --teardown  Remove the symlinks this script created, restore backups,
                   remove ~/.local/libexec if it ends up empty, and delete
                   the extracted dotfiles (asks first)
-  -n, --dry-run   Show what would happen without changing anything
   -h, --help      Show this help and exit
 
 Environment:
@@ -71,18 +69,15 @@ Links created:
   <config>/bash/bashrc                     -> $HOME/.bashrc
 
 Examples:
-  ./bootstrap.sh --dry-run
-  ./bootstrap.sh --teardown --dry-run
-  ./bootstrap.sh --link ~/Projects/Personal/Dotfiles --dry-run
+  ./bootstrap.sh
+  ./bootstrap.sh --teardown
+  ./bootstrap.sh --link ~/Projects/Personal/Dotfiles
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
-  curl -fsSL <url>/bootstrap.sh | bash -s -- --dry-run
-
-In dry-run mode every prompt is answered 'yes' so the full plan is shown;
-nothing is downloaded, created, moved, linked, or written.
+  curl -fsSL <url>/bootstrap.sh | bash
 
 Teardown only removes symlinks that point where this script put them. It
 then offers to delete the extracted dotfiles directory, but never a git
-repository. Short flags can be combined (for example -nt or -nl DIR).
+repository.
 
 --link overrides DOTFILES_DIR, and can't be combined with --teardown.
 EOF
@@ -91,7 +86,7 @@ EOF
 parse_args() {
   local args=() arg i
 
-  # Split bundled short flags: -nt becomes -n -t.
+  # Split bundled short flags: -tl becomes -t -l.
   for arg in "$@"; do
     if [[ "$arg" =~ ^-[A-Za-z]{2,}$ ]]; then
       for (( i = 1; i < ${#arg}; i++ )); do
@@ -106,7 +101,6 @@ parse_args() {
 
   while (( $# )); do
     case "$1" in
-      -n|--dry-run)  DRY_RUN=1 ;;
       -t|--teardown) TEARDOWN=1 ;;
       -l|--link)
         if (( $# < 2 )) || [[ "$2" == -* ]]; then
@@ -127,27 +121,12 @@ parse_args() {
   done
 }
 
-# Run a command, or just print it in dry-run mode.
-run() {
-  if (( DRY_RUN )); then
-    printf '[dry-run] %s\n' "$*"
-  else
-    "$@"
-  fi
-}
-
 # True if we can actually read from the terminal (works under curl | bash).
 has_tty() { { : < /dev/tty; } 2>/dev/null; }
 
 # Ask a yes/no question, default NO. With no terminal, answers no.
-# In dry-run mode, answers yes so the whole plan is shown.
 confirm() {
   local prompt="$1" ans=""
-
-  if (( DRY_RUN )); then
-    info "[dry-run] assuming 'yes' for: $prompt"
-    return 0
-  fi
 
   if has_tty; then
     read -r -p "$prompt [y/N] " ans < /dev/tty || true
@@ -205,14 +184,6 @@ fetch_tarball() {
   command -v curl >/dev/null 2>&1 || die "curl is required but not installed"
   command -v tar  >/dev/null 2>&1 || die "tar is required but not installed"
 
-  if (( DRY_RUN )); then
-    run curl -fsSL "$TARBALL_URL" -o "<tmp>/dotfiles.tar.gz"
-    run tar -xzf "<tmp>/dotfiles.tar.gz" --strip-components=1 -C "<tmp>/src"
-    run mkdir -p "$(dirname "$DOTFILES_DIR")"
-    run mv "<tmp>/src" "$DOTFILES_DIR"
-    return 0
-  fi
-
   local tmp
   tmp="$(mktemp -d)"
   mkdir "$tmp/src"
@@ -268,12 +239,6 @@ fetch_dotfiles() {
     fetch_tarball
   fi
 
-  # Nothing was downloaded in dry-run mode, so there is nothing to validate yet.
-  if (( DRY_RUN )) && [[ ! -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
-    info "[dry-run] skipping source checks: dotfiles not downloaded"
-    return 0
-  fi
-
   check_source
 }
 
@@ -291,8 +256,8 @@ ensure_dir() {
   fi
 
   if confirm "$dir does not exist. Create it?"; then
-    run mkdir -p "$dir"
-    (( DRY_RUN )) || info "Created $dir"
+    mkdir -p "$dir"
+    info "Created $dir"
   else
     warn "skipping: $dir was not created"
     return 1
@@ -327,16 +292,16 @@ link_path() {
     warn "$dest exists and is not a symlink"
     confirm "Move it to $backup and link to $src?" \
       || { info "Left $dest unchanged"; return 1; }
-    run mv -- "$dest" "$backup"
-    (( DRY_RUN )) || info "Moved $dest -> $backup"
+    mv -- "$dest" "$backup"
+    info "Moved $dest -> $backup"
   fi
 
-  run ln -sfn -- "$src" "$dest"
-  (( DRY_RUN )) || info "Linked: $dest -> $src"
+  ln -sfn -- "$src" "$dest"
+  info "Linked: $dest -> $src"
 }
 
 link_dispatcher() {
-  run chmod +x "$DOTFILES_DIR/local/bin/dotfiles"
+  chmod +x "$DOTFILES_DIR/local/bin/dotfiles"
   link_path "$DOTFILES_DIR/local/bin/dotfiles" "$BIN_DIR/dotfiles"
 }
 
@@ -356,8 +321,8 @@ link_bashrc() {
   local src="$CONFIG_DIR/bash/bashrc"
 
   # The target is reached through the config/bash link, so that link must be
-  # in place first (in dry-run it was only printed, not made).
-  if (( ! DRY_RUN )) && [[ ! -e "$src" ]]; then
+  # in place first.
+  if [[ ! -e "$src" ]]; then
     warn "$src not found (is the config/bash link in place?)"
     return 1
   fi
@@ -411,41 +376,36 @@ unlink_path() {
     return 1
   fi
 
-  run rm -- "$dest"
-  (( DRY_RUN )) || info "Removed: $dest"
+  rm -- "$dest"
+  info "Removed: $dest"
 
   local backup
   backup="$(find_backup "$dest" || true)"
 
   if [[ -n "$backup" ]]; then
-    run mv -- "$backup" "$dest"
-    (( DRY_RUN )) || info "Restored backup: $backup -> $dest"
+    mv -- "$backup" "$dest"
+    info "Restored backup: $backup -> $dest"
   fi
 }
 
 
 # Remove DIR (non-recursively, so it can never delete content) if nothing is
-# left in it. In dry-run the links were only reported as removed, so IGNORE
-# names the one entry that would be gone by now.
+# left in it.
 remove_dir_if_empty() {
-  local dir="${1%/}" ignore="" remaining
+  local dir="${1%/}" remaining
 
   if [[ ! -d "$dir" || -L "$dir" ]]; then
     return 0
   fi
 
-  if (( DRY_RUN )); then
-    ignore="${2:-}"
-  fi
-
-  remaining="$(find "$dir" -mindepth 1 -maxdepth 1 ! -name "$ignore" 2>/dev/null | head -n 1)"
+  remaining="$(find "$dir" -mindepth 1 -maxdepth 1 2>/dev/null | head -n 1)"
 
   if [[ -n "$remaining" ]]; then
     return 0
   fi
 
-  run rmdir -- "$dir"
-  (( DRY_RUN )) || info "Removed empty directory: $dir"
+  rmdir -- "$dir"
+  info "Removed empty directory: $dir"
 }
 
 
@@ -465,12 +425,7 @@ unlink_libexec() {
 
   unlink_path "$DOTFILES_DIR/local/libexec/dotfiles" "$LIBEXEC_DIR/dotfiles" || rc=$?
 
-  # rc 0: our link is gone (or was never there). rc 1: something was left in its place.
-  if (( rc == 0 )); then
-    remove_dir_if_empty "$LIBEXEC_DIR" "dotfiles"
-  else
-    remove_dir_if_empty "$LIBEXEC_DIR"
-  fi
+  remove_dir_if_empty "$LIBEXEC_DIR"
 
   return "$rc"
 }
@@ -522,8 +477,8 @@ remove_dotfiles_dir() {
 
   confirm "Delete $dir? Any local edits in it will be lost." || return 1
 
-  run rm -rf -- "$dir"
-  (( DRY_RUN )) || info "Deleted: $dir"
+  rm -rf -- "$dir"
+  info "Deleted: $dir"
 }
 
 
@@ -553,11 +508,7 @@ teardown() {
   fi
   echo
 
-  if (( DRY_RUN )); then
-    info "Dry run complete. Nothing was changed."
-  else
-    info "Teardown complete."
-  fi
+  info "Teardown complete."
 }
 
 # }}}
@@ -565,11 +516,6 @@ teardown() {
 
 main() {
   parse_args "$@"
-
-  if (( DRY_RUN )); then
-    info "Dry run: no changes will be made"
-    echo
-  fi
 
   if (( TEARDOWN )); then
     [[ -z "$LINK_DIR" ]] || die "--link and --teardown can't be combined"
@@ -605,11 +551,7 @@ main() {
   link_bashrc || true
   echo
 
-  if (( DRY_RUN )); then
-    info "Dry run complete. Nothing was changed."
-  else
-    info "Done. Run 'dotfiles' to continue (or $DOTFILES_DIR/local/bin/dotfiles if PATH isn't updated yet)."
-  fi
+  info "Done. Run 'dotfiles' to continue (or $DOTFILES_DIR/local/bin/dotfiles if PATH isn't updated yet)."
 }
 
 main "$@"
