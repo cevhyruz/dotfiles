@@ -1,39 +1,44 @@
-#!/usr/bin/env bash
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
 #
 # Bootstrap script for my dotfiles
-#
-# This will:
-#
-#  Download the dotfiles tarball (no git needed) and extract it into your location of choice
-#  (or, with --link DIR, skip the download and use dotfiles you already have at DIR)
-#  Symlink the file <dotfiles>/local/bin/dotfiles into '~/.local/bin/dotfiles'
-#  Symlink the dir <dotfiles>/local/share/bashlib/ into '~/.local/share/bashlib/'
-#  Symlink the dir <dotfiles>/local/libexec/dotfiles/ into '~/.local/libexec/dotfiles/'
-#  Symlink the dir <dotfiles>/config/bash/ into '~/.config/bash/'
-#  Symlink the file ~/.config/bash/bashrc into '~/.bashrc'
-#
-# Run with --help for usage, or --teardown to undo the symlinks (restoring any
-# backups it made), remove the libexec directory if it ends up empty, and
-# delete the extracted dotfiles.
 
 
 set -euo pipefail
 
 DOTFILES_BRANCH="${DOTFILES_BRANCH:-master}"
-TARBALL_URL="${DOTFILES_TARBALL:-https://github.com/cevhyruz/dotfiles/archive/refs/heads/$DOTFILES_BRANCH.tar.gz}"
-DEFAULT_DIR="$HOME/.dotfiles" # Projects/Personal/Dotfiles
+DOTFILES_REF="${DOTFILES_REF:-}" # tag or commit SHA; wins over the branch
+if [[ -n "$DOTFILES_REF" ]]; then
+  _default_url="https://github.com/cevhyruz/dotfiles/archive/$DOTFILES_REF.tar.gz"
+else
+  _default_url="https://github.com/cevhyruz/dotfiles/archive/refs/heads/$DOTFILES_BRANCH.tar.gz"
+fi
+TARBALL_URL="${DOTFILES_TARBALL:-$_default_url}"
+unset _default_url
+DEFAULT_DIR="$HOME/.dotfiles"
 
 BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
 DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
 
+# Dropped into a directory this script extracted. Teardown only offers to
+# delete a dotfiles directory that has it, so a --link'd directory is never
+# touched.
+MARKER=".bootstrap-extracted"
+
 TEARDOWN=0
 LINK_DIR=""
+TMP_DIR=""
 
-# helpers {{{
+cleanup() {
+  if [[ -n "$TMP_DIR" ]]; then
+    rm -rf -- "$TMP_DIR"
+  fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 info() { printf '==> %s\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
@@ -48,15 +53,22 @@ Requires only curl and tar (no git).
 
 Options:
   -l, --link DIR  Don't download anything; link the dotfiles already at DIR
+                  (also accepts --link=DIR)
   -t, --teardown  Remove the symlinks this script created, restore backups,
                   remove ~/.local/libexec if it ends up empty, and delete
-                  the extracted dotfiles (asks first)
+                  the extracted dotfiles (asks first). This removes symlinks
+                  that point where this script put them. it then offers to
+                  delete the dotfiles directory, but only if this script
+                  extracted it (it carries a $MARKER file); a git repository or
+                  a --link'd directory is never deleted.
   -h, --help      Show this help and exit
 
 Environment:
   DOTFILES_DIR     Where to extract the dotfiles (skips the prompt)
   DOTFILES_BRANCH  Branch to download (default: master)
-  DOTFILES_TARBALL Full tarball URL (overrides DOTFILES_BRANCH)
+  DOTFILES_REF     Tag or commit SHA to download (overrides DOTFILES_BRANCH);
+                   pin a full commit SHA for a reproducible install
+  DOTFILES_TARBALL Full tarball URL (overrides DOTFILES_BRANCH and DOTFILES_REF)
   XDG_BIN_HOME     Where the dispatcher is linked (default: ~/.local/bin)
   XDG_DATA_HOME    Where bashlib is linked (default: ~/.local/share)
   XDG_CONFIG_HOME  Where the bash config is linked (default: ~/.config)
@@ -75,30 +87,12 @@ Examples:
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
   curl -fsSL <url>/bootstrap.sh | bash
 
-Teardown only removes symlinks that point where this script put them. It
-then offers to delete the extracted dotfiles directory, but never a git
-repository.
 
 --link overrides DOTFILES_DIR, and can't be combined with --teardown.
 EOF
 }
 
 parse_args() {
-  local args=() arg i
-
-  # Split bundled short flags: -tl becomes -t -l.
-  for arg in "$@"; do
-    if [[ "$arg" =~ ^-[A-Za-z]{2,}$ ]]; then
-      for (( i = 1; i < ${#arg}; i++ )); do
-        args+=("-${arg:i:1}")
-      done
-    else
-      args+=("$arg")
-    fi
-  done
-
-  set -- ${args[@]+"${args[@]}"}
-
   while (( $# )); do
     case "$1" in
       -t|--teardown) TEARDOWN=1 ;;
@@ -113,8 +107,8 @@ parse_args() {
         LINK_DIR="${1#--link=}"
         [[ -n "$LINK_DIR" ]] || die "--link requires a directory"
         ;;
-      -h|--help)     usage; exit 0 ;;
-      *)             warn "unknown option: $1"; usage >&2; exit 1 ;;
+      -h|--help) usage; exit 0 ;;
+      *)         warn "unknown option: $1"; usage >&2; exit 1 ;;
     esac
 
     shift
@@ -136,24 +130,53 @@ confirm() {
   [[ "$ans" =~ ^[Yy]$ ]]
 }
 
-# Expand a leading ~ and make relative paths absolute (no trailing slash).
+# Collapse ., .. and repeated slashes in an absolute path without touching
+# the filesystem (symlinks are deliberately not resolved).
+normalize_path() {
+  local IFS=/ part
+  local -a parts out=()
+
+  read -ra parts <<< "$1"
+
+  for part in "${parts[@]}"; do
+    case "$part" in
+      ""|.) ;;
+      ..)   if (( ${#out[@]} )); then unset 'out[${#out[@]}-1]'; fi ;;
+      *)    out+=("$part") ;;
+    esac
+  done
+
+  printf '/%s\n' "${out[*]}"
+}
+
+# Expand a leading ~ or ~user, make relative paths absolute, and normalize
+# (no trailing slash).
 abs_path() {
-  local p="$1"
+  local p="$1" user home
 
   case "$p" in
-    "~")    p="$HOME" ;;
-    "~/"*)  p="$HOME/${p#"~/"}" ;;
-    /*)     ;;
-    *)      p="$PWD/$p" ;;
+    "~"|"~/"*)
+      p="$HOME${p#"~"}"
+      ;;
+    "~"*)
+      user="${p#"~"}"
+      user="${user%%/*}"
+      home="$(getent passwd "$user" 2>/dev/null | cut -d: -f6 || true)"
+      [[ -n "$home" ]] || die "unknown user in path: $p"
+      p="$home${p#"~$user"}"
+      ;;
+    /*) ;;
+    *)  p="$PWD/$p" ;;
   esac
 
-  printf '%s\n' "${p%/}"
+  normalize_path "$p"
 }
 
 # Ask for a directory, showing a default. Empty answer (or no terminal)
-# returns the default. Expands a leading ~ and makes relative paths absolute.
+# returns the default.
 ask_dir() {
   local prompt="$1" default="$2" ans=""
+
   if has_tty; then
     read -r -p "$prompt [$default] " ans < /dev/tty || true
   fi
@@ -161,15 +184,12 @@ ask_dir() {
   abs_path "${ans:-$default}"
 }
 
-# }}}
-
-# 1. download {{{
-
 # DOTFILES_DIR from the environment skips the prompt (useful for automation).
 choose_dir() {
   local prompt="${1:-Where should the dotfiles be extracted?}"
 
   if [[ -n "${DOTFILES_DIR:-}" ]]; then
+    DOTFILES_DIR="$(abs_path "$DOTFILES_DIR")"
     info "Using DOTFILES_DIR from environment: $DOTFILES_DIR"
   else
     DOTFILES_DIR="$(ask_dir "$prompt" "$DEFAULT_DIR")"
@@ -179,25 +199,22 @@ choose_dir() {
 # Download the tarball and extract it into DOTFILES_DIR.
 #
 # Everything is staged in a temp directory first, so DOTFILES_DIR only
-# appears once the download and extraction have both succeeded.
+# appears once the download and extraction have both succeeded. The temp
+# directory is removed by the EXIT trap, including on Ctrl-C.
 fetch_tarball() {
   command -v curl >/dev/null 2>&1 || die "curl is required but not installed"
   command -v tar  >/dev/null 2>&1 || die "tar is required but not installed"
 
-  local tmp
-  tmp="$(mktemp -d)"
-  mkdir "$tmp/src"
+  mkdir -p "$(dirname "$DOTFILES_DIR")"
+  TMP_DIR="$(mktemp -d "$(dirname "$DOTFILES_DIR")/.dotfiles-tmp.XXXXXX")"
 
-  if ! curl -fsSL "$TARBALL_URL" -o "$tmp/dotfiles.tar.gz"; then
-    rm -rf "$tmp"
-    die "download failed: $TARBALL_URL"
+  # --strip-components=1 drops GitHub's wrapper folder (dotfiles-<ref>/).
+  if ! curl -fsSL "$TARBALL_URL" | tar -xz --strip-components=1 -C "$TMP_DIR/src"; then
+    die "could not download or extract $TARBALL_URL"
   fi
 
-  # --strip-components=1 drops GitHub's wrapper folder (dotfiles-<branch>/).
-  if ! tar -xzf "$tmp/dotfiles.tar.gz" --strip-components=1 -C "$tmp/src"; then
-    rm -rf "$tmp"
-    die "could not extract the tarball"
-  fi
+  # Mark it as ours before it moves into place.
+  : > "$TMP_DIR/src/$MARKER"
 
   mkdir -p "$(dirname "$DOTFILES_DIR")"
 
@@ -206,29 +223,11 @@ fetch_tarball() {
     rmdir "$DOTFILES_DIR"
   fi
 
-  mv "$tmp/src" "$DOTFILES_DIR"
-  rm -rf "$tmp"
-}
-
-# Make sure DOTFILES_DIR has everything the linking steps need.
-check_source() {
-  [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]] \
-    || die "dispatcher not found at $DOTFILES_DIR/local/bin/dotfiles"
-  [[ -d "$DOTFILES_DIR/local/share/bashlib" ]] \
-    || die "bashlib not found at $DOTFILES_DIR/local/share/bashlib"
-  [[ -d "$DOTFILES_DIR/local/libexec/dotfiles" ]] \
-    || die "libexec not found at $DOTFILES_DIR/local/libexec/dotfiles"
-  [[ -d "$DOTFILES_DIR/config/bash" ]] \
-    || die "bash config not found at $DOTFILES_DIR/config/bash"
-  [[ -f "$DOTFILES_DIR/config/bash/bashrc" ]] \
-    || die "bashrc not found at $DOTFILES_DIR/config/bash/bashrc"
+  mv "$TMP_DIR/src" "$DOTFILES_DIR"
 }
 
 fetch_dotfiles() {
-  if [[ -d "$DOTFILES_DIR/.git" ]]; then
-    info "Repository already present at $DOTFILES_DIR, skipping download"
-
-  elif [[ -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
+  if [[ -d "$DOTFILES_DIR/.git" || -f "$DOTFILES_DIR/local/bin/dotfiles" ]]; then
     info "Dotfiles already present at $DOTFILES_DIR, skipping download"
 
   elif [[ -d "$DOTFILES_DIR" && -n "$(ls -A "$DOTFILES_DIR")" ]]; then
@@ -238,13 +237,22 @@ fetch_dotfiles() {
     info "Downloading $TARBALL_URL into $DOTFILES_DIR"
     fetch_tarball
   fi
-
-  check_source
 }
 
-# }}}
+# Make sure DOTFILES_DIR has everything the linking steps need.
+check_source() {
+  local path
 
-# 2. directories {{{
+  for path in \
+    local/bin/dotfiles \
+    local/share/bashlib \
+    local/libexec/dotfiles \
+    config/bash \
+    config/bash/bashrc
+  do
+    [[ -e "$DOTFILES_DIR/$path" ]] || die "$path not found in $DOTFILES_DIR"
+  done
+}
 
 # Make sure a directory exists, asking before creating it.
 # Returns 1 if it is missing and the user declined.
@@ -264,17 +272,13 @@ ensure_dir() {
   fi
 }
 
-# }}}
-
-# 3. symlinks {{{
-
 # Symlink SRC (file or directory) to DEST. DEST's parent must exist or be
 # created. Returns 0 if DEST ends up pointing at SRC, 1 if it was skipped.
 #
 # Paths must not have a trailing slash: `ln -sfn` would otherwise follow an
 # existing directory symlink instead of replacing it.
 link_path() {
-  local src="${1%/}" dest="${2%/}"
+  local src="${1%/}" dest="${2%/}" backup
 
   ensure_dir "$(dirname "$dest")" || return 1
 
@@ -287,7 +291,6 @@ link_path() {
     confirm "Replace it with a link to $src?" \
       || { info "Left $dest unchanged"; return 1; }
   elif [[ -e "$dest" ]]; then
-    local backup
     backup="$dest.bak.$(date +%s)"
     warn "$dest exists and is not a symlink"
     confirm "Move it to $backup and link to $src?" \
@@ -330,10 +333,6 @@ link_bashrc() {
   link_path "$src" "$HOME/.bashrc"
 }
 
-# }}}
-
-# 4. teardown {{{
-
 # Print the newest "<path>.bak.<timestamp>" backup next to PATH, if any.
 find_backup() {
   local path="$1"
@@ -342,12 +341,11 @@ find_backup() {
     | sort | tail -n 1
 }
 
-
 # Inverse of link_path: remove DEST if it is a symlink to SRC, then restore
 # the newest backup link_path made, if there is one. Anything that is not
 # exactly our symlink is left alone. Returns 1 if DEST was left alone.
 unlink_path() {
-  local src="${1%/}" dest="${2%/}"
+  local src="${1%/}" dest="${2%/}" target rdest rsrc ours=0 backup
 
   if [[ ! -e "$dest" && ! -L "$dest" ]]; then
     info "Not present: $dest"
@@ -359,7 +357,6 @@ unlink_path() {
     return 1
   fi
 
-  local target rdest rsrc ours=0
   target="$(readlink "$dest")"
   rdest="$(readlink -f "$dest" 2>/dev/null || true)"
   rsrc="$(readlink -f "$src" 2>/dev/null || true)"
@@ -379,7 +376,6 @@ unlink_path() {
   rm -- "$dest"
   info "Removed: $dest"
 
-  local backup
   backup="$(find_backup "$dest" || true)"
 
   if [[ -n "$backup" ]]; then
@@ -388,63 +384,47 @@ unlink_path() {
   fi
 }
 
+# Also removes the libexec directory itself, but only if our link was in it
+# and nothing else is (rmdir refuses a non-empty directory, so it can never
+# delete content).
+unlink_libexec() {
+  local rc=0 had_link=0
 
-# Remove DIR (non-recursively, so it can never delete content) if nothing is
-# left in it.
-remove_dir_if_empty() {
-  local dir="${1%/}" remaining
-
-  if [[ ! -d "$dir" || -L "$dir" ]]; then
-    return 0
+  if [[ -L "$LIBEXEC_DIR/dotfiles" ]]; then
+    had_link=1
   fi
 
-  remaining="$(find "$dir" -mindepth 1 -maxdepth 1 2>/dev/null | head -n 1)"
+  unlink_path "$DOTFILES_DIR/local/libexec/dotfiles" "$LIBEXEC_DIR/dotfiles" || rc=$?
 
-  if [[ -n "$remaining" ]]; then
-    return 0
+  if (( had_link )); then
+    if rmdir -- "$LIBEXEC_DIR" 2>/dev/null; then
+      info "Removed empty directory: $LIBEXEC_DIR"
+    fi
   fi
 
-  rmdir -- "$dir"
-  info "Removed empty directory: $dir"
+  return "$rc"
 }
-
 
 unlink_bashrc() {
   unlink_path "$CONFIG_DIR/bash/bashrc" "$HOME/.bashrc"
 }
 
-
 unlink_bash_config() {
   unlink_path "$DOTFILES_DIR/config/bash" "$CONFIG_DIR/bash"
 }
-
-
-# Also removes the libexec directory itself, but only if nothing else is in it.
-unlink_libexec() {
-  local rc=0
-
-  unlink_path "$DOTFILES_DIR/local/libexec/dotfiles" "$LIBEXEC_DIR/dotfiles" || rc=$?
-
-  remove_dir_if_empty "$LIBEXEC_DIR"
-
-  return "$rc"
-}
-
 
 unlink_bashlib() {
   unlink_path "$DOTFILES_DIR/local/share/bashlib" "$DATA_DIR/bashlib"
 }
 
-
 unlink_dispatcher() {
   unlink_path "$DOTFILES_DIR/local/bin/dotfiles" "$BIN_DIR/dotfiles"
 }
 
-
-# Delete the extracted dotfiles directory. Meant for a tarball extract only:
-# it refuses a git repository (history, unpushed work), a symlink, anything
-# that doesn't look like these dotfiles, and any path that contains $HOME.
-# Returns 1 if the directory was kept.
+# Delete the dotfiles directory, but only one this script extracted (it
+# carries $MARKER). Refuses a git repository (history, unpushed work), a
+# symlink, a --link'd directory or anything else without the marker, and any
+# path that is or contains $HOME. Returns 1 if the directory was kept.
 remove_dotfiles_dir() {
   local dir="${DOTFILES_DIR%/}" real
 
@@ -463,8 +443,8 @@ remove_dotfiles_dir() {
     return 1
   fi
 
-  if [[ ! -f "$dir/local/bin/dotfiles" ]]; then
-    warn "$dir doesn't look like these dotfiles; not deleting it"
+  if [[ ! -f "$dir/$MARKER" ]]; then
+    warn "$dir wasn't extracted by this script (no $MARKER); not deleting it"
     return 1
   fi
 
@@ -481,7 +461,6 @@ remove_dotfiles_dir() {
   info "Deleted: $dir"
 }
 
-
 # Reverse order of install: ~/.bashrc points through the config/bash link,
 # so it has to go first.
 teardown() {
@@ -489,17 +468,11 @@ teardown() {
   echo
 
   unlink_bashrc || true
-  echo
-
   unlink_bash_config || true
   echo
 
   unlink_libexec || true
-  echo
-
   unlink_bashlib || true
-  echo
-
   unlink_dispatcher || true
   echo
 
@@ -510,9 +483,6 @@ teardown() {
 
   info "Teardown complete."
 }
-
-# }}}
-
 
 main() {
   parse_args "$@"
@@ -527,31 +497,29 @@ main() {
     DOTFILES_DIR="$(abs_path "$LINK_DIR")"
     [[ -d "$DOTFILES_DIR" ]] || die "not a directory: $DOTFILES_DIR"
     info "Linking from $DOTFILES_DIR (no download)"
-    check_source
   else
     choose_dir
     echo
-
     fetch_dotfiles
   fi
+
+  check_source
   echo
 
   link_dispatcher || true
-  echo
-
   link_bashlib || true
-  echo
-
   link_libexec || true
+
+  # ~/.bashrc points through the config/bash link, so only touch it when
+  # that link is in place.
+  if link_bash_config; then
+    link_bashrc || true
+  else
+    warn "skipping ~/.bashrc: $CONFIG_DIR/bash was not linked"
+  fi
   echo
 
-  link_bash_config || true
-  echo
-
-  link_bashrc || true
-  echo
-
-  info "Done. Run 'dotfiles' to continue (or $DOTFILES_DIR/local/bin/dotfiles if PATH isn't updated yet)."
+  info "Done. To see the changes open a new shell or run 'exec \$SHELL'"
 }
 
 main "$@"
