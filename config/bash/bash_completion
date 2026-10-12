@@ -1,42 +1,34 @@
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
+#
+# Source the bash-completion package if it's available, this file is only
+# sourced by the completion plugin at plugins/completion.bash.
 
-[[ ${BASH_COMPLETION_VERSINFO-} ]] && return 0
+# Custom completion for my own scripts
+#
+complete -W "start stop restart status" myservice
 
-# To override a completion for a specific command, you can install your own completion
-# file for the command into an appropriate place.
-# User-specific completion files defaults to '$XDG_DATA_HOME/bash-completion'
-# or '~/.local/share/bash-completion'
-BASH_COMPLETION_USER_DIR="${config_dir}"
+# Completion functions
+# _deploy() {
+#     local cur=${COMP_WORDS[COMP_CWORD]}
+#     COMPREPLY=( $(compgen -W "staging production" -- "$cur") )
+# }
+# complete -F _deploy deploy
 
-# default ~/.bash_completion
-# BASH_COMPLETION_USER_FILE="${config_dir}/bash_completion"
 
-_bashcomp_main=
+# Re-using a completion for an alias or function
+# complete -F _git g
+# complete -F _docker d
 
-if [[ ! ${BASH_COMPLETION_VERSINFO:-} && -f /usr/share/bash-completion/bash_completion ]]; then
-  true
-fi
 
-for _f in \
-  /mnt/5edb692f-316d-428b-b10d-43b9b9ad2988/Projects/reference/bash-completion/bash_completion \
-  /usr/share/bash-completion/bash_completion \
-  /etc/bash_completion
-do
-  if [[ -r $_f ]]; then
-    _bashcomp_main=$_f
-    break
-  fi
-done
-unset _f
+# Sourcing completion scripts for tools that don't ship them in the standard path.
+# source ~/tools/mycli/completion.bash
 
-if [[ -z $_bashcomp_main ]]; then
-  echo "bash-completion: not installed (install the 'bash-completion' package)" >&2
-  unset _bashcomp_main
-  return 0
-fi
 
-# TODO: Some completions produce errors with 'nounset' enabled, I can maybe
-# just turn if off around here and just re-enable after.
-source "$_bashcomp_main" || echo "bash-completion: failed to source $_bashcomp_main" >&2
-unset _bashcomp_main
+# Readline tweaks to completion behavior
+#
+# append slash for completed names which are symlink to directories.
+bind 'set mark-symlinked-directories on'
+
+# Press TAB once (instead of twice) to auto-complete
+bind 'set show-all-if-ambiguous on'
