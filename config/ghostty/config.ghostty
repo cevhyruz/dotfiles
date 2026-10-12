@@ -1,0 +1,36 @@
+shell-integration = none
+
+# window-decoration = false
+
+window-inherit-working-directory = true
+
+# keybinding
+
+# normalized ctrl+m and ctrl+i to use Enter and Tab
+keybind = ctrl+m=text:\x0d
+keybind = ctrl+i=text:\x09
+
+# new window should always spawn from the previous $PWD
+keybind = ctrl+shift+n=new_window
+
+font-family = "DejaVu Sans Mono"
+font-thicken = false
+
+# Animated shaders 
+# ..
+# custom-shader = shaders/water.glsl
+# custom-shader = shaders/just-snow.glsl
+# custom-shader = shaders/cineShader-Lava.glsl
+# ...
+
+# Typography
+
+font-size = 10
+font-style = Regular
+font-style-bold = Bold
+
+# Shrink the maximum bounding height of Nerd Font icons
+adjust-icon-height = -15%
+# 
+adjust-cell-width = 2%
+adjust-cell-height = 10%
