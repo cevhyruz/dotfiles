@@ -3,7 +3,6 @@
 #
 # Bootstrap script for my dotfiles
 
-
 set -euo pipefail
 
 DOTFILES_BRANCH="${DOTFILES_BRANCH:-master}"
@@ -53,7 +52,8 @@ Requires only curl and tar (no git).
 
 Options:
   -l, --link DIR  Don't download anything; link the dotfiles already at DIR
-                  (also accepts --link=DIR)
+                  (also accepts --link=DIR). Note that this will overrides
+                  DOTFILES_DIR, and can't be combined with --teardown
   -t, --teardown  Remove the symlinks this script created, restore backups,
                   remove ~/.local/libexec if it ends up empty, and delete
                   the extracted dotfiles (asks first). This removes symlinks
@@ -86,9 +86,6 @@ Examples:
   ./bootstrap.sh --link ~/Projects/Personal/Dotfiles
   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
   curl -fsSL <url>/bootstrap.sh | bash
-
-
---link overrides DOTFILES_DIR, and can't be combined with --teardown.
 EOF
 }
 
