@@ -241,8 +241,22 @@ __theme::init() {
   return 0
 }
 
+# toggling theme variant
+theme() {
+  if [[ "${THEME_VARIANT}" == "dark" ]]; then
+    THEME_VARIANT="light"
+  else
+    THEME_VARIANT="dark"
+  fi
 
-# Reserved functions used in theme writing
+  # commented out because this rexpanded the ps1 prompt causing
+  # double the prompt.
+  __theme::init default #&& __theme::main_handle
+}
+
+# ==========================================
+#  Reserved functions used in theme writing
+# ==========================================
 
 # environment that is needed to be setup to support colors
 # for example man/less colors, expressed as ANSI slots so they follow the theme.
