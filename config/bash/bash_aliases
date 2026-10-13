@@ -1,0 +1,84 @@
+# shellcheck shell=bash
+# vi: ft=sh fdm=marker ts=2 sw=2 et
+#
+# Core aliases for daily use: mostly coreutils overrides, plus a
+# few conveniences. Sourced by ~/.bashrc.
+
+# allow sudo'ing aliases.
+alias sudo='sudo '
+
+
+# X11 remap capslock as additional backspace
+alias k="setxkbmap -option caps:backspace -option shift:both_capslock && xmodmap -e 'clear Lock'"
+
+alias today='date "+%A, %B %-d, %Y"'
+
+# https://www.upyesp.org/posts/alias-ipaddress/
+# Alias for IP address on the LAN.
+# - this version returns the address + CIDR/subnet suffix e.g. xxx.xxx.xxx.xxx/xx
+alias ipint="ip addr | awk '\$1==\"inet\" && \$3!=\"scope\" {print \$2}' "
+# - this version returns the address only e.g. xxx.xxx.xxx.xxx
+# alias ipint="ip addr | awk -F' |/' '\$5==\"inet\" && \$8!=\"scope\" {print \$6}' "
+
+
+# prompt whether to remove destinations.
+alias ln="ln -i" # --interactive is GNU, -i is macOS/BSD.
+
+# print function declarations in a script.
+# also adds line number
+# usage: scriptinfo /path/to/script.sh
+#
+alias scriptinfo="grep -nE '^[[:space:]]*(function[[:space:]]+[^[:space:]()]+|[^[:space:]()=]+[[:space:]]*\(\))'"
+
+# quick navigation that works anywhere.
+alias home="cd ${HOME}"
+alias etc="cd /etc"
+alias docs="cd ${HOME}/Documents"
+alias dl="cd ${HOME}/Downloads"
+
+# custom directory quick navigation
+alias notes="cd notes"
+alias projects="cd ${HOME}/Projects"
+alias cloned='cd projects/cloned-repo'
+
+# save and reload current shell session.
+alias reload='history -a; exec "$BASH"'
+
+# always use mv interactively.
+alias mv="mv -i" # --interactive is GNU, -i is macOS/BSD.
+
+# pretty print path names.
+alias path='echo "${PATH//:/\\n}"'
+
+# show every way a name resolves (alias, function, builtin, file).
+alias what="type -a"
+
+# list enabled shopt options, one per line
+alias bashopts='tr : "\n" <<<"$BASHOPTS"'
+
+if [[ -x "/usr/bin/dircolors" ]]; then
+  alias dircolor="dir --color=auto"
+  alias grep="grep --color=auto"
+  # Note: egrep / fgrep are deprecated and GNU grep prints a warning.
+  alias egrep="grep -E --color=auto"
+  alias fgrep="grep -F --color=auto"
+  alias ls="ls --color=auto --group-directories --classify"
+  alias vdir="vdir --color=auto"
+fi
+# ls extension
+alias la='ls --almost-all'
+alias ll='ls -l --human-readable'
+
+# extras
+alias dir="ls -C -b"
+alias vdir='ls -l -b'
+
+# print which spawns the current shell session.
+alias parent='ps -o comm= -p "$PPID"'
+
+# shell convenience.
+alias q="exit"
+alias c="clear"
+
+# go back to the previous directory.
+alias -- -="cd -"

@@ -25,6 +25,11 @@ else
 fi
 unset config_file
 
+# aliases
+if [[ -f "${config_dir}/bash_aliases" ]]; then
+  source "${config_dir}/bash_aliases"
+fi
+
 # local config file
 local_bashrc="${config_dir}/localrc/bashrc.local"
 if [[ -f "${local_bashrc}" ]]; then
