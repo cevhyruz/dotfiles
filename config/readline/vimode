@@ -1,0 +1,123 @@
+# vi:ft=readline
+
+# Vim surround bindings for bash. Original version from
+# https://github.com/liloman/bash-surround/blob/master/inputrc-surround.
+#
+#
+# Vi Mode Bindings
+#  
+# Vi Insert Mode functions
+#
+#   ['\C-d']=vi-eof-maybe         ['\C-p']=menu-complete-backward ['\C-w']=vi-unix-word-rubout
+#   ['\C-h']=backward-delete-char ['\C-r']=reverse-search-history ['\C-y']=yank
+#   ['\C-i']=complete             ['\C-s']=forward-search-history ['\e']=vi-movement-mode
+#   ['\C-j']=accept-line          ['\C-t']=transpose-chars        ['\C-_']=vi-undo
+#   ['\C-m']=accept-line          ['\C-u']=unix-line-discard      ['\C-?']=backward-delete-char
+#   ['\C-n']=menu-complete        ['\C-v']=quoted-insert          [" "] to ["~"] self-insert
+#
+# Vi Command Mode functions
+#
+#   ['\C-d']=vi-eof-maybe       ['\C-m']=accept-line            ['\C-t']=transpose-chars
+#   ['\C-e']=emacs-editing-mode ['\C-n']=next-history           ['\C-u']=unix-line-discard
+#   ['\C-g']=abort              ['\C-p']=previous-history       ['\C-v']=quoted-insert
+#   ['\C-h']=backward-char      ['\C-q']=quoted-insert          ['\C-w']=vi-unix-word-rubout
+#   ['\C-j']=accept-line        ['\C-r']=reverse-search-history ['\C-y']=yank
+#   ['\C-k']=kill-line          ['\C-s']=forward-search-history ['\C-_']=vi-undo
+#   ['\C-l']=clear-screen       [1-9]=vi-arg-digit
+#   [' ']=forward-char          ['F']=vi-char-search            ['e']=vi-end-word
+#   ['#']=insert-comment        ['G']=vi-fetch-history          ['f']=vi-char-search
+#   ['$']=end-of-line           ['I']=vi-insert-beg             ['h']=backward-char
+#   ['%']=vi-match              ['N']=vi-search-again           ['i']=vi-insertion-mode
+#   ['&']=vi-tilde-expand       ['P']=vi-put                    ['j']=next-history
+#   ['*']=vi-complete           ['R']=vi-replace                ['k']=previous-history
+#   ['+']=next-history          ['S']=vi-subst                  ['l']=forward-char
+#   [',']=vi-char-search        ['T']=vi-char-search            ['m']=vi-set-mark
+#   ['-']=previous-history      ['U']=revert-line               ['n']=vi-search-again
+#   ['.']=vi-redo               ['W']=vi-next-word              ['p']=vi-put
+#   ['/']=vi-search             ['X']=vi-rubout                 ['r']=vi-change-char
+#   ['0']=beginning-of-line     ['Y']=vi-yank-to                ['s']=vi-subst
+#   [';']=vi-char-search        ['\\']=vi-complete              ['t']=vi-char-search
+#   ['=']=vi-complete           ['^']=vi-first-print            ['u']=vi-undo
+#   ['?']=vi-search             ['_']=vi-yank-arg               ['w']=vi-next-word
+#   ['A']=vi-append-eol         ['`']=vi-goto-mark              ['x']=vi-delete
+#   ['B']=vi-prev-word          ['a']=vi-append-mode            ['y']=vi-yank-to
+#   ['C']=vi-change-to          ['b']=vi-prev-word              ['|']=vi-column
+#   ['D']=vi-delete-to          ['c']=vi-change-to              ['~']=vi-change-case
+#   ['E']=vi-end-word           ['d']=vi-delete-to
+#
+# Some keys are not bound in Vi Command Mode
+# goqvz
+# HJKLMOQVZ
+
+
+# Set REPL prompt with a nice cursor
+# blinking underline in insert mode and stead block in cmd mode
+set show-mode-in-prompt on
+set vi-ins-mode-string "\1\e[3 q\2" 
+set vi-cmd-mode-string "\1\e[2 q\2"
+
+set keymap vi-insert
+
+# leave insert mode
+"kj": vi-movement-mode
+
+# Vi command-mode functions in insert mode, for use in key-sequence macros.
+# Keeps a macro in one insert session so a single vi-undo reverts all of it.
+"\C-xe": vi-end-word 
+"\C-xE": vi-end-bigword
+"\C-xa": vi-append-mode
+"\C-xf": character-search
+"\C-xA": vi-append-eol
+
+set keymap vi-command
+
+# exit REPL session
+# only tested in gdb,bash
+";q": "dd\C-d"
+
+# macro recording and simulation of the dot command (redo).
+"qa": start-kbd-macro
+"q":  end-kbd-macro
+".":  call-last-kbd-macro
+"z":  print-last-kbd-macro
+
+# multi-line navigation
+"j": next-screen-line
+"k": previous-screen-line
+
+# history search navigation
+"K": history-search-backward
+"J": history-search-forward
+
+# Yanking
+"yiw": "mtlbYe`t"
+"yiW": "mtlBYE`t"
+"yaw": "yiw"
+"yaW": "yiW"
+
+# delete
+"diw": "lbde"
+"diW": "lBdE"
+"daw": "diw"
+"daW": "diW"
+
+# change
+"caw": "ciw"
+"caW": "ciW"
+"ciw": "diwa"
+"ciW": "diWa"
+
+# Yank the line into both readline's kill ring and the system clipboard,
+# like vim's clipboard=unnamedplus. Needs my dotfiles bash 'clipboard' plugin;
+# without it, \C-x\C-y is unbound and only the kill ring is filled.
+"yy": "mt0Y$`t\C-x\C-y"
+"Vy": "yy"
+
+# TODO: add uppercasing/downcasing in surround
+# Upcase/downcase word.
+# Vi has no upcase/downcase-word function, so these borrow the emacs ones.
+# They sit on \C-xU / \C-xu because plain u / U are already vi-undo / revert-line.
+"\C-xU": upcase-word
+"\C-xu": downcase-word
+"viwU": "mtb\C-xU`t"
+"viwu": "mtb\C-xu`t"

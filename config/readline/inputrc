@@ -1,136 +1,26 @@
-# ----------------------------------------------------------------------
-# inputrc for libreadline see readline(3readline)
-# and `info rluserman' for more information.
-# ----------------------------------------------------------------------
+# inputrc for libreadline
+# See readline(3readline) and `info rluserman' for more information.
 
-set editing-mode vi
-
-# allow UTF-8 input and output instead of showing
-# an ugly stuff like $'\0123\0456'.
-#
-# Enable 8bit input
-set meta-flag  on
-set input-meta on
- 
-# Turns off 8th bit stripping
+# Pass 8-bit (UTF-8) characters through unchanged, so umlauts and other
+# non-ASCII text work. Readline already does this in a UTF-8 locale; these
+# lines only matter if the locale isn't detected as UTF-8 (e.g. LANG=C).
+# Side effect: terminals that send Meta as the 8th bit stop working as Meta.
+# Nearly all modern terminals send Alt as ESC instead, so this rarely applies.
 set convert-meta off
- 
-# Keep the 8th bit for display
+set input-meta on
 set output-meta on
 
-# No bell. No ^G in output
-set bell-style none
+# always ring the terminal bell
+set bell-style audible
 
-# plugins
-
-set show-mode-in-prompt on
-
-# Set REPL prompt for various applications.
-set vi-ins-mode-string "\1\e[3 q\2"
-set vi-cmd-mode-string "\1\e[2 q\2"
-
-# === keybindings ===
-
-$if mode=vi
-# switch to command mode
-"kj": vi-movement-mode
-
-
-# insert mode (navigation) for use 'inside' macros,
-# this will make the whole macro as a single action allowing easy undo.
-"\C-x\C-e": vi-end-word
-"\C-x\C-l": vi-end-bigword
-"\C-x\C-a": vi-append-mode
-"\C-f":     character-search
-"\C-x\C-o": vi-append-eol
-
-# NOTE: There maybe a distinction with this vs. 'b,w,e'.
-# we can maybe use add a switch movement function.
-"\C-x\C-w": vi-end-bigword
-"\C-x\C-i": vi-bWord
-
-set keymap vi-command
-
-
-"\C-x\C-r": re-read-init-file
-$if Bash
-  # Copy to X selection
-  # \C-x\C-y is bound when plugin 'clipboard' is enabled.
-  "yy": "\C-x\C-y"
-$endif
-
-# surround with ease
-# FIXME: This will fail if we change the value of XDG_CONFIG_HOME
-$include ~/.config/readline/surround
-
-# anchored undo
-"\C-x\C-u": vi-undo
-"u": "ma\C-x\C-u`ah"
-
-# upcase/downcase word
-"\C-x\C-^": upcase-word
-"\C-x\C-p": downcase-word
-"viwU": "mtb\C-x\C-^`t"
-"viwu": "mtb\C-x\C-p`t"
-
-# terminate session
-# FIXME: In python this waits for a key press before terminating session.
-";q": "dd\C-d"
-
-# multi-line navigation
-"j": next-screen-line
-"k": previous-screen-line
-
-# history navigation
-"K": history-search-backward
-"J": history-search-forward
-
-# macros
-"qa": start-kbd-macro
-"q":  end-kbd-macro
-".":  call-last-kbd-macro
-"z":  print-last-kbd-macro
-
-# === completion ====
-
-# Don't query user about viewing the number of possible completions
-set completion-query-items -1
-
-# Print each completion on its own line
-set completion-display-width -1
-
-set completion-prefix-display-length 0
-
-# Make sure we don't output everything on the 1 line
-set horizontal-scroll-mode off
-
-# append slash for completed names which are symlink to directories.
-set mark-symlinked-directories on
-
-# case-insensitive filename matching and completion.
+# Case-insensitive completion, and list all matches on the first Tab
+# instead of requiring a second press when the match is ambiguous.
 set completion-ignore-case on
-
-# match all files begin with dot (.)
-set match-hidden-files on
+set show-all-if-ambiguous on
 
 # when complete-ignore-case is On, treats '_' and '-'
 # as the same when matching and completing.
 set completion-map-case on
-
-# be more intelligent when autocompleting by also looking at the text after
-# the cursor. For example, when the current line is "cd ~/src/mozil", and
-# the cursor is on the "z", pressing <tab> will not autocomplete it to "cd
-# ~/src/mozillail", but to "cd ~/src/mozilla".
-set skip-completed-text on
-
-# Press TAB once (instead of twice) to auto-complete
-set show-all-if-ambiguous on
-
-set visible-stats on
-
-
-# Don't use pager when showing completions
-set page-completions off
 
 # display common completion prefix using the value of LS_COLORS
 # for custom suffix 'readline-colored-completion-prefix'
@@ -141,4 +31,32 @@ set colored-stats on
 # (which may be empty) before cycling through the list.
 set menu-complete-display-prefix on
 
-set print-completions-horizontally on
+# Don't query user about viewing the number of possible completions
+set completion-query-items 0
+
+# Append a trailing slash when completing directories, including
+# symlinks that point to directories, so you can keep typing the path.
+# mark-directories is already on by default.
+set mark-directories on
+set mark-symlinked-directories on
+
+# When completing in the middle of a word, skip over text after the cursor
+# that already matches the end of the completion instead of duplicating it.
+# For example, with the cursor on the "z" in "cd ~/src/mozil", <Tab>
+# gives "cd ~/src/mozilla" rather than "cd ~/src/mozillazil".
+set skip-completed-text on
+
+# Append a character to completion listings that shows the file type:
+# / for directories, * for executables, @ for symlinks, | for FIFOs,
+# = for sockets.
+set visible-stats on
+
+# Do not use readline's pager (more) when showing completions.
+set page-completions off
+
+# always use vi
+set editing-mode vi
+
+# Vi Mode keybindings
+$include ~/.config/readline/vimode
+$include ~/.config/readline/surround
