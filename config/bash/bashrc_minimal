@@ -26,7 +26,7 @@ if [[ -x /usr/bin/dircolors ]]; then
   alias grep='grep --color=auto'
 fi
 
-# --- plain but easy for eyes prompt
+# --- plain but easy for eyes prompt ---
 PS1='\[\033[0m\]\n\u@\h:\w\n\[\033[01;32m\]\$\[\033[0m\] \[\033[90m\]'
 PS0='\[\033[0m\]'
 
@@ -36,6 +36,3 @@ alias la='ls -A'
 alias l='ls -CF'
 alias ..='cd ..'
 alias ...='cd ../..'
-
-printf 'Warning: bash config failed to initialize\n' >&2
-printf 'Running in minimal fallback mode\n' >&2

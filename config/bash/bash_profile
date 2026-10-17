@@ -1,0 +1,7 @@
+# shellcheck shell=bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+
+# include .bashrc if it exists
+if [[ -f "$HOME/.bashrc" ]]; then
+  source "$HOME/.bashrc"
+fi

@@ -4,6 +4,8 @@
 #
 # Completion for luarocks.
 
+
+echo 'from luarocks cokmpletions'
 function _luarocks() {
     local IFS=$' \t\n'
     local args cur prev cmd opts arg

@@ -1,8 +1,10 @@
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
 #
-# Source the bash-completion package if it's available, this file is only
-# sourced by the completion plugin at plugins/completion.bash.
+# bash_completion
+# User-level bash-completion file. Sourced automatically by the
+# bash-completion framework (BASH_COMPLETION_USER_FILE), which is set up
+# in plugins/completion.bash. Don't source it manually there, or it loads twice.
 
 # Custom completion for my own scripts
 #
@@ -15,20 +17,9 @@ complete -W "start stop restart status" myservice
 # }
 # complete -F _deploy deploy
 
-
 # Re-using a completion for an alias or function
 # complete -F _git g
 # complete -F _docker d
 
-
 # Sourcing completion scripts for tools that don't ship them in the standard path.
 # source ~/tools/mycli/completion.bash
-
-
-# Readline tweaks to completion behavior
-#
-# append slash for completed names which are symlink to directories.
-bind 'set mark-symlinked-directories on'
-
-# Press TAB once (instead of twice) to auto-complete
-bind 'set show-all-if-ambiguous on'

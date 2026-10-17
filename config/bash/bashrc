@@ -2,41 +2,54 @@
 # shellcheck shell=bash
 # vi:ft=sh fdm=marker ts=2 sw=2 et
 
-{
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return 1
 
 if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
   echo "Error: This config requires bash >= 5 (found: ${BASH_VERSION:-unknown})" >&2
   return 51
 fi
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return 1
+_errlog="${XDG_RUNTIME_DIR:-/tmp}/dotfiles-errors.$$"
+alias inspect='cat "${_errlog}"'
 
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
 
-# initialize
-config_file="${config_dir}/init.bash"
+{
 
-if [[ -f "${config_file}" ]]; then
-  source "${config_file}" || echo "Warning: failed to initialize config file" >&2
-else
-  echo "Warning: using minimal config" >&2
-  source "${config_dir}/bashrc-minimal.bash" || echo "Warning: failed to load minimal config" >&2
-fi
-unset config_file
+source "${XDG_DATA_HOME:-$HOME/.local/share}/bashlib/lib.bash"
+import_lib "common" "log" "path"
 
-# aliases
-if [[ -f "${config_dir}/bash_aliases" ]]; then
-  source "${config_dir}/bash_aliases"
+for _rc in "${config_dir}"/{lib/*,core/*,bash_plugins,bash_aliases,bash_functions}; do
+  [[ -f $_rc ]] || continue
+    source "$_rc"
+done
+unset _rc
+
+
+THEME_VARIANT=dark
+__theme::init default && __theme::main_handle
+
+if [[ -s $_errlog ]]; then
+  echo "Using Minimal config"
+  source "$config_dir/bashrc_minimal"
 fi
 
 # local config file
-local_bashrc="${config_dir}/localrc/bashrc.local"
+local_bashrc="${config_dir}/bashrc_local"
 if [[ -f "${local_bashrc}" ]]; then
-  source "${local_bashrc}" || echo "Warning: bashrc.local failed to load" >&2
+  source "${local_bashrc}" || echo "Warning: failed to load basrc_local" >&2
 fi
 unset local_bashrc
 
 unset config_dir
 
-} 2> /tmp/errors.log
+
+} 2> "$_errlog"
+
+
+if [[ -s $_errlog ]]; then
+  printf 'bashrc: load errors (run: inspect)\n' >&2
+else
+  rm -f "$_errlog"
+fi

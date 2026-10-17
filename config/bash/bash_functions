@@ -1,0 +1,251 @@
+# shellcheck shell=bash
+# vim: ft=sh fdm=marker ts=2 sw=2 et
+#
+# Core functions for daily use. Most are thin wrappers that will
+# eventually be split out into their own scripts/executables.
+#
+# NOTE: These are proof-of-concept and mostly non-portable, so expect
+# them to break outside this setup.
+#
+# Sourced by ~/.bashrc.
+
+# alert - desktop notification + sound at a given time
+#
+# USAGE
+#   alert <time> [message]
+#
+# TIME FORMATS
+#   Relative:  30s | 10m | 2h
+#   Absolute:  14:30 | 2:30pm | "tomorrow 9am" | "fri 17:00"
+#              (if the time already passed today, it rolls to tomorrow)
+#
+# EXAMPLES
+#   alert 25m "pomodoro done"
+#   alert 14:30 "standup"
+#   alert "tomorrow 9am" "submit capstone"
+#
+# NOTES
+#   - Message is optional (defaults to "Time's up!")
+#   - Runs detached, so closing the terminal won't cancel it
+#   - Does not survive logout/reboot (use `at` for that)
+#   - List pending: pgrep -af sleep   |   Cancel: kill <pid>
+#   - Requires: notify-send, paplay (falls back to terminal bell)
+alert() {
+  if [[ -z $1 ]]; then
+    echo "usage: alert <time> [message]"
+    echo "  alert 14:30 'standup'   alert 10m 'tea'   alert 'tomorrow 9am' 'submit'"
+    return 1
+  fi
+
+  local when=$1 msg=${2:-"Time's up!"} secs target now
+  now=$(date +%s)
+
+  if [[ $when =~ ^([0-9]+)([smh])$ ]]; then
+    # relative: 30s, 10m, 2h
+    case ${BASH_REMATCH[2]} in
+      s) secs=${BASH_REMATCH[1]} ;;
+      m) secs=$(( BASH_REMATCH[1] * 60 )) ;;
+      h) secs=$(( BASH_REMATCH[1] * 3600 )) ;;
+    esac
+  else
+    # absolute: 14:30, 2:30pm, "tomorrow 9am", etc.
+    target=$(date -d "$when" +%s 2>/dev/null) || { echo "Can't parse time: $when"; return 1; }
+    # if that time already passed today, assume tomorrow
+    (( target <= now )) && target=$(date -d "tomorrow $when" +%s 2>/dev/null)
+    (( target > now )) || { echo "Time is in the past: $when"; return 1; }
+    secs=$(( target - now ))
+  fi
+
+  echo "⏰ Alert at $(date -d "@$(( now + secs ))" '+%a %H:%M:%S'): $msg"
+
+  setsid -f bash -c '
+    sleep "$1"
+    notify-send -u critical -t 0 "⏰ Alert" "$2"
+    for _ in 1 2 3; do
+      paplay /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga 2>/dev/null || printf "\a"
+      sleep 1
+    done
+  ' _ "$secs" "$msg" >/dev/null 2>&1
+}
+
+
+# loglive: continuously show a live git commit graph.
+#
+# Clears the screen and re-runs `git log` (all branches, decorated,
+# one-line graph, last 20 commits) every 1.5 seconds.
+# Press Ctrl+C to stop.
+#
+# TODO: Make a TUI wrapper for this.
+#
+# Usage: loglive
+function loglive() {
+  # while :; do
+  #   clear
+  #   git log --all --decorate --oneline --graph -20
+  #   sleep 1.5
+  # done
+
+  # less flicker version than using clear.
+  watch -n 1.5 --color 'git log --all --decorate --color=always --oneline --graph -20'
+}
+
+# which thats all binaries, version and package
+# TODO: Make an executable tool for this.
+#
+whichv() {
+  local entry real next pkg found=0
+
+  while IFS= read -r entry; do
+    found=1
+    real=$(readlink -f -- "$entry")
+
+    pkg=$(dpkg -S -- "$real" 2>/dev/null | head -n 1)
+    pkg=${pkg%%:*}
+    [[ -n $pkg ]] || pkg="(not from a package)"
+
+    printf '(\e[1;32m%s\e[0m)' "$entry"
+    [[ -L $entry ]] && printf ' [symlink]'
+    printf ' \e[1;33m{%s}\e[0m\n' "$pkg"
+
+    if [[ -L $entry ]]; then
+      next=$(readlink -- "$entry")
+      printf '  \e[1;36mlink:\e[0m     %s\n' "$next"
+    fi
+
+    if [[ $real != "$entry" ]]; then
+      printf '  \e[1;35moriginal:\e[0m %s\n' "$real"
+    fi
+
+    timeout 2 "$entry" --version </dev/null 2>&1 | head -n 3
+  done < <(type -ap -- "$@")
+
+  (( found ))
+}
+
+# quems: launch the Quems development environment.
+#
+# - Opens Chrome with the ChatGPT thread, the local Angular app (:4200),
+#   and the MongoDB Atlas dashboard.
+# - Creates the "DEVELOPMENT" tmux session with nvim windows for the
+#   client (quems) and the API server (quems-server).
+# - Creates the "SERVER" tmux session running `ng serve` and `npm start`
+#   side by side.
+# - If "DEVELOPMENT" already exists, it just attaches to it.
+#
+# Usage: quems
+function quems () {
+  TMUX_CONFIG="${HOME}/Projects/dotfiles/src/Tmux/tmux.conf"
+  TMUX_CONFIG_ARG="-f $TMUX_CONFIG"
+
+  # open google chrome
+  if command -v google-chrome > /dev/null; then
+      echo "Opening Google Chrome..."
+      google-chrome --new-window "https://chatgpt.com/c/673e6f2d-3c70-8000-b42e-7638ec17c8c2" \
+                    --new-window "http://localhost:4200" \
+                    --new-window "https://cloud.mongodb.com/v2/673db0fdef862f270dd97713#/overview" &>/dev/null &
+  else
+      echo "Google Chrome is not installed or not in PATH."
+  fi
+
+  # Check if the session already exists
+  if tmux has-session -t "DEVELOPMENT" 2>/dev/null; then
+      echo "Session 'DEVELOPMENT' already exists. Attaching..."
+      tmux attach-session -t "DEVELOPMENT"
+      # exit 0
+      return 0
+  fi
+
+  tmux $TMUX_CONFIG_ARG new-session -d -s "DEVELOPMENT" -c "${HOME}/Projects/angular/quems"
+  # create windows
+  tmux rename-window -t "DEVELOPMENT" "Quems"
+  tmux send-keys -t "DEVELOPMENT:1" "nvim" C-m
+
+  # API server
+  tmux new-window -t "DEVELOPMENT" -n "Quems::API_SERVER" -c "${HOME}/Projects/angular/quems-server"
+  tmux send-keys -t "DEVELOPMENT:2" "nvim" C-m
+
+  tmux $TMUX_CONFIG_ARG new-session -d -s "SERVER" -c "${HOME}/Projects/angular/quems"
+
+  # create windows
+
+  # angular
+  tmux rename-window -t "SERVER:1" "Quems_SERVER"
+  tmux send-keys -t "SERVER:1" "ng serve" C-m
+  tmux select-pane -t "SERVER:1"
+
+  # database
+  tmux split-window -h -t "SERVER:1" -c "${HOME}/Projects/angular/quems-server"
+  tmux send-keys -t "SERVER:1" "npm start" C-m
+  tmux select-pane -t "SERVER:1"
+
+  # Attach to the session
+  tmux attach-session -t "DEVELOPMENT"
+}  
+
+
+# ntc5: launch the NTC5 development environment.
+#
+# - Creates the "DEVELOPMENT" tmux session with nvim windows for the
+#   Angular client (testing) and the API server (NTC5-API).
+# - Creates the "SERVER" tmux session with three panes:
+#     1. `ng serve` for the Angular client
+#     2. `npm start` for the API server
+#     3. A SQL Server docker container (`sql`) with an interactive
+#        sqlcmd shell connected to the `ntc_ojt` database
+# - If "DEVELOPMENT" already exists, it just attaches to it.
+# - The Chrome launch at the bottom is currently disabled.
+#
+# Usage: ntc5
+function ntc5 () {
+  TMUX_CONFIG="${HOME}/Projects/dotfiles/src/Tmux/tmux.conf"
+  TMUX_CONFIG_ARG="-f $TMUX_CONFIG"
+
+  # Check if the session already exists
+  if tmux has-session -t "DEVELOPMENT" 2>/dev/null; then
+      echo "Session 'DEVELOPMENT' already exists. Attaching..."
+      tmux attach-session -t "DEVELOPMENT"
+      # exit 0
+      return 0
+  fi
+
+  tmux $TMUX_CONFIG_ARG new-session -d -s "DEVELOPMENT" -c "${HOME}/Projects/angular/testing"
+  # create windows
+  tmux rename-window -t "DEVELOPMENT" "testing"
+  tmux send-keys -t "DEVELOPMENT:1" "nvim src/app/app.component.ts" C-m
+
+  # API server
+  tmux new-window -t "DEVELOPMENT" -n "testing server" -c "${HOME}/Projects/angular/NTC5-API"
+  tmux send-keys -t "DEVELOPMENT:2" "nvim main.ts" C-m
+
+  tmux $TMUX_CONFIG_ARG new-session -d -s "SERVER" -c "${HOME}/Projects/angular/testing"
+
+  # create windows
+
+tmux rename-window -t "SERVER:1" "testing::frontend"
+tmux send-keys -t "SERVER:1.0" "ng serve" C-m
+
+# Split for database mssql
+tmux split-window -h -t "SERVER:1.0" -c "${HOME}/Projects/angular/NTC5-API"
+tmux send-keys -t "SERVER:1.1" "npm start" C-m
+
+# Split for docker
+tmux split-window -v -t "SERVER:1.1" -c "${HOME}/Projects/angular/NTC5-API"
+tmux send-keys -t "SERVER:1.2" "docker start sql" C-m
+sleep 3;
+tmux send-keys -t "SERVER:1.2" "docker exec -it sql1 'bash'" C-m
+sleep 3;
+tmux send-keys -t "SERVER:1.2" '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "useKcah" -C' C-m
+sleep 3;
+tmux send-keys -t "SERVER:1.2" 'use ntc_ojt;' C-m
+
+  # Attach to the session
+  tmux attach-session -t "DEVELOPMENT"
+
+  # open google chrome
+  # if command -v google-chrome > /dev/null; then
+  #     echo "Opening Google Chrome..."
+  #     google-chrome --new-window "http://localhost:4200" &>/dev/null &
+  # else
+  #     echo "Google Chrome is not installed or not in PATH."
+  # fi
+}  

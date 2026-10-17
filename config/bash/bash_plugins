@@ -1,0 +1,27 @@
+# shellcheck shell=bash
+# vi: ft=sh fdm=marker ts=2 sw=2 et
+#
+# Sources plugins.
+
+# remember the current state of the glob options
+shopt -q failglob && _fg=1 || _fg=0
+shopt -q nullglob && _ng=1 || _ng=0
+
+# expand the glob with 'failglob' disabled, and 'nullglob' enabled
+# so an empty directory also gives an empty array.
+shopt -u failglob; shopt -s nullglob
+_plugins=("${config_dir}/plugins"/*.bash)
+
+# restore those options
+if (( _fg )); then shopt -s failglob; else shopt -u failglob; fi
+if (( _ng )); then shopt -s nullglob; else shopt -u nullglob; fi
+unset _fg _ng
+
+# source plugins
+for plugin in "${_plugins[@]}"; do
+  [[ -e $plugin ]] || continue  # skip dangling symlinks
+  source "$plugin"
+  # echo "$plugin"
+done
+
+unset plugin _plugins

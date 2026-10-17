@@ -1,19 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash disable=SC2034,SC1003
 # vim: ft=sh fdm=marker ts=2 sw=2 et
+# @requires path:/usr/share/bash-completion
 
-# Loads the bash-completion framework (if installed) and provides small helpers
-# for inspecting which completions are available vs. loaded.
+# completion.bash. Loads the bash-completion framework (if installed)
+# and provides small helpers for inspecting which completions are available vs. loaded.
 
 # source "${config_dir}/bash_completion" || echo 'plugin: bash-completion error' >&2
-
-
-# To override a completion for a specific command, you can install your own completion
-# file for the command into an appropriate place.
-# User-specific completion files defaults to '$XDG_DATA_HOME/bash-completion'
-# or '~/.local/share/bash-completion'
-BASH_COMPLETION_USER_DIR="${config_dir}"
-BASH_COMPLETION_USER_FILE="${config_dir}/bash_completion"
 
 # bash-completion 2.x needs bash >= 4.2
 if (( BASH_VERSINFO[0] < 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 2) )); then
@@ -21,9 +14,40 @@ if (( BASH_VERSINFO[0] < 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 2) ))
   return 0
 fi
 
-
 # We don't need to to do anything if it's already enabled
 [[ ${BASH_COMPLETION_VERSINFO-} ]] && return 0
+
+# Use the ${config_dir} for user-level bash-completion
+
+# User directory for bash-completion
+#
+# A colon-separated list of directories. The framework looks for lazy-loaded
+# completion files in "<dir>/completions/" for each entry.
+#
+# Default: ${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion
+#
+# Must be set BEFORE the framework is sourced.
+BASH_COMPLETION_USER_DIR="${config_dir}"
+
+
+# User-level bash-completion customization
+#
+# The framework sources this user file at the end of its main script, so
+# per-command completions can live here instead of in separate files under
+# completions/:
+#
+#   complete -W "start stop restart status" myservice
+#
+# Overriding the default completion (`complete -D`, bash >= 4.1)
+#   Set it here, or in a user startup file.
+#
+# Using bash's built-in completion instead of the framework's for a command
+#   Run this here, or in a user startup file:
+#
+#   complete -o default -o bashdefault <cmd>
+#
+# Must be set BEFORE the framework is sourced.
+BASH_COMPLETION_USER_FILE="${config_dir}/bash_completion"
 
 
 _bashcomp_main=
@@ -51,6 +75,8 @@ source "$_bashcomp_main" || echo "bash-completion: failed to source $_bashcomp_m
 unset _bashcomp_main
 
 
+# -- Helper functions
+
 # Directories searched for lazy-loaded completion files, one per line
 bashcomp_dirs() {
   local d
@@ -61,22 +87,18 @@ bashcomp_dirs() {
   done
 }
 
-# How man
-bashcomp_dirs_completions() {
-  :;
-}
-
 # Command names that have a completion registered in THIS shell
 bashcomp_loaded() {
   local line i
   local -a w
   while IFS= read -r line; do
-    # `complete -p` output is shell-quoted by bash itself, so eval is safe here
+    # NOTE: `complete -p` output is shell-quoted
+    # by bash itself, so eval is safe here.
     eval "w=($line)"
     for (( i = 1; i < ${#w[@]}; i++ )); do
       case ${w[i]} in
-        -[ACFGPSWX]) (( i++ )) ;;              # options that take an argument
-        -*) ;;                                  # plain flags (-o x is handled below)
+        -[ACFGPSWX]) (( i++ )) ;; # options that take an argument
+        -*) ;; # plain flags (-o x is handled below)
         *) printf '%s\n' "${w[@]:i}"; break ;;
       esac
     done
@@ -111,9 +133,9 @@ bashcomp_which() {
 bashcomp_load() {
   local cmd=${1:?usage: bashcomp_load COMMAND}
   if declare -F _comp_load >/dev/null; then
-    _comp_load -- "$cmd"                        # bash-completion >= 2.12
+    _comp_load -- "$cmd" # bash-completion >= 2.12
   elif declare -F _completion_loader >/dev/null; then
-    _completion_loader "$cmd"                   # older versions
+    _completion_loader "$cmd" # older versions
   else
     echo "bashcomp_load: no loader function found" >&2
     return 1

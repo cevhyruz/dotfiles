@@ -7,7 +7,6 @@
 # allow sudo'ing aliases.
 alias sudo='sudo '
 
-
 # X11 remap capslock as additional backspace
 alias k="setxkbmap -option caps:backspace -option shift:both_capslock && xmodmap -e 'clear Lock'"
 
@@ -19,7 +18,6 @@ alias today='date "+%A, %B %-d, %Y"'
 alias ipint="ip addr | awk '\$1==\"inet\" && \$3!=\"scope\" {print \$2}' "
 # - this version returns the address only e.g. xxx.xxx.xxx.xxx
 # alias ipint="ip addr | awk -F' |/' '\$5==\"inet\" && \$8!=\"scope\" {print \$6}' "
-
 
 # prompt whether to remove destinations.
 alias ln="ln -i" # --interactive is GNU, -i is macOS/BSD.
