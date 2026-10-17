@@ -52,12 +52,12 @@ Requires only curl and tar (no git).
 
 Options:
   -l, --link DIR  Don't download anything; link the dotfiles already at DIR
-                  (also accepts --link=DIR). Note that this will overrides
+                  (also accepts --link=DIR). Note that this overrides
                   DOTFILES_DIR, and can't be combined with --teardown
   -t, --teardown  Remove the symlinks this script created, restore backups,
                   remove ~/.local/libexec if it ends up empty, and delete
                   the extracted dotfiles (asks first). This removes symlinks
-                  that point where this script put them. it then offers to
+                  that point where this script put them. It then offers to
                   delete the dotfiles directory, but only if this script
                   extracted it (it carries a $MARKER file); a git repository or
                   a --link'd directory is never deleted.
@@ -78,7 +78,9 @@ Links created:
   <dotfiles>/local/share/bashlib/          -> $DATA_DIR/bashlib
   <dotfiles>/local/libexec/dotfiles/       -> $LIBEXEC_DIR/dotfiles
   <dotfiles>/config/bash/                  -> $CONFIG_DIR/bash
-  <config>/bash/bashrc                     -> $HOME/.bashrc
+  <dotfiles>/home/<entry>                  -> $HOME/<entry>
+                                              (every top-level entry, dotfiles
+                                              included, e.g. .bashrc)
 
 Examples:
   ./bootstrap.sh
@@ -205,6 +207,9 @@ fetch_tarball() {
   mkdir -p "$(dirname "$DOTFILES_DIR")"
   TMP_DIR="$(mktemp -d "$(dirname "$DOTFILES_DIR")/.dotfiles-tmp.XXXXXX")"
 
+  # tar -C needs the target to exist.
+  mkdir -p "$TMP_DIR/src"
+
   # --strip-components=1 drops GitHub's wrapper folder (dotfiles-<ref>/).
   if ! curl -fsSL "$TARBALL_URL" | tar -xz --strip-components=1 -C "$TMP_DIR/src"; then
     die "could not download or extract $TARBALL_URL"
@@ -236,7 +241,8 @@ fetch_dotfiles() {
   fi
 }
 
-# Make sure DOTFILES_DIR has everything the linking steps need.
+# Make sure DOTFILES_DIR has everything the linking steps need. -e follows
+# symlinks, so home/.bashrc also fails here if its relative target is broken.
 check_source() {
   local path
 
@@ -245,7 +251,8 @@ check_source() {
     local/share/bashlib \
     local/libexec/dotfiles \
     config/bash \
-    config/bash/bashrc
+    home \
+    home/.bashrc
   do
     [[ -e "$DOTFILES_DIR/$path" ]] || die "$path not found in $DOTFILES_DIR"
   done
@@ -317,17 +324,22 @@ link_bash_config() {
   link_path "$DOTFILES_DIR/config/bash" "$CONFIG_DIR/bash"
 }
 
-link_bashrc() {
-  local src="$CONFIG_DIR/bash/bashrc"
+# Link every top-level entry of <dotfiles>/home into $HOME. Directories are
+# linked whole, so only put a directory in home/ if the repo should own all
+# of it.
+link_home() {
+  local entry found=0
 
-  # The target is reached through the config/bash link, so that link must be
-  # in place first.
-  if [[ ! -e "$src" ]]; then
-    warn "$src not found (is the config/bash link in place?)"
-    return 1
+  shopt -s dotglob nullglob
+  for entry in "$DOTFILES_DIR"/home/*; do
+    found=1
+    link_path "$entry" "$HOME/${entry##*/}" || true
+  done
+  shopt -u dotglob nullglob
+
+  if (( ! found )); then
+    warn "nothing to link in $DOTFILES_DIR/home"
   fi
-
-  link_path "$src" "$HOME/.bashrc"
 }
 
 # Print the newest "<path>.bak.<timestamp>" backup next to PATH, if any.
@@ -402,8 +414,21 @@ unlink_libexec() {
   return "$rc"
 }
 
-unlink_bashrc() {
-  unlink_path "$CONFIG_DIR/bash/bashrc" "$HOME/.bashrc"
+# Inverse of link_home. Needs DOTFILES_DIR to still exist, since it walks
+# home/ to know which links are ours.
+unlink_home() {
+  local entry found=0
+
+  shopt -s dotglob nullglob
+  for entry in "$DOTFILES_DIR"/home/*; do
+    found=1
+    unlink_path "$entry" "$HOME/${entry##*/}" || true
+  done
+  shopt -u dotglob nullglob
+
+  if (( ! found )); then
+    warn "nothing to unlink: $DOTFILES_DIR/home is missing or empty"
+  fi
 }
 
 unlink_bash_config() {
@@ -458,13 +483,13 @@ remove_dotfiles_dir() {
   info "Deleted: $dir"
 }
 
-# Reverse order of install: ~/.bashrc points through the config/bash link,
-# so it has to go first.
+# Reverse order of install. unlink_home goes first because it walks the
+# dotfiles directory, which remove_dotfiles_dir may delete at the end.
 teardown() {
   choose_dir "Where are the dotfiles?"
   echo
 
-  unlink_bashrc || true
+  unlink_home
   unlink_bash_config || true
   echo
 
@@ -506,14 +531,8 @@ main() {
   link_dispatcher || true
   link_bashlib || true
   link_libexec || true
-
-  # ~/.bashrc points through the config/bash link, so only touch it when
-  # that link is in place.
-  if link_bash_config; then
-    link_bashrc || true
-  else
-    warn "skipping ~/.bashrc: $CONFIG_DIR/bash was not linked"
-  fi
+  link_bash_config || true
+  link_home
   echo
 
   info "Done. To see the changes open a new shell or run 'exec \$SHELL'"
