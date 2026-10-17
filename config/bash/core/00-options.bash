@@ -8,14 +8,15 @@ set -o nounset  # treat unset variables as an error when substituting.
 set -o pipefail # value of pipeline is the status of the last command.
 set -o errtrace # ERR trap will be inherited by shell functions.
 set -o vi       # enable bash vi mode.
+set -o notify   # notify of job termination immediately.
 
 # disabled options
 
 set +o functrace  # disable trap DEBUG on subshells.
 
 # enabled options
-
 shopt -s promptvars              # expand prompt values.
+shopt -s execfail                # make it so that failed `exec' commands don't flush this shell.
 shopt -s no_empty_cmd_completion # no auto-completion on empty line.
 shopt -s autocd                  # allow omitting `cd` to directory names.
 shopt -s cdspell                 # auto-correct typos in path names.

@@ -8,19 +8,25 @@
 # Bash readline
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
-# Bash history
-# Exported so 'bash --norc' wont create the history file at $HOME
 export HISTFILE="${XDG_STATE_HOME}/bash/history"
-# export HISTTIMEFORMAT='%F %T  '
+
 export HISTCONTROL='ignorespace:erasedups';  # No dups and ignore commands that starts with a space
+
 export HISTTIMEFORMAT='(%a, %b-%d) %I:%M:%S%P  '
+
 export HISTTIMEFORMAT=$'\e[2;36m(%a, %b-%d) %I:%M:%S%P\e[0m  '
+
+export HISTIGNORE='ls*:cd*:pwd:exit:clear:history*:&:[ \t]*'
+
 export HISTSIZE=100000 
+
 export HISTFILESIZE=$HISTSIZE
 
-# --- Common tool overrides that respect XDG once told to ---
+# Common tool overrides that respect XDG once told t
+export LESS='-i -M -P%t?f%f :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 export LESSHISTFILE="$XDG_STATE_HOME/less/history"
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
+
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 
