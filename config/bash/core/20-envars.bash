@@ -1,48 +1,20 @@
-#!/usr/bin/env bash
-# shellcheck shell=bash
-#
+# shellcheck shell=sh disable=SC2034
 # vim: ft=sh fdm=marker ts=2 sw=2 et
-# Set up shell variables for Bash
+#
+# Bash-related variables that must also be visible to systemd.
+#
+# Sourced after config/bash/core/10-xdg.sh, which defines the XDG_* variables
+# used here.
+#
+# Real file: config/bash/core/20-bash.sh
+# Symlinked to ~/.config/environment.d/20-bash.conf, so this file is read
+# by both bash (sourced with `set -a`) and systemd (environment.d).
+#
+# Because systemd parses it too, only these are allowed:
+#   - KEY=value lines (quotes and ${VAR:-default} are fine)
+#   - full-line # comments
+# No export, source, command substitution, or other shell logic.
 
 
-# Bash readline
-export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
-
-export HISTFILE="${XDG_STATE_HOME}/bash/history"
-
-export HISTCONTROL='ignorespace:erasedups';  # No dups and ignore commands that starts with a space
-
-export HISTTIMEFORMAT='(%a, %b-%d) %I:%M:%S%P  '
-
-export HISTTIMEFORMAT=$'\e[2;36m(%a, %b-%d) %I:%M:%S%P\e[0m  '
-
-export HISTIGNORE='ls*:cd*:pwd:exit:clear:history*:&:[ \t]*'
-
-export HISTSIZE=100000 
-
-export HISTFILESIZE=$HISTSIZE
-
-# Common tool overrides that respect XDG once told t
-export LESS='-i -M -P%t?f%f :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
-export LESSHISTFILE="$XDG_STATE_HOME/less/history"
-export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
-
-export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-
-if [[ -f "$XDG_CONFIG_HOME/wget/wgetrc" ]]; then
-  export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
-fi
-
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-
-# Ensure directories for tool-specific overrides exist too, since some
-# tools (bash history, less) won't create their parent dir automatically
-# TODO: bootstrap this on setup
-# mkdir -p "$(dirname "$HISTFILE")" "$(dirname "$LESSHISTFILE")" 2>/dev/null
-
-# __common::command_exists "nvim" && VISUAL="nvim"
-# export EDITOR="$VISUAL"
-# __common::command_exists "less" && export PAGER="less"
-# __common::command_exists "google-chrome" && export BROWSER="google-chrome"
+INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+HISTFILE="${XDG_STATE_HOME}/bash/history"

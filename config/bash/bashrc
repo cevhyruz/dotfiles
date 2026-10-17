@@ -22,7 +22,18 @@ import_lib "common" "log" "path"
 
 for _rc in "${config_dir}"/{lib/*,core/*,bash_plugins,bash_aliases,bash_functions}; do
   [[ -f $_rc ]] || continue
-    source "$_rc"
+  case $_rc in
+    # Env-style files: plain KEY=value lines, shared with environment.d via
+    # symlinks, so they contain no `export`. Auto-export them while sourcing.
+    */core/10-xdg.sh | */core/20-envars.bash)
+      set -a
+      source "$_rc"
+      set +a
+      ;;
+    *)
+      source "$_rc"
+      ;;
+  esac
 done
 unset _rc
 
