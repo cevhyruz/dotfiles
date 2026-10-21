@@ -13,14 +13,14 @@ fi
 _errlog="${XDG_RUNTIME_DIR:-/tmp}/dotfiles-errors.$$"
 alias inspect='cat "${_errlog}"'
 
-config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
+DOTFILES_BASH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
 
 {
 
 source "${XDG_DATA_HOME:-$HOME/.local/share}/bashlib/lib.bash"
 import_lib "common" "log" "path"
 
-for _rc in "${config_dir}"/{lib/*,core/*,bash_plugins,bash_aliases,bash_functions}; do
+for _rc in "${DOTFILES_BASH_CONFIG_DIR}"/{lib/*,core/*,bash_plugins,bash_aliases,bash_functions}; do
   [[ -f $_rc ]] || continue
   case $_rc in
     # Env-style files: plain KEY=value lines, shared with environment.d via
@@ -43,18 +43,17 @@ __theme::init default && __theme::main_handle
 
 if [[ -s $_errlog ]]; then
   echo "Using Minimal config"
-  source "$config_dir/bashrc_minimal"
+  source "$DOTFILES_BASH_CONFIG_DIR/bashrc_minimal"
 fi
 
 # local config file
-local_bashrc="${config_dir}/bashrc_local"
+local_bashrc="${DOTFILES_BASH_CONFIG_DIR}/bashrc_local"
 if [[ -f "${local_bashrc}" ]]; then
   source "${local_bashrc}" || echo "Warning: failed to load basrc_local" >&2
 fi
 unset local_bashrc
 
-unset config_dir
-
+unset DOTFILES_BASH_CONFIG_DIR
 
 } 2> "$_errlog"
 

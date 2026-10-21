@@ -6,7 +6,7 @@
 # completion.bash. Loads the bash-completion framework (if installed)
 # and provides small helpers for inspecting which completions are available vs. loaded.
 
-# source "${config_dir}/bash_completion" || echo 'plugin: bash-completion error' >&2
+# source "${DOTFILES_BASH_CONFIG_DIR}/bash_completion" || echo 'plugin: bash-completion error' >&2
 
 # bash-completion 2.x needs bash >= 4.2
 if (( BASH_VERSINFO[0] < 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 2) )); then
@@ -17,7 +17,7 @@ fi
 # We don't need to to do anything if it's already enabled
 [[ ${BASH_COMPLETION_VERSINFO-} ]] && return 0
 
-# Use the ${config_dir} for user-level bash-completion
+# Use the ${DOTFILES_BASH_CONFIG_DIR} for user-level bash-completion
 
 # User directory for bash-completion
 #
@@ -27,7 +27,7 @@ fi
 # Default: ${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion
 #
 # Must be set BEFORE the framework is sourced.
-BASH_COMPLETION_USER_DIR="${config_dir}"
+BASH_COMPLETION_USER_DIR="${DOTFILES_BASH_CONFIG_DIR}"
 
 
 # User-level bash-completion customization
@@ -47,7 +47,7 @@ BASH_COMPLETION_USER_DIR="${config_dir}"
 #   complete -o default -o bashdefault <cmd>
 #
 # Must be set BEFORE the framework is sourced.
-BASH_COMPLETION_USER_FILE="${config_dir}/bash_completion"
+BASH_COMPLETION_USER_FILE="${DOTFILES_BASH_CONFIG_DIR}/bash_completion"
 
 
 _bashcomp_main=

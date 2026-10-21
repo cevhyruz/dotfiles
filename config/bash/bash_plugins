@@ -10,7 +10,7 @@ shopt -q nullglob && _ng=1 || _ng=0
 # expand the glob with 'failglob' disabled, and 'nullglob' enabled
 # so an empty directory also gives an empty array.
 shopt -u failglob; shopt -s nullglob
-_plugins=("${config_dir}/plugins"/*.bash)
+_plugins=("${DOTFILES_BASH_CONFIG_DIR}/plugins"/*.bash)
 
 # restore those options
 if (( _fg )); then shopt -s failglob; else shopt -u failglob; fi
