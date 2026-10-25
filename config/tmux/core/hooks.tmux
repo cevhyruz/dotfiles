@@ -17,3 +17,9 @@ set-hook -g pane-focus-in   {
 set-hook -g pane-focus-out {
   setenv -g TMUX_PANE_ACTIVE 0
 }
+
+# Update the terminal's idea of the cwd when the active pane changes
+# needs the osc7.sh script and tmux option allow-passthrough on.
+set-hook -ag after-select-pane      { __vte_osc7 }
+set-hook -ag after-select-window    { __vte_osc7 }
+set-hook -ag client-session-changed { __vte_osc7 }

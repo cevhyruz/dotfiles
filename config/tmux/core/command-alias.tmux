@@ -19,6 +19,10 @@ set -ag command-alias splitp="splitw -vc '#{pane_current_path}' -e \"OLDPWD='~/D
 set -ag command-alias split="splitw -vc '#{pane_current_path}'"
 set -ag command-alias vsplit="splitw -hc '#{pane_current_path}'"
 
+# Update the terminal's idea of the cwd when the active pane changes
+# needs the osc7.sh script and tmux option allow-passthrough on.
+set -ag command-alias __vte_osc7="run-shell -b \"printf '\033]7;file://%s%s\033\\' '#{host}' '#{pane_current_path}' > '#{client_tty}' \""
+
 # zoom a pane
 set -ag command-alias zoom="resize-pane -Z"
 
