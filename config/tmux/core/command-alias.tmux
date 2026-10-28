@@ -21,7 +21,7 @@ set -ag command-alias vsplit="splitw -hc '#{pane_current_path}'"
 
 # Update the terminal's idea of the cwd when the active pane changes
 # needs the osc7.sh script and tmux option allow-passthrough on.
-set -as command-alias '__vte_osc7=run-shell "~/.config/tmux/bin/osc7.sh #{q:client_tty} #{q:pane_current_path}"'
+set -as command-alias '__osc7=run-shell "~/.config/tmux/bin/osc7.sh #{q:client_tty} #{q:pane_current_path}"'
 
 # zoom a pane
 set -ag command-alias zoom="resize-pane -Z"
