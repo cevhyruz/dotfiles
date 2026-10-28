@@ -13,13 +13,15 @@ set-hook -g pane-focus-in   {
   setenv -g TMUX_PANE_ACTIVE 1
 }
 
-# When pane becomes inactive
+# When pane bcomes inactive
 set-hook -g pane-focus-out {
   setenv -g TMUX_PANE_ACTIVE 0
 }
 
 # Update the terminal's idea of the cwd when the active pane changes
 # needs the osc7.sh script and tmux option allow-passthrough on.
+# TODO: make this auto set, when the tmux.bash plugin is laoded.
 set-hook -ag after-select-pane      { __vte_osc7 }
 set-hook -ag after-select-window    { __vte_osc7 }
 set-hook -ag client-session-changed { __vte_osc7 }
+set-hook -ag window-pane-changed { __vte_osc7 }
