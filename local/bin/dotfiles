@@ -1,328 +1,1161 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
-# vim: ft=bash fdm=marker ts=2 sw=2 et
-
-# ---------------------------------------------------------------------------
-# Execution context — must be first, before set -e/traps/anything else,
-# since the bash-version guard below needs to know whether to `exit` or
-# `return` if the check fails.
-# ---------------------------------------------------------------------------
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    __SOURCED=0
-else
-    __SOURCED=1
-fi
-
-set -euo pipefail
-IFS=$'\n\t'
-
-# ---------------------------------------------------------------------------
-# Bash version guard
-# ---------------------------------------------------------------------------
-if (( ${BASH_VERSINFO[0]:-0} < 4 )); then
-    printf 'Error: this script requires bash >= 4 (found: %s)\n' \
-        "${BASH_VERSION:-unknown}" >&2
-    if [[ "$__SOURCED" -eq 1 ]]; then
-        return 1
-    else
-        exit 1
-    fi
-fi
-
-# ---------------------------------------------------------------------------
-# Constants / metadata
-# ---------------------------------------------------------------------------
-readonly SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
-readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-readonly SCRIPT_VERSION="0.1.0"
-
-# Exit codes — customize/extend for your script. Keeping them named and
-# centralized makes it easy for another script calling this one (e.g. in
-# --plumbing mode) to branch on why it failed rather than just pass/fail.
-readonly EXIT_OK=0
-readonly EXIT_ERROR=1
-readonly EXIT_NOT_FOUND=2
-# 130/143 (128+SIGINT/128+SIGTERM) are used by the signal handlers below,
-# per the conventional shell exit-code-for-signal scheme.
-
-# Runtime flags/state — populated by main(); declared here (not `local`) so
-# any top-level action_* function can see them without threading params
-# through every call.
-PLUMBING=0
-VERBOSE=0
-DRY_RUN=0
-ACTION=""
-TARGET=""
-TMP_DIR=""
-
-# ---------------------------------------------------------------------------
-# Logging helpers
+# dotfiles-doctor.sh - check (and repair) a GNU Stow style dotfiles repo
 #
-# Colors are decided inside main() (they depend on --plumbing, which isn't
-# known until args are parsed) but the log_* functions themselves are
-# defined here so they're available to every function, sourced or not.
-# ---------------------------------------------------------------------------
-C_RED="" C_GREEN="" C_YELLOW="" C_BLUE="" C_RESET=""
-
-log_info()  { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[INFO]%s  %s\n'  "$C_BLUE"  "$C_RESET" "$*"; }
-log_ok()    { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[ OK ]%s  %s\n'  "$C_GREEN" "$C_RESET" "$*"; }
-log_warn()  { [[ "$PLUMBING" -eq 1 ]] && return 0; printf '%s[WARN]%s  %s\n' "$C_YELLOW" "$C_RESET" "$*" >&2; }
-log_error() { printf '%s[FAIL]%s  %s\n' "$C_RED"    "$C_RESET" "$*" >&2; }
-log_debug() { [[ "$VERBOSE" -eq 1 ]] && printf '%s[DBG ]%s  %s\n' "$C_BLUE" "$C_RESET" "$*" >&2 || true; }
-
-die() {
-    log_error "$1"
-    exit "${2:-$EXIT_ERROR}"
-}
-
-# ---------------------------------------------------------------------------
-# Dependency checking
-# ---------------------------------------------------------------------------
-require_cmd() {
-    local cmd="$1" hint="${2:-}"
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-        local msg="Missing required command: $cmd"
-        [[ -n "$hint" ]] && msg="$msg ($hint)"
-        die "$msg"
-    fi
-}
-
-# ---------------------------------------------------------------------------
-# Temp dir + cleanup
+# Every top-level directory in the repo is a package whose files mirror the
+# target (default $HOME). The doctor compares each file with what is actually
+# there and reports:
+#   OK        target is the repo file (through a link, or a folded dir link)
+#   MISSING   nothing at the target path yet
+#   BROKEN    a dead symlink sits at the target path
+#   CONFLICT  a real file/dir is in the way (stow would refuse)
+#   WRONG     a symlink there points somewhere else
+#   ORPHAN    a dead symlink into the repo, left over from a removed/renamed file
+# It also checks that stow is installed and whether the repo has uncommitted work.
 #
-# A single lazily-created temp dir rather than tracking individual temp
-# files — scales cleanly if more than one thing ever needs scratch space,
-# and cleanup is just one rm -rf.
-# ---------------------------------------------------------------------------
-ensure_tmp_dir() {
-    if [[ -z "$TMP_DIR" ]]; then
-        TMP_DIR="$(mktemp -d)"
-        log_debug "Created temp dir: $TMP_DIR"
-    fi
-}
+# The interface opens immediately and the scan runs in the background. On the
+# first scan, files appear in the list as they are discovered (package by package);
+# the counts grow while it runs. Rescans (r, or after a fix) keep the old list on
+# screen until the new result is complete, so the list never flickers or shrinks.
+#
+# Usage: dotfiles-doctor.sh [-d REPO] [-t TARGET] [-p PKG]... [-x PKG]... [-m PKG=DIR]... [-c]
+#   -d REPO     repo path (default: $DOTFILES, ~/.dotfiles, then ~/dotfiles)
+#   -t TARGET   where packages are linked (default: $HOME)
+#   -p PKG      only check this package (repeatable)
+#   -x PKG      skip this package (repeatable); dirs starting with "_" are always skipped
+#   -m PKG=DIR  link this package into DIR instead (default: config=$XDG_CONFIG_HOME)
+#   -c          non-interactive report, exit 1 if anything is wrong
+#
+# Command line (: or !): the command runs in the repo directory and gets the
+#   highlighted file as {} (the repo file; for an ORPHAN the dead link), {t} for the
+#   target path, and $SRC $TGT $PKG in its environment. With no placeholder the repo
+#   file is appended: "bat" -> bat '<file>' (end with ; to run without the file). Up/down browse history, kept in
+#   $XDG_STATE_HOME/dotfiles-doctor/history. The list is rescanned afterwards.
+#
+# Keys: j/k move   a show all/issues only   f fix item   F fix all MISSING
+#       r rescan   q quit
+#       numbers: n toggles absolute / relative (vim-style) line numbers;
+#       type a count first for vim-style motions: 5j / 5k move 5 rows,
+#       12G, 12g or 12<enter> jump to line 12, esc cancels a pending count.
+#       While a count is pending, every visible line number that starts with the
+#       typed digits is highlighted (an exact match is underlined) and gets a letter
+#       label, like vim easymotion: press the letter to jump straight to that row
+#       H / M / L jump to the top / middle / bottom row of the visible window
+#       (not the list); 3H and 3L mean 3rd row from the top / bottom
+#       / search: filter the list live (space separated terms are ANDed and match
+#       status, package and path, e.g. "missing config"); the selection stays on the
+#       same file (or the next one that still matches); enter keeps the filter,
+#       esc while typing restores the old one and the old position, esc afterwards
+#       clears it
+#       : or ! run a shell command on the highlighted file, see below
+#       ctrl-k info popup, drawn right below the highlighted row (below the row
+#       above it if there is no room): status, package, source and target, what is at
+#       the target now and what f would do. ctrl-k or esc closes it. Any other key
+#       closes it and is then handled as usual, so j/k, clicks, the wheel and the
+#       rest keep working while it is open.
+#       ? or ctrl-/ help popup listing all keybindings, centered. Like the info popup it is
+#       not modal: navigation keys (j/k, g/G, H/M/L, counts, ctrl-e/ctrl-y, the wheel) close
+#       it and are then handled as usual; any other key only closes it (and is swallowed,
+#       so q does not quit while help is open)
+#       ctrl-e / ctrl-y scroll the view 5 rows (3^E = three rows) and only move the
+#       selection if it would leave the window
+#       marks: space marks/unmarks the highlighted file, the selection stays put
+#       (3<space> toggles the highlighted file and the two below it); A marks everything in view, I inverts, C clears all; clicking a
+#       [ ] box toggles it. With marks, f fixes every marked file in view (one
+#       confirmation) and : runs the command on each marked file
+#       mouse: click a row to select it; the wheel scrolls the view 5 rows per notch,
+#       exactly like ctrl-e / ctrl-y; m toggles the mouse
+#       (turn it off to select text with the terminal, or hold shift)
+#       scrollbar: the right-most column of the list shows where the view is (only when
+#       the list is longer than the window); click it to jump there, or drag the thumb
+#       f, F and : are ignored while a scan is still running.
+#       p groups the list by package: each package gets a header row with its file count and
+#       status counts. tab or enter (or a click on the arrow) on a header or any of its files
+#       folds / unfolds that package, z folds all / unfolds all, space on a header marks the
+#       whole package (it has to be unfolded). Folds are ignored while a filter is active
+#
+# The terminal plumbing (frames, row diffing, mouse, scrollbar, popups, line editor,
+# confirm, viewport motions, easymotion labels) lives in tui.sh; this file only holds
+# what is specific to dotfiles.
 
-cleanup_tmp() {
-    if [[ -n "$TMP_DIR" && -d "$TMP_DIR" ]]; then
-        rm -rf -- "$TMP_DIR"
-    fi
-}
+_here=${BASH_SOURCE[0]%/*}; [[ $_here == "${BASH_SOURCE[0]}" ]] && _here=.
+source "$_TUI_SOURCEPATH"
 
-# Normal exit path (includes falling off the end of the script, `exit N`
-# from anywhere, and `die`). Runs cleanup once, then re-exits with
-# whatever status was already in flight.
-on_exit() {
-    local status=$?
-    cleanup_tmp
-    exit "$status"
-}
+_TUI_SB_ENABLE=0
 
-# Ctrl-C / termination path — separated from on_exit so an interrupt gets
-# its own message and the conventional 128+signum exit code, rather than
-# being folded into a generic exit-1 the way `die` handles ordinary errors.
-on_interrupt() {
-    local sig="$1"
-    trap - EXIT INT TERM   # avoid on_exit firing again after this handler
-    log_warn "Interrupted (SIG$sig), cleaning up..."
-    cleanup_tmp
-    case "$sig" in
-        INT)  exit 130 ;;
-        TERM) exit 143 ;;
-        *)    exit "$EXIT_ERROR" ;;
-    esac
-}
+repo= target=$HOME check=0
+only=() skip=() pkgs=()
+declare -A map=() cnt=() marked=()
+mv=()
+declare -A gcnt=() folded=()     # per-package counts ("pkg|" total, "pkg|STATUS"), folded packages
+grp_name=() grp_sig=() GS=       # package of each header row, its counts, summary text
+it_pkg=() it_rel=() it_src=() it_tgt=() it_st=() view=()
+sel=0 top=0 show_all=0 MSG= num_mode=0 cnt= query= group=0
+cmd_hist=() hist_file=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-doctor/history
+env_stow= env_git= git_dirty=0 stow_ok=0
 
-# ---------------------------------------------------------------------------
-# Help / usage
-# ---------------------------------------------------------------------------
+# draw caches: per-item rendered cells (status/package/path), the detail text of
+# the selected item, and the color of each status
+declare -A st_col=([OK]=82 [MISSING]=220 [BROKEN]=196 [WRONG]=208 [CONFLICT]=201 [ORPHAN]=245)
+cells=() cells_w=-1 d_i= d_now= drawn_top=0
+scroll_step=5      # rows per ctrl-e / ctrl-y / wheel notch
+anchor=-1 anchor_rel=0   # selection kept across filter changes
+
+# info popup (ctrl-k). popup=1 while it is open. PL holds its "label|value" lines, built
+# by popup_prepare and cached under pop_key.
+popup=0 pop_key= PL=()
+
+# help popup (? / ctrl-/): pure state, painted by draw().
+help=0
+# "key|description" lines; a key of "#" makes the line a section title
+HL=(
+    ""
+    "#|Move"
+    ""
+    " j k up down|move a row; 5j / 5k move 5 rows"
+    " g G|first / last row; 12G, 12g, 12<enter> go to line 12"
+    " H M L|top / middle / bottom of the window; 3H, 3L"
+    " ^E ^Y wheel|scroll the view 5 rows (3^E = 3 rows)"
+    " digits|start a count; matching line numbers get a jump letter"
+    " n|toggle absolute / relative line numbers"
+    ""
+    "#|Filter"
+    ""
+    " /|live filter, terms are ANDed (e.g. missing config)"
+    " a|show all files / issues only"
+    " esc|clear the pending count, then the filter"
+    ""
+    "#|Marks"
+    ""
+    " space|mark file; on a header the whole package; 3<space>"
+    " A I C|mark all in view / invert / clear marks"
+    " click [ ]|toggle the mark with the mouse"
+    ""
+    "#|Actions"
+    ""
+    " f|fix highlighted file (or all marked files)"
+    " F|fix all MISSING"
+    " r|rescan"
+    " : !|run a command; {} {t} \$SRC \$TGT \$PKG available"
+    ""
+    "#|Packages"
+    ""
+    " p|group the list by package (header rows)"
+    " tab enter|fold / unfold the package of the row"
+    " z|fold all / unfold all"
+    ""
+    "#|Other"
+    ""
+    " ^K|info popup for the highlighted file"
+    "? ^/|this help; navigation keys close it and still work"
+    " m|toggle mouse (off: terminal text selection)"
+    " q|quit"
+)
+
+# background scan state: scanning=1 while a worker runs, loaded=1 once the environment
+# record (or the end of a scan) has been seen (before that the environment row shows a
+# placeholder). The first scan streams into the live list: scan_fd is the open read end
+# of the growing output file, scan_part holds a partly read field and scan_rec the
+# fields of the record being assembled.
+scanning=0 loaded=0 scan_pid= scan_dir= scan_out= scan_done= scan_gen=0
+scan_fd= scan_part= scan_rec=() scan_stream=0
+
+# hooks for tui.sh: prompts repaint through draw, and pick up scan results while
+# they wait (_TUI_POLL_TO is a short key timeout while a scan runs)
+_TUI_REDRAW=draw
+_TUI_POLL_FN=poll_scan
+
 usage() {
-    cat <<EOF
-${C_GREEN}${SCRIPT_NAME}${C_RESET} v${SCRIPT_VERSION}
-One-line description of what this script does.
+    sed -n '/^# Usage:/,/^# *-c /p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' >&2
+    exit "${1:-2}"
+}
+die() { printf '%s: %s\n' "${0##*/}" "$*" >&2; exit 2; }
 
-${C_YELLOW}USAGE${C_RESET}
-    $SCRIPT_NAME [OPTIONS] [TARGET]
+tilde() { REPLY=${1/#"$HOME"/\~}; }
 
-${C_YELLOW}ACTIONS${C_RESET} (choose one — replace with your own)
-    -x, --example TARGET     Placeholder action; replace with real subcommands
-    -h, --help               Show this help and exit
-        --version            Show version and exit
+# vp CMD...: run a tui.sh viewport function on our top/sel
+vp() { _TUI_VSEL=$sel _TUI_VTOP=$top; "$@"; sel=$_TUI_VSEL top=$_TUI_VTOP; }
 
-${C_YELLOW}ACTIONS${C_RESET} (choose one — replace with your own)
-    -x, --example TARGET    Placeholder action; replace with real subcommands
-    -h, --help               Show this help and exit
-        --version             Show version and exit
+# ---------------------------------------------------------------------------
+# Scanning
+# ---------------------------------------------------------------------------
 
-${C_YELLOW}OPTIONS${C_RESET}
-    -n, --dry-run            Show what would happen, don't do it
-    -v, --verbose             Print debug info
-    -p, --plumbing            Machine-readable mode for use by other scripts:
-                              no colors, no decorative log lines, silent
-                              success (see EXIT CODES)
-
-${C_YELLOW}EXAMPLES${C_RESET}
-    $SCRIPT_NAME -x some-target
-    $SCRIPT_NAME -x some-target --dry-run --verbose
-    $SCRIPT_NAME -p -x some-target || echo "failed: \$?"
-
-${C_YELLOW}EXIT CODES${C_RESET}
-    0    success
-    1    general error (bad args, missing dependency, ...)
-    2    not found (customize per your script's meaning)
-    130  interrupted (SIGINT / Ctrl-C)
-    143  terminated (SIGTERM)
-EOF
+# classify SRC TGT -> ST
+classify() {
+    if [[ $2 -ef $1 ]]; then ST=OK
+    elif [[ -L $2 ]]; then
+        if [[ -e $2 ]]; then ST=WRONG; else ST=BROKEN; fi
+    elif [[ -e $2 ]]; then ST=CONFLICT
+    else ST=MISSING
+    fi
 }
 
-version() {
-    printf '%s %s\n' "$SCRIPT_NAME" "$SCRIPT_VERSION"
+# files stow would ignore by default
+ignored() {
+    local rel=$1 b=${1##*/}
+    case $b in *'~'|'#'*'#'|'.#'*) return 0 ;; esac
+    [[ $rel == */* ]] && return 1
+    case $b in
+        README*|LICENSE*|COPYING|.gitignore|.gitmodules|.gitattributes|.stow-local-ignore) return 0 ;;
+    esac
+    return 1
 }
 
-# ---------------------------------------------------------------------------
-# ACTIONS
-#
-# Replace action_example with your real logic. Keep the pattern:
-#   - validate inputs first, die() with a clear message on bad input
-#   - respect DRY_RUN before anything destructive
-#   - respect PLUMBING for what you print to stdout (log_* already do this
-#     for you; only worry about it for direct printf/echo data output)
-#   - return/exit with a meaningful code (EXIT_OK / EXIT_ERROR / EXIT_NOT_FOUND
-#     or your own), not just 0/1
-# ---------------------------------------------------------------------------
-action_example() {
-    [[ -n "$TARGET" ]] || die "No target given. Use: $SCRIPT_NAME -x TARGET"
-
-    log_debug "Running example action on: $TARGET"
-
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-        log_info "[dry-run] would process: $TARGET"
-        return "$EXIT_OK"
-    fi
-
-    # --- your real logic goes here ---
-    log_ok "Processed: $TARGET"
-    return "$EXIT_OK"
+add() {
+    local k
+    it_pkg+=("$1") it_rel+=("$2") it_src+=("$3") it_tgt+=("$4") it_st+=("$5")
+    cnt[$5]=$(( ${cnt[$5]:-0} + 1 ))
+    k="$1|";   gcnt[$k]=$(( ${gcnt[$k]:-0} + 1 ))
+    k="$1|$5"; gcnt[$k]=$(( ${gcnt[$k]:-0} + 1 ))
 }
 
-# ---------------------------------------------------------------------------
-# main() — parses args and dispatches. Only called at the bottom of this
-# file when the script is executed directly, not when sourced.
-# ---------------------------------------------------------------------------
-main() {
-    # --- Pre-scan for -p/--plumbing so colors can be decided before any
-    # logging happens (colors are read-only globals, set once). ---
-    for __arg in "$@"; do
-        case "$__arg" in
-            -p|--plumbing) PLUMBING=1 ;;
-        esac
-    done
-    unset __arg
+# scan_worker: does the slow part (find, classify, dead links, git status) and
+# prints the result to stdout as NUL separated fields, in tagged records:
+#   I pkg rel src tgt status      one item (6 fields), printed as soon as it is classified
+#   E stow_ok stow_txt git_dirty git_txt   the environment (5 fields), printed last
+# Runs in a background subshell; never touches the interface.
+scan_worker() {
+    local p tdir rel src tgt d l real
+    local -A known=() dirs=()
 
-    if [[ -t 1 && "$PLUMBING" -eq 0 ]]; then
-        C_RED=$'\033[0;31m'
-        C_GREEN=$'\033[0;32m'
-        C_YELLOW=$'\033[0;33m'
-        C_BLUE=$'\033[0;34m'
-        C_RESET=$'\033[0m'
+    for p in "${pkgs[@]}"; do
+        tdir=${map[$p]:-$target}
+        while IFS= read -rd '' rel; do
+            ignored "$rel" && continue
+            src=$repo/$p/$rel tgt=$tdir/$rel
+            classify "$src" "$tgt"
+            printf '%s\0' I "$p" "$rel" "$src" "$tgt" "$ST"
+            known[$tgt]=1
+            dirs[${tgt%/*}]=1
+        done < <(find "$repo/$p" -name .git -prune -o \( -type f -o -type l \) -printf '%P\0')
+    done
+
+    # dead links into the repo, next to the files we manage
+    shopt -s nullglob dotglob
+    for d in "${!dirs[@]}"; do
+        [[ -d $d ]] || continue
+        for l in "$d"/*; do
+            [[ -L $l && ! -e $l && -z ${known[$l]:-} ]] || continue
+            real=$(readlink -f -- "$l")
+            [[ $real == "$repo"/* ]] || continue
+            tilde "$l"
+            printf '%s\0' I "-" "$REPLY" "" "$l" ORPHAN
+        done
+    done
+    shopt -u nullglob dotglob
+
+    # environment
+    local s_ok s_txt g_dirty g_txt
+    if command -v stow >/dev/null 2>&1; then s_ok=1 s_txt="stow installed"
+    else s_ok=0 s_txt="stow not installed"; fi
+    if git -C "$repo" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        local -a gs
+        mapfile -t gs < <(git -C "$repo" status --porcelain 2>/dev/null)
+        g_dirty=${#gs[@]}
+        if (( g_dirty )); then g_txt="git: $g_dirty uncommitted change(s)"; else g_txt="git: clean"; fi
+    else
+        g_dirty=0 g_txt="git: not a repository"
+    fi
+    printf '%s\0' E "$s_ok" "$s_txt" "$g_dirty" "$g_txt"
+}
+
+scan_clear() { it_pkg=() it_rel=() it_src=() it_tgt=() it_st=() cnt=() gcnt=(); }
+
+scan_close() { [[ -n $scan_fd ]] && { exec {scan_fd}<&-; scan_fd=; }; return 0; }
+
+# scan_drain FD: read what the worker has written so far and apply every complete
+# record (a partial trailing field is kept in scan_part until the rest arrives).
+# Returns 0 if anything was added.
+scan_drain() {
+    local f rc need changed=1
+    while :; do
+        IFS= read -r -d '' -u "$1" f; rc=$?
+        if (( rc )); then scan_part+=$f; break; fi       # EOF for now: keep the partial field
+        scan_rec+=("$scan_part$f"); scan_part=
+        case ${scan_rec[0]} in I) need=6 ;; E) need=5 ;; *) need=1 ;; esac
+        (( ${#scan_rec[@]} < need )) && continue
+        case ${scan_rec[0]} in
+            I) add "${scan_rec[@]:1:5}"; changed=0 ;;
+            E) stow_ok=${scan_rec[1]} env_stow=${scan_rec[2]}
+               git_dirty=${scan_rec[3]} env_git=${scan_rec[4]}
+               loaded=1; changed=0 ;;
+        esac
+        scan_rec=()
+    done
+    return $changed
+}
+
+# scan_load FILE: replace the lists with the complete output of a finished worker.
+scan_load() {
+    local fd k
+    exec {fd}<"$1" || return 1
+    scan_clear; scan_part= scan_rec=()
+    scan_drain "$fd"
+    exec {fd}<&-
+    cells=() d_i=; _tui_forget_sigs
+
+    # forget marks whose item no longer exists
+    local -A present=()
+    for k in "${it_tgt[@]}"; do present[$k]=1; done
+    for k in "${!marked[@]}"; do [[ -n ${present[$k]:-} ]] || unset 'marked[$k]'; done
+    return 0
+}
+
+# scan_sync: blocking scan, for the plain report
+scan_sync() { local t; t=$(mktemp) || return 1; scan_worker >"$t"; scan_load "$t"; rm -f -- "$t"; }
+
+# scan_cancel: stop a running background scan
+scan_cancel() {
+    scan_close
+    (( scanning )) || return 0
+    pkill -P "$scan_pid" 2>/dev/null
+    kill "$scan_pid" 2>/dev/null
+    wait "$scan_pid" 2>/dev/null
+    scanning=0 _TUI_POLL_TO=
+}
+
+# scan_start: (re)start the scan in the background and return immediately. The first
+# scan streams into the live list; later scans keep the current lists until poll_scan
+# loads the finished result.
+scan_start() {
+    scan_cancel
+    scan_out=$scan_dir/out.$(( ++scan_gen )) scan_done=$scan_dir/out.$scan_gen.done
+    scan_stream=$(( ! loaded ))
+    if (( scan_stream )); then
+        scan_clear; scan_part= scan_rec=(); cells=() d_i=; _tui_forget_sigs
+        : >"$scan_out"; exec {scan_fd}<"$scan_out"
+    fi
+    scanning=1 _TUI_POLL_TO=0.03       # wake up often while a scan runs
+    (
+        trap - EXIT WINCH
+        scan_worker >"$scan_out"
+        : >"$scan_done"
+    ) </dev/null 2>/dev/null &
+    scan_pid=$!
+}
+
+# poll_scan: pick up new output (streaming) or the finished result (rescan).
+# Returns 0 when the lists changed, in which case the view has been rebuilt.
+poll_scan() {
+    (( scanning )) || return 1
+    local fin=0 got=1
+    [[ -e $scan_done ]] && fin=1              # check first, so the last bytes are not missed
+    if (( scan_stream )); then
+        scan_drain "$scan_fd" && got=0
+    elif (( fin )); then
+        scan_load "$scan_out"; got=0
+    fi
+    if (( fin )); then
+        wait "$scan_pid" 2>/dev/null
+        scanning=0 loaded=1 _TUI_POLL_TO=; scan_close
+        rm -f -- "$scan_out" "$scan_done"
+        got=0
+    fi
+    (( got )) || build_view
+    return $got
+}
+
+# scroll_view N: scroll the view N rows down (negative: up). The selection stays where
+# it is unless it would leave the window, then it is pulled to the nearest edge row
+# (vim's ctrl-e / ctrl-y).
+scroll_view() {
+    local lr=$(( _TUI_ROWS - 10 )) n=${#view[@]}
+    (( lr < 3 )) && lr=3
+    vp _tui_vp_scroll "$1" "$lr" "$n"
+}
+
+build_view() {
+    local i t hay p k st s lastp=
+    local -a terms=()
+    view=() grp_name=() grp_sig=()
+    [[ -n $query ]] && read -ra terms <<<"${query,,}"
+    for i in "${!it_st[@]}"; do
+        if (( ! show_all )) && [[ ${it_st[i]} == OK ]]; then continue; fi
+        if (( ${#terms[@]} )); then
+            hay="${it_st[i]} ${it_pkg[i]} ${it_rel[i]} ${it_tgt[i]}"; hay=${hay,,}
+            for t in "${terms[@]}"; do [[ $hay == *"$t"* ]] || continue 2; done
+        fi
+        if (( group )); then
+            p=${it_pkg[i]}
+            if [[ $p != "$lastp" ]]; then          # first visible file of a package: header row
+                lastp=$p
+                view+=("$(( -1 - ${#grp_name[@]} ))")
+                grp_name+=("$p")
+                k="$p|"; s=${gcnt[$k]:-0}
+                for st in OK MISSING BROKEN WRONG CONFLICT ORPHAN; do k="$p|$st"; s+=" ${gcnt[$k]:-0}"; done
+                grp_sig+=("$s")
+            fi
+            [[ -z $query && -n ${folded[$p]-} ]] && continue
+        fi
+        view+=("$i")
+    done
+    (( sel >= ${#view[@]} )) && sel=$(( ${#view[@]} - 1 ))
+    (( sel < 0 )) && sel=0
+    return 0
+}
+
+# reselect ITEM: put the selection on ITEM, or on the next visible item after it
+# (the last one if there is none). The view is in item order.
+reselect() {
+    local i
+    for i in "${!view[@]}"; do
+        (( view[i] >= $1 )) && { sel=$i; return 0; }
+    done
+    sel=$(( ${#view[@]} - 1 )); (( sel < 0 )) && sel=0
+    return 0
+}
+
+# rebuild_keep [KEEP]: rebuild the view after the filter changed (set query or show_all
+# first) without the selection jumping: it stays on the same item, on the same screen
+# row, or moves to the next item that still matches. KEEP=1 remembers the last item
+# seen across an empty result (used while typing a search).
+rebuild_keep() {
+    local j
+    (( ${1:-0} )) || anchor=-1
+    if (( ${#view[@]} )); then
+        anchor=${view[sel]} anchor_rel=$(( sel - top ))
+        if (( anchor < 0 )); then                  # on a header: anchor to its first file
+            anchor=-1
+            for (( j = sel + 1; j < ${#view[@]}; j++ )); do
+                (( view[j] >= 0 )) && { anchor=${view[j]}; break; }
+            done
+        fi
+    fi
+    build_view
+    if (( anchor >= 0 )); then reselect "$anchor"; top=$(( sel - anchor_rel )); else sel=0 top=0; fi
+}
+
+issues() { local n=${#it_st[@]}; echo $(( n - ${cnt[OK]:-0} )); }
+
+# ---------------------------------------------------------------------------
+# Fixing
+# ---------------------------------------------------------------------------
+
+# mklink SRC TGT: relative symlink, like stow makes
+mklink() {
+    local rel
+    rel=$(realpath -m --relative-to="${2%/*}" "${1%/*}")/${1##*/}
+    mkdir -p -- "${2%/*}" && ln -s -- "$rel" "$2"
+}
+
+search_cb() { query=$1; rebuild_keep 1; draw; }
+
+# run_command IDX: prompt for a command and run it on the marked files in view,
+# or on IDX when nothing is marked
+run_command() {
+    local i c run p rc fails=0 label="! "
+    local -a targets=("$1")
+    get_marked
+    if (( ${#mv[@]} )); then targets=("${mv[@]}"); label="! (${#mv[@]} marked) "; fi
+    MSG="{} = repo file   {t} = target   \$SRC \$TGT \$PKG   (no placeholder: file is appended)"
+    _TUI_PROMPT="${label}_"
+    draw
+    _tui_readline "$label" "" cmd_hist || { MSG="cancelled"; return 0; }
+    c=$_TUI_LINE
+    [[ -z ${c//[[:space:]]/} ]] && return 0
+
+    if [[ ${cmd_hist[-1]:-} != "$c" ]]; then
+        cmd_hist+=("$c")
+        mkdir -p -- "${hist_file%/*}" && printf '%s\n' "$c" >>"$hist_file"
     fi
 
-    # --- Traps: set up only once we're actually running, not on source ---
-    trap on_exit EXIT
-    trap 'on_interrupt INT'  INT
-    trap 'on_interrupt TERM' TERM
-
-    # --- Dependency checks. Add whatever external commands your real
-    # logic needs; keep them here so failures surface immediately with a
-    # clear message instead of partway through doing real work. ---
-    # require_cmd jq
-    # require_cmd curl
-
-    # --- Normalize --opt=value into --opt value so the parser stays simple ---
-    local args=() arg key val
-    for arg in "$@"; do
-        case "$arg" in
-            --*=*)
-                key="${arg%%=*}"
-                val="${arg#*=}"
-                args+=("$key" "$val")
-                ;;
-            *)
-                args+=("$arg")
-                ;;
-        esac
-    done
-    set -- "${args[@]}"
-
-    # --- Option parsing (long + short, no external getopt dependency) ---
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            -x|--example)
-                ACTION="example"
-                TARGET="${2:-}"
-                [[ -n "$TARGET" ]] && shift
-                ;;
-            # --- add your own options here, following the same pattern ---
-            # -o|--output)
-            #     OUTPUT_PATH="${2:-}"; shift
-            #     ;;
-            -n|--dry-run)
-                DRY_RUN=1
-                ;;
-            -v|--verbose)
-                VERBOSE=1
-                ;;
-            -p|--plumbing)
-                PLUMBING=1
-                ;;
-            -h|--help)
-                usage
-                exit 0
-                ;;
-            --version)
-                version
-                exit 0
-                ;;
-            --)
-                shift
-                break
-                ;;
-            -*)
-                die "Unknown option: $1 (see --help)"
-                ;;
-            *)
-                # bare positional arg = target, if action not already set
-                if [[ -z "$TARGET" ]]; then
-                    TARGET="$1"
-                    [[ -z "$ACTION" ]] && ACTION="example"
-                else
-                    die "Unexpected extra argument: $1"
-                fi
-                ;;
-        esac
-        shift
-    done
-
-    if [[ -z "$ACTION" ]]; then
-        usage
-        exit 1
+    run=$c
+    for p in '{}' '{s}' '{t}'; do run=${run//\"$p\"/$p}; run=${run//\'$p\'/$p}; done
+    if [[ $c != *'{}'* && $c != *'{s}'* && $c != *'{t}'* && $c != *'$SRC'* && $c != *'$TGT'* \
+          && $c != *'${SRC}'* && $c != *'${TGT}'* && $c != *\; ]]; then
+        run+=' "$SRC"'
     fi
+    run=${run//\{\}/\"\$SRC\"}; run=${run//\{s\}/\"\$SRC\"}; run=${run//\{t\}/\"\$TGT\"}
 
-    log_debug "Action:   $ACTION"
-    log_debug "Target:   ${TARGET:-<none>}"
-    log_debug "Dry run:  $DRY_RUN"
+    _tui_suspend
+    for i in "${targets[@]}"; do
+        (( ${#targets[@]} > 1 )) && printf '\e[1m==> %s <==\e[0m\n' "${it_tgt[i]}"
+        ( cd -- "$repo" && SRC=${it_src[i]:-${it_tgt[i]}} TGT=${it_tgt[i]} PKG=${it_pkg[i]} bash -c "$run" )
+        rc=$?; (( rc )) && (( fails++ ))
+    done
+    if (( ${#targets[@]} > 1 )); then
+        _tui_wait_key "$(printf '[%d file(s), %d failed] press any key to return ' "${#targets[@]}" "$fails")"
+    else
+        _tui_wait_key "$(printf '[exit %d] press any key to return ' "$rc")"
+    fi
+    _tui_resume
+    scan_start; build_view
+    if (( ${#targets[@]} > 1 )); then MSG="ran on ${#targets[@]} files (${fails} failed): ${c:0:40}"
+    else MSG="ran: ${c:0:50} (exit $rc)"; fi
+}
 
-    case "$ACTION" in
-        example) action_example ;;
-        *)       die "Unhandled action: $ACTION" ;;
+is_marked()   { [[ -n ${marked[${it_tgt[$1]}]:-} ]]; }
+toggle_mark() { if is_marked "$1"; then unset 'marked[${it_tgt[$1]}]'; else marked[${it_tgt[$1]}]=1; fi; }
+# get_marked: indices of marked items that are in the current view -> mv
+get_marked()  {
+  local i
+  mv=()
+  for i in "${view[@]}"; do
+    (( i >= 0 )) && is_marked "$i" && mv+=("$i");
+  done;
+}
+
+# select_group PKG: put the selection on the header row of PKG
+select_group() {
+    local i
+    for i in "${!view[@]}"; do
+        (( view[i] < 0 )) || continue
+        [[ ${grp_name[-1 - view[i]]} == "$1" ]] && { sel=$i; return 0; }
+    done
+    return 0
+}
+
+# fold_toggle: fold / unfold the package of the selected row; the selection ends on its header
+fold_toggle() {
+    local v p
+    (( group )) || { MSG="grouping is off (p turns it on)"; return 0; }
+    (( ${#view[@]} )) || return 0
+    [[ -n $query ]] && { MSG="folding is off while a filter is active"; return 0; }
+    v=${view[sel]}
+    if (( v < 0 )); then p=${grp_name[-1 - v]}; else p=${it_pkg[v]}; fi
+    if [[ -n ${folded[$p]-} ]]; then unset 'folded[$p]'; else folded[$p]=1; fi
+    build_view; select_group "$p"
+}
+
+# fold_all: fold every package, or unfold all when everything is already folded
+fold_all() {
+    local v k cur any=0
+    (( group )) || { MSG="grouping is off (p turns it on)"; return 0; }
+    (( ${#view[@]} )) || return 0
+    [[ -n $query ]] && { MSG="folding is off while a filter is active"; return 0; }
+    v=${view[sel]}
+    if (( v < 0 )); then cur=${grp_name[-1 - v]}; else cur=${it_pkg[v]}; fi
+    for k in "${grp_name[@]}"; do [[ -n ${folded[$k]-} ]] || { any=1; break; }; done
+    for k in "${grp_name[@]}"; do
+        if (( any )); then folded[$k]=1; else unset 'folded[$k]'; fi
+    done
+    build_view; select_group "$cur"
+}
+
+# toggle_group VIDX: mark every file under the header at view index VIDX, or unmark if all are marked
+toggle_group() {
+    local h=$1 j i t n=${#view[@]} all=1 g=$(( -1 - ${view[$1]} ))
+    if [[ -z $query && -n ${folded[${grp_name[g]}]-} ]]; then
+        MSG="unfold it first (tab), so you can see what gets marked"; return 0
+    fi
+    for (( j = h + 1; j < n && view[j] >= 0; j++ )); do
+        is_marked "${view[j]}" || { all=0; break; }
+    done
+    for (( j = h + 1; j < n && view[j] >= 0; j++ )); do
+        i=${view[j]} t=${it_tgt[i]}
+        if (( all )); then unset 'marked[$t]'; else marked[$t]=1; fi
+    done
+}
+
+# apply_fix IDX: repair one item without asking. Returns 1 on failure.
+apply_fix() {
+    local st=${it_st[$1]} src=${it_src[$1]} tgt=${it_tgt[$1]}
+    case $st in
+        MISSING)      mklink "$src" "$tgt" ;;
+        BROKEN|WRONG) rm -- "$tgt" && mklink "$src" "$tgt" ;;
+        CONFLICT)     [[ -e $tgt.bak || -L $tgt.bak ]] && return 1
+                      mv -- "$tgt" "$tgt.bak" && mklink "$src" "$tgt" ;;
+        ORPHAN)       rm -- "$tgt" ;;
+        *)            return 0 ;;
     esac
 }
 
+fix_item() {
+    local i=$1 st=${it_st[$1]} tgt=${it_tgt[$1]} name=${it_tgt[$1]##*/} verb
+    case $st in
+        OK)       MSG="$name is already fine"; return ;;
+        MISSING)  verb="linked" ;;
+        BROKEN|WRONG)
+            _tui_confirm "replace the link at $name?" || { MSG="skipped"; return; }
+            verb="relinked" ;;
+        CONFLICT)
+            _tui_confirm "move $name to $name.bak and link it?" || { MSG="skipped"; return; }
+            if [[ -e $tgt.bak || -L $tgt.bak ]]; then MSG="$name.bak already exists, not touching anything"; return; fi
+            verb="backed up and linked" ;;
+        ORPHAN)
+            _tui_confirm "remove the dead link $name?" || { MSG="skipped"; return; }
+            verb="removed" ;;
+    esac
+    if apply_fix "$i"; then MSG="$verb $name"; unset 'marked[$tgt]'; else MSG="could not fix $name"; fi
+    scan_start; build_view
+}
+
+# fix_marked: repair every marked file in the view after one confirmation
+fix_marked() {
+    local i nl=0 nr=0 nb=0 nd=0 tot ok=0 bad=0 parts=
+    get_marked
+    for i in "${mv[@]}"; do
+        case ${it_st[i]} in
+            MISSING) (( nl++ )) ;;
+            BROKEN|WRONG) (( nr++ )) ;;
+            CONFLICT) (( nb++ )) ;;
+            ORPHAN) (( nd++ )) ;;
+        esac
+    done
+    tot=$(( nl + nr + nb + nd ))
+    (( tot )) || { MSG="the marked files need no fixing"; return; }
+    (( nl )) && parts+="link $nl, "
+    (( nr )) && parts+="replace $nr, "
+    (( nb )) && parts+="back up $nb, "
+    (( nd )) && parts+="remove $nd, "
+    _tui_confirm "fix $tot marked (${parts%, })?" || { MSG="skipped"; return; }
+    for i in "${mv[@]}"; do
+        [[ ${it_st[i]} == OK ]] && continue
+        if apply_fix "$i"; then (( ok++ )); unset 'marked[${it_tgt[i]}]'; else (( bad++ )); fi
+    done
+    MSG="fixed $ok of $tot"; (( bad )) && MSG+=", $bad failed (a .bak already exists?)"
+    scan_start; build_view
+}
+
+fix_missing() {
+    local i n=0
+    for i in "${!it_st[@]}"; do
+        [[ ${it_st[i]} == MISSING ]] || continue
+        mklink "${it_src[i]}" "${it_tgt[i]}" && (( n++ ))
+    done
+    MSG="created $n link(s)"
+    scan_start; build_view
+}
+
 # ---------------------------------------------------------------------------
-# Entry point — only runs when executed directly. Sourcing this file loads
-# functions/constants without side effects (no trap setup, no arg parsing,
-# nothing runs) so another script can `source` it and call individual
-# functions on its own terms.
+# Drawing
 # ---------------------------------------------------------------------------
-if [[ "$__SOURCED" -eq 0 ]]; then
-    main "$@"
+
+st_color() {
+    case $1 in
+        OK)       _tui_fg 82 ;;
+        MISSING)  _tui_fg 220 ;;
+        BROKEN)   _tui_fg 196 ;;
+        WRONG)    _tui_fg 208 ;;
+        CONFLICT) _tui_fg 201 ;;
+        ORPHAN)   _tui_fg 245 ;;
+    esac
+}
+
+# now_text IDX -> REPLY: what is at the target of item IDX right now
+now_text() {
+    local i=$1
+    case ${it_st[i]} in
+        OK)       REPLY="linked correctly" ;;
+        MISSING)  REPLY="nothing there yet" ;;
+        BROKEN)   REPLY="dead link -> $(readlink -- "${it_tgt[i]}")" ;;
+        WRONG)    REPLY="link points elsewhere -> $(readlink -- "${it_tgt[i]}")" ;;
+        CONFLICT) REPLY="a real file or directory is in the way (stow would refuse)" ;;
+        ORPHAN)   REPLY="dead link into the repo -> $(readlink -- "${it_tgt[i]}")" ;;
+    esac
+}
+
+# detail IDX: the detail pane for the selected item. The text of the "now" line
+# (which may need a readlink fork) is computed only when the selection changes.
+detail() {
+    local i=$1
+    if [[ $i != "$d_i" ]]; then
+        now_text "$i"; d_now=$REPLY
+        d_i=$i
+    fi
+    if [[ -n ${it_src[i]} ]]; then tilde "${it_src[i]}"; _tui_kv_row $(( _TUI_ROWS - 4 )) source "$REPLY"
+    else _tui_kv_row $(( _TUI_ROWS - 4 )) source ""; fi
+    tilde "${it_tgt[i]}"; _tui_kv_row $(( _TUI_ROWS - 3 )) target "$REPLY"
+    _tui_kv_row $(( _TUI_ROWS - 2 )) now "$d_now"
+}
+
+# group_summary G AVAIL -> GS: dim "N files" plus colored per-status counts, as many as fit
+group_summary() {
+    local -a v=(${grp_sig[$1]})
+    local -a names=(OK MISSING BROKEN WRONG CONFLICT ORPHAN)
+    local avail=$2 used piece st k
+    piece="${v[0]} file"; (( v[0] != 1 )) && piece+=s
+    used=${#piece}
+    GS=$'\e[2m'"$piece"$'\e[22m'
+    for k in 1 2 3 4 5 6; do
+        (( v[k] )) || continue
+        st=${names[k-1]}
+        piece="  ${st,,} ${v[k]}"
+        (( used + ${#piece} > avail )) && break
+        used=$(( used + ${#piece} ))
+        GS+=$'\e[38;5;'"${st_col[$st]}"'m'"$piece"$'\e[39m'
+    done
+}
+
+# detail_group HEADER: detail pane for a package header row
+detail_group() {
+    local g=$(( -1 - $1 )) p
+    local -a v=(${grp_sig[g]})
+    p=${grp_name[g]}
+    if [[ $p == - ]]; then
+        _tui_kv_row $(( _TUI_ROWS - 4 )) source ""
+        _tui_kv_row $(( _TUI_ROWS - 3 )) target ""
+    else
+        tilde "$repo/$p";                _tui_kv_row $(( _TUI_ROWS - 4 )) source "$REPLY"
+        tilde "${map[$p]:-$target}";     _tui_kv_row $(( _TUI_ROWS - 3 )) target "$REPLY"
+    fi
+    _tui_kv_row $(( _TUI_ROWS - 2 )) now "${v[0]} files, $(( v[0] - v[1] )) need fixing   (tab folds, space marks all)"
+}
+
+# ---------------------------------------------------------------------------
+# Info popup (ctrl-k)
+#
+# The popup is not a modal loop: it is just state (popup=1) that draw() paints on top
+# of the list, right below the selected row. The main loop closes it on any key and
+# then handles that key normally, so navigation works while it is open. Geometry and
+# painting are tui.sh's (_tui_popup_*); this part only builds the lines.
+# ---------------------------------------------------------------------------
+
+# popup_prepare IDX: build PL ("label|value" lines) for item IDX. Cached under pop_key,
+# so the stat/readlink forks only happen when the item (or its status) changes.
+popup_prepare() {
+    local i=$1 st=${it_st[$1]} src=${it_src[$1]} tgt=${it_tgt[$1]}
+    local key="$i/$st/$tgt" name=${tgt##*/} fix now size mtime
+    [[ $key == "$pop_key" ]] && return 0
+    pop_key=$key
+
+    case $st in
+        OK)           fix="nothing to do" ;;
+        MISSING)      fix="f creates the link" ;;
+        BROKEN|WRONG) fix="f replaces the link" ;;
+        CONFLICT)     fix="f moves it to $name.bak, then links" ;;
+        ORPHAN)       fix="f removes the dead link" ;;
+    esac
+    now_text "$i"; now=$REPLY
+
+    PL=("status|$st" "package|${it_pkg[i]}")
+    if [[ -n $src ]]; then tilde "$src"; PL+=("source|$REPLY"); fi
+    tilde "$tgt"; PL+=("target|$REPLY" "now|$now")
+    if [[ -n $src && -f $src ]]; then
+        read -r size mtime < <(stat -L -c '%s %Y' -- "$src" 2>/dev/null)
+        if [[ -n $size ]]; then
+            printf -v mtime '%(%F %T)T' "$mtime"
+            PL+=("repo|$size bytes, modified $mtime")
+        fi
+    fi
+    if [[ $st == CONFLICT && -f $tgt ]]; then
+        read -r size mtime < <(stat -c '%s %Y' -- "$tgt" 2>/dev/null)
+        if [[ -n $size ]]; then
+            printf -v mtime '%(%F %T)T' "$mtime"
+            PL+=("there|$size bytes, modified $mtime")
+        fi
+    fi
+    if is_marked "$i"; then PL+=("marked|yes"); else PL+=("marked|no"); fi
+    PL+=("fix|$fix")
+}
+
+# popup_valcolor LABEL VALUE: the status line of the info popup is coloured like the list
+popup_valcolor() { if [[ $1 == status ]]; then st_color "$2"; else _tui_p '\e[39m'; fi; }
+_TUI_POP_VALFN=popup_valcolor
+
+# draw: build the whole screen as a frame. Only rows whose bytes changed since the
+# last frame are written (see _tui_row_begin in tui.sh), all in a single write.
+# List rows additionally skip all building work when their signature is unchanged.
+draw() {
+    local full=0
+    if _tui_resize_check; then full=1; cells=() d_i=; fi
+    local rows=$(( _TUI_ROWS - 10 )) n=${#view[@]} i idx it st avail s nw num nm=0 nmv=0 mk hl lbl sbc cell d r g gn fold sig
+    (( rows < 3 )) && rows=3
+    vp _tui_vp_fit "$rows" "$n"
+
+    _tui_sb_calc "$rows" "$n" "$top" 5
+    _tui_labels_calc "$cnt" "$top" "$rows" "$n" "$sel" "$num_mode"
+    _tui_frame_begin
+
+    # part of the same atomic frame; _tui_clear also forgets the drawn popups
+    if (( full )); then _tui_clear; drawn_top=$top; fi
+
+    # popups: say where each box goes this frame, then sync, so rows that a closed or
+    # moved box used to cover get repainted by the list loop below
+    _tui_popup_hide info; _tui_popup_hide help
+    if (( popup && n && view[sel] >= 0 )); then
+        popup_prepare "${view[sel]}"
+        _tui_popup_geom_below info $(( 5 + sel - top )) ${#PL[@]} 5
+    fi
+    (( help )) && _tui_popup_geom_center help ${#HL[@]}
+    _tui_popup_sync info; _tui_popup_sync help
+
+    # row 1: title, filter, marks
+    nm=${#marked[@]} nmv=0
+    if (( nm )); then
+        for it in "${view[@]}"; do (( it >= 0 )) && [[ -n ${marked[${it_tgt[it]}]-} ]] && (( nmv++ )); done
+    fi
+    if ! _tui_row_same 1 "$query|$nm|$nmv"; then
+        _tui_row_begin 1
+        tilde "$repo"
+        _tui_bold; _tui_p ' dotfiles doctor'; _tui_reset; _tui_dim; _tui_p '  %s' "$REPLY"; _tui_reset
+        [[ -n $query ]] && { _tui_fg 220; _tui_p '   /%s' "$query"; _tui_reset; }
+        if (( nm )); then
+            _tui_fg 82; _tui_p '   %d marked' "$nm"; (( nm > nmv )) && _tui_p ' (%d hidden)' $(( nm - nmv )); _tui_reset
+        fi
+        _tui_clear_eol; _tui_row_end
+    fi
+
+    # row 2: environment
+    if ! _tui_row_same 2 "$loaded|$stow_ok|$env_stow|$git_dirty|$env_git"; then
+        _tui_row_begin 2
+        if (( loaded )); then
+            _tui_p ' '
+            if (( stow_ok )); then _tui_fg 82; else _tui_fg 196; fi
+            _tui_p '%s' "$env_stow"; _tui_reset; _tui_p '   '
+            if (( git_dirty )); then _tui_fg 220; fi
+            _tui_p '%s' "$env_git"; _tui_reset
+        fi
+        _tui_clear_eol; _tui_row_end
+    fi
+
+    # row 3: summary (counts grow while the first scan streams in)
+    if ! _tui_row_same 3 "$loaded|${#pkgs[@]}|${#it_st[@]}|${cnt[*]}"; then
+        _tui_row_begin 3
+        _tui_p ' %d packages, %d files   ' "${#pkgs[@]}" $(( ${#it_st[@]} - ${cnt[ORPHAN]:-0} ))
+        for st in OK MISSING BROKEN WRONG CONFLICT ORPHAN; do
+            (( ${cnt[$st]:-0} )) || continue
+            st_color "$st"; _tui_p '%s %d  ' "${st,,}" "${cnt[$st]}"; _tui_reset
+        done
+        _tui_clear_eol; _tui_row_end
+    fi
+
+    # row 4: separator above the list
+    nw=${#n}; (( nw < 2 )) && nw=2
+    avail=$(( _TUI_COLS - 28 - nw - 1 ))
+    if ! _tui_row_same 4 "$nw|$avail"; then
+        _tui_row_begin 4
+        _tui_hline 4 1 "$_TUI_COLS"
+        _tui_clear_eol; _tui_row_end
+    fi
+
+    # list (cached cells are only valid for one column width)
+    (( avail != cells_w )) && { cells=(); cells_w=$avail; }
+
+    # the window scrolled: let the terminal move the rows and shift the caches along,
+    # so only the newly revealed rows and the old/new selection are redrawn
+    d=$(( top - drawn_top ))
+    if (( d != 0 && d > -rows && d < rows )); then _tui_scroll 5 $(( 4 + rows )) "$d"; fi
+    drawn_top=$top
+
+    # list loop
+    for (( i = 0; i < rows; i++ )); do
+        idx=$(( top + i ))
+        if (( idx >= n )); then
+            _tui_row_same $(( 5 + i )) "-/$n/$query/$i/$scanning" && continue
+            _tui_row_begin $(( 5 + i ))
+            if (( n == 0 && i == 1 )); then
+                if [[ -n $query ]]; then _tui_dim; _tui_p '   no matches for "%s"  (esc clears)' "$query"
+                elif (( ! scanning )); then _tui_fg 82; _tui_p '   everything is linked and healthy'; fi
+                _tui_reset
+            fi
+            _tui_clear_eol; _tui_row_end
+            continue
+        fi
+        it=${view[idx]}
+        _tui_lineno "$idx" "$sel" "$num_mode"; num=$REPLY
+        # while a count is pending, line numbers that start with it are highlighted
+        # and the first ones get a letter label (see _tui_labels_calc)
+        _tui_num_hl "$cnt" "$num"; hl=$REPLY lbl=
+        (( hl )) && lbl=${_TUI_LAB_ROW[$idx]-}
+        # scrollbar cell of this row: 0 none, 1 track, 2 thumb, 3 thumb being dragged
+        _tui_sb_kind "$i"; sbc=$REPLY
+        if (( it < 0 )); then                       # package header row
+            g=$(( -1 - it )) gn=${grp_name[-1 - it]}
+            fold=0; [[ -z $query && -n ${folded[$gn]-} ]] && fold=1
+            sig="H/$g/$fold/$(( idx == sel ))/$nw/$avail/$sbc/$gn/${grp_sig[g]}"
+        else
+            mk=0; [[ -n ${marked[${it_tgt[it]}]-} ]] && mk=1
+            sig="$it/$(( idx == sel ))/$mk/$nw/$avail/$sbc"
+        fi
+        _tui_row_state $(( 5 + i )) "$sig" "$num/$hl/$lbl"
+        case $? in
+            0) continue ;;
+            1) # only the line number, its highlight or its label changed: patch that field
+               _tui_p '\e[%d;6H' $(( 5 + i )); (( idx == sel )) && _tui_reverse
+               _tui_put_num "$nw" "$num" "$hl" "$lbl" $(( idx == sel )); _tui_reset
+               _tui_row_dirty $(( 5 + i ))
+               continue ;;
+        esac
+
+        if (( it < 0 )); then
+            s=$gn; [[ $s == - ]] && s="(orphans)"
+            group_summary "$g" "$avail"
+            _tui_row_begin $(( 5 + i ))
+            (( idx == sel )) && _tui_reverse
+            if (( fold )); then _tui_p ' \e[1;38;5;75m ▸ \e[22;39m'; else _tui_p ' \e[1;38;5;75m ▾ \e[22;39m'; fi
+            _tui_p ' '; _tui_put_num "$nw" "$num" "$hl" "$lbl" $(( idx == sel ))
+            _tui_p '\e[1;38;5;75m%-21.21s\e[22;39m %s' "$s" "$GS"
+            _tui_reset; _tui_clear_eol
+            (( sbc )) && _tui_sb_put "$sbc" $(( 5 + i ))
+            _tui_row_end
+            continue
+        fi
+
+        cell=${cells[it]-}
+        if [[ -z $cell ]]; then
+            st=${it_st[it]}
+            if [[ $st == ORPHAN ]]; then s=${it_rel[it]}; else tilde "${it_tgt[it]}"; s=$REPLY; fi
+            printf -v cell ' \e[38;5;%sm%-8s\e[39m %-12.12s %-*.*s' \
+                "${st_col[$st]}" "$st" "${it_pkg[it]}" "$avail" "$avail" "$s"
+            cells[it]=$cell
+        fi
+
+        _tui_row_begin $(( 5 + i ))
+        (( idx == sel )) && _tui_reverse
+        if (( mk )); then _tui_p ' \e[1;32m[x]\e[22;39m'; else _tui_p ' \e[2m[ ]\e[22m'; fi
+        _tui_p ' '; _tui_put_num "$nw" "$num" "$hl" "$lbl" $(( idx == sel )); _tui_p '%s' "${cell:1}"
+        _tui_reset; _tui_clear_eol
+        (( sbc )) && _tui_sb_put "$sbc" $(( 5 + i ))
+        _tui_row_end
+    done
+
+    # divider + detail pane
+    if ! _tui_row_same $(( _TUI_ROWS - 5 )) "$_TUI_COLS"; then
+        _tui_row_begin $(( _TUI_ROWS - 5 ))
+        _tui_dim; _tui_hline $(( _TUI_ROWS - 5 )) 1 "$_TUI_COLS"; _tui_reset
+        _tui_row_end
+    fi
+
+    if (( n )); then
+        if (( view[sel] >= 0 )); then detail "${view[sel]}"
+        else detail_group "${view[sel]}"; fi
+    else
+        _tui_kv_row $(( _TUI_ROWS - 4 )) "" ""; _tui_kv_row $(( _TUI_ROWS - 3 )) "" ""; _tui_kv_row $(( _TUI_ROWS - 2 )) "" ""
+    fi
+
+    # message row + status bar
+    if ! _tui_row_same $(( _TUI_ROWS - 1 )) "$cnt|$MSG"; then
+        _tui_row_begin $(( _TUI_ROWS - 1 ))
+        if [[ -n $cnt ]]; then _tui_fg 220; _tui_p ' count: %s_' "$cnt"; _tui_reset
+        elif [[ -n $MSG ]]; then _tui_fg 220; _tui_p ' %s' "$MSG"; _tui_reset; fi
+        _tui_clear_eol; _tui_row_end
+    fi
+
+    # popups go on top of everything except the status bar
+    _tui_popup_draw info info PL 7 dim left
+    _tui_popup_draw help help HL 14 51 cut
+
+    _tui_status "${_TUI_PROMPT:-j/k move  spc mark  / find  : run  f fix  F fix all  ^K info  ? help  a all  n num  q quit}"
+
+    _tui_frame_end
+}
+
+# ---------------------------------------------------------------------------
+# Plain report (-c)
+# ---------------------------------------------------------------------------
+
+report() {
+    local i st
+    tilde "$repo"; printf 'repo: %s\n%s\n%s\n' "$REPLY" "$env_stow" "$env_git"
+    for i in "${!it_st[@]}"; do
+        st=${it_st[i]}
+        [[ $st == OK ]] && continue
+        tilde "${it_tgt[i]}"
+        printf '%-9s %-12s %s\n' "$st" "${it_pkg[i]}" "$REPLY"
+    done
+    printf '%d packages, %d files, %d issue(s)\n' "${#pkgs[@]}" $(( ${#it_st[@]} - ${cnt[ORPHAN]:-0} )) "$(issues)"
+    (( $(issues) == 0 ))
+}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+while getopts ':d:t:p:x:m:ch' o; do
+    case $o in
+        d) repo=$OPTARG ;;
+        t) target=$OPTARG ;;
+        p) only+=("$OPTARG") ;;
+        x) skip+=("$OPTARG") ;;
+        m) [[ $OPTARG == ?*=?* ]] || usage; map[${OPTARG%%=*}]=${OPTARG#*=} ;;
+        c) check=1 ;;
+        h) usage 0 ;;
+        *) usage ;;
+    esac
+done
+
+if [[ -z $repo ]]; then
+    for d in "${DOTFILES:-}" "$HOME/.dotfiles" "$HOME/dotfiles"; do
+        [[ -n $d && -d $d ]] && { repo=$d; break; }
+    done
+fi
+[[ -d $repo ]] || die "dotfiles repo not found, pass one with -d"
+repo=$(cd -- "$repo" && pwd -P)
+[[ -n ${map[config]+x} ]] || map[config]=${XDG_CONFIG_HOME:-$HOME/.config}
+
+if (( ${#only[@]} )); then
+    for p in "${only[@]}"; do [[ -d $repo/$p ]] || die "no such package: $p"; done
+    pkgs=("${only[@]}")
+else
+    for d in "$repo"/*/; do
+        d=${d%/} d=${d##*/}
+        [[ $d == _* ]] && continue
+        [[ " ${skip[*]} " == *" $d "* ]] && continue
+        pkgs+=("$d")
+    done
+fi
+(( ${#pkgs[@]} )) || die "no packages found in $repo"
+
+if (( check )) || [[ ! -t 0 ]]; then
+    scan_sync
+    report
+    exit
 fi
 
+scan_dir=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-doctor.XXXXXX") || die "cannot create a temp directory"
+cleanup() {
+    _tui_deinit
+    scan_cancel
+    [[ -n $scan_dir ]] && rm -rf -- "$scan_dir"
+}
+trap cleanup EXIT
+
+# Start scanning before the screen is touched, so the terminal keeps showing the
+# shell until there is something to draw (like fzf). The worker runs while the
+# history loads; then wait, at most 250 ms, for the first row to exist, and only
+# then switch to the alternate screen. The first frame already has files in it.
+scan_start
+[[ -f $hist_file ]] && mapfile -t cmd_hist < <(tail -n 100 "$hist_file")
+build_view
+deadline=$(( ${EPOCHREALTIME/[.,]/} + 250000 ))
+while (( scanning && ${#view[@]} == 0 && ${EPOCHREALTIME/[.,]/} < deadline )); do
+    poll_scan
+    (( ${#view[@]} )) || sleep 0.005
+done
+
+_tui_init
+_tui_trap_resize
+_tui_mouse_on drag
+
+last=0
+
+# Main loop
+
+while :; do
+    (( scanning )) && poll_scan           # pick up new results as soon as they are ready
+    # draw unless more input is already waiting (held keys), but never starve
+    # the screen for more than 50 ms. EPOCHREALTIME needs bash 5.
+    now=${EPOCHREALTIME/[.,]/}
+    if ! _tui_pending || (( now - last > 50000 )); then draw; last=$now; fi
+
+    # wake up regularly: this is also how a resize is noticed
+    _tui_key "${_TUI_POLL_TO:-$_TUI_TICK}" || break
+    key=$_TUI_KEY
+    if [[ -z $key ]]; then                # timeout or resize tick: just redraw
+        continue
+    fi
+
+    n=${#view[@]}
+    c=${cnt:-1}
+    lr=$(( _TUI_ROWS - 10 )); (( lr < 3 )) && lr=3          # rows in the window
+    vis=$(( n - top )); (( vis > lr )) && vis=$lr; (( vis < 1 )) && vis=1   # rows showing items
+
+    if [[ $key == drag || $key == release ]]; then    # only meaningful while the scrollbar is held
+        if _tui_sb_event "$key" && [[ $key == drag ]]; then
+            top=$_TUI_SB_TOP; vp _tui_vp_scroll 0 "$lr" "$n"
+        fi
+        continue
+    fi
+    MSG=
+    # the info popup is not modal: any key closes it and is then handled like normal,
+    # except ctrl-k (toggle) and esc, which only close it
+    if (( popup )); then
+        popup=0
+        [[ $key == $'\013' || $key == esc ]] && continue
+        if [[ $key == '?' || $key == $'\037' ]]; then help=1; continue; fi
+    fi
+
+    # help's own key handling, consumes every key, so nothing leaks through the list.
+    if (( help )); then
+        help=0
+        case $key in
+            # navigation: help closes, the key is handled by the list below
+            [0-9]|up|down|j|k|g|G|H|M|L|$'\005'|$'\031'|wheelup|wheeldown|enter|click) ;;
+            # anything else only closes it
+            *) continue ;;
+        esac
+    fi
+
+    if [[ -n $cnt && ${#key} -eq 1 ]]; then       # easymotion: a label letter jumps to its row
+        _tui_labels_calc "$cnt" "$top" "$lr" "$n" "$sel" "$num_mode"
+        if [[ -n ${_TUI_LAB_AT["$key"]-} ]]; then sel=${_TUI_LAB_AT["$key"]}; cnt=; continue; fi
+    fi
+
+    case $key in
+        [0-9])                         # build up a count; 0 only counts after another digit
+            if [[ $key != 0 || -n $cnt ]]; then cnt+=$key; fi
+            continue ;;
+        esc)
+            if [[ -n $cnt ]]; then cnt=; continue
+            elif [[ -n $query ]]; then query=; rebuild_keep; continue
+            fi ;;
+        f|F|:|'!')                     # these act on the list: wait for a running scan
+            if (( scanning )); then MSG="still scanning, try again in a moment"; cnt=; continue; fi ;;
+    esac
+
+    case $key in
+
+        # help popup (ctrl-?)
+        #
+        # NOTE: Most terminals can't send a distinct 'ctrl-?', because it arrives
+        # as '0x7f', the same byte as 'backspace'
+        $'\037'|'?')  help=1 popup=0 ;;
+
+        up|k)       (( sel -= c )) ;;
+        down|j)     (( sel += c )) ;;
+        g)          if [[ -n $cnt ]]; then (( sel = cnt - 1 )); else sel=0; fi ;;
+        G)          if [[ -n $cnt ]]; then (( sel = cnt - 1 )); else (( sel = n - 1 )); fi ;;
+        enter)      if [[ -n $cnt ]]; then (( sel = cnt - 1 ))
+                    elif (( n && view[sel] < 0 )); then fold_toggle; n=${#view[@]}; fi ;;
+        H|M|L)      vp _tui_vp_jump "$key" "$cnt" "$lr" "$n" ;;
+        click)      if _tui_sb_press "$_TUI_MX" "$_TUI_MY"; then
+                        # scrollbar: the thumb was grabbed where it was hit, or centred on the click
+                        top=$_TUI_SB_TOP; vp _tui_vp_scroll 0 "$lr" "$n"
+                    elif (( _TUI_MY >= 5 && _TUI_MY < 5 + lr )); then
+                        i=$(( top + _TUI_MY - 5 ))
+                        if (( i < n )); then
+                            sel=$i
+                            if (( view[i] < 0 )); then
+                                (( _TUI_MX >= 2 && _TUI_MX <= 4 )) && { fold_toggle; n=${#view[@]}; }
+                            else
+                                (( _TUI_MX >= 2 && _TUI_MX <= 4 )) && toggle_mark "${view[i]}"
+                            fi
+                        fi
+                    fi ;;
+        $'\005')    scroll_view "${cnt:-$scroll_step}" ;;
+        $'\031')    scroll_view "-${cnt:-$scroll_step}" ;;
+        $'\013')    if (( n && view[sel] >= 0 )); then popup=1 pop_key=; else MSG="no file selected"; fi ;;
+        space)      for (( k = 0; k < c && sel + k < n; k++ )); do
+                        v=${view[sel + k]}
+                        if (( v >= 0 )); then toggle_mark "$v"
+                        elif (( c == 1 )); then toggle_group $(( sel + k )); fi
+                    done ;;
+        A)          k=0; for i in "${view[@]}"; do (( i >= 0 )) || continue; marked[${it_tgt[i]}]=1; (( k++ )); done
+                    MSG="marked $k file(s)" ;;
+        I)          for i in "${view[@]}"; do (( i >= 0 )) && toggle_mark "$i"; done ;;
+        C)          marked=(); MSG="marks cleared" ;;
+        wheelup)    scroll_view "-$scroll_step" ;;
+        wheeldown)  scroll_view "$scroll_step" ;;
+        m)          if (( _TUI_MOUSE )); then _tui_mouse_off; MSG="mouse off (terminal selection works)"
+                    else _tui_mouse_on; MSG="mouse on"; fi ;;
+        rclick|mclick) ;;
+        /)          old=$query old_sel=$sel old_top=$top anchor=-1
+                    if _tui_readline "/" "$query" "" search_cb; then
+                        query=$_TUI_LINE; build_view         # keep the selection the search left us on
+                    else
+                        query=$old; build_view; sel=$old_sel top=$old_top    # back to where we were
+                        (( sel >= ${#view[@]} )) && sel=$(( ${#view[@]} - 1 )); (( sel < 0 )) && sel=0
+                    fi
+                    n=${#view[@]} ;;
+        :|!)        if (( n && view[sel] >= 0 )); then run_command "${view[sel]}"; n=${#view[@]}
+                    else MSG="no file selected"; fi ;;
+        n)          num_mode=$(( !num_mode )); (( num_mode )) && MSG="relative numbers" || MSG="absolute numbers" ;;
+        a)          show_all=$(( !show_all )); rebuild_keep; n=${#view[@]} ;;
+        p)          group=$(( !group )); rebuild_keep; n=${#view[@]}
+                    (( group )) && MSG="grouped by package" || MSG="flat list" ;;
+        $'\t')      fold_toggle; n=${#view[@]} ;;
+        z)          fold_all; n=${#view[@]} ;;
+        f)          get_marked
+                    if (( ${#mv[@]} )); then fix_marked
+                    elif (( n && view[sel] >= 0 )); then fix_item "${view[sel]}"
+                    elif (( n )); then MSG="select a file, or mark some first (space on a header marks the package)"; fi
+                    n=${#view[@]} ;;
+        F)          fix_missing; n=${#view[@]} ;;
+        r)          scan_start; build_view; MSG="rescanning"; n=${#view[@]} ;;
+        q|esc)      break ;;
+    esac
+    cnt=
+    (( sel >= n )) && sel=$(( n - 1 ))
+    (( sel < 0 )) && sel=0
+done
+exit 0

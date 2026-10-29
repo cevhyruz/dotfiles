@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# vi:ft=sh fdm=marker ts=2 sw=2 et
+#
+# plugin-loader.sh - enable/disable plugins by symlinking them, built on tui.sh
+#
+# Layout:
+#   plugins/            every plugin lives here (files or directories)
+#   plugins/enabled/    symlinks to the enabled plugins
+#
+# Enabling   a plugin: creates  plugins/enabled/NAME -> ../NAME
+# Disabling  a plugin: removes  plugins/enabled/NAME (only if it is a symlink)
+#
+
+
+
+# list all plugins from plugins/*
+
+echo "${DOTFILES_BASH_CONFIG_DIR}"

@@ -34,5 +34,6 @@ if [[ -n "${TMUX-}" ]]; then
     printf '\033Ptmux;\033\033]7;file://%s%s\007\033\\' "$HOSTNAME" "$out"
   }
 
-  PROMPT_COMMAND+=(__osc7_tmux)
+ ::post_command __osc7_tmux
+
 fi

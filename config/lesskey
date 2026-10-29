@@ -1,0 +1,5 @@
+#command
+h left-scroll
+l right-scroll
+^E noaction 5e
+^Y noaction 5y

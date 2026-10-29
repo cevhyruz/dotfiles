@@ -1,43 +1,28 @@
 # shellcheck shell=bash
 # vim: ft=bash fdm=marker ts=2 sw=2 et
 #
-# Bootstrap script for my dotfiles
+# Bootstrap script for my dotfiles.
+
 
 set -euo pipefail
 
 DOTFILES_BRANCH="${DOTFILES_BRANCH:-master}"
-DOTFILES_REF="${DOTFILES_REF:-}" # tag or commit SHA; wins over the branch
-if [[ -n "$DOTFILES_REF" ]]; then
-  _default_url="https://github.com/cevhyruz/dotfiles/archive/$DOTFILES_REF.tar.gz"
-else
-  _default_url="https://github.com/cevhyruz/dotfiles/archive/refs/heads/$DOTFILES_BRANCH.tar.gz"
-fi
-TARBALL_URL="${DOTFILES_TARBALL:-$_default_url}"
-unset _default_url
-DEFAULT_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$HOME/Projects/personal/dotfiles"
 
-BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
-DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
-LIBEXEC_DIR="$HOME/.local/libexec" # no XDG variable exists for this one
+readonly DOTFILES_URL="https://github.com/cevhyruz/dotfiles/archive/${DOTFILES_BRANCH}.tar.gz"
+readonly DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+readonly CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+readonly BIN_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
+readonly LIBEXEC_DIR="$HOME/.local/libexec"
 
 # Dropped into a directory this script extracted. Teardown only offers to
 # delete a dotfiles directory that has it, so a --link'd directory is never
 # touched.
-MARKER=".bootstrap-extracted"
+readonly MARKER_FILE=".bootstrap-extracted"
 
 TEARDOWN=0
 LINK_DIR=""
 TMP_DIR=""
-
-cleanup() {
-  if [[ -n "$TMP_DIR" ]]; then
-    rm -rf -- "$TMP_DIR"
-  fi
-}
-trap cleanup EXIT
-trap 'exit 130' INT
-trap 'exit 143' TERM
 
 info() { printf '==> %s\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
@@ -48,70 +33,43 @@ usage() {
 Usage: bootstrap.sh [options]
 
 Download the dotfiles tarball and symlink their pieces into place.
-Requires only curl and tar (no git).
+Requires curl and tar (no git).
 
 Options:
-  -l, --link DIR  Don't download anything; link the dotfiles already at DIR
-                  (also accepts --link=DIR). Note that this overrides
-                  DOTFILES_DIR, and can't be combined with --teardown
-  -t, --teardown  Remove the symlinks this script created, restore backups,
-                  remove ~/.local/libexec if it ends up empty, and delete
-                  the extracted dotfiles (asks first). This removes symlinks
-                  that point where this script put them. It then offers to
-                  delete the dotfiles directory, but only if this script
-                  extracted it (it carries a $MARKER file); a git repository or
-                  a --link'd directory is never deleted.
-  -h, --help      Show this help and exit
+   -l, --link DIR   Don't download anything; link the dotfiles already at DIR
+                    (also accepts --link=DIR). Note that this overrides
+                    DOTFILES_DIR, and can't be combined with --teardown
+   -t, --teardown   Remove the symlinks this script created, restore backups,
+                    remove ~/.local/libexec if it ends up empty, and delete
+                    the extracted dotfiles (asks first). This removes symlinks
+                    that point where this script put them. It then offers to
+                    delete the dotfiles directory, but only if this script
+                    extracted it (it carries a $MARKER_FILE file); a
+                    git repository or a --link'd directory is never deleted.
+   -h, --help       Show this help and exit
 
 Environment:
-  DOTFILES_DIR     Where to extract the dotfiles (skips the prompt)
-  DOTFILES_BRANCH  Branch to download (default: master)
-  DOTFILES_REF     Tag or commit SHA to download (overrides DOTFILES_BRANCH);
-                   pin a full commit SHA for a reproducible install
-  DOTFILES_TARBALL Full tarball URL (overrides DOTFILES_BRANCH and DOTFILES_REF)
-  XDG_BIN_HOME     Where the dispatcher is linked (default: ~/.local/bin)
-  XDG_DATA_HOME    Where bashlib is linked (default: ~/.local/share)
-  XDG_CONFIG_HOME  Where the bash config is linked (default: ~/.config)
+   DOTFILES_DIR     Where to extract the dotfiles (skips the prompt)
+   DOTFILES_BRANCH  Branch to download (default: master)
+   XDG_BIN_HOME     Where the dispatcher is linked (default: ~/.local/bin)
+   XDG_DATA_HOME    Where bashlib is linked (default: ~/.local/share)
+   XDG_CONFIG_HOME  Where the bash config is linked (default: ~/.config)
 
 Links created:
-  <dotfiles>/local/bin/dotfiles            -> $BIN_DIR/dotfiles
-  <dotfiles>/local/share/bashlib/          -> $DATA_DIR/bashlib
-  <dotfiles>/local/libexec/dotfiles/       -> $LIBEXEC_DIR/dotfiles
-  <dotfiles>/config/bash/                  -> $CONFIG_DIR/bash
-  <dotfiles>/home/<entry>                  -> $HOME/<entry>
-                                              (every top-level entry, dotfiles
-                                              included, e.g. .bashrc)
+   <dotfiles>/local/bin/dotfiles      -> $BIN_DIR/dotfiles
+   <dotfiles>/local/share/bashlib/    -> $DATA_DIR/bashlib
+   <dotfiles>/local/libexec/dotfiles/ -> $LIBEXEC_DIR/dotfiles
+   <dotfiles>/config/bash/            -> $CONFIG_DIR/bash
+   <dotfiles>/home/<entry>            -> $HOME/<entry>
+                                         (every top-level entry, dotfiles
+                                         included, e.g. .bashrc)
 
 Examples:
-  ./bootstrap.sh
-  ./bootstrap.sh --teardown
-  ./bootstrap.sh --link ~/Projects/Personal/Dotfiles
-  DOTFILES_DIR=~/dotfiles ./bootstrap.sh
-  curl -fsSL <url>/bootstrap.sh | bash
+   ./bootstrap.sh
+   ./bootstrap.sh --teardown
+   ./bootstrap.sh --link ~/Projects/dotfiles
+   DOTFILES_DIR=~/dotfiles ./bootstrap.sh
 EOF
-}
-
-parse_args() {
-  while (( $# )); do
-    case "$1" in
-      -t|--teardown) TEARDOWN=1 ;;
-      -l|--link)
-        if (( $# < 2 )) || [[ "$2" == -* ]]; then
-          die "$1 requires a directory"
-        fi
-        LINK_DIR="$2"
-        shift
-        ;;
-      --link=*)
-        LINK_DIR="${1#--link=}"
-        [[ -n "$LINK_DIR" ]] || die "--link requires a directory"
-        ;;
-      -h|--help) usage; exit 0 ;;
-      *)         warn "unknown option: $1"; usage >&2; exit 1 ;;
-    esac
-
-    shift
-  done
 }
 
 # True if we can actually read from the terminal (works under curl | bash).
@@ -191,7 +149,7 @@ choose_dir() {
     DOTFILES_DIR="$(abs_path "$DOTFILES_DIR")"
     info "Using DOTFILES_DIR from environment: $DOTFILES_DIR"
   else
-    DOTFILES_DIR="$(ask_dir "$prompt" "$DEFAULT_DIR")"
+    DOTFILES_DIR="$(ask_dir "$prompt" "$DOTFILES_DIR")"
   fi
 }
 
@@ -211,12 +169,12 @@ fetch_tarball() {
   mkdir -p "$TMP_DIR/src"
 
   # --strip-components=1 drops GitHub's wrapper folder (dotfiles-<ref>/).
-  if ! curl -fsSL "$TARBALL_URL" | tar -xz --strip-components=1 -C "$TMP_DIR/src"; then
-    die "could not download or extract $TARBALL_URL"
+  if ! curl -fsSL "$DOTFILES_URL" | tar -xz --strip-components=1 -C "$TMP_DIR/src"; then
+    die "could not download or extract $DOTFILES_URL"
   fi
 
   # Mark it as ours before it moves into place.
-  : > "$TMP_DIR/src/$MARKER"
+  : > "$TMP_DIR/src/$MARKER_FILE"
 
   mkdir -p "$(dirname "$DOTFILES_DIR")"
 
@@ -236,7 +194,7 @@ fetch_dotfiles() {
     die "$DOTFILES_DIR exists and is not empty (and doesn't look like these dotfiles)"
 
   else
-    info "Downloading $TARBALL_URL into $DOTFILES_DIR"
+    info "Downloading $DOTFILES_URL into $DOTFILES_DIR"
     fetch_tarball
   fi
 }
@@ -444,7 +402,7 @@ unlink_dispatcher() {
 }
 
 # Delete the dotfiles directory, but only one this script extracted (it
-# carries $MARKER). Refuses a git repository (history, unpushed work), a
+# carries $MARKER_FILE). Refuses a git repository (history, unpushed work), a
 # symlink, a --link'd directory or anything else without the marker, and any
 # path that is or contains $HOME. Returns 1 if the directory was kept.
 remove_dotfiles_dir() {
@@ -465,8 +423,8 @@ remove_dotfiles_dir() {
     return 1
   fi
 
-  if [[ ! -f "$dir/$MARKER" ]]; then
-    warn "$dir wasn't extracted by this script (no $MARKER); not deleting it"
+  if [[ ! -f "$dir/$MARKER_FILE" ]]; then
+    warn "$dir wasn't extracted by this script (no $MARKER_FILE); not deleting it"
     return 1
   fi
 
@@ -507,7 +465,26 @@ teardown() {
 }
 
 main() {
-  parse_args "$@"
+  while (( $# )); do
+    case "$1" in
+      -t|--teardown) TEARDOWN=1 ;;
+      -l|--link)
+        if (( $# < 2 )) || [[ "$2" == -* ]]; then
+          die "$1 requires a directory"
+        fi
+        LINK_DIR="$2"
+        shift
+        ;;
+      --link=*)
+        LINK_DIR="${1#--link=}"
+        [[ -n "$LINK_DIR" ]] || die "--link requires a directory"
+        ;;
+      -h|--help) usage; exit 0 ;;
+      *)         warn "unknown option: $1"; usage >&2; exit 1 ;;
+    esac
+
+    shift
+  done
 
   if (( TEARDOWN )); then
     [[ -z "$LINK_DIR" ]] || die "--link and --teardown can't be combined"
@@ -528,8 +505,11 @@ main() {
   check_source
   echo
 
-  link_dispatcher || true
   link_bashlib || true
+
+  # from this point we can now use bashlib/
+
+  link_dispatcher || true
   link_libexec || true
   link_bash_config || true
   link_home
@@ -537,5 +517,17 @@ main() {
 
   info "Done. To see the changes open a new shell or run 'exec \$SHELL'"
 }
+
+cleanup() {
+  trap - EXIT HUP INT TERM
+  if [[ -n "$TMP_DIR" ]]; then
+    rm -rf -- "$TMP_DIR"
+  fi
+}
+
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 main "$@"

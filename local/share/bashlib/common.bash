@@ -11,6 +11,7 @@
 __common::command_exists() {
   command -v "${1-}" &>/dev/null 2>&1
 }
+
 __common::is_root() {
   (( EUID == 0 ))
 }

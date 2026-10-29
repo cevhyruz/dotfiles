@@ -10,10 +10,40 @@ if (( ${BASH_VERSINFO[0]:-0} < 5 )); then
   return 51
 fi
 
+# lib/navigate.bash - browse prompts and outputs in a pager (alternate screen)
+nav() {
+  [[ -n ${TMUX-} ]] || { printf 'nav: needs tmux\n' >&2; return 1; }
+  {
+    tmux capture-pane -p -J -S -
+    printf '\n%.0s' $(seq 1 "${LINES:-50}")
+  } | less -j5 $'+G?^╭─\n'
+}
+
+bind -m vi-command -x '"\C-x": nav'      # Ctrl-X then n
+
 _errlog="${XDG_RUNTIME_DIR:-/tmp}/dotfiles-errors.$$"
 alias inspect='cat "${_errlog}"'
 
 DOTFILES_BASH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
+
+# VTE's hook also sets the window title, which fights with PS1's title.
+# Keep only the cwd report (OSC 7).
+if declare -F __vte_osc7 >/dev/null; then
+  __vte_prompt_command() { printf '%s' "$(__vte_osc7)"; }
+fi
+
+# Early theme replay: repaint the cached palette before anything slow loads,
+# so the terminal's default colors don't flash at startup. __theme::init
+# re-applies the real palette later, so a stale cache fixes itself.
+# Needs THEME_VARIANT set to dark/light (cache is keyed by it).
+if [[ -t 1 && -z ${SSH_CONNECTION-} && -z ${TMUX-} ]]; then
+  __f=${XDG_CACHE_HOME:-$HOME/.cache}/bash-theme-${THEME_VARIANT:-dark}.seq
+  if [[ -r $__f ]]; then
+    IFS= read -r -d '' __s < "$__f"   # returns non-zero at EOF, that's expected
+    printf '%s' "$__s"
+  fi
+  unset __f __s
+fi
 
 {
 
@@ -38,8 +68,8 @@ done
 unset _rc
 
 
-THEME_VARIANT=dark
-__theme::init default && __theme::main_handle
+__pe::load_conf
+__theme::init "${THEME_NAME:-default}"
 
 if [[ -s $_errlog ]]; then
   echo "Using Minimal config"

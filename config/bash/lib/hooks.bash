@@ -2,101 +2,108 @@
 # shellcheck shell=bash disable=SC2034,SC2016
 # vim: ft=sh fdm=marker ts=2 sw=2 et
 #
-# very simple implementation of Bash-preexec
+# Minimal bash-preexec.
 #
-# Globals:
-# PRE_COMMAND  : commands to be run before the command.
-# POST_COMMAND : commands to be run after the command.
+# API:
+#   ::pre_command  CMD   run CMD before each command
+#   ::post_command CMD   run CMD before each prompt/after each command
+#                        (EXIT_CODE holds the last status)
+#
+# Requires bash 4.3+ (namerefs).
 
+# Guard against double-sourcing: re-adopting our own PROMPT_COMMAND
+# would make _exec_postcmd call itself forever.
+[[ -n "${_HOOKS_LOADED:-}" ]] && return 0
+_HOOKS_LOADED=1
 
-# TODO: Make sure that this~
-#  [ ] does not conflict with anything else that uses  the 'DEBUG' trap.
-#  [ ] subshells and functions don't inherit the trap unless functrace is set.
-#  [ ] does not misfire with multi-line commands or when PROMPT_COMMAND is an array.
-#  [ ] `history 1` can give the wrong line if 'HISTCONTROL=ignorespace/ignoredups'.
+declare -ag hooks_precmd=() hooks_postcmd=()
 
-
-function _exec_precmd() {
-  [[ -z "${AT_PROMPT:-}" ]] && return 1
-  unset AT_PROMPT
-
-  for cmd in "${hooks_precmd[@]}"; do
-    eval "$cmd"
+# Append $2 to the array named $1 unless it is already there.
+function _hook_add() {
+  local -n _hooks=$1
+  local _h
+  for _h in "${_hooks[@]}"; do
+    [[ "$_h" == "$2" ]] && return 0
   done
-  unset cmd
+  _hooks+=("$2")
 }
 
+# Run every entry of the array named $1.
+function _hook_run() {
+  local -n _hooks=$1
+  local _cmd
+  for _cmd in "${_hooks[@]}"; do
+    eval "$_cmd"
+  done
+}
+
+function ::pre_command()  { _hook_add hooks_precmd  "$1"; }
+function ::post_command() { _hook_add hooks_postcmd "$1"; }
+
+# DEBUG trap: fires before every simple command, so AT_PROMPT makes
+# the hooks run only once per prompt.
+function _exec_precmd() {
+  [[ -n "${AT_PROMPT:-}" ]] || return 0
+  # Inside a `bind -x` handler: not a user command, leave AT_PROMPT set
+  [[ -v READLINE_LINE ]] && return 0
+  unset AT_PROMPT
+  _hook_run hooks_precmd
+}
+
+function _exec_precmd() {
+  [[ -n "${AT_PROMPT:-}" ]] || return 0
+  [[ -v READLINE_LINE ]] && return 0
+  unset AT_PROMPT
+  _hook_run hooks_precmd
+  HOOK_CMD_START=${EPOCHREALTIME/./}    # last thing before the command runs
+}
+
+function _exec_precmd() {
+  [[ -n "${AT_PROMPT:-}" ]] || return 0
+  [[ -v READLINE_LINE ]] && return 0
+  declare -g HOOK_CMD=$BASH_COMMAND      # the command about to run
+  unset AT_PROMPT
+  _hook_run hooks_precmd
+  HOOK_CMD_START=${EPOCHREALTIME/./}
+}
+
+# PROMPT_COMMAND entry point. Must capture $? first.
 function _exec_postcmd() {
   declare -g EXIT_CODE=$?
   declare -g AT_PROMPT=1
 
-  [[ -n "${FIRST_PROMPT:-}" ]] && {
-    unset FIRST_PROMPT
-    return 1
-  }
+  # Nothing has run yet on the very first prompt.
+  # if [[ -n "${FIRST_PROMPT:-}" ]]; then
+  #   unset FIRST_PROMPT
+  #   return 0
+  # fi
 
-  for cmd in "${hooks_postcmd[@]}"; do
-    eval "$cmd"
-  done
-  unset cmd
+  _hook_run hooks_postcmd
+  return "$EXIT_CODE"
 }
 
-function ::post_command() {
-  local has_cmd=0
-  if (( ${#hooks_postcmd[@]} > 0 )); then
-    for hook in "${hooks_postcmd[@]}"; do
-      if [[ "$hook" == "$1" ]]; then
-        has_cmd=1 && break
-      fi
-    done
-    unset hook
-    if [[ $has_cmd -eq 1 ]]; then
-      return 0
-    fi
-    hooks_postcmd+=("$1")
-  else
-    hooks_postcmd=("$1")
-  fi
-}
-
-function ::pre_command() {
-  local has_cmd=0
-  if (( ${#hooks_precmd[@]} > 0 )); then
-    for hook in "${hooks_precmd[@]}"; do
-      if [[ "$hook" == "$1" ]]; then
-        has_cmd=1 && break
-      fi
-    done
-    unset hook
-    if [[ $has_cmd -eq 1 ]]; then
-      return 0
-    fi
-    hooks_precmd+=("$1")
-  else
-    hooks_precmd=("$1")
-  fi
+function _exec_postcmd() {
+  declare -g EXIT_CODE=$?
+  declare -g HOOK_CMD_END=${EPOCHREALTIME/./}   # first thing after it ends
+  declare -g AT_PROMPT=1
+  _hook_run hooks_postcmd
+  return "$EXIT_CODE"
 }
 
 function __init_hooks() {
-  declare -ag hooks_precmd=()
-  declare -ag hooks_postcmd=()
+  # FIRST_PROMPT=1
 
-  FIRST_PROMPT=1
+  # The DEBUG trap misbehaves under bats, so skip it there.
+  # NOTE: This overwrites any existing DEBUG trap.
+  [[ -z "${TEST_DIRECTORY:-}" ]] && trap '_exec_precmd' DEBUG
 
-  # FIXME: For some reason, bash trap triggers an error
-  # when inside bats. We'll skip initializing for now.
-  if [[ -z "${TEST_DIRECTORY:-}" ]]; then
-    trap '_exec_precmd' DEBUG
-  fi
-
-  if [[ -n "${PROMPT_COMMAND-}" ]]; then
-    for cmd in "${PROMPT_COMMAND[@]}"; do
-     ::post_command "$cmd"
-    done
-  fi
+  # Adopt whatever is in PROMPT_COMMAND (string or array).
+  local cmd
+  for cmd in "${PROMPT_COMMAND[@]}"; do
+    [[ -n "$cmd" ]] && ::post_command "$cmd"
+  done
 
   PROMPT_COMMAND='_exec_postcmd'
-
 }
 
 __init_hooks && unset -f __init_hooks

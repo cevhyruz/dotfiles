@@ -208,3 +208,17 @@ Projects/
 ├── reference/        ← repo that has modified (notes, comments) so I can understand it
 └── ventures          ← repo for projects that may go into my portfolio (enteprise grade without clients)
 ```
+
+
+
+
+bash completion files--------------------
+
+completions/
+lib/bash-completion.bash
+plugins/completion.bash
+bash_completion
+
+aliases-----------------
+bash_aliases
+

@@ -4,7 +4,6 @@
 # log.bash - Library for logging.
 
 
-
 # __log::err() {
 #    printf '[FAIL]: %s (line %s) %s\n' "${BASH_SOURCE[1]}" "${BASH_LINENO[0]}" "$*" >&2
 # }

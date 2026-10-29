@@ -14,6 +14,25 @@ bind-key -N "Send the prefix key" ` {
 # bind-key -N "Resize the pane to right" -r '>' { resize-pane -R }
 # bind-key -N "Resize the pane to left" -r '<' { resize-pane -L }
 
+# From normal mode: enter copy mode and jump to the previous prompt in one key
+# Need OSC 133 marks in shell prompt
+# bind -n M-Up copy-mode \; send -X previous-prompt
+# bind -n M-Down copy-mode \; send -X next-prompt
+
+#new working
+set -g copy-mode-match-style         'bg=#454b57'
+set -g copy-mode-current-match-style 'bg=#81a1c1,fg=#2b303b'
+
+bind -T copy-mode-vi K send -X search-backward '^╭─'
+bind -T copy-mode-vi J send -X search-forward  '^╭─'
+bind -n M-Up copy-mode \; send -X search-backward '^╭─'
+bind -n M-Down copy-mode \; send -X search-forward '^╭─'
+
+
+# set -g mode-style 'bg=#454b57,fg=#c0c5ce'
+# # Jump, then select the header line and the arrow line
+# bind -T copy-mode-vi [ send -X clear-selection \; send -X cursor-up \; send -X previous-prompt \; send -X select-line \; send -X cursor-down
+# bind -T copy-mode-vi ] send -X clear-selection \; send -X next-prompt \; send -X select-line \; send -X cursor-down
 
 # vimium-style navigation
 #

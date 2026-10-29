@@ -8,7 +8,7 @@
 #   THEME_{DARK,LIGHT}_{BG,FG,CURSOR}          hex colors
 #   THEME_ROLE                                 role -> ANSI slot (0-15)
 #
-# Requires core/term.bash. Bash >= 4.3.
+# Requires core/term.bash and core/hooks.bash. Bash >= 4.3.
 #
 # Usage:  __theme::init [name]
 # Env:    THEME_NAME=default   THEME_VARIANT=dark|light|auto
@@ -65,33 +65,9 @@ __theme::load() {
     return 1
   fi
 
-  # Precompute SGR strings per role, once, so prompts don't fork or loop.
-  #   THEME_SGR  raw escape, for printf / echo -e
-  #   THEME_PS1  \[ \] wrapped, for text placed literally in PS1
-  #   THEME_RL   \001 \002 wrapped, for values that PS1 expands from a
-  #              variable (bash does not decode \[ \] inside those)
-  THEME_SGR=()
-  THEME_PS1=()
-  THEME_RL=()
-  for role in "${!THEME_ROLE[@]}"; do
-    i=${THEME_ROLE[$role]}
-    (( code = i < 8 ? 30 + i : 90 + i - 8 ))
-    THEME_SGR[$role]=$'\e['$code'm'
-    THEME_PS1[$role]='\[\e['$code'm\]'
-    THEME_RL[$role]=$'\001\e['$code$'m\002'
-  done
-  THEME_SGR[reset]=$'\e[0m'
-  THEME_PS1[reset]='\[\e[0m\]'
-  THEME_RL[reset]=$'\001\e[0m\002'
-
-  # No color support: make every style empty so prompts print plain text.
-  if (( TERM_COLORS < 8 )); then
-    for role in "${!THEME_SGR[@]}"; do
-      THEME_SGR[$role]=
-      THEME_PS1[$role]=
-      THEME_RL[$role]=
-    done
-  fi
+  __theme::roles_handle
+  __theme::compile_roles
+ 
 }
 
 # Sets REPLY to a truecolor SGR for a RRGGBB hex. $1 = 38 (fg) or 48 (bg).
@@ -194,6 +170,7 @@ __theme::apply() {
     out+=$seq
   fi
   printf '%s' "$out"
+  printf '%s' "$out" > "${XDG_CACHE_HOME:-$HOME/.cache}/bash-theme-${THEME_VARIANT:-dark}.seq"
   THEME_APPLIED=1
 }
 
@@ -208,31 +185,25 @@ __theme::reset() {
   THEME_APPLIED=0
 }
 
-# we have the terminal title being set as the base prompt
-#
-__theme::get_current_prompt() {
-:;
-}
 
-# Prepend __theme::prompt to PROMPT_COMMAND (string or array), once.
-__theme::prompt_hook() {
-  [[ -n ${THEME_PROMPT_HOOKED:-} ]] && return 0
-
-  THEME_PROMPT_HOOKED=1
-  if [[ ${PROMPT_COMMAND@a} == *a* ]]; then
-    PROMPT_COMMAND=(__theme::prompt_handle "${PROMPT_COMMAND[@]}")
-  else
-    PROMPT_COMMAND="__theme::prompt_handle${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
-  fi
-}
+# Register __theme::prompt_handle to run before every prompt.
+__theme::prompt_hook() { ::post_command __theme::prompt_handle; }
 
 
 __theme::init() {
+  declare -F ::post_command >/dev/null || {
+    printf 'theme: core/hooks.bash must be sourced first\n' >&2
+    return 1
+  }
+
   __theme::load "$@" || return
   __theme::apply
 
+  __theme::prompt_hook
+
   # initialize theme handlers
   __theme::export_env_handle
+  __theme::main_handle
 
   if [[ ${THEME_RESET_ON_EXIT:-0} == 1 ]]; then
     trap '__theme::reset' EXIT
@@ -243,28 +214,63 @@ __theme::init() {
 
 # toggling theme variant
 theme() {
-  if [[ "${THEME_VARIANT}" == "dark" ]]; then
+  if [[ "${THEME_VARIANT:-dark}" == "dark" ]]; then
     THEME_VARIANT="light"
   else
     THEME_VARIANT="dark"
   fi
 
-  # commented out because this rexpanded the ps1 prompt causing
-  # double the prompt.
-  __theme::init default #&& __theme::main_handle
+  __theme::init default
 }
 
 # ==========================================
 #  Reserved functions used in theme writing
 # ==========================================
 
+
+declare -F __theme::roles_handle >/dev/null || __theme::roles_handle() { :; }
+
+__theme::compile_roles() {
+  local role i code
+
+  # Precompute SGR strings per role, once, so prompts don't fork or loop.
+  #   THEME_SGR  raw escape, for printf / echo -e
+  #   THEME_PS1  \[ \] wrapped, for text placed literally in PS1
+  #   THEME_RL   \001 \002 wrapped, for values that PS1 expands from a
+  #              variable (bash does not decode \[ \] inside those)
+  THEME_SGR=()
+  THEME_PS1=()
+  THEME_RL=()
+  for role in "${!THEME_ROLE[@]}"; do
+    i=${THEME_ROLE[$role]}
+    (( code = i < 8 ? 30 + i : 90 + i - 8 ))
+    THEME_SGR[$role]=$'\e['$code'm'
+    THEME_PS1[$role]='\[\e['$code'm\]'
+    THEME_RL[$role]=$'\001\e['$code$'m\002'
+  done
+  THEME_SGR[reset]=$'\e[0m'
+  THEME_PS1[reset]='\[\e[0m\]'
+  THEME_RL[reset]=$'\001\e[0m\002'
+
+  # No color support: make every style empty so prompts print plain text.
+  if (( TERM_COLORS < 8 )); then
+    for role in "${!THEME_SGR[@]}"; do
+      THEME_SGR[$role]=
+      THEME_PS1[$role]=
+      THEME_RL[$role]=
+    done
+  fi
+
+}
+
+
 # environment that is needed to be setup to support colors
 # for example man/less colors, expressed as ANSI slots so they follow the theme.
 # runs after the __theme::apply
 __theme::export_env_handle() { :; }
 
-# Runs before every prompt. Must be first in PROMPT_COMMAND so $? is still the
-# exit status of the command you just ran; it hands $? on unchanged.
+# Runs before every prompt via ::post_command. The last command's exit status
+# is in $EXIT_CODE ($? is not reliable here, other hooks may have run first).
 # this is where theme author chooses/setup prompt segments from the library.
 __theme::prompt_handle() { :; }
 

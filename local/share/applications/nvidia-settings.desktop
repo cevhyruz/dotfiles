@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=NVIDIA X Server Settings
+Comment=Configure NVIDIA X Server Settings
+Exec=sh -c 'exec /usr/bin/nvidia-settings --config="${XDG_CONFIG_HOME:-$HOME/.config}/nvidia/settings"'
+Icon=nvidia-settings
+Categories=System;Settings;

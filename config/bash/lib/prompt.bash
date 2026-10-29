@@ -67,19 +67,8 @@
 #      THEME_TIME_MIN_MS=1000       minimum duration, in milliseconds, worth showing
 
 
-THEME_GIT_SEG=
-THEME_PY_SEG=
-THEME_NODE_SEG=
-THEME_ERRLOG_SEG=
-THEME_SHLVL_SEG=
-THEME_EXIT_SEG=
-THEME_TIME_SEG=
-THEME_ARROW=
-
-
 # Features
-# [] can edit prompt segments on demand (like icd)
-# [] compact mode (like COLUMN < 80) drop low priority segments
+# [/] can edit prompt segments on demand (like icd)
 # [] chpwd hook: bash has none, but [[ $PWD != $THEME_LAST_PWD ]] in the prompt
 #    function gives you one. Useful things to trigger from it:
 #     - Auto nvm use when entering a directory with .nvmrc. Your node segment
@@ -206,6 +195,62 @@ __prompt::git() {  # {{{1
   [[ -n $flags ]] && seg+=" ${flags}${r}"
 
   REPLY=$seg
+}
+
+# Sets REPLY to the colored, fish-style abbreviated cwd:
+#   /home/me/projects/site/components/auth -> ~/p/s/components/auth
+# Every directory except the last THEME_CWD_KEEP is cut to THEME_CWD_LEN
+# characters; a leading dot is kept (.config -> .c). No forks.
+#
+# Env: THEME_CWD=0            disable (falls back to nothing, see main_handle)
+#      THEME_CWD_KEEP=1       trailing directories kept in full
+#      THEME_CWD_LEN=1        characters kept per abbreviated directory
+#      THEME_CWD_MAX=0        only abbreviate when the full path is longer
+#                             than this many characters (0 = always, like fish)
+__prompt::cwd() { # {{{1
+    REPLY=
+    [[ ${THEME_CWD:-1} == 1 ]] || return 0
+
+    local p=$PWD prefix= keep=${THEME_CWD_KEEP:-1} len=${THEME_CWD_LEN:-1}
+    local out seg i n
+    local -a parts
+
+    if [[ $p == "$HOME" ]]; then
+        p=
+        prefix='~'
+    elif [[ $p == "$HOME"/* ]]; then
+        p=${p#"$HOME"}
+        prefix='~'
+    fi
+
+    if [[ -z $p && -z $prefix ]]; then
+        out=/ # filesystem root
+    elif [[ -z $p ]]; then
+        out=$prefix # exactly $HOME
+    else
+        IFS=/ read -ra parts <<<"${p#/}"
+        n=${#parts[@]}
+
+        # Abbreviate only when the full path is too long (0 = always).
+        if (( ${#prefix} + ${#p} > ${THEME_CWD_MAX:-0} )); then
+            for (( i = 0; i < n - keep; i++ )); do
+                seg=${parts[i]}
+                if [[ $seg == .* ]]; then
+                    parts[i]=${seg:0:len+1} # keep the dot plus len chars
+                else
+                    parts[i]=${seg:0:len}
+                fi
+            done
+        fi
+
+        out=$prefix
+        for seg in "${parts[@]}"; do
+            out+=/$seg
+        done
+    fi
+
+    out=${out//[[:cntrl:]]/} # no escapes from odd dir names
+    REPLY="${THEME_RL[path]}${out}${THEME_RL[reset]}"
 }
 
 # Sets REPLY to the colored python segment, or to '' when there is nothing

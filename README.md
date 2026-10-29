@@ -8,3 +8,14 @@
 This repository is a collection of configurations and settings for
 10x development environment.  Composed of tmux, neovim, bash, fzf,
 and all other stuff to make development a breeze.
+
+
+## Setting up
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cevhyruz/dotfiles/master/bootstrap.sh | bash
+```
+
+
+if ~/.local/share/applications is symlinked run this to update database.
+update-desktop-database ~/.local/share/applications

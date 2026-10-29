@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# trace-bashrc [-t] [-n] [-l logfile] [rcfile]
+#   -t  fast mode: fork-free PS4 with timestamps (for finding slow spots)
+#   -n  don't open the viewer afterwards
+#   -l  log path (default /tmp/bashrc-trace.log)
+log=/tmp/bashrc-trace.log fast=0 view=1
+while getopts 'tnl:' opt; do
+  case $opt in
+    t) fast=1 ;;
+    n) view=0 ;;
+    l) log=$OPTARG ;;
+    *) echo "usage: ${0##*/} [-t] [-n] [-l logfile] [rcfile]" >&2; exit 2 ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+rc=${1:-$HOME/.bashrc}
+[[ -r $rc ]] || { echo "${0##*/}: cannot read $rc" >&2; exit 1; }
+
+workdir=$(mktemp -d "${TMPDIR:-/tmp}/trace-bashrc.XXXXXX") || exit 1
+trap 'rm -rf "$workdir"' EXIT
+
+# ---- 1. rc file for the traced shell (quoted heredoc: nothing expands) ----
+cat >"$workdir/trace-rc.sh" <<'EOF'
+__xt_prefix() {
+  local i src
+  # Outermost frame is this wrapper, so start one below it.
+  for (( i = ${#BASH_SOURCE[@]} - 2; i > 0; i-- )); do
+    src=${BASH_SOURCE[i]:-?}
+    printf '%s:%s%s > ' \
+      "${src##*/}" "${FUNCNAME[i]:+${FUNCNAME[i]}():}" "${BASH_LINENO[i-1]:-?}"
+  done
+}
+
+# PS4 must start with a fixed character: bash repeats it per nesting level.
+if [[ $XT_FAST == 1 ]]; then
+  PS4='+${EPOCHREALTIME} ${BASH_SOURCE[0]##*/}:${FUNCNAME[0]:+${FUNCNAME[0]}():}${LINENO} > '
+else
+  PS4='+ $(__xt_prefix)'
+fi
+
+exec 5>"$XT_LOG"
+BASH_XTRACEFD=5
+set -x
+source "$XT_RC"
+set +x
+exit
+EOF
+
+# ---- 2. run the trace ----
+XT_LOG=$log XT_RC=$rc XT_FAST=$fast bash --rcfile "$workdir/trace-rc.sh" -i
+[[ -s $log ]] || { echo "${0##*/}: no trace produced" >&2; exit 1; }
+
+# Drop the wrapper's own `source <rc>` (first) and `set +x` (last) lines.
+sed -i -e '1{/source /d}' -e '${/set +x$/d}' "$log"
+echo "trace written to $log"
+(( view )) || exit 0
+
+# ---- 3. view ----
+bat=$(command -v batcat || command -v bat) || { less -S "$log"; exit; }
+
+# "chain > command"  ->  "command    # chain", comments aligned in a column.
+awk -v maxw="${XT_WIDTH:-60}" '
+  {
+    s = $0; p = ""
+    if (match(s, /^\++[0-9.]* ?/)) {          # depth marker (+ timestamp in -t mode)
+      m = substr(s, 1, RLENGTH); s = substr(s, RLENGTH + 1)
+      gsub(/[+ ]/, "", m); p = m
+    }
+    while (match(s, /^[^ ]+:[0-9?]+ > /)) {   # file:func():line segments
+      p = p (p == "" ? "" : " > ") substr(s, 1, RLENGTH - 3)
+      s = substr(s, RLENGTH + 1)
+    }
+    cmd[NR] = s; pfx[NR] = p
+    if (length(s) <= maxw && length(s) > w) w = length(s)
+  }
+  END {
+    for (i = 1; i <= NR; i++) {
+      pad = sprintf("%*s", w - length(cmd[i]) > 0 ? w - length(cmd[i]) : 0, "")
+      print pfx[i] == "" ? cmd[i] : cmd[i] pad "   # " pfx[i]
+    }
+  }
+' "$log" >"$workdir/view.sh"
+
+# Pin the line-number column so it stays visible when scrolling right.
+digits=$(wc -l <"$workdir/view.sh"); digits=${#digits}
+pin=$(( (digits < 4 ? 4 : digits) + 3 ))
+
+# Not `exec`: the EXIT trap must still run.
+"$bat" --language=bash --style=numbers,grid --paging=always --wrap=never \
+  --pager="less -RFS --header=0,$pin" "$workdir/view.sh"

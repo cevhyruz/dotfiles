@@ -73,6 +73,9 @@ __theme::prompt_handle() {
       THEME_GIT_SEG=$REPLY
     fi
 
+    __prompt::cwd
+    THEME_CWD_SEG=$REPLY
+
     __prompt::python
     THEME_PY_SEG=$REPLY
 
@@ -84,6 +87,19 @@ __theme::prompt_handle() {
 
     __prompt::shlvl
     THEME_SHLVL_SEG=$REPLY
+
+    THEME_PLACEHOLDER=
+    if [[ -n ${PLACEHOLDER_TEXT-} ]] && (( TERM_COLORS >= 8 )); then
+      # One non-printing block (\001..\002): readline counts it as width 0.
+      THEME_PLACEHOLDER=$'\001'${THEME_SGR[muted]}${PLACEHOLDER_TEXT}
+      THEME_PLACEHOLDER+=$'\e[0m\e['${#PLACEHOLDER_TEXT}$'D\002'
+      __placeholder::arm
+    fi
+
+    THEME_TIME_SEG=
+    if [[ ${THEME_TIME:-1} == 1 && -n ${CMD_DURATION-} ]]; then
+      THEME_TIME_SEG=" ${THEME_RL[muted]}took ${CMD_DURATION}${THEME_RL[reset]}"
+    fi
 
     return "$ret"
 }
@@ -110,8 +126,6 @@ function _ps4_callstack() {
 # __theme::prompt refreshes before each prompt.
 # needs 'promptvars' options to be enabled
 __theme::main_handle() {
-  __theme::prompt_hook
-
   # TODO: Basic prompt when colors are not supported. Move this in init
   if (( TERM_COLORS < 8 )); then
       PS1='\u@\h:\w${THEME_PY_SEG}${THEME_NODE_SEG}${THEME_GIT_SEG}${THEME_EXIT_SEG}${THEME_ERRLOG_SEG} \$ '
@@ -132,16 +146,39 @@ __theme::main_handle() {
     PS1=
   fi
 
-  # if (( THEME_APPLIED )); then
-  #   echo 'theme is applied'
-  #   PS1=
-  # fi
+  local title header input
+  # default order, used only if nothing (the saved config) has set one
+  [[ -n ${THEME_SEGMENTS[@]+x} ]] || THEME_SEGMENTS=(SHLVL PY NODE GIT TIME EXIT ERRLOG)
 
-  # PS1=
+  # 1. Window title (escape only, prints nothing visible)
+  title=$TERM_TITLE_PS1
 
-  PS1+="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}:${THEME_PS1[path]}\w${r}"
-  PS1+='${THEME_SHLVL_SEG}${THEME_PY_SEG}${THEME_NODE_SEG}${THEME_GIT_SEG}${THEME_EXIT_SEG}${THEME_ERRLOG_SEG}'
-  PS1+="\n"'${THEME_ARROW}'"${bot}${r} \\\$ "
+  # 2. Header line: ╭─ user@host:path
+  #    Expanded now: colors come from THEME_PS1 at build time.
+  header="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}"
+  header+=":${THEME_PS1[path]}\w${r}"
+
+  header="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}"
+  header+=':${THEME_CWD_SEG}'
+
+  # Single-quoted pieces expand at every prompt, after prompt_handle runs.
+  segments=
+  for s in "${THEME_SEGMENTS[@]}"; do
+    segments+="\${THEME_${s}_SEG}"
+  done
+
+  # 4. Input line: ╰─➤ $
+  #    THEME_ARROW is single-quoted for the same reason as the segments.
+  input='${THEME_ARROW}'"${bot}${r} \\\$ "
+
+  # Assemble: assignment, never append, so re-running is safe.
+  # OSC 133
+  PS1="${title}${header}${segments}\n${input}\[\033[90m\]"
+  local mark=
+  [[ -n ${TMUX-} ]] && mark='\[\e]133;A\a\]'
+
+  PS1="${title}${mark}${header}${segments}\n${input}"
+
 
   # PS1 does not reset the final escape sequence of the prompt string,
   # we need to normalize after reading and before executing the command.
@@ -150,9 +187,6 @@ __theme::main_handle() {
   # Print newline after every command.
   ::post_command "printf '\n'"
 
-  # PS4='$(_ps4_callstack)'
 
-
-  # [?] ErrLog at the right-most with auto-adjust on resize of the terminal (1 of 2)
-  # trap '__theme::errlog_winch' WINCH
 }
+

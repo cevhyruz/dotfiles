@@ -42,11 +42,8 @@ fi
 # set the title to 'user@host: dir'
 case $TERM in
   xterm* | rxvt* | tmux* | screen* | alacritty | foot | gnome* | Eterm | aterm | kterm | kitty)
-    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:  \w\a\]"
-    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h [$$]: \w\a\]"
-    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u at \h running $SHELL with PID [$$] and size [\${COLUMNS}x\${LINES}]: on \w\a\]"
-    PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\w [${COLUMNS}x${LINES}] \u@\h ${BASH##*/}[$$]\a\]'
-  # TERM_TITLE_PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\w\a\]'
+    TERM_TITLE=1
+    TERM_TITLE_PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\w [${COLUMNS}x${LINES}] \u@\h ${BASH##*/}[$$]\a\]'
     ;;
 esac
 

@@ -10,6 +10,9 @@
 #
 complete -W "start stop restart status" myservice
 
+# TODO: add completion for git aliases:
+# git discard <modified file/s>
+
 # Completion functions
 # _deploy() {
 #     local cur=${COMP_WORDS[COMP_CWORD]}
@@ -23,3 +26,4 @@ complete -W "start stop restart status" myservice
 
 # Sourcing completion scripts for tools that don't ship them in the standard path.
 # source ~/tools/mycli/completion.bash
+
