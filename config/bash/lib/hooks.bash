@@ -28,6 +28,18 @@ function _hook_add() {
   _hooks+=("$2")
 }
 
+# Remove every occurrence of $2 from the array named $1.
+function _hook_remove() {
+  local -n _hooks=$1
+  local _h _keep=()
+  for _h in "${_hooks[@]}"; do
+    [[ "$_h" == "$2" ]] || _keep+=("$_h")
+  done
+  _hooks=("${_keep[@]}")
+}
+
+function ::remove_post_command() { _hook_remove hooks_postcmd "$1"; }
+
 # Run every entry of the array named $1.
 function _hook_run() {
   local -n _hooks=$1
@@ -43,6 +55,7 @@ function ::post_command() { _hook_add hooks_postcmd "$1"; }
 # DEBUG trap: fires before every simple command, so AT_PROMPT makes
 # the hooks run only once per prompt.
 function _exec_precmd() {
+  case $BASH_COMMAND in _exec_postcmd|_footer_*) return 0 ;; esac   # our own traps, not user commands
   [[ -n "${AT_PROMPT:-}" ]] || return 0
   # Inside a `bind -x` handler: not a user command, leave AT_PROMPT set
   [[ -v READLINE_LINE ]] && return 0

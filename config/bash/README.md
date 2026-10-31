@@ -15,6 +15,7 @@ config/bash/
 ├── core/                  ← foundational non-negotiable feature (sensible defaults)
 ├── libexec/               ← library executables for bash (downloading plugins, enabling features, etc..)
 ├── lib/                   ← library used throughout bash (can use bashlib)
+│   └── prompts/           ← prompt segment libraries. sourced only when enabled through 'prompt_edit'
 ├── plugins/               ← plugg-able custom session/command/tools improvements
 │   ├── completion.bash
 │   └── ...

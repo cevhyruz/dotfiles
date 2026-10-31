@@ -5,6 +5,8 @@
 # Set up shell variables for Bash
 
 
+export OLDPWD=$HOME
+
 # Bash readline
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 

@@ -71,6 +71,9 @@ unset _rc
 __pe::load_conf
 __theme::init "${THEME_NAME:-default}"
 
+footer_on
+
+
 if [[ -s $_errlog ]]; then
   echo "Using Minimal config"
   source "$DOTFILES_BASH_CONFIG_DIR/bashrc_minimal"

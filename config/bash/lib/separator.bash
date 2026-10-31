@@ -36,7 +36,7 @@ __sep::is_user_cmd() {
 __sep::before() {
   __sep::is_user_cmd || return 0
   SEP_CMD_RAN=1
-  __sep::print
+  # __sep::print
 }
 
 # __sep::after is unchanged: it only prints if SEP_CMD_RAN was set.
@@ -45,6 +45,7 @@ __sep::before() {
 __sep::after() {
   [[ -n ${SEP_CMD_RAN-} ]] || return 0
   unset SEP_CMD_RAN
+  printf '\n'
   __sep::print
 }
 

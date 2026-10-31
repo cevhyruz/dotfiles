@@ -135,6 +135,7 @@ __theme::main_handle() {
   # nice symbols
   local r=${THEME_PS1[reset]} m=${THEME_PS1[muted]}
   local top='╭─' bot='╰─➤' title=
+  # local top='█ ' bot='█ ' title=
 
   # TODO: ASCII symbols for linux console. Move this in init
   if (( TERM_IS_CONSOLE )); then
@@ -155,8 +156,8 @@ __theme::main_handle() {
 
   # 2. Header line: ╭─ user@host:path
   #    Expanded now: colors come from THEME_PS1 at build time.
-  header="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}"
-  header+=":${THEME_PS1[path]}\w${r}"
+  # header="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}"
+  # header+=":${THEME_PS1[path]}\w${r}"
 
   header="${m}${top}${r} ${THEME_PS1[user]}\u${m}@\h${r}"
   header+=':${THEME_CWD_SEG}'
